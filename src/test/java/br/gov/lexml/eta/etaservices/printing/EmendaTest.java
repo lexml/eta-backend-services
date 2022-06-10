@@ -21,19 +21,19 @@ class EmendaTest {
     void test() throws JAXBException {
 
         final var emenda = new Emenda(
-                Instant.now(),
+                "2022-06-01",
                 "aplicacao",
                 "versaoAplicacao",
                 ModoEdicaoEmenda.EMENDA,
                 Map.of(),
                 new RefProposicaoEmendada("1", "MPV", "200", "2022", "aaa", "bcd"),
-                new ColegiadoApreciador(CD, PLENARIO, Optional.empty()),
+                new ColegiadoApreciador(CD, PLENARIO, null),
                 new Epigrafe("abc",""),
                 List.of(),
                 new ComandoEmenda(Optional.empty(), List.of()),
                 "justificativa emenda",
                 "Brasilia",
-                Optional.of("2019-01-01"),
+                "2019-01-01",
                 new Autoria(PARLAMENTAR, true, 0, 0, List.of(), Optional.empty()),
                 new OpcoesImpressao(true, "", false));
 
