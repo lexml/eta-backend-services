@@ -3,7 +3,6 @@ package br.gov.lexml.eta.etaservices.printing;
 import jakarta.xml.bind.annotation.XmlElement;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public final class ColegiadoApreciador {
   private SiglaCasaLegislativa siglaCasaLegislativa;
