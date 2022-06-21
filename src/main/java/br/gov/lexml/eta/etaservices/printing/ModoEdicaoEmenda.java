@@ -6,7 +6,7 @@ public enum ModoEdicaoEmenda {
 
     private final String nome;
 
-    private ModoEdicaoEmenda(String nome) {
+    ModoEdicaoEmenda(String nome) {
         this.nome = nome;
     }
 
