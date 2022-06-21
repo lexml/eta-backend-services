@@ -1,17 +1,18 @@
-package br.gov.lexml.eta.etaservices.printing;
+package br.gov.lexml.eta.etaservices.printing.xml;
 
 
-import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBException;
+import br.gov.lexml.eta.etaservices.printing.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;
 
 import javax.xml.transform.Source;
-import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
+import static br.gov.lexml.eta.etaservices.printing.Sexo.M;
 import static br.gov.lexml.eta.etaservices.printing.SiglaCasaLegislativa.CD;
 import static br.gov.lexml.eta.etaservices.printing.TipoAutoria.PARLAMENTAR;
 import static br.gov.lexml.eta.etaservices.printing.TipoColegiado.PLENARIO;
@@ -22,55 +23,59 @@ class EmendaXmlMarshallingTest {
     private Source xmlSource;
 
     @BeforeEach
-    void setUp() throws JAXBException {
+    void setUp() {
         final var emenda = setupEmenda();
         xmlSource = getXmlSource(emenda);
     }
 
     @Test
-    void testAttribute() {
+    void testMetadados() {
 
         assertThat(xmlSource)
-                .valueByXPath("/emenda/@aplicacao")
-                .isEqualToIgnoringCase("aplicacao");
+                .valueByXPath("/Emenda/Metadados/Aplicacao")
+                .isEqualToIgnoringCase("eta");
     }
 
     @Test
-    void testElement() {
+    void testColegiadoApreciador() {
 
         assertThat(xmlSource)
-                .valueByXPath("/emenda/colegiado/siglaCasaLegislativa")
+                .valueByXPath("/Emenda/ColegiadoApreciador/@siglaCasaLegislativa")
                 .isEqualToIgnoringCase("cd");
     }
 
     private Emenda setupEmenda() {
         return new Emenda(
-                "2022-06-01",
+                LocalDate.parse("2022-06-01")
+                        .atStartOfDay()
+                        .atZone(ZoneId.of("America/Sao_Paulo"))
+                        .toInstant(),
                 "eta",
                 "1.0.0",
                 ModoEdicaoEmenda.EMENDA,
                 Map.of("metadado1", "valor1", "metadado2", "valor2"),
-                new RefProposicaoEmendada("1", "MPV", "200", "2022", "aaa", "bcd"),
+                new RefProposicaoEmendada("urn:lex:br:federal:medida.provisoria:800:2022", "MPV", "800", "2022", "Altera a Lei 1.234/56 e dá outras providências", "bcd"),
                 new ColegiadoApreciador(CD, PLENARIO, null),
-                new Epigrafe("abc", ""),
+                new Epigrafe("A Presidência da República em suas atribuições sanciona", ""),
                 List.of(),
                 new ComandoEmenda(null, List.of()),
                 "justificativa emenda",
                 "Brasilia",
-                "2019-01-01",
-                new Autoria(PARLAMENTAR, true, 0, 0, List.of(), null),
+                LocalDate.parse("2019-06-01"),
+                new Autoria(PARLAMENTAR, true, 0, 0, List.of(
+                        new Parlamentar("abcd", "João da Silva", M, "MDB", "SP", CD, "Deputado")
+                ), null),
                 new OpcoesImpressao(true, "", false));
     }
 
-    private Source getXmlSource(Emenda emenda) throws JAXBException {
-        final var jaxbContext = JAXBContext.newInstance(Emenda.class);
-        final var marshaller = jaxbContext.createMarshaller();
-        final var os = new java.io.ByteArrayOutputStream();
-        marshaller.marshal(emenda, os);
-        final var xml = os.toString(StandardCharsets.UTF_8);
+    private Source getXmlSource(Emenda emenda) {
+
+        final var marshaller = new EmendaXmlMarshaller();
+
+        final var xml = marshaller.toXml(emenda);
 
         System.out.println(xml);
-        
+
         return Input.fromString(xml).build();
     }
 
