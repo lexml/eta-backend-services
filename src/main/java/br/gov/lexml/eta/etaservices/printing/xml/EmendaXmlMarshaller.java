@@ -251,12 +251,40 @@ public class EmendaXmlMarshaller {
 
         sb.append(">\n");
 
-        adicionado.filhos().forEach(filho -> geraDispositivosAdicionados(filho, sb));
+        adicionado.filhos().forEach(filho -> geraFilhosDispositivosAdicionados(filho, sb));
 
-        sb.append("\n      </DispositivoAdicionado>\n");
-
+        sb.append("      </DispositivoAdicionado>\n");
 
     }
+
+    private void geraFilhosDispositivosAdicionados(DispositivoEmendaAdicionado filho, StringBuilder sb) {
+        sb.append("        <");
+        sb.append(filho.tipo());
+
+        if (filho.rotulo() == null && filho.texto() == null &&
+                (filho.filhos() == null || filho.filhos().isEmpty())) {
+            sb.append(FECHA_TAG_SEM_CONTEUDO);
+        } else {
+            sb.append(">\n");
+            if (filho.rotulo() != null) {
+                sb.append("          <Rotulo>")
+                        .append(filho.rotulo())
+                        .append("</Rotulo>\n");
+            }
+            if (filho.texto() != null) {
+                sb.append("          <Texto>")
+                        .append(filho.texto())
+                        .append("</Texto>\n");
+            }
+
+            filho.filhos().forEach(filhoFilho -> geraFilhosDispositivosAdicionados(filhoFilho, sb));
+
+            sb.append("        </");
+            sb.append(filho.tipo());
+            sb.append(">\n");
+        }
+    }
+
 
     private void geraComandoEmenda(ComandoEmenda comandoEmenda, StringBuilder sb) {
         sb.append("  <ComandoEmenda>\n");
