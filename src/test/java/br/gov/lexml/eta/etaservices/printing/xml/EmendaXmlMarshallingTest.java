@@ -1,7 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
 
-import br.gov.lexml.eta.etaservices.printing.*;
+import br.gov.lexml.eta.etaservices.printing.ModoEdicaoEmenda;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;
@@ -44,8 +44,8 @@ class EmendaXmlMarshallingTest {
                 .isEqualToIgnoringCase("cd");
     }
 
-    private Emenda setupEmenda() {
-        return new Emenda(
+    private EmendaRecord setupEmenda() {
+        return new EmendaRecord(
                 LocalDate.parse("2022-06-01")
                         .atStartOfDay()
                         .atZone(ZoneId.of("America/Sao_Paulo"))
@@ -54,19 +54,19 @@ class EmendaXmlMarshallingTest {
                 "1.0.0",
                 ModoEdicaoEmenda.EMENDA,
                 Map.of("metadado1", "valor1", "metadado2", "valor2"),
-                new RefProposicaoEmendada("urn:lex:br:federal:medida.provisoria:800:2022", "MPV", "800", "2022", "Altera a Lei 1.234/56 e dá outras providências", "bcd"),
-                new ColegiadoApreciador(CD, PLENARIO, null),
-                new Epigrafe("A Presidência da República em suas atribuições sanciona", ""),
-                List.of(new ComponenteEmendado(
+                new RefProposicaoEmendadaRecord("urn:lex:br:federal:medida.provisoria:800:2022", "MPV", "800", "2022", "Altera a Lei 1.234/56 e dá outras providências", "bcd"),
+                new ColegiadoApreciadorRecord(CD, PLENARIO, null),
+                new EpigrafeRecord("A Presidência da República em suas atribuições sanciona", ""),
+                List.of(new ComponenteEmendadoRecord(
                         "urn:...",
                         true,
                         null,
                         null,
-                         new DispositivosEmenda(
+                         new DispositivosEmendaRecord(
                                  List.of(),
                                  List.of(),
                                  List.of(
-                                         new DispositivoEmendaAdicionado(
+                                         new DispositivoEmendaAdicionadoRecord(
                                                  "Artigo",
                                                     "2",
                                                     "Art. 2-1",
@@ -81,7 +81,7 @@ class EmendaXmlMarshallingTest {
                                                  "urn:lex:br:federal:medida.provisoria:800:2022",
                                                     false,
                                                  List.of(
-                                                         new DispositivoEmendaAdicionado("Artigo",
+                                                         new DispositivoEmendaAdicionadoRecord("Artigo",
                                                                  "2",
                                                                  "Art. 2-1",
                                                                  "Lorem ipsum dolor sit amet, consetet",
@@ -96,17 +96,17 @@ class EmendaXmlMarshallingTest {
                                                                  false,
                                                                  List.of())
                                                  )))))),
-                new ComandoEmenda(null, List.of()),
+                new ComandoEmendaRecord(null, List.of()),
                 "justificativa emenda",
                 "Brasilia",
                 LocalDate.parse("2019-06-01"),
-                new Autoria(PARLAMENTAR, true, 0, 0, List.of(
-                        new Parlamentar("abcd", "João da Silva", M, "MDB", "SP", CD, "Deputado")
+                new AutoriaRecord(PARLAMENTAR, true, 0, 0, List.of(
+                        new ParlamentarRecord("abcd", "João da Silva", M, "MDB", "SP", CD, "Deputado")
                 ), null),
-                new OpcoesImpressao(true, "", false));
+                new OpcoesImpressaoRecord(true, "", false));
     }
 
-    private Source getXmlSource(Emenda emenda) {
+    private Source getXmlSource(EmendaRecord emenda) {
 
         final var marshaller = new EmendaXmlMarshaller();
 

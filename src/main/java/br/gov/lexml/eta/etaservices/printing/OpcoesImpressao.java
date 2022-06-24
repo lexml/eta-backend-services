@@ -1,8 +1,9 @@
 package br.gov.lexml.eta.etaservices.printing;
 
-public record OpcoesImpressao(
-        boolean imprimirBrasao,
-        String textoCabecalho,
-        boolean reduzirEspacoEntreLinhas) {
+public interface OpcoesImpressao {
+    boolean isImprimirBrasao();
 
+    String getTextoCabecalho();
+
+    boolean isReduzirEspacoEntreLinhas();
 }

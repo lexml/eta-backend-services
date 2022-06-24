@@ -1,9 +1,11 @@
 package br.gov.lexml.eta.etaservices.printing;
 
-public record ItemComandoEmenda(
-    String cabecalho,
-    String citacao,
-    String rotulo,
-    String complemento) {
+public interface ItemComandoEmenda {
+    String getCabecalho();
 
+    String getCitacao();
+
+    String getRotulo();
+
+    String getComplemento();
 }

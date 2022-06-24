@@ -5,20 +5,34 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-public record Emenda(
-  Instant dataUltimaModificacao,
-  String aplicacao,
-  String versaoAplicacao,
-  ModoEdicaoEmenda modoEdicao,
-  Map<String, Object> metadados,
-  RefProposicaoEmendada proposicao,
-  ColegiadoApreciador colegiado,
-  Epigrafe epigrafe,
-  List<ComponenteEmendado> componentes,
-  ComandoEmenda comandoEmenda,
-  String justificativa,
-  String local,
-  LocalDate data,
-  Autoria autoria,
-  OpcoesImpressao opcoesImpressao) {
+public interface Emenda {
+    Instant getDataUltimaModificacao();
+
+    String getAplicacao();
+
+    String getVersaoAplicacao();
+
+    ModoEdicaoEmenda getModoEdicao();
+
+    Map<String, Object> getMetadados();
+
+    RefProposicaoEmendada getProposicao();
+
+    ColegiadoApreciador getColegiado();
+
+    Epigrafe getEpigrafe();
+
+    List<? extends ComponenteEmendado> getComponentes();
+
+    ComandoEmenda getComandoEmenda();
+
+    String getJustificativa();
+
+    String getLocal();
+
+    LocalDate getData();
+
+    Autoria getAutoria();
+
+    OpcoesImpressao getOpcoesImpressao();
 }

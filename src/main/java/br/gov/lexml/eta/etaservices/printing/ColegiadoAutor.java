@@ -1,4 +1,9 @@
 package br.gov.lexml.eta.etaservices.printing;
 
-public record ColegiadoAutor(String identificacao, String nome, String sigla) {
+public interface ColegiadoAutor {
+    String getIdentificacao();
+
+    String getNome();
+
+    String getSigla();
 }

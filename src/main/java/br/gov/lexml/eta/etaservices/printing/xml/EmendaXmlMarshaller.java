@@ -1,6 +1,20 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
-import br.gov.lexml.eta.etaservices.printing.*;
+import br.gov.lexml.eta.etaservices.printing.Autoria;
+import br.gov.lexml.eta.etaservices.printing.ColegiadoApreciador;
+import br.gov.lexml.eta.etaservices.printing.ColegiadoAutor;
+import br.gov.lexml.eta.etaservices.printing.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.printing.ComponenteEmendado;
+import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionado;
+import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaModificado;
+import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaSuprimido;
+import br.gov.lexml.eta.etaservices.printing.DispositivosEmenda;
+import br.gov.lexml.eta.etaservices.printing.Emenda;
+import br.gov.lexml.eta.etaservices.printing.Epigrafe;
+import br.gov.lexml.eta.etaservices.printing.ItemComandoEmenda;
+import br.gov.lexml.eta.etaservices.printing.OpcoesImpressao;
+import br.gov.lexml.eta.etaservices.printing.Parlamentar;
+import br.gov.lexml.eta.etaservices.printing.RefProposicaoEmendada;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -15,14 +29,14 @@ public class EmendaXmlMarshaller {
         final var sb = new StringBuilder();
         geraCabecalhoEmenda(emenda, sb);
         geraMetadados(emenda, sb);
-        geraProposicao(emenda.proposicao(), sb);
-        geraColegiado(emenda.colegiado(), sb);
-        geraEpigrafe(emenda.epigrafe(), sb);
-        geraComponentes(emenda.componentes(), sb);
-        geraComandoEmenda(emenda.comandoEmenda(), sb);
-        geraJustificativa(emenda.justificativa(), sb);
-        geraAutoria(emenda.autoria(), sb);
-        geraOpcoesImpressao(emenda.opcoesImpressao(), sb);
+        geraProposicao(emenda.getProposicao(), sb);
+        geraColegiado(emenda.getColegiado(), sb);
+        geraEpigrafe(emenda.getEpigrafe(), sb);
+        geraComponentes(emenda.getComponentes(), sb);
+        geraComandoEmenda(emenda.getComandoEmenda(), sb);
+        geraJustificativa(emenda.getJustificativa(), sb);
+        geraAutoria(emenda.getAutoria(), sb);
+        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
 
         sb.append("</Emenda>");
         return sb.toString();
@@ -31,10 +45,10 @@ public class EmendaXmlMarshaller {
     }
 
     private void geraCabecalhoEmenda(Emenda emenda, StringBuilder sb) {
-        sb.append("<Emenda versaoFormatoArquivo=\"1.0\" local=\"").append(emenda.local()).append("\"");
+        sb.append("<Emenda versaoFormatoArquivo=\"1.0\" local=\"").append(emenda.getLocal()).append("\"");
 
-        if (emenda.data() != null) {
-            sb.append(" data=\"").append(DateTimeFormatter.ISO_DATE.format(emenda.data()))
+        if (emenda.getData() != null) {
+            sb.append(" data=\"").append(DateTimeFormatter.ISO_DATE.format(emenda.getData()))
                     .append("\"");
         }
         sb.append(">\n");
@@ -49,19 +63,19 @@ public class EmendaXmlMarshaller {
     private void geraMetadados(Emenda emenda, StringBuilder sb) {
         sb.append("  <Metadados>\n")
                 .append("    <DataUltimaModificacao>")
-                .append(emenda.dataUltimaModificacao())
+                .append(emenda.getDataUltimaModificacao())
                 .append("</DataUltimaModificacao>\n")
                 .append("    <Aplicacao>")
-                .append(emenda.aplicacao())
+                .append(emenda.getAplicacao())
                 .append("</Aplicacao>\n")
                 .append("    <VersaoAplicacao>")
-                .append(emenda.versaoAplicacao())
+                .append(emenda.getVersaoAplicacao())
                 .append("</VersaoAplicacao>\n")
                 .append("    <ModoEdicao>")
-                .append(emenda.modoEdicao())
+                .append(emenda.getModoEdicao())
                 .append("</ModoEdicao>\n");
 
-        emenda.metadados().forEach((k, v) ->
+        emenda.getMetadados().forEach((k, v) ->
                 sb.append("    <")
                         .append(k)
                         .append(">")
@@ -76,22 +90,22 @@ public class EmendaXmlMarshaller {
     private void geraProposicao(RefProposicaoEmendada proposicao, StringBuilder sb) {
         sb.append("  <Proposicao ")
                 .append("urn=\"")
-                .append(proposicao.urn())
+                .append(proposicao.getUrn())
                 .append("\" ")
                 .append("sigla=\"")
-                .append(proposicao.sigla())
+                .append(proposicao.getSigla())
                 .append("\" ")
                 .append("numero=\"")
-                .append(proposicao.numero())
+                .append(proposicao.getNumero())
                 .append("\" ")
                 .append("ano=\"")
-                .append(proposicao.ano())
+                .append(proposicao.getAno())
                 .append("\" ")
                 .append("ementa=\"")
-                .append(proposicao.ementa())
+                .append(proposicao.getEmenta())
                 .append("\" ")
                 .append("identificacaoTexto=\"")
-                .append(proposicao.identificacaoTexto())
+                .append(proposicao.getIdentificacaoTexto())
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
@@ -99,15 +113,15 @@ public class EmendaXmlMarshaller {
         sb.append("  <ColegiadoApreciador ")
                 .append("siglaCasaLegislativa=\"")
                 .append(colegiado
-                        .siglaCasaLegislativa())
+                        .getSiglaCasaLegislativa())
                 .append("\" ")
                 .append("tipoColegiado=\"")
-                .append(colegiado.tipoColegiado())
+                .append(colegiado.getTipoColegiado())
                 .append("\"");
 
-        if (colegiado.tipoColegiado() == COMISSAO) {
+        if (colegiado.getTipoColegiado() == COMISSAO) {
             sb.append(" siglaComissao=\"")
-                    .append(colegiado.siglaComissao())
+                    .append(colegiado.getSiglaComissao())
                     .append("\"");
         }
 
@@ -117,101 +131,101 @@ public class EmendaXmlMarshaller {
     private void geraEpigrafe(Epigrafe epigrafe, StringBuilder sb) {
         sb.append("  <Epigrafe ")
                 .append("texto=\"")
-                .append(epigrafe.texto())
+                .append(epigrafe.getTexto())
                 .append("\" ");
 
-        if (epigrafe.complemento() != null) {
+        if (epigrafe.getComplemento() != null) {
             sb.append("complemento=\"")
-                    .append(epigrafe.complemento())
+                    .append(epigrafe.getComplemento())
                     .append("\" ");
         }
 
         sb.append("/>\n");
     }
 
-    private void geraComponentes(List<ComponenteEmendado> componentes, StringBuilder sb) {
+    private void geraComponentes(List<? extends ComponenteEmendado> componentes, StringBuilder sb) {
         componentes.forEach(componente -> {
             sb.append("  <Componente ")
                     .append("urn=\"")
-                    .append(componente.urn())
+                    .append(componente.getUrn())
                     .append("\" ")
                     .append("artigo=\"")
-                    .append(componente.articulado())
+                    .append(componente.isArticulado())
                     .append("\" ");
 
-            if (componente.tituloAnexo() != null) {
+            if (componente.getTituloAnexo() != null) {
                 sb.append("tituloAnexo=\"")
-                        .append(componente.tituloAnexo())
+                        .append(componente.getTituloAnexo())
                         .append("\" ");
             }
 
-            if (componente.rotuloAnexo() != null) {
+            if (componente.getRotuloAnexo() != null) {
                 sb.append("rotuloAnexo=\"")
-                        .append(componente.rotuloAnexo())
+                        .append(componente.getRotuloAnexo())
                         .append("\" ");
             }
 
             sb.append(">\n");
-            geraDispositivos(componente.dispositivos(), sb);
+            geraDispositivos(componente.getDispositivos(), sb);
             sb.append("  </Componente>\n");
         });
     }
 
     private void geraDispositivos(DispositivosEmenda dispositivos, StringBuilder sb) {
         sb.append("    <Dispositivos>\n");
-        dispositivos.dispositivosSuprimidos().forEach(suprimido -> geraDispositivosSuprimidos(suprimido, sb));
-        dispositivos.dispositivosModificados().forEach(modificado -> geraDispositivosModificados(modificado, sb));
-        dispositivos.dispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, sb));
+        dispositivos.getDispositivosSuprimidos().forEach(suprimido -> geraDispositivosSuprimidos(suprimido, sb));
+        dispositivos.getDispositivosModificados().forEach(modificado -> geraDispositivosModificados(modificado, sb));
+        dispositivos.getDispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, sb));
         sb.append("    </Dispositivos>\n");
     }
 
     private void geraDispositivosSuprimidos(DispositivoEmendaSuprimido suprimido, StringBuilder sb) {
         sb.append("      <DispositivoSuprimido ")
                 .append("tipo=\"")
-                .append(suprimido.tipo())
+                .append(suprimido.getTipo())
                 .append("\" ")
                 .append("id=\"")
-                .append(suprimido.id())
+                .append(suprimido.getId())
                 .append("\" ")
                 .append("rotulo=\"")
-                .append(suprimido.rotulo())
+                .append(suprimido.getRotulo())
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
     private void geraDispositivosModificados(DispositivoEmendaModificado modificado, StringBuilder sb) {
         sb.append("      <DispositivoModificado ")
                 .append("tipo=\"")
-                .append(modificado.tipo())
+                .append(modificado.getTipo())
                 .append("\" ")
                 .append("id=\"")
-                .append(modificado.id())
+                .append(modificado.getId())
                 .append("\" ")
                 .append("rotulo=\"")
-                .append(modificado.rotulo())
+                .append(modificado.getRotulo())
                 .append("\" ");
-        if (modificado.textoOmitido() != null) {
+        if (modificado.isTextoOmitido() != null) {
             sb.append("textoOmitido=\"")
-                    .append(modificado.textoOmitido())
+                    .append(modificado.isTextoOmitido())
                     .append("\" ");
         }
-        if (modificado.abreAspas() != null) {
+        if (modificado.isAbreAspas() != null) {
             sb.append("abreAspas=\"")
-                    .append(modificado.abreAspas())
+                    .append(modificado.isAbreAspas())
                     .append("\" ");
         }
-        if (modificado.fechaAspas() != null) {
+        if (modificado.isFechaAspas() != null) {
             sb.append("fechaAspas=\"")
-                    .append(modificado.fechaAspas())
+                    .append(modificado.isFechaAspas())
                     .append("\" ");
         }
-        if (modificado.notaAlteracao() != null) {
+        if (modificado.getNotaAlteracao() != null) {
             sb.append("notaAlteracao=\"")
-                    .append(modificado.notaAlteracao())
+                    .append(modificado.getNotaAlteracao())
                     .append("\" ");
         }
         sb.append(">\n");
         sb.append("        <Texto>")
-                .append(modificado.texto())
+                .append(modificado.getTexto())
                 .append("\n        </Texto>\n");
 
     }
@@ -219,33 +233,33 @@ public class EmendaXmlMarshaller {
     private void geraDispositivosAdicionados(DispositivoEmendaAdicionado adicionado, StringBuilder sb) {
         sb.append("      <DispositivoAdicionado ");
 
-        if (adicionado.ondeCouber() != null) {
+        if (adicionado.isOndeCouber() != null) {
             sb.append("ondeCouber=\"")
-                    .append(adicionado.ondeCouber())
+                    .append(adicionado.isOndeCouber())
                     .append("\" ");
         }
 
-        if (adicionado.idPai() != null) {
+        if (adicionado.getIdPai() != null) {
             sb.append("idPai=\"")
-                    .append(adicionado.idPai())
+                    .append(adicionado.getIdPai())
                     .append("\" ");
         }
 
-        if (adicionado.idIrmaoAnterior() != null) {
+        if (adicionado.getIdIrmaoAnterior() != null) {
             sb.append("idIrmaoAnterior=\"")
-                    .append(adicionado.idIrmaoAnterior())
+                    .append(adicionado.getIdIrmaoAnterior())
                     .append("\" ");
         }
 
-        if (adicionado.urnNormaAlterada() != null) {
+        if (adicionado.getUrnNormaAlterada() != null) {
             sb.append("urnNormaAlterada=\"")
-                    .append(adicionado.urnNormaAlterada())
+                    .append(adicionado.getUrnNormaAlterada())
                     .append("\" ");
         }
 
-        if (adicionado.existeNaNormaAlterada() != null) {
+        if (adicionado.isExisteNaNormaAlterada() != null) {
             sb.append("existeNaNormaAlterada=\"")
-                    .append(adicionado.existeNaNormaAlterada())
+                    .append(adicionado.isExisteNaNormaAlterada())
                     .append("\" ");
         }
 
@@ -259,28 +273,28 @@ public class EmendaXmlMarshaller {
 
     private void geraFilhosDispositivosAdicionados(DispositivoEmendaAdicionado filho, StringBuilder sb) {
         sb.append("        <");
-        sb.append(filho.tipo());
+        sb.append(filho.getTipo());
 
-        if (filho.rotulo() == null && filho.texto() == null &&
+        if (filho.getRotulo() == null && filho.getTexto() == null &&
                 (filho.filhos() == null || filho.filhos().isEmpty())) {
             sb.append(FECHA_TAG_SEM_CONTEUDO);
         } else {
             sb.append(">\n");
-            if (filho.rotulo() != null) {
+            if (filho.getRotulo() != null) {
                 sb.append("          <Rotulo>")
-                        .append(filho.rotulo())
+                        .append(filho.getRotulo())
                         .append("</Rotulo>\n");
             }
-            if (filho.texto() != null) {
+            if (filho.getTexto() != null) {
                 sb.append("          <Texto>")
-                        .append(filho.texto())
+                        .append(filho.getTexto())
                         .append("</Texto>\n");
             }
 
             filho.filhos().forEach(filhoFilho -> geraFilhosDispositivosAdicionados(filhoFilho, sb));
 
             sb.append("        </");
-            sb.append(filho.tipo());
+            sb.append(filho.getTipo());
             sb.append(">\n");
         }
     }
@@ -289,36 +303,36 @@ public class EmendaXmlMarshaller {
     private void geraComandoEmenda(ComandoEmenda comandoEmenda, StringBuilder sb) {
         sb.append("  <ComandoEmenda>\n");
 
-        if (comandoEmenda.cabecalhoComum() != null) {
+        if (comandoEmenda.getCabecalhoComum() != null) {
             sb.append("    <CabecalhoComum>")
-                    .append(comandoEmenda.cabecalhoComum())
+                    .append(comandoEmenda.getCabecalhoComum())
                     .append("</CabecalhoComum>\n");
         } else {
             sb.append("    <CabecalhoComum/>\n");
         }
 
-        comandoEmenda.comandos().forEach(comando -> geraComando(comando, sb));
+        comandoEmenda.getComandos().forEach(comando -> geraComando(comando, sb));
         sb.append("  </ComandoEmenda>\n");
     }
 
     private void geraComando(ItemComandoEmenda comando, StringBuilder sb) {
         sb.append("    <ItemComandoEmenda>\n");
 
-        if (comando.rotulo() != null) {
+        if (comando.getRotulo() != null) {
             sb.append("      <rotulo>")
-                    .append(comando.rotulo())
+                    .append(comando.getRotulo())
                     .append("</rotulo>\n");
         } else {
             sb.append("      <rotulo/>\n");
         }
 
         sb.append("      <cabecalho>")
-                .append(comando.cabecalho())
+                .append(comando.getCabecalho())
                 .append("</cabecalho>\n");
 
-        if (comando.citacao() != null) {
+        if (comando.getCitacao() != null) {
             sb.append("      <citacao>")
-                    .append(comando.citacao())
+                    .append(comando.getCitacao())
                     .append("</citacao>\n");
         } else {
             sb.append("      <citacao/>\n");
@@ -336,19 +350,19 @@ public class EmendaXmlMarshaller {
     private void geraAutoria(Autoria autoria, StringBuilder sb) {
         sb.append("  <Autoria ")
                 .append(" tipo=\"")
-                .append(autoria.tipo())
+                .append(autoria.getTipo())
                 .append("\" imprimirPartidoUF=\"")
-                .append(autoria.imprimirPartidoUF())
+                .append(autoria.isImprimirPartidoUF())
                 .append("\" quantidadeAssinaturasAdicionaisDeputados=\"")
-                .append(autoria.quantidadeAssinaturasAdicionaisDeputados())
+                .append(autoria.getQuantidadeAssinaturasAdicionaisDeputados())
                 .append("\" quantidadeAssinaturasAdicionaisSenadores=\"")
-                .append(autoria.quantidadeAssinaturasAdicionaisSenadores())
+                .append(autoria.getQuantidadeAssinaturasAdicionaisSenadores())
                 .append("\" >\n");
 
-        autoria.parlamentares().forEach(autor -> geraParlamentar(autor, sb));
+        autoria.getParlamentares().forEach(autor -> geraParlamentar(autor, sb));
 
-        if (autoria.colegiado() != null) {
-            geraColegiadoAutor(autoria.colegiado(), sb);
+        if (autoria.getColegiado() != null) {
+            geraColegiadoAutor(autoria.getColegiado(), sb);
         }
 
         sb.append("  </Autoria>\n");
@@ -359,52 +373,52 @@ public class EmendaXmlMarshaller {
     private void geraParlamentar(Parlamentar autor, StringBuilder sb) {
         sb.append("    <Parlamentar ")
                 .append(" identificacao=\"")
-                .append(autor.identificacao())
+                .append(autor.getIdentificacao())
                 .append("\" ")
                 .append("nome=\"")
-                .append(autor.nome())
+                .append(autor.getNome())
                 .append("\" ")
                 .append("tratamento=\"")
-                .append(autor.tratamento())
+                .append(autor.getTratamento())
                 .append("\" ")
                 .append("siglaPartido=\"")
-                .append(autor.siglaPartido())
+                .append(autor.getSiglaPartido())
                 .append("\" ")
                 .append("siglaUF=\"")
-                .append(autor.siglaUf())
+                .append(autor.getSiglaUf())
                 .append("\" ")
                 .append("siglaCasaLegislativa=\"")
-                .append(autor.siglaCasaLegislativa())
+                .append(autor.getSiglaCasaLegislativa())
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
     private void geraColegiadoAutor(ColegiadoAutor colegiado, StringBuilder sb) {
         sb.append("    <Colegiado ")
                 .append("identificacao=\"")
-                .append(colegiado.identificacao())
+                .append(colegiado.getIdentificacao())
                 .append("\" ")
                 .append("nome=\"")
-                .append(colegiado.nome())
+                .append(colegiado.getNome())
                 .append("\" ")
                 .append("sigla=\"")
-                .append(colegiado.sigla())
+                .append(colegiado.getSigla())
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
     private void geraOpcoesImpressao(OpcoesImpressao opcoesImpressao, StringBuilder sb) {
         sb.append("  <OpcoesImpressao ")
                 .append(" imprimirBrasao=\"")
-                .append(opcoesImpressao.imprimirBrasao())
+                .append(opcoesImpressao.isImprimirBrasao())
                 .append("\" ");
 
-        if (opcoesImpressao.textoCabecalho() != null) {
+        if (opcoesImpressao.getTextoCabecalho() != null) {
             sb.append(" textoCabecalho=\"")
-                    .append(opcoesImpressao.textoCabecalho())
+                    .append(opcoesImpressao.getTextoCabecalho())
                     .append("\" ");
         }
 
         sb.append(" reduzirEspacoEntreLinhas=\"")
-                .append(opcoesImpressao.reduzirEspacoEntreLinhas())
+                .append(opcoesImpressao.isReduzirEspacoEntreLinhas())
                 .append(FECHA_TAG_SEM_CONTEUDO);
 
 
