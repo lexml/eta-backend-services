@@ -80,7 +80,7 @@ public final class ParlamentarRecord implements Parlamentar {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ParlamentarRecord) obj;
+        ParlamentarRecord that = (ParlamentarRecord) obj;
         return Objects.equals(this.identificacao, that.identificacao) &&
                 Objects.equals(this.nome, that.nome) &&
                 Objects.equals(this.sexo, that.sexo) &&

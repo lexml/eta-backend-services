@@ -41,7 +41,7 @@ public final class ItemComandoEmendaRecord implements ItemComandoEmenda {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ItemComandoEmendaRecord) obj;
+        ItemComandoEmendaRecord that = (ItemComandoEmendaRecord) obj;
         return Objects.equals(this.cabecalho, that.cabecalho) &&
                 Objects.equals(this.citacao, that.citacao) &&
                 Objects.equals(this.rotulo, that.rotulo) &&

@@ -25,7 +25,7 @@ public final class EpigrafeRecord implements Epigrafe {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (EpigrafeRecord) obj;
+        EpigrafeRecord that = (EpigrafeRecord) obj;
         return Objects.equals(this.texto, that.texto) &&
                 Objects.equals(this.complemento, that.complemento);
     }

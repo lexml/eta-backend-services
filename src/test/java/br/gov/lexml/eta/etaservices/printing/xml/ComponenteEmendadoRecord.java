@@ -53,7 +53,7 @@ public final class ComponenteEmendadoRecord implements ComponenteEmendado {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ComponenteEmendadoRecord) obj;
+        ComponenteEmendadoRecord that = (ComponenteEmendadoRecord) obj;
         return Objects.equals(this.urn, that.urn) &&
                 this.articulado == that.articulado &&
                 Objects.equals(this.rotuloAnexo, that.rotuloAnexo) &&

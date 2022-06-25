@@ -55,7 +55,7 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (RefProposicaoEmendadaRecord) obj;
+        RefProposicaoEmendadaRecord that = (RefProposicaoEmendadaRecord) obj;
         return Objects.equals(this.urn, that.urn) &&
                 Objects.equals(this.sigla, that.sigla) &&
                 Objects.equals(this.numero, that.numero) &&

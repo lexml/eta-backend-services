@@ -26,7 +26,7 @@ public class EmendaXmlMarshaller {
     public static final String FECHA_TAG_SEM_CONTEUDO = "\" />\n";
 
     public String toXml(Emenda emenda) {
-        final var sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         geraCabecalhoEmenda(emenda, sb);
         geraMetadados(emenda, sb);
         geraProposicao(emenda.getProposicao(), sb);

@@ -65,7 +65,7 @@ public final class AutoriaRecord implements Autoria {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (AutoriaRecord) obj;
+        AutoriaRecord that = (AutoriaRecord) obj;
         return Objects.equals(this.tipo, that.tipo) &&
                 this.imprimirPartidoUF == that.imprimirPartidoUF &&
                 this.quantidadeAssinaturasAdicionaisSenadores == that.quantidadeAssinaturasAdicionaisSenadores &&

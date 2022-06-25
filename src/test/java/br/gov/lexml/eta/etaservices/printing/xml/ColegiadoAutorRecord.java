@@ -31,7 +31,7 @@ public final class ColegiadoAutorRecord implements ColegiadoAutor {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ColegiadoAutorRecord) obj;
+        ColegiadoAutorRecord that = (ColegiadoAutorRecord) obj;
         return Objects.equals(this.identificacao, that.identificacao) &&
                 Objects.equals(this.nome, that.nome) &&
                 Objects.equals(this.sigla, that.sigla);

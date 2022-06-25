@@ -130,7 +130,7 @@ public final class EmendaRecord implements Emenda {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (EmendaRecord) obj;
+        EmendaRecord that = (EmendaRecord) obj;
         return Objects.equals(this.dataUltimaModificacao, that.dataUltimaModificacao) &&
                 Objects.equals(this.aplicacao, that.aplicacao) &&
                 Objects.equals(this.versaoAplicacao, that.versaoAplicacao) &&

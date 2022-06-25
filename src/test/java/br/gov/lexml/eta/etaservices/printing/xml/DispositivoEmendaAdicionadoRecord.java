@@ -113,7 +113,7 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (DispositivoEmendaAdicionadoRecord) obj;
+        DispositivoEmendaAdicionadoRecord that = (DispositivoEmendaAdicionadoRecord) obj;
         return Objects.equals(this.tipo, that.tipo) &&
                 Objects.equals(this.id, that.id) &&
                 Objects.equals(this.rotulo, that.rotulo) &&

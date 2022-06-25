@@ -32,7 +32,7 @@ public final class DispositivoEmendaSuprimidoRecord implements
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (DispositivoEmendaSuprimidoRecord) obj;
+        DispositivoEmendaSuprimidoRecord that = (DispositivoEmendaSuprimidoRecord) obj;
         return Objects.equals(this.tipo, that.tipo) &&
                 Objects.equals(this.id, that.id) &&
                 Objects.equals(this.rotulo, that.rotulo);

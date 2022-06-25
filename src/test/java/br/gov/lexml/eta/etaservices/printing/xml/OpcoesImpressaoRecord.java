@@ -34,7 +34,7 @@ public final class OpcoesImpressaoRecord implements OpcoesImpressao {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (OpcoesImpressaoRecord) obj;
+        OpcoesImpressaoRecord that = (OpcoesImpressaoRecord) obj;
         return this.imprimirBrasao == that.imprimirBrasao &&
                 Objects.equals(this.textoCabecalho, that.textoCabecalho) &&
                 this.reduzirEspacoEntreLinhas == that.reduzirEspacoEntreLinhas;

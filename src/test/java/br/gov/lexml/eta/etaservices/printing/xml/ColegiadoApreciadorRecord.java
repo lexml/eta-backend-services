@@ -36,7 +36,7 @@ public final class ColegiadoApreciadorRecord implements ColegiadoApreciador {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (ColegiadoApreciadorRecord) obj;
+        ColegiadoApreciadorRecord that = (ColegiadoApreciadorRecord) obj;
         return Objects.equals(this.siglaCasaLegislativa, that.siglaCasaLegislativa) &&
                 Objects.equals(this.tipoColegiado, that.tipoColegiado) &&
                 Objects.equals(this.siglaComissao, that.siglaComissao);

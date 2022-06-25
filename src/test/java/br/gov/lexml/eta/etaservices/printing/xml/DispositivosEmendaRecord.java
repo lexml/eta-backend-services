@@ -38,7 +38,7 @@ public final class DispositivosEmendaRecord implements DispositivosEmenda {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (DispositivosEmendaRecord) obj;
+        DispositivosEmendaRecord that = (DispositivosEmendaRecord) obj;
         return Objects.equals(this.dispositivosSuprimidos, that.dispositivosSuprimidos) &&
                 Objects.equals(this.dispositivosModificados, that.dispositivosModificados) &&
                 Objects.equals(this.dispositivosAdicionados, that.dispositivosAdicionados);
