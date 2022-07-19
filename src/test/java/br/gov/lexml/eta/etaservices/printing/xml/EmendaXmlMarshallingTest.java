@@ -1,8 +1,19 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
 
+import br.gov.lexml.eta.etaservices.printing.AutoriaRecord;
+import br.gov.lexml.eta.etaservices.printing.ColegiadoApreciadorRecord;
+import br.gov.lexml.eta.etaservices.printing.ComandoEmendaRecord;
+import br.gov.lexml.eta.etaservices.printing.ComponenteEmendadoRecord;
+import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionadoRecord;
+import br.gov.lexml.eta.etaservices.printing.DispositivosEmendaRecord;
 import br.gov.lexml.eta.etaservices.printing.Emenda;
+import br.gov.lexml.eta.etaservices.printing.EmendaRecord;
+import br.gov.lexml.eta.etaservices.printing.EpigrafeRecord;
 import br.gov.lexml.eta.etaservices.printing.ModoEdicaoEmenda;
+import br.gov.lexml.eta.etaservices.printing.OpcoesImpressaoRecord;
+import br.gov.lexml.eta.etaservices.printing.ParlamentarRecord;
+import br.gov.lexml.eta.etaservices.printing.RefProposicaoEmendadaRecord;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;

@@ -1,8 +1,4 @@
-package br.gov.lexml.eta.etaservices.printing.xml;
-
-import br.gov.lexml.eta.etaservices.printing.ColegiadoApreciador;
-import br.gov.lexml.eta.etaservices.printing.SiglaCasaLegislativa;
-import br.gov.lexml.eta.etaservices.printing.TipoColegiado;
+package br.gov.lexml.eta.etaservices.printing;
 
 import java.util.Objects;
 

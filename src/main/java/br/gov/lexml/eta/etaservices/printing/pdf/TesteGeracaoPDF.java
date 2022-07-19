@@ -1,32 +1,31 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
+import org.apache.commons.io.FileUtils;
+
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 /**
  * Para executar e testar geração do PDF durante desenvolvimento.
  */
 public class TesteGeracaoPDF {
 
-	public static void main(String[] args) throws Exception {
+	public static final String EMENDA_XML = "<emenda>Teste</emenda>";
+	private static final String TARGET_FO_EMENDA_XML = "target/fo-emenda.xml";
+	private static final String TARGET_EMENDA_PDF = "target/emenda.pdf";
 
-		// Geração do PDF
+	public static void main(String[] args) throws IOException {
 		processaVelocity();
 		processaFOEmenda();
-
-		// Transformação de um xslfo simples, adicionando um emenda.xml
-//		processaExemploFORequerimento();
-//		processaExemploFOEmenda();
-
 	}
 
-	private static void processaVelocity() throws Exception {
+	private static void processaVelocity() throws IOException {
 
 		Map<String, Object> infos = new HashMap<>();
 		infos.put("aplicacao", "LexEdit");
@@ -34,30 +33,16 @@ public class TesteGeracaoPDF {
 		infos.put("textoCabecalho", "Gabinete do Senador Ricardo Lima");
 
 		String fo = new VelocityTemplateProcessor(infos).getTemplateResult();
-		FileUtils.writeStringToFile(new File("target/fo-emenda.xml"), fo);
+		FileUtils.writeStringToFile(new File(TARGET_FO_EMENDA_XML), fo, StandardCharsets.UTF_8);
 
 	}
 
-	private static void processaFOEmenda() throws Exception {
-		OutputStream out = new FileOutputStream("target/emenda.pdf");
-		String xslfo = FileUtils.readFileToString(new File("target/fo-emenda.xml"), "UTF-8");
-		String emendaXML = "<emenda>Teste</emenda>";
-		new FOPProcessor().processFOP(out, xslfo, emendaXML);
-	}
-
-
-	private static void processaExemploFORequerimento() throws Exception {
-		OutputStream out = new FileOutputStream("target/exemplo-requerimento.pdf");
-		String xslfo = IOUtils.toString(TesteGeracaoPDF.class.getResourceAsStream("/exemplo-fo-requerimento.xml"), "UTF-8");
-		String emendaXML = "<emenda>Teste</emenda>";
-		new FOPProcessor().processFOP(out, xslfo, emendaXML);
-	}
-
-	private static void processaExemploFOEmenda() throws Exception {
-		OutputStream out = new FileOutputStream("target/exemplo-emenda.pdf");
-		String xslfo = IOUtils.toString(TesteGeracaoPDF.class.getResourceAsStream("/exemplo-fo-emenda-lexedit-swing.xml"), "UTF-8");
-		String emendaXML = "<emenda>Teste</emenda>";
-		new FOPProcessor().processFOP(out, xslfo, emendaXML);
+	private static void processaFOEmenda() throws IOException {
+		try(OutputStream out = Files.newOutputStream(Paths.get(TARGET_EMENDA_PDF))) {
+			String xslFo = FileUtils.readFileToString(new File(TARGET_FO_EMENDA_XML),
+					StandardCharsets.UTF_8);
+			new FOPProcessor().processFOP(out, xslFo, EMENDA_XML);
+		}
 	}
 
 }

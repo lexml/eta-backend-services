@@ -1,7 +1,4 @@
-package br.gov.lexml.eta.etaservices.printing.xml;
-
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionado;
-import br.gov.lexml.eta.etaservices.printing.NotaAlteracao;
+package br.gov.lexml.eta.etaservices.printing;
 
 import java.util.List;
 import java.util.Objects;
@@ -105,7 +102,7 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
         return existeNaNormaAlterada;
     }
 
-    public List<DispositivoEmendaAdicionadoRecord> filhos() {
+    public List<DispositivoEmendaAdicionadoRecord> getFilhos() {
         return filhos;
     }
 

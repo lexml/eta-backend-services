@@ -1,60 +1,61 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import java.io.StringWriter;
-import java.util.Map;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+
 class VelocityTemplateProcessor {
 
-	private static final Logger log = LoggerFactory.getLogger(VelocityTemplateProcessor.class);
+    private static final Logger log = LoggerFactory.getLogger(VelocityTemplateProcessor.class);
 
-	private static String TEMPLATE_RESOURCE = "/template-velocity-emenda.xml";
+    private static String TEMPLATE_RESOURCE = "/template-velocity-emenda.xml";
 
 //	private final HostEditor hostEditor;
 
 //	private Map<String, String> templateReplacements;
 
-	private Map<String, Object> mapaParaContexto;
+    private Map<String, Object> mapaParaContexto;
 
-	private String velocityResult;
+    private String velocityResult;
 
-	VelocityTemplateProcessor(Map<String, Object> mapaParaContexto /*, HostEditor hostEditor*/) {
-		this.mapaParaContexto = mapaParaContexto;
-	}
+    VelocityTemplateProcessor(Map<String, Object> mapaParaContexto /*, HostEditor hostEditor*/) {
+        this.mapaParaContexto = mapaParaContexto;
+    }
 
-	/**
-	 * Process a Velocity template. Returns a FOP pure code.
-	 *
-	 * @return a final FO code processed by Velocity
-	 * @throws Exception
-	 */
-	public String getTemplateResult() throws Exception {
+    /**
+     * Process a Velocity template. Returns a FOP pure code.
+     *
+     * @return a final FO code processed by Velocity
+     * @throws Exception
+     */
+    public String getTemplateResult() throws IOException {
 
-		if (velocityResult == null) {
+        if (velocityResult == null) {
 
-			String finalTemplate = IOUtils.toString(getClass().getResourceAsStream(TEMPLATE_RESOURCE), "UTF-8");
+            String finalTemplate = IOUtils.toString(getClass().getResourceAsStream(TEMPLATE_RESOURCE), StandardCharsets.UTF_8);
 
-			//REPLACEMENTS
+            //REPLACEMENTS
 //			VelocityTemplateProcessorLanguageExpansion vtple = new VelocityTemplateProcessorLanguageExpansion(madocDocument, hostEditor);
 //			finalTemplate = vtple.doExpansions(finalTemplate);
 //			templateReplacements = vtple.getTemplateReplacements();
 
-			if (log.isDebugEnabled()){
-				log.debug("finalTemplate: " + finalTemplate);
-			}
+            if (log.isDebugEnabled()) {
+                log.debug("finalTemplate: " + finalTemplate);
+            }
 
-			// processing velocity
-			velocityResult = getVelocityResult(finalTemplate);
-		}
+            // processing velocity
+            velocityResult = getVelocityResult(finalTemplate);
+        }
 
-		return velocityResult;
+        return velocityResult;
 
 		/*
 		try {
@@ -64,29 +65,28 @@ class VelocityTemplateProcessor {
 			e.printStackTrace();
 		}
 		*/
-	}
+    }
 
-	/**
-	 * Returns an FO code from a template
-	 * @param template an string that contains skeleton and all templates from current MadocDocument
-	 * @return final FO code
-	 */
-	private String getVelocityResult(String template) {
+    /**
+     * Returns an FO code from a template
+     *
+     * @param template an string that contains skeleton and all templates from current MadocDocument
+     * @return final FO code
+     */
+    private String getVelocityResult(String template) {
 
-		VelocityEngine ve = new VelocityEngine();
+        VelocityEngine ve = new VelocityEngine();
 
-	    ve.setProperty( RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS,
-	    	      "org.apache.velocity.runtime.log.Log4JLogChute" );
-	    ve.setProperty("runtime.log.logsystem.log4j.logger", getClass().getName());
+        ve.setProperty("runtime.log.logsystem.log4j.logger", getClass().getName());
 
-		ve.init();
+        ve.init();
 
-		VelocityContext ctx = new VelocityContext();
+        VelocityContext ctx = new VelocityContext();
 
-		// Adiciona dados direto na raiz
-		mapaParaContexto.forEach((key, value) -> {
-			ctx.put(key, value);
-		});
+        // Adiciona dados direto na raiz
+        mapaParaContexto.forEach((key, value) -> {
+            ctx.put(key, value);
+        });
 
 //		// put constants
 //		Map<String, String> constants = new HashMap<String, String>();
@@ -113,21 +113,20 @@ class VelocityTemplateProcessor {
 		}
 		*/
 
-	    StringWriter w = new StringWriter();
-		ve.evaluate(ctx, w, "defaultTemplate", template);
-		String result = w.toString();
+        StringWriter w = new StringWriter();
+        ve.evaluate(ctx, w, "defaultTemplate", template);
+        String result = w.toString();
 
-		if (StringUtils.isEmpty(result)){
-			return "";
-		}
+        if (StringUtils.isEmpty(result)) {
+            return "";
+        }
 
-		// Retira espaços duplicados e espaço antes de pontuação
-		result = result.replaceAll("\\s{2,}", " ");
-		result = result.replaceAll("\\s([.,;:!?])", "$1");
+        // Retira espaços duplicados e espaço antes de pontuação
+        result = result.replaceAll("\\s{2,}", " ");
+        result = result.replaceAll("\\s([.,;:!?])", "$1");
 
-		log.debug("getVelocityResult: " + result);
+        log.debug("getVelocityResult: " + result);
 
-		return result;
-	}
+        return result;
+    }
 }
-

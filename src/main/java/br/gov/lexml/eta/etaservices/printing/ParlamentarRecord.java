@@ -1,8 +1,4 @@
-package br.gov.lexml.eta.etaservices.printing.xml;
-
-import br.gov.lexml.eta.etaservices.printing.Parlamentar;
-import br.gov.lexml.eta.etaservices.printing.Sexo;
-import br.gov.lexml.eta.etaservices.printing.SiglaCasaLegislativa;
+package br.gov.lexml.eta.etaservices.printing;
 
 import java.util.Objects;
 

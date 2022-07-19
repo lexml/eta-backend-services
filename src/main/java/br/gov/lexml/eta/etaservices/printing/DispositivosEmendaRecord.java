@@ -1,9 +1,4 @@
-package br.gov.lexml.eta.etaservices.printing.xml;
-
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionado;
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaModificado;
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaSuprimido;
-import br.gov.lexml.eta.etaservices.printing.DispositivosEmenda;
+package br.gov.lexml.eta.etaservices.printing;
 
 import java.util.List;
 import java.util.Objects;

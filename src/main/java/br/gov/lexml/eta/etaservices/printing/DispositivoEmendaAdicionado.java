@@ -13,5 +13,5 @@ public interface DispositivoEmendaAdicionado extends DispositivoEmendaModificado
 
     Boolean isExisteNaNormaAlterada();
 
-    List<? extends DispositivoEmendaAdicionado> filhos();
+    List<? extends DispositivoEmendaAdicionado> getFilhos();
 }

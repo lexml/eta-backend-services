@@ -1,7 +1,4 @@
-package br.gov.lexml.eta.etaservices.printing.xml;
-
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaModificado;
-import br.gov.lexml.eta.etaservices.printing.NotaAlteracao;
+package br.gov.lexml.eta.etaservices.printing;
 
 import java.util.Objects;
 

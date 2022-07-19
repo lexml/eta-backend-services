@@ -265,7 +265,7 @@ public class EmendaXmlMarshaller {
 
         sb.append(">\n");
 
-        adicionado.filhos().forEach(filho -> geraFilhosDispositivosAdicionados(filho, sb));
+        adicionado.getFilhos().forEach(filho -> geraFilhosDispositivosAdicionados(filho, sb));
 
         sb.append("      </DispositivoAdicionado>\n");
 
@@ -276,7 +276,7 @@ public class EmendaXmlMarshaller {
         sb.append(filho.getTipo());
 
         if (filho.getRotulo() == null && filho.getTexto() == null &&
-                (filho.filhos() == null || filho.filhos().isEmpty())) {
+                (filho.getFilhos() == null || filho.getFilhos().isEmpty())) {
             sb.append(FECHA_TAG_SEM_CONTEUDO);
         } else {
             sb.append(">\n");
@@ -291,7 +291,7 @@ public class EmendaXmlMarshaller {
                         .append("</Texto>\n");
             }
 
-            filho.filhos().forEach(filhoFilho -> geraFilhosDispositivosAdicionados(filhoFilho, sb));
+            filho.getFilhos().forEach(filhoFilho -> geraFilhosDispositivosAdicionados(filhoFilho, sb));
 
             sb.append("        </");
             sb.append(filho.getTipo());
