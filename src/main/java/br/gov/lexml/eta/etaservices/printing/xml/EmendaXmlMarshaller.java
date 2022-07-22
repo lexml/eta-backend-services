@@ -23,7 +23,7 @@ import static br.gov.lexml.eta.etaservices.printing.TipoColegiado.COMISSAO;
 
 public class EmendaXmlMarshaller {
 
-    public static final String FECHA_TAG_SEM_CONTEUDO = "\" />\n";
+    public static final String FECHA_TAG_SEM_CONTEUDO = "/>\n";
 
     public String toXml(Emenda emenda) {
         final StringBuilder sb = new StringBuilder();
@@ -106,6 +106,7 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("identificacaoTexto=\"")
                 .append(proposicao.getIdentificacaoTexto())
+                .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
@@ -189,6 +190,7 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("rotulo=\"")
                 .append(suprimido.getRotulo())
+                .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
@@ -203,17 +205,17 @@ public class EmendaXmlMarshaller {
                 .append("rotulo=\"")
                 .append(modificado.getRotulo())
                 .append("\" ");
-        if (modificado.isTextoOmitido() != null) {
+        if (modificado.isTextoOmitido() != null && modificado.isTextoOmitido()) {
             sb.append("textoOmitido=\"")
                     .append(modificado.isTextoOmitido())
                     .append("\" ");
         }
-        if (modificado.isAbreAspas() != null) {
+        if (modificado.isAbreAspas() != null && modificado.isAbreAspas()) {
             sb.append("abreAspas=\"")
                     .append(modificado.isAbreAspas())
                     .append("\" ");
         }
-        if (modificado.isFechaAspas() != null) {
+        if (modificado.isFechaAspas() != null && modificado.isFechaAspas()) {
             sb.append("fechaAspas=\"")
                     .append(modificado.isFechaAspas())
                     .append("\" ");
@@ -252,18 +254,6 @@ public class EmendaXmlMarshaller {
                     .append("\" ");
         }
 
-        if (adicionado.getUrnNormaAlterada() != null) {
-            sb.append("urnNormaAlterada=\"")
-                    .append(adicionado.getUrnNormaAlterada())
-                    .append("\" ");
-        }
-
-        if (adicionado.isExisteNaNormaAlterada() != null) {
-            sb.append("existeNaNormaAlterada=\"")
-                    .append(adicionado.isExisteNaNormaAlterada())
-                    .append("\" ");
-        }
-
         sb.append(">\n");
 
         geraFilhosDispositivosAdicionados(adicionado, sb);
@@ -280,7 +270,35 @@ public class EmendaXmlMarshaller {
         	.append(filho.getId())
         	.append("\" ");
 
-        if (filho.getRotulo() == null && filho.getTexto() == null &&
+        if (filho.getUrnNormaAlterada() != null) {
+            sb.append("xml:base=\"")
+                    .append(filho.getUrnNormaAlterada())
+                    .append("\" ");
+        }
+
+        // TODO - Avaliar uso do true/false ou s/n por estar dentro de estrutura lexml (não é atributo lexml)
+        if (filho.isExisteNaNormaAlterada() != null) {
+            sb.append("existeNaNormaAlterada=\"")
+                    .append(filho.isExisteNaNormaAlterada())
+                    .append("\" ");
+        }
+        
+        if (filho.isTextoOmitido() != null && filho.isTextoOmitido()) {
+            sb.append("textoOmitido=\"s\" ");
+        }
+        if (filho.isAbreAspas() != null && filho.isAbreAspas()) {
+            sb.append("abreAspas=\"s\" ");
+        }
+        if (filho.isFechaAspas() != null && filho.isFechaAspas()) {
+            sb.append("fechaAspas=\"s\" ");
+        }
+        if (filho.getNotaAlteracao() != null) {
+            sb.append("notaAlteracao=\"")
+                    .append(filho.getNotaAlteracao())
+                    .append("\" ");
+        }
+        
+        if (filho.getRotulo() == null && (filho.getTexto() == null || filho.getTipo().equals("Omissis")) &&
                 (filho.getFilhos() == null || filho.getFilhos().isEmpty())) {
             sb.append(FECHA_TAG_SEM_CONTEUDO);
         } else {
@@ -312,8 +330,6 @@ public class EmendaXmlMarshaller {
             sb.append("    <CabecalhoComum>")
                     .append(comandoEmenda.getCabecalhoComum())
                     .append("</CabecalhoComum>\n");
-        } else {
-            sb.append("    <CabecalhoComum/>\n");
         }
 
         comandoEmenda.getComandos().forEach(comando -> geraComando(comando, sb));
@@ -324,25 +340,27 @@ public class EmendaXmlMarshaller {
         sb.append("    <ItemComandoEmenda>\n");
 
         if (comando.getRotulo() != null) {
-            sb.append("      <rotulo>")
+            sb.append("      <Rotulo>")
                     .append(comando.getRotulo())
-                    .append("</rotulo>\n");
-        } else {
-            sb.append("      <rotulo/>\n");
+                    .append("</Rotulo>\n");
         }
 
-        sb.append("      <cabecalho>")
+        sb.append("      <Cabecalho>")
                 .append(comando.getCabecalho())
-                .append("</cabecalho>\n");
+                .append("</Cabecalho>\n");
 
         if (comando.getCitacao() != null) {
-            sb.append("      <citacao>")
+            sb.append("      <Citacao>")
                     .append(comando.getCitacao())
-                    .append("</citacao>\n");
-        } else {
-            sb.append("      <citacao/>\n");
+                    .append("</Citacao>\n");
         }
 
+        if (comando.getComplemento() != null) {
+            sb.append("      <Complemento>")
+                    .append(comando.getComplemento())
+                    .append("</Complemento>\n");
+        }
+        
         sb.append("    </ItemComandoEmenda>\n");
     }
 
@@ -355,7 +373,7 @@ public class EmendaXmlMarshaller {
     private void geraAutoria(Autoria autoria, StringBuilder sb) {
         sb.append("  <Autoria ")
                 .append(" tipo=\"")
-                .append(autoria.getTipo())
+                .append(autoria.getTipo().getDescricao())
                 .append("\" imprimirPartidoUF=\"")
                 .append(autoria.isImprimirPartidoUF())
                 .append("\" quantidadeAssinaturasAdicionaisDeputados=\"")
@@ -394,6 +412,7 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("siglaCasaLegislativa=\"")
                 .append(autor.getSiglaCasaLegislativa())
+                .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
@@ -407,6 +426,7 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("sigla=\"")
                 .append(colegiado.getSigla())
+                .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
@@ -424,6 +444,7 @@ public class EmendaXmlMarshaller {
 
         sb.append(" reduzirEspacoEntreLinhas=\"")
                 .append(opcoesImpressao.isReduzirEspacoEntreLinhas())
+                .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
 
 
