@@ -149,7 +149,7 @@ public class EmendaXmlMarshaller {
                     .append("urn=\"")
                     .append(componente.getUrn())
                     .append("\" ")
-                    .append("artigo=\"")
+                    .append("articulado=\"")
                     .append(componente.isArticulado())
                     .append("\" ");
 
