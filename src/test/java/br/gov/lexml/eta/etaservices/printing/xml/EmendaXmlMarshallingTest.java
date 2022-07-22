@@ -14,11 +14,18 @@ import br.gov.lexml.eta.etaservices.printing.ModoEdicaoEmenda;
 import br.gov.lexml.eta.etaservices.printing.OpcoesImpressaoRecord;
 import br.gov.lexml.eta.etaservices.printing.ParlamentarRecord;
 import br.gov.lexml.eta.etaservices.printing.RefProposicaoEmendadaRecord;
+import br.gov.lexml.eta.etaservices.printing.json.ArquivoEmenda;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;
 
 import javax.xml.transform.Source;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Collections;
@@ -34,10 +41,11 @@ import static org.xmlunit.assertj3.XmlAssert.assertThat;
 class EmendaXmlMarshallingTest {
 
     private Source xmlSource;
+    private Emenda emenda;
 
     @BeforeEach
     void setUp() {
-        final Emenda emenda = setupEmenda();
+        setupEmenda();
         xmlSource = getXmlSource(emenda);
     }
 
@@ -59,70 +67,17 @@ class EmendaXmlMarshallingTest {
 
     private EmendaRecord setupEmenda() {
 
-        final Map<String, Object> metadados = new LinkedHashMap<>();
-        metadados.put("metadado1", "valor1");
-        metadados.put("metadado2", "valor2");
+        ClassLoader classLoader = getClass().getClassLoader();
+        try {
+            File file = new File(classLoader.getResource("test1.json").getFile());
+            String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
+            emenda = objectMapper.readValue(text, ArquivoEmenda.class).getEmenda();
 
-        return new EmendaRecord(
-                LocalDate.parse("2022-06-01")
-                        .atStartOfDay()
-                        .atZone(ZoneId.of("America/Sao_Paulo"))
-                        .toInstant(),
-                "eta",
-                "1.0.0",
-                ModoEdicaoEmenda.EMENDA,
-                metadados,
-                new RefProposicaoEmendadaRecord("urn:lex:br:federal:medida.provisoria:800:2022", "MPV", "800", "2022", "Altera a Lei 1.234/56 e dá outras providências", "bcd"),
-                new ColegiadoApreciadorRecord(CD, PLENARIO, null),
-                new EpigrafeRecord("A Presidência da República em suas atribuições sanciona", ""),
-                Collections.singletonList(new ComponenteEmendadoRecord(
-                        "urn:...",
-                        true,
-                        null,
-                        null,
-                        new DispositivosEmendaRecord(
-                                Collections.emptyList(),
-                                Collections.emptyList(),
-                                Collections.singletonList(
-                                        new DispositivoEmendaAdicionadoRecord(
-                                                "Artigo",
-                                                "2",
-                                                "Art. 2-1",
-                                                "Lorem ipsum dolor sit amet, consetet",
-                                                false,
-                                                false,
-                                                false,
-                                                null,
-                                                false,
-                                                "0",
-                                                "1",
-                                                "urn:lex:br:federal:medida.provisoria:800:2022",
-                                                false,
-                                                Collections.singletonList(
-                                                        new DispositivoEmendaAdicionadoRecord("Artigo",
-                                                                "2",
-                                                                "Art. 2-1",
-                                                                "Lorem ipsum dolor sit amet, consetet",
-                                                                false,
-                                                                false,
-                                                                false,
-                                                                null,
-                                                                false,
-                                                                "0",
-                                                                "1",
-                                                                "urn:lex:br:federal:medida.provisoria:800:2022",
-                                                                false,
-                                                                Collections.emptyList())
-                                                )))))),
-                new ComandoEmendaRecord(null, Collections.emptyList()),
-                "justificativa emenda",
-                "Brasilia",
-                LocalDate.parse("2019-06-01"),
-                new AutoriaRecord(PARLAMENTAR, true, 0, 0,
-                        Collections.singletonList(
-                        new ParlamentarRecord("abcd", "João da Silva", M, "MDB", "SP", CD, "Deputado")
-                ), null),
-                new OpcoesImpressaoRecord(true, "", false));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private Source getXmlSource(Emenda emenda) {

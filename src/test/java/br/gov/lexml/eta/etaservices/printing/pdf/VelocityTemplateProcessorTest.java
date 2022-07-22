@@ -13,7 +13,11 @@ import org.xmlunit.builder.Input;
 import javax.xml.transform.Source;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,6 +65,16 @@ class VelocityTemplateProcessorTest {
                 .withNamespaceContext(context)
                 .valueByXPath("/fo:root/fo:declarations/x:xmpmeta/rdf:RDF/rdf:Description/xmp:CreatorTool[1]")
                 .isEqualTo(emenda.getAplicacao());
+
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource("test1.pdf");
+
+        // Gera pdf
+        assert resource != null;
+        try(OutputStream out = Files.newOutputStream(Paths.get(resource.toURI()))) {
+            new FOPProcessor().processFOP(out, templateResult, "");
+        }
     }
 
 }
