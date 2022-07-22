@@ -11,7 +11,7 @@ public interface Parlamentar {
 
     String getSiglaPartido();
 
-    String getSiglaUf();
+    String getSiglaUF();
 
     SiglaCasaLegislativa getSiglaCasaLegislativa();
 

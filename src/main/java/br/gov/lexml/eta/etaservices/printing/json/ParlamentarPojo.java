@@ -14,7 +14,7 @@ public class ParlamentarPojo implements Parlamentar {
     private String nome;
     private Sexo sexo;
     private String siglaPartido;
-    private String siglaUf;
+    private String siglaUF;
     private SiglaCasaLegislativa siglaCasaLegislativa;
     private String cargo;
 
@@ -55,12 +55,12 @@ public class ParlamentarPojo implements Parlamentar {
     }
 
     @Override
-    public String getSiglaUf() {
-        return siglaUf;
+    public String getSiglaUF() {
+        return siglaUF;
     }
 
     public void setSiglaUf(String siglaUf) {
-        this.siglaUf = siglaUf;
+        this.siglaUF = siglaUf;
     }
 
     @Override
@@ -99,12 +99,12 @@ public class ParlamentarPojo implements Parlamentar {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ParlamentarPojo that = (ParlamentarPojo) o;
-        return Objects.equals(identificacao, that.identificacao) && Objects.equals(nome, that.nome) && sexo == that.sexo && Objects.equals(siglaPartido, that.siglaPartido) && Objects.equals(siglaUf, that.siglaUf) && siglaCasaLegislativa == that.siglaCasaLegislativa && Objects.equals(cargo, that.cargo);
+        return Objects.equals(identificacao, that.identificacao) && Objects.equals(nome, that.nome) && sexo == that.sexo && Objects.equals(siglaPartido, that.siglaPartido) && Objects.equals(siglaUF, that.siglaUF) && siglaCasaLegislativa == that.siglaCasaLegislativa && Objects.equals(cargo, that.cargo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(identificacao, nome, sexo, siglaPartido, siglaUf, siglaCasaLegislativa, cargo);
+        return Objects.hash(identificacao, nome, sexo, siglaPartido, siglaUF, siglaCasaLegislativa, cargo);
     }
 
     @Override
@@ -114,7 +114,7 @@ public class ParlamentarPojo implements Parlamentar {
                 ", nome='" + nome + '\'' +
                 ", sexo=" + sexo +
                 ", siglaPartido='" + siglaPartido + '\'' +
-                ", siglaUf='" + siglaUf + '\'' +
+                ", siglaUf='" + siglaUF + '\'' +
                 ", siglaCasaLegislativa=" + siglaCasaLegislativa +
                 ", cargo='" + cargo + '\'' +
                 '}';

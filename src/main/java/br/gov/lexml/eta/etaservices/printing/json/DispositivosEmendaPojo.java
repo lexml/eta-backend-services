@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class DispositivosEmendaPojo implements DispositivosEmenda {
-    private List<? extends DispositivoEmendaSuprimido> dispositivosSuprimidos;
-    private List<? extends DispositivoEmendaModificado> dispositivosModificados;
-    private List<? extends DispositivoEmendaAdicionado> dispositivosAdicionados;
+    private List<? extends DispositivoEmendaSuprimidoPojo> dispositivosSuprimidos;
+    private List<? extends DispositivoEmendaModificadoPojo> dispositivosModificados;
+    private List<? extends DispositivoEmendaAdicionadoPojo> dispositivosAdicionados;
 
     @Override
     public List<? extends DispositivoEmendaSuprimido> getDispositivosSuprimidos() {
         return dispositivosSuprimidos;
     }
 
-    public void setDispositivosSuprimidos(List<? extends DispositivoEmendaSuprimido> dispositivosSuprimidos) {
+    public void setDispositivosSuprimidos(List<? extends DispositivoEmendaSuprimidoPojo> dispositivosSuprimidos) {
         this.dispositivosSuprimidos = dispositivosSuprimidos;
     }
 
@@ -27,7 +27,7 @@ public class DispositivosEmendaPojo implements DispositivosEmenda {
         return dispositivosModificados;
     }
 
-    public void setDispositivosModificados(List<? extends DispositivoEmendaModificado> dispositivosModificados) {
+    public void setDispositivosModificados(List<? extends DispositivoEmendaModificadoPojo> dispositivosModificados) {
         this.dispositivosModificados = dispositivosModificados;
     }
 
@@ -36,7 +36,7 @@ public class DispositivosEmendaPojo implements DispositivosEmenda {
         return dispositivosAdicionados;
     }
 
-    public void setDispositivosAdicionados(List<? extends DispositivoEmendaAdicionado> dispositivosAdicionados) {
+    public void setDispositivosAdicionados(List<? extends DispositivoEmendaAdicionadoPojo> dispositivosAdicionados) {
         this.dispositivosAdicionados = dispositivosAdicionados;
     }
 

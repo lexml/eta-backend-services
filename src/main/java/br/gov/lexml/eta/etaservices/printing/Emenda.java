@@ -18,7 +18,7 @@ public interface Emenda {
 
     RefProposicaoEmendada getProposicao();
 
-    ColegiadoApreciador getColegiado();
+    ColegiadoApreciador getColegiadoApreciador();
 
     Epigrafe getEpigrafe();
 

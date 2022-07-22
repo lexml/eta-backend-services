@@ -22,16 +22,16 @@ public class EmendaPojo implements Emenda {
     private String versaoAplicacao;
     private ModoEdicaoEmenda modoEdicao;
     private Map<String, Object> metadados;
-    private RefProposicaoEmendada proposicao;
-    private ColegiadoApreciador colegiado;
-    private Epigrafe epigrafe;
-    private List<? extends ComponenteEmendado> componentes;
-    private ComandoEmenda comandoEmenda;
+    private RefProposicaoEmendadaPojo proposicao;
+    private ColegiadoApreciadorPojo colegiado;
+    private EpigrafePojo epigrafe;
+    private List<? extends ComponenteEmendadoPojo> componentes;
+    private ComandoEmendaPojo comandoEmenda;
     private String justificativa;
     private String local;
     private LocalDate data;
-    private Autoria autoria;
-    private OpcoesImpressao opcoesImpressao;
+    private AutoriaPojo autoria;
+    private OpcoesImpressaoPojo opcoesImpressao;
 
     @Override
     public Instant getDataUltimaModificacao() {
@@ -83,16 +83,16 @@ public class EmendaPojo implements Emenda {
         return proposicao;
     }
 
-    public void setProposicao(RefProposicaoEmendada proposicao) {
+    public void setProposicao(RefProposicaoEmendadaPojo proposicao) {
         this.proposicao = proposicao;
     }
 
     @Override
-    public ColegiadoApreciador getColegiado() {
+    public ColegiadoApreciador getColegiadoApreciador() {
         return colegiado;
     }
 
-    public void setColegiado(ColegiadoApreciador colegiado) {
+    public void setColegiadoApreciador(ColegiadoApreciadorPojo colegiado) {
         this.colegiado = colegiado;
     }
 
@@ -101,7 +101,7 @@ public class EmendaPojo implements Emenda {
         return epigrafe;
     }
 
-    public void setEpigrafe(Epigrafe epigrafe) {
+    public void setEpigrafe(EpigrafePojo epigrafe) {
         this.epigrafe = epigrafe;
     }
 
@@ -110,7 +110,7 @@ public class EmendaPojo implements Emenda {
         return componentes;
     }
 
-    public void setComponentes(List<? extends ComponenteEmendado> componentes) {
+    public void setComponentes(List<? extends ComponenteEmendadoPojo> componentes) {
         this.componentes = componentes;
     }
 
@@ -119,7 +119,7 @@ public class EmendaPojo implements Emenda {
         return comandoEmenda;
     }
 
-    public void setComandoEmenda(ComandoEmenda comandoEmenda) {
+    public void setComandoEmenda(ComandoEmendaPojo comandoEmenda) {
         this.comandoEmenda = comandoEmenda;
     }
 
@@ -155,7 +155,7 @@ public class EmendaPojo implements Emenda {
         return autoria;
     }
 
-    public void setAutoria(Autoria autoria) {
+    public void setAutoria(AutoriaPojo autoria) {
         this.autoria = autoria;
     }
 
@@ -164,7 +164,7 @@ public class EmendaPojo implements Emenda {
         return opcoesImpressao;
     }
 
-    public void setOpcoesImpressao(OpcoesImpressao opcoesImpressao) {
+    public void setOpcoesImpressao(OpcoesImpressaoPojo opcoesImpressao) {
         this.opcoesImpressao = opcoesImpressao;
     }
 

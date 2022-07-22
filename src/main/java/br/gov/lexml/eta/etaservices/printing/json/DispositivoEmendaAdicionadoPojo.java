@@ -1,7 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
 import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionado;
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionadoRecord;
 import br.gov.lexml.eta.etaservices.printing.NotaAlteracao;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
     private String idIrmaoAnterior;
     private String urnNormaAlterada;
     private Boolean existeNaNormaAlterada;
-    private List<DispositivoEmendaAdicionadoRecord> filhos;
+    private List<DispositivoEmendaAdicionadoPojo> filhos;
 
     @Override
     public String getTipo() {
@@ -135,11 +134,11 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         this.existeNaNormaAlterada = existeNaNormaAlterada;
     }
 
-    public List<DispositivoEmendaAdicionadoRecord> getFilhos() {
+    public List<? extends DispositivoEmendaAdicionado> getFilhos() {
         return filhos;
     }
 
-    public void setFilhos(List<DispositivoEmendaAdicionadoRecord> filhos) {
+    public void setFilhos(List<DispositivoEmendaAdicionadoPojo> filhos) {
         this.filhos = filhos;
     }
 

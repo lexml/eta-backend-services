@@ -15,8 +15,8 @@ public class AutoriaPojo implements Autoria {
     private boolean imprimirPartidoUF;
     private int quantidadeAssinaturasAdicionaisDeputados;
     private int quantidadeAssinaturasAdicionaisSenadores;
-    private List<? extends Parlamentar> parlamentares = new ArrayList<>();
-    private ColegiadoAutor colegiado;
+    private List<? extends ParlamentarPojo> parlamentares = new ArrayList<>();
+    private ColegiadoAutorPojo colegiado;
 
     @Override
     public TipoAutoria getTipo() {
@@ -59,7 +59,7 @@ public class AutoriaPojo implements Autoria {
         return parlamentares;
     }
 
-    public void setParlamentares(List<? extends Parlamentar> parlamentares) {
+    public void setParlamentares(List<? extends ParlamentarPojo> parlamentares) {
         this.parlamentares = parlamentares;
     }
 
@@ -68,7 +68,7 @@ public class AutoriaPojo implements Autoria {
         return colegiado;
     }
 
-    public void setColegiado(ColegiadoAutor colegiado) {
+    public void setColegiado(ColegiadoAutorPojo colegiado) {
         this.colegiado = colegiado;
     }
 

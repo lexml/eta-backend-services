@@ -9,7 +9,7 @@ import java.util.Objects;
 
 public class ComandoEmendaPojo implements ComandoEmenda {
     private String cabecalhoComum;
-    private List<? extends ItemComandoEmenda> comandos = new ArrayList<>();
+    private List<? extends ItemComandoEmendaPojo> comandos = new ArrayList<>();
 
     @Override
     public String getCabecalhoComum() {
@@ -25,7 +25,7 @@ public class ComandoEmendaPojo implements ComandoEmenda {
         return comandos;
     }
 
-    public void setComandos(List<? extends ItemComandoEmenda> comandos) {
+    public void setComandos(List<? extends ItemComandoEmendaPojo> comandos) {
         this.comandos = comandos;
     }
 

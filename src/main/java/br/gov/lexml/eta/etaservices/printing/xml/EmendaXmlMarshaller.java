@@ -30,7 +30,7 @@ public class EmendaXmlMarshaller {
         geraCabecalhoEmenda(emenda, sb);
         geraMetadados(emenda, sb);
         geraProposicao(emenda.getProposicao(), sb);
-        geraColegiado(emenda.getColegiado(), sb);
+        geraColegiado(emenda.getColegiadoApreciador(), sb);
         geraEpigrafe(emenda.getEpigrafe(), sb);
         geraComponentes(emenda.getComponentes(), sb);
         geraComandoEmenda(emenda.getComandoEmenda(), sb);
@@ -385,7 +385,7 @@ public class EmendaXmlMarshaller {
                 .append(autor.getSiglaPartido())
                 .append("\" ")
                 .append("siglaUF=\"")
-                .append(autor.getSiglaUf())
+                .append(autor.getSiglaUF())
                 .append("\" ")
                 .append("siglaCasaLegislativa=\"")
                 .append(autor.getSiglaCasaLegislativa())

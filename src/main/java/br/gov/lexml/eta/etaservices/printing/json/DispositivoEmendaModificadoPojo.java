@@ -52,7 +52,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
     }
 
     @Override
-    public boolean isTextoOmitido() {
+    public Boolean isTextoOmitido() {
         return textoOmitido;
     }
 
@@ -61,7 +61,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
     }
 
     @Override
-    public boolean isAbreAspas() {
+    public Boolean isAbreAspas() {
         return abreAspas;
     }
 
@@ -70,7 +70,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
     }
 
     @Override
-    public boolean isFechaAspas() {
+    public Boolean isFechaAspas() {
         return fechaAspas;
     }
 

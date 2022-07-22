@@ -80,7 +80,7 @@ public final class EmendaRecord implements Emenda {
         return proposicao;
     }
 
-    public ColegiadoApreciador getColegiado() {
+    public ColegiadoApreciador getColegiadoApreciador() {
         return colegiado;
     }
 

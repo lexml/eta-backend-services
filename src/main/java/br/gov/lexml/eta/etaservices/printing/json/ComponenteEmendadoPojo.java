@@ -1,7 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
 import br.gov.lexml.eta.etaservices.printing.ComponenteEmendado;
-import br.gov.lexml.eta.etaservices.printing.DispositivosEmendaRecord;
+import br.gov.lexml.eta.etaservices.printing.DispositivosEmenda;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ public class ComponenteEmendadoPojo implements ComponenteEmendado {
     private boolean articulado;
     private String rotuloAnexo;
     private String tituloAnexo;
-    private DispositivosEmendaRecord dispositivos;
+    private DispositivosEmendaPojo dispositivos;
 
     @Override
     public String getUrn() {
@@ -49,11 +49,11 @@ public class ComponenteEmendadoPojo implements ComponenteEmendado {
     }
 
     @Override
-    public DispositivosEmendaRecord getDispositivos() {
+    public DispositivosEmenda getDispositivos() {
         return dispositivos;
     }
 
-    public void setDispositivos(DispositivosEmendaRecord dispositivos) {
+    public void setDispositivos(DispositivosEmendaPojo dispositivos) {
         this.dispositivos = dispositivos;
     }
 

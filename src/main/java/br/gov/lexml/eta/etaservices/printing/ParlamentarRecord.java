@@ -60,7 +60,7 @@ public final class ParlamentarRecord implements Parlamentar {
         return siglaPartido;
     }
 
-    public String getSiglaUf() {
+    public String getSiglaUF() {
         return siglaUf;
     }
 
