@@ -33,7 +33,7 @@ class EmendaXmlMarshallingTest {
 
         assertThat(xmlSource)
                 .valueByXPath("/Emenda/Metadados/Aplicacao")
-                .isEqualToIgnoringCase("eta");
+                .isEqualToIgnoringCase("");
     }
 
     @Test
@@ -41,7 +41,7 @@ class EmendaXmlMarshallingTest {
 
         assertThat(xmlSource)
                 .valueByXPath("/Emenda/ColegiadoApreciador/@siglaCasaLegislativa")
-                .isEqualToIgnoringCase("cd");
+                .isEqualToIgnoringCase("CN");
     }
 
     private void setupEmenda() {

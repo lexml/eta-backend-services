@@ -227,7 +227,7 @@ public class EmendaXmlMarshaller {
         sb.append("        <Texto>")
                 .append(modificado.getTexto())
                 .append("\n        </Texto>\n");
-        sb.append("      </DispositivoModificado> ";
+        sb.append("      </DispositivoModificado> ");
 
     }
 
