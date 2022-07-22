@@ -266,7 +266,7 @@ public class EmendaXmlMarshaller {
 
         sb.append(">\n");
 
-        adicionado.getFilhos().forEach(filho -> geraFilhosDispositivosAdicionados(filho, sb));
+        geraFilhosDispositivosAdicionados(adicionado, sb);
 
         sb.append("      </DispositivoAdicionado>\n");
 
@@ -275,6 +275,10 @@ public class EmendaXmlMarshaller {
     private void geraFilhosDispositivosAdicionados(DispositivoEmendaAdicionado filho, StringBuilder sb) {
         sb.append("        <");
         sb.append(filho.getTipo());
+        
+        sb.append(" id=\"")
+        	.append(filho.getId())
+        	.append("\" ");
 
         if (filho.getRotulo() == null && filho.getTexto() == null &&
                 (filho.getFilhos() == null || filho.getFilhos().isEmpty())) {
@@ -287,9 +291,9 @@ public class EmendaXmlMarshaller {
                         .append("</Rotulo>\n");
             }
             if (filho.getTexto() != null) {
-                sb.append("          <Texto>")
+                sb.append("          <p>")
                         .append(filho.getTexto())
-                        .append("</Texto>\n");
+                        .append("</p>\n");
             }
 
             filho.getFilhos().forEach(filhoFilho -> geraFilhosDispositivosAdicionados(filhoFilho, sb));
