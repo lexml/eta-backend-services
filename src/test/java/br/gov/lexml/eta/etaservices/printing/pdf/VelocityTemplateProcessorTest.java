@@ -2,6 +2,7 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import br.gov.lexml.eta.etaservices.printing.Emenda;
 import br.gov.lexml.eta.etaservices.printing.json.ArquivoEmenda;
+import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.io.FileUtils;
@@ -14,67 +15,97 @@ import javax.xml.transform.Source;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 class VelocityTemplateProcessorTest {
 
+    public static final String SOURCE_FILE_NAME = "test1.json";
+    public static final String DESTINATION_FILE_NAME = "test1.pdf";
     private Emenda emenda;
+    private String xml;
+
+
+    @Test
+    @DisplayName("Verifica se nome da aplicação é preenchido")
+    void testaMetadadosEmenda() throws IOException, URISyntaxException {
+        final String templateResult = processTemplate();
+        savePdf(templateResult);
+
+        final Source result = Input.fromString(templateResult).build();
+
+        assertThat(result)
+                .withNamespaceContext(getXSLFoNamespaceContext())
+                .valueByXPath("/fo:root/fo:declarations/x:xmpmeta/rdf:RDF/rdf:Description/xmp:CreatorTool[1]")
+                .isEqualTo(emenda.getAplicacao());
+    }
+
+    private String processTemplate() throws IOException {
+        final Map<String, Object> contextoVelocity = getContextoVelocity();
+
+        final VelocityTemplateProcessor velocityTemplateProcessor =
+                new VelocityTemplateProcessor(contextoVelocity);
+
+        return velocityTemplateProcessor.getTemplateResult();
+    }
+
+    private Map<String, Object> getContextoVelocity() {
+        final Map<String, Object> contextoVelocity = new HashMap<>();
+        contextoVelocity.put("emenda", emenda);
+        return contextoVelocity;
+    }
+
+    private void savePdf(String templateResult) throws IOException, URISyntaxException {
+        final ClassLoader classLoader = getClass().getClassLoader();
+        final URL resource = classLoader.getResource(DESTINATION_FILE_NAME);
+
+        // Gera pdf
+        assert resource != null;
+
+        try (final OutputStream out = Files.newOutputStream(Paths.get(resource.toURI()))) {
+            new FOPProcessor().processFOP(out, templateResult, xml);
+        }
+    }
+
+    private Map<String, String> getXSLFoNamespaceContext() {
+        final Map<String, String> context = new HashMap<>();
+        context.put("fo", "http://www.w3.org/1999/XSL/Format");
+        context.put("x", "http://www.w3.org/2001/XMLSchema-instance");
+        context.put("rdf", "https://www.lexml.gov.br/eta/1.0/emenda");
+        context.put("xmp", "https://www.lexml.gov.br/eta/1.0/emenda/comando");
+        return context;
+    }
 
     @BeforeEach
     void setUp() {
-        ClassLoader classLoader = getClass().getClassLoader();
+        emenda = readEmendaFile();
+        xml = convertToXml(emenda);
+    }
+
+    private Emenda readEmendaFile() {
+        final ClassLoader classLoader = getClass().getClassLoader();
         try {
-            File file = new File(classLoader.getResource("test1.json").getFile());
-            String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
-            ObjectMapper objectMapper = new ObjectMapper();
+            final URL sourceUrl = classLoader.getResource(SOURCE_FILE_NAME);
+            assert sourceUrl != null;
+            final File sourceFile = new File(sourceUrl.getFile());
+            final String json = FileUtils.readFileToString(sourceFile, UTF_8);
+            final ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            emenda = objectMapper.readValue(text, ArquivoEmenda.class).getEmenda();
+            return objectMapper.readValue(json, ArquivoEmenda.class).getEmenda();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @Test
-    @DisplayName("Verifica se nome da aplicação é preenchido")
-    void testaMetadadosEmenda() throws Exception {
-        Map<String, Object> mapaParaContexto = new HashMap<>();
-        mapaParaContexto.put("emenda", emenda);
-
-        VelocityTemplateProcessor velocityTemplateProcessor =
-                new VelocityTemplateProcessor(mapaParaContexto);
-
-        String templateResult = velocityTemplateProcessor.getTemplateResult();
-
-        Source result = Input.fromString(templateResult).build();
-
-        Map<String, String> context = new HashMap<>();
-        context.put("fo", "http://www.w3.org/1999/XSL/Format");
-        context.put("x", "http://www.w3.org/2001/XMLSchema-instance");
-        context.put("rdf", "http://www.lexml.gov.br/eta/1.0/emenda");
-        context.put("xmp", "http://www.lexml.gov.br/eta/1.0/emenda/comando");
-
-        assertThat(result)
-                .withNamespaceContext(context)
-                .valueByXPath("/fo:root/fo:declarations/x:xmpmeta/rdf:RDF/rdf:Description/xmp:CreatorTool[1]")
-                .isEqualTo(emenda.getAplicacao());
-
-
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource("test1.pdf");
-
-        // Gera pdf
-        assert resource != null;
-        try(OutputStream out = Files.newOutputStream(Paths.get(resource.toURI()))) {
-            new FOPProcessor().processFOP(out, templateResult, "");
-        }
+    private String convertToXml(final Emenda emenda) {
+        return new EmendaXmlMarshaller().toXml(emenda);
     }
-
 }

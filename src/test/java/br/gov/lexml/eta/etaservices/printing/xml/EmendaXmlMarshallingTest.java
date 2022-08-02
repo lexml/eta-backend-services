@@ -13,20 +13,13 @@ import org.xmlunit.builder.Input;
 import javax.xml.transform.Source;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 class EmendaXmlMarshallingTest {
-
     private Source xmlSource;
-    private Emenda emenda;
-
-    @BeforeEach
-    void setUp() {
-        setupEmenda();
-        xmlSource = getXmlSource(emenda);
-    }
 
     @Test
     void testMetadados() {
@@ -44,15 +37,23 @@ class EmendaXmlMarshallingTest {
                 .isEqualToIgnoringCase("CN");
     }
 
-    private void setupEmenda() {
+    @BeforeEach
+    void setUp() {
+        final Emenda emenda = setupEmenda();
+        xmlSource = getXmlSource(emenda);
+    }
+
+    private Emenda setupEmenda() {
 
         ClassLoader classLoader = getClass().getClassLoader();
         try {
-            File file = new File(classLoader.getResource("test1.json").getFile());
+            URL sourceUrl = classLoader.getResource("test1.json");
+            assert sourceUrl != null;
+            File file = new File(sourceUrl.getFile());
             String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            emenda = objectMapper.readValue(text, ArquivoEmenda.class).getEmenda();
+            return objectMapper.readValue(text, ArquivoEmenda.class).getEmenda();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
