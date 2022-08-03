@@ -32,11 +32,14 @@ class VelocityTemplateProcessorTest {
     private Emenda emenda;
     private String xml;
 
+    private VelocityTemplateProcessor velocityTemplateProcessor;
+
 
     @Test
     @DisplayName("Verifica se nome da aplicação é preenchido")
     void testaMetadadosEmenda() throws IOException, URISyntaxException {
-        final String templateResult = processTemplate();
+        final String templateResult =
+                velocityTemplateProcessor.getTemplateResult(emenda);
         savePdf(templateResult);
 
         final Source result = Input.fromString(templateResult).build();
@@ -45,13 +48,6 @@ class VelocityTemplateProcessorTest {
                 .withNamespaceContext(getXSLFoNamespaceContext())
                 .valueByXPath("/fo:root/fo:declarations/x:xmpmeta/rdf:RDF/rdf:Description/xmp:CreatorTool[1]")
                 .isEqualTo(emenda.getAplicacao());
-    }
-
-    private String processTemplate() throws IOException {
-        final VelocityTemplateProcessor velocityTemplateProcessor =
-                new VelocityTemplateProcessor(new TemplateLoaderBean());
-
-        return velocityTemplateProcessor.getTemplateResult(emenda);
     }
 
     private void savePdf(String templateResult) throws IOException, URISyntaxException {
@@ -79,6 +75,8 @@ class VelocityTemplateProcessorTest {
     void setUp() {
         emenda = readEmendaFile();
         xml = convertToXml(emenda);
+        velocityTemplateProcessor =
+                new VelocityTemplateProcessor(new TemplateLoaderBean());
     }
 
     private Emenda readEmendaFile() {
