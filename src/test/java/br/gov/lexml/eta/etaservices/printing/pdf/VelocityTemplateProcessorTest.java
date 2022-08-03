@@ -48,18 +48,10 @@ class VelocityTemplateProcessorTest {
     }
 
     private String processTemplate() throws IOException {
-        final Map<String, Object> contextoVelocity = getContextoVelocity();
-
         final VelocityTemplateProcessor velocityTemplateProcessor =
-                new VelocityTemplateProcessor(contextoVelocity);
+                new VelocityTemplateProcessor(new TemplateLoaderBean());
 
-        return velocityTemplateProcessor.getTemplateResult();
-    }
-
-    private Map<String, Object> getContextoVelocity() {
-        final Map<String, Object> contextoVelocity = new HashMap<>();
-        contextoVelocity.put("emenda", emenda);
-        return contextoVelocity;
+        return velocityTemplateProcessor.getTemplateResult(emenda);
     }
 
     private void savePdf(String templateResult) throws IOException, URISyntaxException {

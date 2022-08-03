@@ -1,6 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import org.apache.commons.io.IOUtils;
+import br.gov.lexml.eta.etaservices.printing.Emenda;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -9,71 +9,54 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
 
 class VelocityTemplateProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(VelocityTemplateProcessor.class);
 
-    private static String TEMPLATE_RESOURCE = "/template-velocity-emenda.xml";
+    private static final String TEMPLATE_RESOURCE = "/template-velocity-emenda.xml";
 
-//	private final HostEditor hostEditor;
+    private final TemplateLoader templateLoader;
 
-//	private Map<String, String> templateReplacements;
-
-    private Map<String, Object> mapaParaContexto;
 
     private String velocityResult;
 
-    VelocityTemplateProcessor(Map<String, Object> mapaParaContexto /*, HostEditor hostEditor*/) {
-        this.mapaParaContexto = mapaParaContexto;
+    VelocityTemplateProcessor(final TemplateLoader templateLoader) {
+        this.templateLoader = templateLoader;
     }
 
     /**
      * Process a Velocity template. Returns a FOP pure code.
      *
      * @return a final FO code processed by Velocity
-     * @throws Exception
+     * @throws IOException - if there is some issue reading the resource
      */
-    public String getTemplateResult() throws IOException {
+    public String getTemplateResult(final Emenda emenda) throws IOException {
 
         if (velocityResult == null) {
 
-            String finalTemplate = IOUtils.toString(getClass().getResourceAsStream(TEMPLATE_RESOURCE), StandardCharsets.UTF_8);
+            String finalTemplate = this.templateLoader.loadTemplate(TEMPLATE_RESOURCE);
 
             //REPLACEMENTS
-//			VelocityTemplateProcessorLanguageExpansion vtple = new VelocityTemplateProcessorLanguageExpansion(madocDocument, hostEditor);
-//			finalTemplate = vtple.doExpansions(finalTemplate);
-//			templateReplacements = vtple.getTemplateReplacements();
 
             if (log.isDebugEnabled()) {
                 log.debug("finalTemplate: " + finalTemplate);
             }
 
             // processing velocity
-            velocityResult = getVelocityResult(finalTemplate);
+            velocityResult = getVelocityResult(finalTemplate, emenda);
         }
 
         return velocityResult;
-
-		/*
-		try {
-			FileUtils.write(new File("/tmp/saida_final.txt"), finalTemplate);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
     }
 
     /**
      * Returns an FO code from a template
      *
-     * @param template an string that contains skeleton and all templates from current MadocDocument
-     * @return final FO code
+     * @param template a string that contains skeleton and all templates from current MadocDocument
+     * @return FO code after velocity processing
      */
-    private String getVelocityResult(String template) {
+    private String getVelocityResult(String template, final Emenda emenda) {
 
         VelocityEngine ve = new VelocityEngine();
 
@@ -83,35 +66,7 @@ class VelocityTemplateProcessor {
 
         VelocityContext ctx = new VelocityContext();
 
-        // Adiciona dados direto na raiz
-        mapaParaContexto.forEach((key, value) -> {
-            ctx.put(key, value);
-        });
-
-//		// put constants
-//		Map<String, String> constants = new HashMap<String, String>();
-//		constants.put("DATE_FORMAT", Constants.DATE_FORMAT);
-//		constants.put("FULL_DATE_FORMAT", Constants.FULL_DATE_FORMAT);
-//		velocityContext.put("consts", constants);
-//
-//		// put util
-//		velocityContext.put("madoc", new VelocityExtension(contextCollection, velocityContext));
-
-//		VelocityContext ctx = getContextFromMadoc();
-//		VelocityExtension madoc = (VelocityExtension) ctx.get("madoc");
-//		madoc.setVelocityEngine(ve);
-
-		/*
-		try {'
-			FileWriter fw = new FileWriter("target/template.vm");
-			fw.write(template);
-			fw.flush();
-			fw.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+        ctx.put("emenda", emenda);
 
         StringWriter w = new StringWriter();
         ve.evaluate(ctx, w, "defaultTemplate", template);

@@ -22,7 +22,6 @@ import java.util.List;
 import static br.gov.lexml.eta.etaservices.printing.TipoColegiado.COMISSAO;
 
 public class EmendaXmlMarshaller {
-
     public static final String FECHA_TAG_SEM_CONTEUDO = "/>\n";
 
     public String toXml(Emenda emenda) {

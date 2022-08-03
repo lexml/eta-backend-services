@@ -27,12 +27,7 @@ public class TesteGeracaoPDF {
 
 	private static void processaVelocity() throws IOException {
 
-		Map<String, Object> infos = new HashMap<>();
-		infos.put("aplicacao", "LexEdit");
-		infos.put("imprimirBrasao", true);
-		infos.put("textoCabecalho", "Gabinete do Senador Ricardo Lima");
-
-		String fo = new VelocityTemplateProcessor(infos).getTemplateResult();
+		String fo = new VelocityTemplateProcessor(new TemplateLoaderBean()).getTemplateResult(null);
 		FileUtils.writeStringToFile(new File(TARGET_FO_EMENDA_XML), fo, StandardCharsets.UTF_8);
 
 	}
