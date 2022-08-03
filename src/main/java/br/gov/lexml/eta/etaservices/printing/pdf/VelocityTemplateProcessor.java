@@ -18,7 +18,6 @@ class VelocityTemplateProcessor {
 
     private final TemplateLoader templateLoader;
 
-
     private String velocityResult;
 
     VelocityTemplateProcessor(final TemplateLoader templateLoader) {
@@ -44,10 +43,23 @@ class VelocityTemplateProcessor {
             }
 
             // processing velocity
-            velocityResult = getVelocityResult(finalTemplate, emenda);
+            velocityResult = replaceHtmlTagsWithFO(getVelocityResult(finalTemplate, emenda));
         }
 
         return velocityResult;
+    }
+
+    private String replaceHtmlTagsWithFO(final String partialFO) {
+
+        return partialFO
+                .replaceAll("<p>","<fo:block>")
+                .replaceAll("</p>", "</fo:block>")
+                .replaceAll("<em>", "<fo:inline font-style=\"italic\">")
+                .replaceAll("</em>", "</fo:inline>")
+                .replaceAll("<strong>", "<fo:inline font-style=\"bold\">")
+                .replaceAll("</strong>", "</fo:inline>");
+
+        // TODO - what else?
     }
 
     /**
