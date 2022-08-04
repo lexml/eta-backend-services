@@ -185,7 +185,7 @@
 						#end
 						$fo.html2fo($i.cabecalho)
 					</fo:block>	
-					#*
+
 					#if ($i.citacao)
 						<fo:block line-height="100%"
 							role="comando de emenda" space-before="14pt" text-align="justify"
@@ -200,7 +200,7 @@
 							$i.complemento
 						</fo:block>	
 					#end
-					*#
+
 				#end
 				<fo:block font-size="16pt" font-weight="bold"
 					keep-with-next="always" space-before="26pt" text-align="center"
@@ -209,7 +209,7 @@
 					role="justificacao" space-before="14pt" text-align="justify"
 					text-indent="2.5cm" white-space-collapse="false">
 					<fo:block margin-bottom="0.6em">
-						$emenda.justificativa.texto
+						$emenda.justificativa
 
 
 <!--						Texto normal,-->
