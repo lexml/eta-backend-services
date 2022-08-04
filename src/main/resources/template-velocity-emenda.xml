@@ -390,7 +390,7 @@
 						</fo:table-body>
 					</fo:table>
 					#end
-					#if(emenda.autoria.quantidadeAssinaturasAdicionaisDeputados > 0)
+					#if($emenda.autoria.quantidadeAssinaturasAdicionaisDeputados > 0)
 					<fo:block page-break-before="always" />
 					<fo:table table-layout="fixed" width="100%">
 						<fo:table-column

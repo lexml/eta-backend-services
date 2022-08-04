@@ -54,11 +54,11 @@
 		    <artifactId>commons-text</artifactId>
 		    <version>1.9</version>
 		</dependency>
-        <dependency>
-            <groupId>net.sf.saxon</groupId>
-            <artifactId>Saxon-HE</artifactId>
-            <version>11.4</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>net.sf.saxon</groupId>-->
+<!--            <artifactId>Saxon-HE</artifactId>-->
+<!--            <version>11.4</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>

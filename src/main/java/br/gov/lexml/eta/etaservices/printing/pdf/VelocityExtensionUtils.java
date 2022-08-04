@@ -13,7 +13,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 
-import sun.util.locale.BaseLocale;
 
 final class VelocityExtensionUtils {
 
@@ -32,7 +31,7 @@ final class VelocityExtensionUtils {
 			try {
 				return Double.valueOf(value.trim());
 			} catch (NumberFormatException e1){
-				return new Double(0);
+				return (double) 0;
 			}
 		}
 	}
