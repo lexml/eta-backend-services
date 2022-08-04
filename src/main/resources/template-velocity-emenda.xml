@@ -325,6 +325,7 @@
 							</fo:table-body>
 						</fo:table>
 					</fo:block>
+					#if($emenda.autoria.quantidadeAssinaturasAdicionaisSenadores > 0)
 					<fo:table table-layout="fixed" width="100%">
 						<fo:table-column
 							column-width="proportional-column-width(60)" />
@@ -361,6 +362,8 @@
 							</fo:table-row>
 						</fo:table-body>
 					</fo:table>
+					#end
+					#if(emenda.autoria.quantidadeAssinaturasAdicionaisDeputados > 0)
 					<fo:block page-break-before="always" />
 					<fo:table table-layout="fixed" width="100%">
 						<fo:table-column
@@ -408,6 +411,7 @@
 							</fo:table-row>
 						</fo:table-body>
 					</fo:table>
+					#end
 				</fo:block>
 			</fo:block-container>
 		</fo:flow>

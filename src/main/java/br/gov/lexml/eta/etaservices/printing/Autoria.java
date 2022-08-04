@@ -13,5 +13,15 @@ public interface Autoria {
 
     List<? extends Parlamentar> getParlamentares();
 
+    @SuppressWarnings("unused")
+    default boolean hasOddNumberOfParlamentares() {
+        if (getParlamentares() == null) {
+            return false;
+        }
+
+        return getParlamentares().size() % 2 == 1;
+
+    }
+
     ColegiadoAutor getColegiado();
 }
