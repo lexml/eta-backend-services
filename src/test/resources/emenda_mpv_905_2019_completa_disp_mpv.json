@@ -1,0 +1,2633 @@
+{
+  "emenda": {
+  "dataUltimaModificacao": "2022-07-22T19:50:51.349Z",
+  "aplicacao": "",
+  "versaoAplicacao": "",
+  "modoEdicao": "emenda",
+  "metadados": {},
+  "proposicao": {
+    "urn": "urn:lex:br:federal:medida.provisoria:2019-11-11;905",
+    "sigla": "MPV",
+    "numero": "905",
+    "ano": "2019",
+    "ementa": "Institui o Contrato de Trabalho Verde e Amarelo, altera a legislação trabalhista, e dá outras providências.\n",
+    "identificacaoTexto": "Texto da MPV"
+  },
+  "colegiadoApreciador": {
+    "siglaCasaLegislativa": "CN",
+    "tipoColegiado": "Comissão",
+    "siglaComissao": "CMMPV 905/2019"
+  },
+  "epigrafe": {
+    "texto": "EMENDA Nº         - CMMPV 905/2019",
+    "complemento": "(à MPV 905/2019)"
+  },
+  "componentes": [
+    {
+      "urn": "urn:lex:br:federal:medida.provisoria:2019-11-11;905",
+      "articulado": true,
+      "dispositivos": {
+        "dispositivosSuprimidos": [
+          {
+            "tipo": "Paragrafo",
+            "id": "art2_par2",
+            "rotulo": "§ 2º"
+          }
+        ],
+        "dispositivosModificados": [
+          {
+            "tipo": "Paragrafo",
+            "id": "art2_par3",
+            "texto": "Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum.",
+            "rotulo": "§ 3º"
+          }
+        ],
+        "dispositivosAdicionados": [
+          {
+            "tipo": "Artigo",
+            "id": "art1-1",
+            "rotulo": "Art. 1º-1.",
+            "idIrmaoAnterior": "art1",
+            "filhos": [
+              {
+                "tipo": "Caput",
+                "id": "art1-1_cpt",
+                "texto": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc."
+              },
+              {
+                "tipo": "Paragrafo",
+                "id": "art1-1_par1",
+                "rotulo": "§ 1º",
+                "texto": "Ut tincidunt rutrum ornare. Praesent rhoncus sem non risus mattis, nec vulputate neque vehicula. Donec quis quam ac massa auctor scelerisque. Nulla facilisi:",
+                "filhos": [
+                  {
+                    "tipo": "Inciso",
+                    "id": "art1-1_par1_inc1",
+                    "rotulo": "I –",
+                    "texto": "tincidunt rutrum ornare 1:",
+                    "filhos": [
+                      {
+                        "tipo": "Alinea",
+                        "id": "art1-1_par1_inc1_ali1",
+                        "rotulo": "a)",
+                        "texto": "laoreet lectus 1:",
+                        "filhos": [
+                          {
+                            "tipo": "Item",
+                            "id": "art1-1_par1_inc1_ali1_ite1",
+                            "rotulo": "1.",
+                            "texto": "consectetur adipiscing elit 1;"
+                          },
+                          {
+                            "tipo": "Item",
+                            "id": "art1-1_par1_inc1_ali1_ite2",
+                            "rotulo": "2.",
+                            "texto": "consectetur adipiscing elit 2."
+                          }
+                        ]
+                      },
+                      {
+                        "tipo": "Alinea",
+                        "id": "art1-1_par1_inc1_ali2",
+                        "rotulo": "b)",
+                        "texto": "laoreet lectus 2."
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Inciso",
+                    "id": "art1-1_par1_inc2",
+                    "rotulo": "II –",
+                    "texto": "tincidunt rutrum ornare 2."
+                  }
+                ]
+              },
+              {
+                "tipo": "Paragrafo",
+                "id": "art1-1_par2",
+                "rotulo": "§ 2º",
+                "texto": "Nunc eget diam scelerisque eros consectetur aliquet. Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum."
+              }
+            ]
+          },
+          {
+            "tipo": "Artigo",
+            "id": "art2-1",
+            "rotulo": "Art. 2º-1.",
+            "idIrmaoAnterior": "art2",
+            "filhos": [
+              {
+                "tipo": "Caput",
+                "id": "art2-1_cpt",
+                "texto": "A  <a href=\"urn:lex:br:federal:lei:2012-12-12;123\"> Lei nº 123, de 12 de dezembro de 2012 </a>passa a vigorar com a seguinte redação:",
+                "filhos": [
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "textoOmitido": true,
+                            "existeNaNormaAlterada": true,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "tipo": "Alteracao",
+                    "id": "art2-1_cpt_alt1",
+                    "urnNormaAlterada": "urn:lex:br:federal:lei:2012-12-12;123",
+                    "filhos": [
+                      {
+                        "tipo": "Artigo",
+                        "id": "art2-1_cpt_alt1_art10",
+                        "rotulo": "Art. 10.",
+                        "existeNaNormaAlterada": false,
+                        "abreAspas": true,
+                        "notaAlteracao": "NR",
+                        "filhos": [
+                          {
+                            "tipo": "Caput",
+                            "id": "art2-1_cpt_alt1_art10_cpt",
+                            "texto": "Texto artigo."
+                          },
+                          {
+                            "tipo": "Omissis",
+                            "id": "art2-1_cpt_alt1_art10_omi1",
+                            "texto": "..........................................................................................."
+                          },
+                          {
+                            "tipo": "Paragrafo",
+                            "id": "art2-1_cpt_alt1_art10_par10",
+                            "rotulo": "§ 10.",
+                            "texto": "Texto parágrafo:",
+                            "existeNaNormaAlterada": false,
+                            "filhos": [
+                              {
+                                "tipo": "Omissis",
+                                "id": "art2-1_cpt_alt1_art10_par10_omi1",
+                                "texto": "..........................................................................................."
+                              },
+                              {
+                                "tipo": "Inciso",
+                                "id": "art2-1_cpt_alt1_art10_par10_inc10",
+                                "rotulo": "X –",
+                                "texto": "texto inciso:",
+                                "existeNaNormaAlterada": false,
+                                "filhos": [
+                                  {
+                                    "tipo": "Omissis",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_omi1",
+                                    "texto": "..........................................................................................."
+                                  },
+                                  {
+                                    "tipo": "Alinea",
+                                    "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10",
+                                    "rotulo": "j)",
+                                    "texto": "texto alínea:",
+                                    "existeNaNormaAlterada": false,
+                                    "filhos": [
+                                      {
+                                        "tipo": "Item",
+                                        "id": "art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1",
+                                        "rotulo": "1.",
+                                        "texto": "texto item.",
+                                        "existeNaNormaAlterada": false,
+                                        "fechaAspas": true
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "comandoEmenda": {
+    "comandos": [
+      {
+        "cabecalho": "Acrescentem-se arts. 1º-1 e 2º-1; suprima-se o § 2º do art. 2º; e dê-se nova redação ao § 3º do art. 2º da Medida Provisória, nos termos a seguir:",
+        "citacao": "<p>“<Rotulo>Art. 1º-1.</Rotulo>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p><Rotulo>§ 1º</Rotulo>Ut tincidunt rutrum ornare. Praesent rhoncus sem non risus mattis, nec vulputate neque vehicula. Donec quis quam ac massa auctor scelerisque. Nulla facilisi:</p><p><Rotulo>I –</Rotulo>tincidunt rutrum ornare 1:</p><p><Rotulo>a)</Rotulo>laoreet lectus 1:</p><p><Rotulo>1.</Rotulo>consectetur adipiscing elit 1;</p><p><Rotulo>2.</Rotulo>consectetur adipiscing elit 2.</p><p><Rotulo>b)</Rotulo>laoreet lectus 2.</p><p><Rotulo>II –</Rotulo>tincidunt rutrum ornare 2.</p><p><Rotulo>§ 2º</Rotulo>Nunc eget diam scelerisque eros consectetur aliquet. Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum.”</p><p>“<Rotulo>Art. 2º</Rotulo><Omissis/></p><p><Omissis/></p><p><Rotulo>§ 2º</Rotulo>(Suprimir)</p><p><Rotulo>§ 3º</Rotulo>Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum.</p><p><Omissis/>”</p><p>“<Rotulo>Art. 2º-1.</Rotulo>A  Lei nº 123, de 12 de dezembro de 2012 passa a vigorar com a seguinte redação:</p><Alteracao><p><Rotulo>Art. 10.</Rotulo>Texto artigo.</p><p><Rotulo/>...........................................................................................</p><p><Rotulo>§ 10.</Rotulo>Texto parágrafo:</p><p><Rotulo/>...........................................................................................</p><p><Rotulo>X –</Rotulo>texto inciso:</p><p><Rotulo/>...........................................................................................</p><p><Rotulo>j)</Rotulo>texto alínea:</p><p><Rotulo>1.</Rotulo>texto item.”</p></Alteracao>",
+        "complemento": "Os dispositivos acima propostos e adjacentes deverão ser devidamente renumerados no momento da consolidação das emendas ao texto da proposição."
+      }
+    ]
+  },
+  "justificativa": "<p class=\"align-justify\">Formatação: negrito, itálico, sublinhado, subscrito e sobrescrito.</p><p class=\"align-justify\">Justificado: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p>Esquerda: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p class=\"align-center\">Centro: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p class=\"align-right\">Direita: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><blockquote>Citação: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</blockquote><p>Lista numerada:</p><ol><li>um</li><li>dois</li></ol><p>Lista não numerada:</p><ul><li>um</li><li>dois</li></ul><p>\t</p>",
+  "local": "Sala da comissão",
+  "autoria": {
+    "tipo": "Parlamentar",
+    "imprimirPartidoUF": true,
+    "quantidadeAssinaturasAdicionaisSenadores": 5,
+    "quantidadeAssinaturasAdicionaisDeputados": 5,
+    "parlamentares": [
+      {
+        "identificacao": 160597,
+        "nome": "Romário",
+        "sexo": "M",
+        "siglaPartido": "PL",
+        "siglaUF": "RJ",
+        "siglaCasaLegislativa": "SF",
+        "cargo": "Presidente da comissão"
+      },
+      {
+        "identificacao": 5988,
+        "nome": "Soraya Thronicke",
+        "sexo": "F",
+        "siglaPartido": "UNIÃO",
+        "siglaUF": "MS",
+        "siglaCasaLegislativa": "SF",
+        "cargo": ""
+      },
+      {
+        "identificacao": 5527,
+        "nome": "Simone Tebet",
+        "sexo": "F",
+        "siglaPartido": "MDB",
+        "siglaUF": "MS",
+        "siglaCasaLegislativa": "SF",
+        "cargo": ""
+      }
+    ]
+  },
+  "opcoesImpressao": {
+    "imprimirBrasao": true,
+    "textoCabecalho": "",
+    "reduzirEspacoEntreLinhas": false
+  },
+  "data": "2022-07-22"
+}
+}

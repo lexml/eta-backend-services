@@ -43,24 +43,25 @@ class VelocityTemplateProcessor {
             }
 
             // processing velocity
-            velocityResult = replaceHtmlTagsWithFO(getVelocityResult(finalTemplate, emenda));
+//            velocityResult = replaceHtmlTagsWithFO(getVelocityResult(finalTemplate, emenda));
+            velocityResult = getVelocityResult(finalTemplate, emenda);
         }
 
         return velocityResult;
     }
 
-    private String replaceHtmlTagsWithFO(final String partialFO) {
-
-        return partialFO
-                .replaceAll("<p>","<fo:block>")
-                .replaceAll("</p>", "</fo:block>")
-                .replaceAll("<em>", "<fo:inline font-style=\"italic\">")
-                .replaceAll("</em>", "</fo:inline>")
-                .replaceAll("<strong>", "<fo:inline font-style=\"bold\">")
-                .replaceAll("</strong>", "</fo:inline>");
-
-        // TODO - what else?
-    }
+//    private String replaceHtmlTagsWithFO(final String partialFO) {
+//
+//        return partialFO
+//                .replaceAll("<p>","<fo:block>")
+//                .replaceAll("</p>", "</fo:block>")
+//                .replaceAll("<em>", "<fo:inline font-style=\"italic\">")
+//                .replaceAll("</em>", "</fo:inline>")
+//                .replaceAll("<strong>", "<fo:inline font-style=\"bold\">")
+//                .replaceAll("</strong>", "</fo:inline>");
+//
+//        // TODO - what else?
+//    }
 
     /**
      * Returns an FO code from a template
@@ -79,6 +80,7 @@ class VelocityTemplateProcessor {
         VelocityContext ctx = new VelocityContext();
 
         ctx.put("emenda", emenda);
+        ctx.put("fo", new VelocityExtensionHTML2FO(ctx, ve));
 
         StringWriter w = new StringWriter();
         ve.evaluate(ctx, w, "defaultTemplate", template);
