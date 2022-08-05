@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,7 +24,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.tools.ant.filters.StringInputStream;
-import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -162,8 +160,7 @@ public class HTML2FOConverter {
 			xhtml = unescapeHtmlKeepingXMLEntities(xhtml);	
 			xhtml = xhtml.replaceAll("&(?![lg]t;)", "&amp;");
 			
-//			TransformerFactory factory = TransformerFactory.newInstance();
-			TransformerFactory factory = TransformerFactoryImpl.newInstance();
+			TransformerFactory factory = TransformerFactory.newInstance();
 	        Transformer transformer = factory.newTransformer(
 	        		new StreamSource(getClass().getResourceAsStream("/xhtml2fo.xsl")));
 	        

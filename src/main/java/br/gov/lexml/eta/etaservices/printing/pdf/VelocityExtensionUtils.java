@@ -57,9 +57,9 @@ final class VelocityExtensionUtils {
 		
 		boolean success;
 		if (velocityEngine == null) {
-			success = Velocity.evaluate(ctx, sw, VelocityExtensionHTML2FO.class.getName(), vtl);
+			success = Velocity.evaluate(ctx, sw, VelocityExtension.class.getName(), vtl);
 		} else {
-			success = velocityEngine.evaluate(ctx, sw, VelocityExtensionHTML2FO.class.getName(), vtl);
+			success = velocityEngine.evaluate(ctx, sw, VelocityExtension.class.getName(), vtl);
 		}
 		
 		return success? sw.toString(): vtl; 

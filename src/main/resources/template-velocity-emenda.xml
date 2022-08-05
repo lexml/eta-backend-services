@@ -158,7 +158,7 @@
 			<fo:block-container>
 				<fo:marker marker-class-name="marker.texto" />
 ## Epígrafe -------------------------------------------------------------------------
-				<fo:block space-after="21pt" text-align="center"
+				<fo:block text-align="center"
 					white-space-collapse="false">
 					<fo:block font-size="16pt" font-weight="bold">$emenda.epigrafe.texto</fo:block>
 				</fo:block>
@@ -183,14 +183,14 @@
 						#if ($usarRotulo)
 							<fo:inline font-weight="bold">$i.rotulo</fo:inline>
 						#end
-						$fo.html2fo($i.cabecalho)
+						$ve.html2fo($i.cabecalho)
 					</fo:block>	
 
 					#if ($i.citacao)
 						<fo:block line-height="100%"
 							role="comando de emenda" space-before="14pt" text-align="justify"
 							text-indent="2.5cm" white-space-collapse="false">
-							$fo.html2fo($i.citacao)
+							$ve.html2fo($ve.citacao2html($i.citacao))
 						</fo:block>	
 					#end
 					#if ($i.complemento)
