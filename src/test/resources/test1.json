@@ -102,8 +102,8 @@
     "autoria": {
       "tipo": "Parlamentar",
       "imprimirPartidoUF": true,
-      "quantidadeAssinaturasAdicionaisSenadores": 0,
-      "quantidadeAssinaturasAdicionaisDeputados": 0,
+      "quantidadeAssinaturasAdicionaisSenadores": 3,
+      "quantidadeAssinaturasAdicionaisDeputados": 4,
       "parlamentares": [
         {
           "identificacao": 5982,

@@ -210,7 +210,7 @@
 					role="justificacao" space-before="14pt" text-align="justify"
 					text-indent="2.5cm" white-space-collapse="false">
 					<fo:block margin-bottom="0.6em">
-						$emenda.justificativa
+						$ve.html2fo($emenda.justificativa)
 
 
 <!--						Texto normal,-->
