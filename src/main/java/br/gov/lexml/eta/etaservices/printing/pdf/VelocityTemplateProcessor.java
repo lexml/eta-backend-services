@@ -1,14 +1,15 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import br.gov.lexml.eta.etaservices.printing.Emenda;
+import java.io.IOException;
+import java.io.StringWriter;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import br.gov.lexml.eta.etaservices.printing.Emenda;
 
 class VelocityTemplateProcessor {
 
@@ -80,7 +81,7 @@ class VelocityTemplateProcessor {
         VelocityContext ctx = new VelocityContext();
 
         ctx.put("emenda", emenda);
-        ctx.put("fo", new VelocityExtensionHTML2FO(ctx, ve));
+        ctx.put("ve", new VelocityExtension(ctx, ve));
 
         StringWriter w = new StringWriter();
         ve.evaluate(ctx, w, "defaultTemplate", template);

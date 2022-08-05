@@ -7,7 +7,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
-public class VelocityExtensionHTML2FO {
+public class VelocityExtension {
 
 	private HTML2FOConverter html2foConverter;
 
@@ -15,20 +15,16 @@ public class VelocityExtensionHTML2FO {
 
 	private VelocityEngine velocityEngine;
 
-	public VelocityExtensionHTML2FO(VelocityContext ctx, VelocityEngine velocityEngine) {
+	public VelocityExtension(VelocityContext ctx, VelocityEngine velocityEngine) {
 		try {
 			this.ctx = ctx;
 			this.velocityEngine = velocityEngine;
 			Map<String, String> conf = new HashMap<>();
-			conf.put(HTML2FOConverter.CONF_PARAGRAPH_MARGIN_BOTTOM, "$pMarginBottomDefault");
+//			conf.put(HTML2FOConverter.CONF_PARAGRAPH_MARGIN_BOTTOM, "$pMarginBottomDefault");
 			html2foConverter = new HTML2FOConverter(conf);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public String getTeste() {
-		return "ok";
 	}
 
 	// HTML to XSL-FO
@@ -40,6 +36,11 @@ public class VelocityExtensionHTML2FO {
 			System.out.println(e);
 			return e.getLocalizedMessage();
 		}
+	}
+	
+	public String citacao2html(String citacao) {
+		return citacao.replace("Rotulo>", "strong>")
+				.replaceAll("(?i)<omissis ?/>", "<span class=\"omissis\"></span>");
 	}
 
 }
