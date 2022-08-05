@@ -202,6 +202,7 @@
 					#end
 
 				#end
+				#if ($emenda.justificativa)
 				<fo:block font-size="16pt" font-weight="bold"
 					keep-with-next="always" space-before="26pt" text-align="center"
 					white-space-collapse="false"> JUSTIFICATIVA </fo:block>
@@ -226,6 +227,7 @@
 <!--						</fo:inline>-->
 <!--						.-->
 					</fo:block>
+					#*
 					<fo:block margin-bottom="0.6em" text-align="justify">Parágrafo justificado (primeira
 						linha endentada, Padrão) Nonono nonono noonono nonon onono nonono
 						nonono noonono nonon ononononono nonono noonono nonon ononononono
@@ -292,7 +294,9 @@
 							</fo:list-item-body>
 						</fo:list-item>
 					</fo:list-block>
+				    *#
 				</fo:block>
+				#end
 			</fo:block-container>
 			<fo:block-container>
 				<fo:marker marker-class-name="marker.texto">
