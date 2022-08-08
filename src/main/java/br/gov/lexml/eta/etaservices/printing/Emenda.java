@@ -36,7 +36,7 @@ public interface Emenda {
 
     @SuppressWarnings("unused")
     default String getDataFormatada() {
-        return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
+        return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)).toLowerCase();
     }
 
     Autoria getAutoria();
