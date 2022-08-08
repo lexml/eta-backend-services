@@ -325,7 +325,16 @@
 				<fo:block keep-with-next.within-page="always"
 					keep-with-previous="10" line-height="160%" role="fecho"
 					space-after="0pt" space-before="14pt" text-align="justify"
-					text-indent="2.5cm" white-space-collapse="false"> $emenda.local, ${emenda.dataFormatada}. </fo:block>
+					text-indent="2.5cm" white-space-collapse="false">
+						$emenda.local, 
+						#if($ve.isEmpty($emenda.data))
+	                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+	                        de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+	                        de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.
+						#else
+							${emenda.dataFormatada}.
+						#end
+				</fo:block>
 				<fo:block font-weight="bold">
 					<fo:block>
 						<fo:table role="demais-signatarios-senadores"

@@ -1,5 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +42,33 @@ public class VelocityExtension {
 	public String citacao2html(String citacao) {
 		return citacao.replace("Rotulo>", "strong>")
 				.replaceAll("(?i)<omissis ?/>", "<span class=\"omissis\"></span>");
+	}
+	
+	/**
+	 * Return a size of something
+	 * 
+	 * @param o
+	 * @return
+	 */
+	public int size(Object o) {
+
+		if (o == null) {
+			return 0;
+		}
+
+		if (o instanceof Object[]) {
+			return ((Object[]) o).length;
+		}
+
+		if (o instanceof Collection) {
+			return ((Collection<?>) o).size();
+		}
+
+		return o.toString().length();
+	}
+	
+	public boolean isEmpty(Object o) {
+		return size(o) == 0;
 	}
 
 }
