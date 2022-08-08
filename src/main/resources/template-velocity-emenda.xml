@@ -341,7 +341,9 @@
 									<fo:table-cell text-align="center">
 										<fo:block margin-top="30pt">$assinatura._1().tratamento $assinatura._1().nome
 										</fo:block>
+										#if ($emenda.autoria.imprimirPartidoUF)
 										<fo:block keep-with-previous="always">($assinatura._1().siglaPartido - $assinatura._1().siglaUF)</fo:block>
+										#end
 										#if ($assinatura._1().cargo)
 										<fo:block keep-with-previous="always">$assinatura._1().cargo
 										</fo:block>
@@ -350,7 +352,9 @@
 									<fo:table-cell text-align="center">
 										<fo:block margin-top="30pt">$assinatura._2().tratamento $assinatura._2().nome
 										</fo:block>
+										#if ($emenda.autoria.imprimirPartidoUF)
 										<fo:block keep-with-previous="always">($assinatura._2().siglaPartido - $assinatura._2().siglaUF)</fo:block>
+										#end
 										#if ($assinatura._2().cargo)
 										<fo:block keep-with-previous="always">$assinatura._2().cargo
 										</fo:block>
@@ -363,7 +367,9 @@
 										text-align="center">
 										<fo:block margin-top="30pt">$assinatura._1().tratamento $assinatura._1().nome
 										</fo:block>
+										#if ($emenda.autoria.imprimirPartidoUF)
 										<fo:block keep-with-previous="always">($assinatura._1().siglaPartido - $assinatura._1().siglaUF)</fo:block>
+										#end
 										#if ($assinatura._1().cargo)
 										<fo:block keep-with-previous="always">$assinatura._1().cargo
 										</fo:block>
