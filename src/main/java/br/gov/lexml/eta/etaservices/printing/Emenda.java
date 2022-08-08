@@ -34,6 +34,7 @@ public interface Emenda {
 
     LocalDate getData();
 
+    @SuppressWarnings("unused")
     default String getDataFormatada() {
         return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG));
     }
