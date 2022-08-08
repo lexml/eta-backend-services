@@ -20,7 +20,7 @@ final class VelocityExtensionUtils {
 	
 	static Double stringToDouble(String value) throws NumberFormatException{
 		if (value == null){
-			return new Double(0);
+			return 0.0;
 		}
 		
 		try{

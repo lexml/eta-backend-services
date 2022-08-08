@@ -27,7 +27,7 @@ import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 class VelocityTemplateProcessorTest {
 
-    public static final String SOURCE_FILE_NAME = "test1.json";
+    public static final String SOURCE_FILE_NAME = "emenda_mpv_905_2019_completa_disp_mpv.json";
     public static final String DESTINATION_FILE_NAME = "test1.pdf";
     private Emenda emenda;
     private String xml;

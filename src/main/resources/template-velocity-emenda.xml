@@ -298,6 +298,7 @@
 				</fo:block>
 				#end
 			</fo:block-container>
+			#*
 			<fo:block-container>
 				<fo:marker marker-class-name="marker.texto">
 					<fo:block border-bottom-style="solid" border-color="gray"
@@ -309,7 +310,9 @@
 				</fo:marker>
 				<fo:block />
 			</fo:block-container>
+			*#
 			<fo:block-container>
+				#*
 				<fo:marker marker-class-name="marker.texto">
 					<fo:block border-bottom-style="solid" border-color="gray"
 						border-width="thin" color="gray" font-size="small"
@@ -318,11 +321,11 @@
 						nonono nonono noonono nonon onono nonono nonono noonono nonon
 						ononononono nonono noonono nonon ononononono. </fo:block>
 				</fo:marker>
+				*#
 				<fo:block keep-with-next.within-page="always"
 					keep-with-previous="10" line-height="160%" role="fecho"
 					space-after="0pt" space-before="14pt" text-align="justify"
-					text-indent="2.5cm" white-space-collapse="false"> Sala das Sessões, 28 de
-					junho de 2022. </fo:block>
+					text-indent="2.5cm" white-space-collapse="false"> $emenda.local, ${emenda.dataFormatada}. </fo:block>
 				<fo:block font-weight="bold">
 					<fo:block>
 						<fo:table role="demais-signatarios-senadores"
@@ -332,27 +335,43 @@
 							<fo:table-column
 								column-width="proportional-column-width(50)" />
 							<fo:table-body>
+								#foreach ($assinatura in $emenda.autoria.parlamentaresPair)
+								#if ($assinatura._2())
 								<fo:table-row>
 									<fo:table-cell text-align="center">
-										<fo:block margin-top="30pt">Deputado Abílio Santana
+										<fo:block margin-top="30pt">$assinatura._1().tratamento $assinatura._1().nome
 										</fo:block>
-										<fo:block keep-with-previous="always">(PSC - BA)</fo:block>
-										<fo:block keep-with-previous="always">Presidente do xpto
+										<fo:block keep-with-previous="always">($assinatura._1().siglaPartido - $assinatura._1().siglaUF)</fo:block>
+										#if ($assinatura._1().cargo)
+										<fo:block keep-with-previous="always">$assinatura._1().cargo
 										</fo:block>
+										#end
 									</fo:table-cell>
 									<fo:table-cell text-align="center">
-										<fo:block margin-top="30pt">Deputado Abou Anni </fo:block>
-										<fo:block keep-with-previous="always">(UNIÃO - SP)</fo:block>
+										<fo:block margin-top="30pt">$assinatura._2().tratamento $assinatura._2().nome
+										</fo:block>
+										<fo:block keep-with-previous="always">($assinatura._2().siglaPartido - $assinatura._2().siglaUF)</fo:block>
+										#if ($assinatura._2().cargo)
+										<fo:block keep-with-previous="always">$assinatura._2().cargo
+										</fo:block>
+										#end
 									</fo:table-cell>
 								</fo:table-row>
+								#else
 								<fo:table-row>
 									<fo:table-cell number-columns-spanned="2"
 										text-align="center">
-										<fo:block margin-top="30pt">Deputado Acácio Favacho
+										<fo:block margin-top="30pt">$assinatura._1().tratamento $assinatura._1().nome
 										</fo:block>
-										<fo:block keep-with-previous="always">(MDB - AP)</fo:block>
+										<fo:block keep-with-previous="always">($assinatura._1().siglaPartido - $assinatura._1().siglaUF)</fo:block>
+										#if ($assinatura._1().cargo)
+										<fo:block keep-with-previous="always">$assinatura._1().cargo
+										</fo:block>
+										#end
 									</fo:table-cell>
 								</fo:table-row>
+								#end
+								#end
 							</fo:table-body>
 						</fo:table>
 					</fo:block>
@@ -381,6 +400,7 @@
 							</fo:table-row>
 						</fo:table-header>
 						<fo:table-body>
+							#foreach ($ls in $emenda.autoria.assinaturasAdicionaisSenadores)
 							<fo:table-row height="10mm" line-height="160%">
 								<fo:table-cell border-color="black"
 									border-style="solid" border-width="0.5pt">
@@ -391,6 +411,7 @@
 									<fo:block />
 								</fo:table-cell>
 							</fo:table-row>
+							#end
 						</fo:table-body>
 					</fo:table>
 					#end
@@ -426,6 +447,7 @@
 							</fo:table-row>
 						</fo:table-header>
 						<fo:table-body>
+							#foreach ($ld in $emenda.autoria.assinaturasAdicionaisDeputados)
 							<fo:table-row height="10mm" line-height="160%">
 								<fo:table-cell border-color="black"
 									border-style="solid" border-width="0.5pt">
@@ -440,6 +462,7 @@
 									<fo:block />
 								</fo:table-cell>
 							</fo:table-row>
+							#end
 						</fo:table-body>
 					</fo:table>
 					#end
