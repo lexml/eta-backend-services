@@ -1,8 +1,8 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,6 +91,10 @@ public class VelocityExtension {
 		mTag.appendTail(sb);
 		
 		return sb.toString();
+	}
+	
+	public String getDataIso() {
+		return LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).toString();
 	}
 
 }
