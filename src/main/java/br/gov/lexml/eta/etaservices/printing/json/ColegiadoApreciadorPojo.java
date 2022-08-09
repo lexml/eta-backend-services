@@ -16,6 +16,7 @@ public class ColegiadoApreciadorPojo implements ColegiadoApreciador {
         return siglaCasaLegislativa;
     }
 
+    @SuppressWarnings("unused")
     public void setSiglaCasaLegislativa(SiglaCasaLegislativa siglaCasaLegislativa) {
         this.siglaCasaLegislativa = siglaCasaLegislativa;
     }
@@ -25,6 +26,7 @@ public class ColegiadoApreciadorPojo implements ColegiadoApreciador {
         return tipoColegiado;
     }
 
+    @SuppressWarnings("unused")
     public void setTipoColegiado(TipoColegiado tipoColegiado) {
         this.tipoColegiado = tipoColegiado;
     }
@@ -34,6 +36,7 @@ public class ColegiadoApreciadorPojo implements ColegiadoApreciador {
         return siglaComissao;
     }
 
+    @SuppressWarnings("unused")
     public void setSiglaComissao(String siglaComissao) {
         this.siglaComissao = siglaComissao;
     }

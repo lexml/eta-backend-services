@@ -18,6 +18,7 @@ public class DispositivosEmendaPojo implements DispositivosEmenda {
         return dispositivosSuprimidos;
     }
 
+    @SuppressWarnings("unused")
     public void setDispositivosSuprimidos(List<? extends DispositivoEmendaSuprimidoPojo> dispositivosSuprimidos) {
         this.dispositivosSuprimidos = dispositivosSuprimidos;
     }
@@ -27,6 +28,7 @@ public class DispositivosEmendaPojo implements DispositivosEmenda {
         return dispositivosModificados;
     }
 
+    @SuppressWarnings("unused")
     public void setDispositivosModificados(List<? extends DispositivoEmendaModificadoPojo> dispositivosModificados) {
         this.dispositivosModificados = dispositivosModificados;
     }
@@ -36,6 +38,7 @@ public class DispositivosEmendaPojo implements DispositivosEmenda {
         return dispositivosAdicionados;
     }
 
+    @SuppressWarnings("unused")
     public void setDispositivosAdicionados(List<? extends DispositivoEmendaAdicionadoPojo> dispositivosAdicionados) {
         this.dispositivosAdicionados = dispositivosAdicionados;
     }

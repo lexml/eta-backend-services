@@ -16,6 +16,7 @@ public class ComandoEmendaPojo implements ComandoEmenda {
         return cabecalhoComum;
     }
 
+    @SuppressWarnings("unused")
     public void setCabecalhoComum(String cabecalhoComum) {
         this.cabecalhoComum = cabecalhoComum;
     }
@@ -25,6 +26,7 @@ public class ComandoEmendaPojo implements ComandoEmenda {
         return comandos;
     }
 
+    @SuppressWarnings("unused")
     public void setComandos(List<? extends ItemComandoEmendaPojo> comandos) {
         this.comandos = comandos;
     }

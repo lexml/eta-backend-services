@@ -9,6 +9,7 @@ public class ArquivoEmenda {
         return emenda;
     }
 
+    @SuppressWarnings("unused")
     public void setEmenda(EmendaPojo emenda) {
         this.emenda = emenda;
     }

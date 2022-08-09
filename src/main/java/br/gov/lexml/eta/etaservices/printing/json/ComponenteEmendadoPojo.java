@@ -17,6 +17,7 @@ public class ComponenteEmendadoPojo implements ComponenteEmendado {
         return urn;
     }
 
+    @SuppressWarnings("unused")
     public void setUrn(String urn) {
         this.urn = urn;
     }
@@ -26,6 +27,7 @@ public class ComponenteEmendadoPojo implements ComponenteEmendado {
         return articulado;
     }
 
+    @SuppressWarnings("unused")
     public void setArticulado(boolean articulado) {
         this.articulado = articulado;
     }
@@ -35,6 +37,7 @@ public class ComponenteEmendadoPojo implements ComponenteEmendado {
         return rotuloAnexo;
     }
 
+    @SuppressWarnings("unused")
     public void setRotuloAnexo(String rotuloAnexo) {
         this.rotuloAnexo = rotuloAnexo;
     }
@@ -44,6 +47,7 @@ public class ComponenteEmendadoPojo implements ComponenteEmendado {
         return tituloAnexo;
     }
 
+    @SuppressWarnings("unused")
     public void setTituloAnexo(String tituloAnexo) {
         this.tituloAnexo = tituloAnexo;
     }
@@ -53,6 +57,7 @@ public class ComponenteEmendadoPojo implements ComponenteEmendado {
         return dispositivos;
     }
 
+    @SuppressWarnings("unused")
     public void setDispositivos(DispositivosEmendaPojo dispositivos) {
         this.dispositivos = dispositivos;
     }

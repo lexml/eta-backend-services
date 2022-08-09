@@ -23,6 +23,7 @@ public class AutoriaPojo implements Autoria {
         return tipo;
     }
 
+    @SuppressWarnings("unused")
     public void setTipo(TipoAutoria tipo) {
         this.tipo = tipo;
     }
@@ -32,6 +33,7 @@ public class AutoriaPojo implements Autoria {
         return imprimirPartidoUF;
     }
 
+    @SuppressWarnings("unused")
     public void setImprimirPartidoUF(boolean imprimirPartidoUF) {
         this.imprimirPartidoUF = imprimirPartidoUF;
     }
@@ -41,6 +43,7 @@ public class AutoriaPojo implements Autoria {
         return quantidadeAssinaturasAdicionaisDeputados;
     }
 
+    @SuppressWarnings("unused")
     public void setQuantidadeAssinaturasAdicionaisDeputados(int quantidadeAssinaturasAdicionaisDeputados) {
         this.quantidadeAssinaturasAdicionaisDeputados = quantidadeAssinaturasAdicionaisDeputados;
     }
@@ -50,6 +53,7 @@ public class AutoriaPojo implements Autoria {
         return quantidadeAssinaturasAdicionaisSenadores;
     }
 
+    @SuppressWarnings("unused")
     public void setQuantidadeAssinaturasAdicionaisSenadores(int quantidadeAssinaturasAdicionaisSenadores) {
         this.quantidadeAssinaturasAdicionaisSenadores = quantidadeAssinaturasAdicionaisSenadores;
     }
@@ -59,6 +63,7 @@ public class AutoriaPojo implements Autoria {
         return parlamentares;
     }
 
+    @SuppressWarnings("unused")
     public void setParlamentares(List<? extends ParlamentarPojo> parlamentares) {
         this.parlamentares = parlamentares;
     }
@@ -68,6 +73,7 @@ public class AutoriaPojo implements Autoria {
         return colegiado;
     }
 
+    @SuppressWarnings("unused")
     public void setColegiado(ColegiadoAutorPojo colegiado) {
         this.colegiado = colegiado;
     }

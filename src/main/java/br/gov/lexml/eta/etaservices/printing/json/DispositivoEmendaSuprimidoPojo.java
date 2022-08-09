@@ -14,6 +14,7 @@ public class DispositivoEmendaSuprimidoPojo implements DispositivoEmendaSuprimid
         return tipo;
     }
 
+    @SuppressWarnings("unused")
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -22,6 +23,7 @@ public class DispositivoEmendaSuprimidoPojo implements DispositivoEmendaSuprimid
         return id;
     }
 
+    @SuppressWarnings("unused")
     public void setId(String id) {
         this.id = id;
     }
@@ -30,6 +32,7 @@ public class DispositivoEmendaSuprimidoPojo implements DispositivoEmendaSuprimid
         return rotulo;
     }
 
+    @SuppressWarnings("unused")
     public void setRotulo(String rotulo) {
         this.rotulo = rotulo;
     }
