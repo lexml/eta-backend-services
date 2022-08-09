@@ -28,6 +28,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return tipo;
     }
 
+    @SuppressWarnings("unused")
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -37,6 +38,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return id;
     }
 
+    @SuppressWarnings("unused")
     public void setId(String id) {
         this.id = id;
     }
@@ -46,6 +48,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return rotulo;
     }
 
+    @SuppressWarnings("unused")
     public void setRotulo(String rotulo) {
         this.rotulo = rotulo;
     }
@@ -55,6 +58,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return texto;
     }
 
+    @SuppressWarnings("unused")
     public void setTexto(String texto) {
         this.texto = texto;
     }
@@ -63,6 +67,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return textoOmitido;
     }
 
+    @SuppressWarnings("unused")
     public void setTextoOmitido(Boolean textoOmitido) {
         this.textoOmitido = textoOmitido;
     }
@@ -71,6 +76,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return abreAspas;
     }
 
+    @SuppressWarnings("unused")
     public void setAbreAspas(Boolean abreAspas) {
         this.abreAspas = abreAspas;
     }
@@ -79,6 +85,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return fechaAspas;
     }
 
+    @SuppressWarnings("unused")
     public void setFechaAspas(Boolean fechaAspas) {
         this.fechaAspas = fechaAspas;
     }
@@ -88,6 +95,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return notaAlteracao;
     }
 
+    @SuppressWarnings("unused")
     public void setNotaAlteracao(NotaAlteracao notaAlteracao) {
         this.notaAlteracao = notaAlteracao;
     }
@@ -96,6 +104,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return ondeCouber;
     }
 
+    @SuppressWarnings("unused")
     public void setOndeCouber(Boolean ondeCouber) {
         this.ondeCouber = ondeCouber;
     }
@@ -105,6 +114,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return idPai;
     }
 
+    @SuppressWarnings("unused")
     public void setIdPai(String idPai) {
         this.idPai = idPai;
     }
@@ -114,6 +124,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return idIrmaoAnterior;
     }
 
+    @SuppressWarnings("unused")
     public void setIdIrmaoAnterior(String idIrmaoAnterior) {
         this.idIrmaoAnterior = idIrmaoAnterior;
     }
@@ -123,6 +134,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return urnNormaAlterada;
     }
 
+    @SuppressWarnings("unused")
     public void setUrnNormaAlterada(String urnNormaAlterada) {
         this.urnNormaAlterada = urnNormaAlterada;
     }
@@ -131,6 +143,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return existeNaNormaAlterada;
     }
 
+    @SuppressWarnings("unused")
     public void setExisteNaNormaAlterada(Boolean existeNaNormaAlterada) {
         this.existeNaNormaAlterada = existeNaNormaAlterada;
     }
@@ -139,6 +152,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         return filhos;
     }
 
+    @SuppressWarnings("unused")
     public void setFilhos(List<DispositivoEmendaAdicionadoPojo> filhos) {
         this.filhos = filhos;
     }

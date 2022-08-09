@@ -23,6 +23,7 @@ public class ParlamentarPojo implements Parlamentar {
         return identificacao;
     }
 
+    @SuppressWarnings("unused")
     public void setIdentificacao(String identificacao) {
         this.identificacao = identificacao;
     }
@@ -41,6 +42,7 @@ public class ParlamentarPojo implements Parlamentar {
         return sexo;
     }
 
+    @SuppressWarnings("unused")
     public void setSexo(Sexo sexo) {
         this.sexo = sexo;
     }
@@ -50,6 +52,7 @@ public class ParlamentarPojo implements Parlamentar {
         return siglaPartido;
     }
 
+    @SuppressWarnings("unused")
     public void setSiglaPartido(String siglaPartido) {
         this.siglaPartido = siglaPartido;
     }
@@ -59,7 +62,8 @@ public class ParlamentarPojo implements Parlamentar {
         return siglaUF;
     }
 
-    public void setSiglaUf(String siglaUf) {
+    @SuppressWarnings("unused")
+    public void setSiglaUF(String siglaUf) {
         this.siglaUF = siglaUf;
     }
 
@@ -68,6 +72,7 @@ public class ParlamentarPojo implements Parlamentar {
         return siglaCasaLegislativa;
     }
 
+    @SuppressWarnings("unused")
     public void setSiglaCasaLegislativa(SiglaCasaLegislativa siglaCasaLegislativa) {
         this.siglaCasaLegislativa = siglaCasaLegislativa;
     }
@@ -77,6 +82,7 @@ public class ParlamentarPojo implements Parlamentar {
         return cargo;
     }
 
+    @SuppressWarnings("unused")
     public void setCargo(String cargo) {
         this.cargo = cargo;
     }

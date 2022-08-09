@@ -14,6 +14,7 @@ public class ColegiadoAutorPojo implements ColegiadoAutor {
         return identificacao;
     }
 
+    @SuppressWarnings("unused")
     public void setIdentificacao(String identificacao) {
         this.identificacao = identificacao;
     }
@@ -23,6 +24,7 @@ public class ColegiadoAutorPojo implements ColegiadoAutor {
         return nome;
     }
 
+    @SuppressWarnings("unused")
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -32,6 +34,7 @@ public class ColegiadoAutorPojo implements ColegiadoAutor {
         return sigla;
     }
 
+    @SuppressWarnings("unused")
     public void setSigla(String sigla) {
         this.sigla = sigla;
     }

@@ -1,7 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import br.gov.lexml.eta.etaservices.printing.Emenda;
-import br.gov.lexml.eta.etaservices.printing.json.ArquivoEmenda;
+import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
 import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -88,7 +88,7 @@ class VelocityTemplateProcessorTest {
             final String json = FileUtils.readFileToString(sourceFile, UTF_8);
             final ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            return objectMapper.readValue(json, ArquivoEmenda.class).getEmenda();
+            return objectMapper.readValue(json, EmendaPojo.class);
 
         } catch (IOException e) {
             throw new RuntimeException(e);

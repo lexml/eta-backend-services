@@ -20,6 +20,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return tipo;
     }
 
+    @SuppressWarnings("unused")
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
@@ -29,6 +30,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return id;
     }
 
+    @SuppressWarnings("unused")
     public void setId(String id) {
         this.id = id;
     }
@@ -38,6 +40,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return rotulo;
     }
 
+    @SuppressWarnings("unused")
     public void setRotulo(String rotulo) {
         this.rotulo = rotulo;
     }
@@ -47,6 +50,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return texto;
     }
 
+    @SuppressWarnings("unused")
     public void setTexto(String texto) {
         this.texto = texto;
     }
@@ -56,6 +60,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return textoOmitido;
     }
 
+    @SuppressWarnings("unused")
     public void setTextoOmitido(boolean textoOmitido) {
         this.textoOmitido = textoOmitido;
     }
@@ -65,6 +70,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return abreAspas;
     }
 
+    @SuppressWarnings("unused")
     public void setAbreAspas(boolean abreAspas) {
         this.abreAspas = abreAspas;
     }
@@ -74,6 +80,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return fechaAspas;
     }
 
+    @SuppressWarnings("unused")
     public void setFechaAspas(boolean fechaAspas) {
         this.fechaAspas = fechaAspas;
     }
@@ -83,6 +90,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         return notaAlteracao;
     }
 
+    @SuppressWarnings("unused")
     public void setNotaAlteracao(NotaAlteracao notaAlteracao) {
         this.notaAlteracao = notaAlteracao;
     }

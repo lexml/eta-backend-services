@@ -15,6 +15,7 @@ public class ItemComandoEmendaPojo implements ItemComandoEmenda {
         return cabecalho;
     }
 
+    @SuppressWarnings("unused")
     public void setCabecalho(String cabecalho) {
         this.cabecalho = cabecalho;
     }
@@ -24,6 +25,7 @@ public class ItemComandoEmendaPojo implements ItemComandoEmenda {
         return citacao;
     }
 
+    @SuppressWarnings("unused")
     public void setCitacao(String citacao) {
         this.citacao = citacao;
     }
@@ -42,6 +44,7 @@ public class ItemComandoEmendaPojo implements ItemComandoEmenda {
         return complemento;
     }
 
+    @SuppressWarnings("unused")
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }

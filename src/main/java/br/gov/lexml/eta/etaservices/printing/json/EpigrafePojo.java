@@ -13,6 +13,7 @@ public class EpigrafePojo implements Epigrafe {
         return texto;
     }
 
+    @SuppressWarnings("unused")
     public void setTexto(String texto) {
         this.texto = texto;
     }
@@ -22,6 +23,7 @@ public class EpigrafePojo implements Epigrafe {
         return complemento;
     }
 
+    @SuppressWarnings("unused")
     public void setComplemento(String complemento) {
         this.complemento = complemento;
     }
