@@ -38,6 +38,7 @@ public class EmendaPojo implements Emenda {
         return dataUltimaModificacao;
     }
 
+    @SuppressWarnings("unused")
     public void setDataUltimaModificacao(Instant dataUltimaModificacao) {
         this.dataUltimaModificacao = dataUltimaModificacao;
     }
@@ -47,6 +48,7 @@ public class EmendaPojo implements Emenda {
         return aplicacao;
     }
 
+    @SuppressWarnings("unused")
     public void setAplicacao(String aplicacao) {
         this.aplicacao = aplicacao;
     }
@@ -56,6 +58,7 @@ public class EmendaPojo implements Emenda {
         return versaoAplicacao;
     }
 
+    @SuppressWarnings("unused")
     public void setVersaoAplicacao(String versaoAplicacao) {
         this.versaoAplicacao = versaoAplicacao;
     }
@@ -65,6 +68,7 @@ public class EmendaPojo implements Emenda {
         return modoEdicao;
     }
 
+    @SuppressWarnings("unused")
     public void setModoEdicao(ModoEdicaoEmenda modoEdicao) {
         this.modoEdicao = modoEdicao;
     }
@@ -74,6 +78,7 @@ public class EmendaPojo implements Emenda {
         return metadados;
     }
 
+    @SuppressWarnings("unused")
     public void setMetadados(Map<String, Object> metadados) {
         this.metadados = metadados;
     }
@@ -83,6 +88,7 @@ public class EmendaPojo implements Emenda {
         return proposicao;
     }
 
+    @SuppressWarnings("unused")
     public void setProposicao(RefProposicaoEmendadaPojo proposicao) {
         this.proposicao = proposicao;
     }
@@ -92,6 +98,7 @@ public class EmendaPojo implements Emenda {
         return colegiado;
     }
 
+    @SuppressWarnings("unused")
     public void setColegiadoApreciador(ColegiadoApreciadorPojo colegiado) {
         this.colegiado = colegiado;
     }
@@ -101,6 +108,7 @@ public class EmendaPojo implements Emenda {
         return epigrafe;
     }
 
+    @SuppressWarnings("unused")
     public void setEpigrafe(EpigrafePojo epigrafe) {
         this.epigrafe = epigrafe;
     }
@@ -110,6 +118,7 @@ public class EmendaPojo implements Emenda {
         return componentes;
     }
 
+    @SuppressWarnings("unused")
     public void setComponentes(List<? extends ComponenteEmendadoPojo> componentes) {
         this.componentes = componentes;
     }
@@ -119,6 +128,7 @@ public class EmendaPojo implements Emenda {
         return comandoEmenda;
     }
 
+    @SuppressWarnings("unused")
     public void setComandoEmenda(ComandoEmendaPojo comandoEmenda) {
         this.comandoEmenda = comandoEmenda;
     }
@@ -128,6 +138,7 @@ public class EmendaPojo implements Emenda {
         return justificativa;
     }
 
+    @SuppressWarnings("unused")
     public void setJustificativa(String justificativa) {
         this.justificativa = justificativa;
     }
@@ -137,6 +148,7 @@ public class EmendaPojo implements Emenda {
         return local;
     }
 
+    @SuppressWarnings("unused")
     public void setLocal(String local) {
         this.local = local;
     }
@@ -146,6 +158,7 @@ public class EmendaPojo implements Emenda {
         return data;
     }
 
+    @SuppressWarnings("unused")
     public void setData(LocalDate data) {
         this.data = data;
     }
@@ -155,6 +168,7 @@ public class EmendaPojo implements Emenda {
         return autoria;
     }
 
+    @SuppressWarnings("unused")
     public void setAutoria(AutoriaPojo autoria) {
         this.autoria = autoria;
     }
@@ -164,6 +178,7 @@ public class EmendaPojo implements Emenda {
         return opcoesImpressao;
     }
 
+    @SuppressWarnings("unused")
     public void setOpcoesImpressao(OpcoesImpressaoPojo opcoesImpressao) {
         this.opcoesImpressao = opcoesImpressao;
     }

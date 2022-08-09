@@ -17,6 +17,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
         return urn;
     }
 
+    @SuppressWarnings("unused")
     public void setUrn(String urn) {
         this.urn = urn;
     }
@@ -26,6 +27,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
         return sigla;
     }
 
+    @SuppressWarnings("unused")
     public void setSigla(String sigla) {
         this.sigla = sigla;
     }
@@ -35,6 +37,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
         return numero;
     }
 
+    @SuppressWarnings("unused")
     public void setNumero(String numero) {
         this.numero = numero;
     }
@@ -44,6 +47,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
         return ano;
     }
 
+    @SuppressWarnings("unused")
     public void setAno(String ano) {
         this.ano = ano;
     }
@@ -53,6 +57,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
         return ementa;
     }
 
+    @SuppressWarnings("unused")
     public void setEmenta(String ementa) {
         this.ementa = ementa;
     }
@@ -62,6 +67,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
         return identificacaoTexto;
     }
 
+    @SuppressWarnings("unused")
     public void setIdentificacaoTexto(String identificacaoTexto) {
         this.identificacaoTexto = identificacaoTexto;
     }

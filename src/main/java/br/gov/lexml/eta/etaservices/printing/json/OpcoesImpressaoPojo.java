@@ -14,6 +14,7 @@ public class OpcoesImpressaoPojo implements OpcoesImpressao {
         return imprimirBrasao;
     }
 
+    @SuppressWarnings("unused")
     public void setImprimirBrasao(boolean imprimirBrasao) {
         this.imprimirBrasao = imprimirBrasao;
     }
@@ -23,6 +24,7 @@ public class OpcoesImpressaoPojo implements OpcoesImpressao {
         return textoCabecalho;
     }
 
+    @SuppressWarnings("unused")
     public void setTextoCabecalho(String textoCabecalho) {
         this.textoCabecalho = textoCabecalho;
     }
@@ -32,6 +34,7 @@ public class OpcoesImpressaoPojo implements OpcoesImpressao {
         return reduzirEspacoEntreLinhas;
     }
 
+    @SuppressWarnings("unused")
     public void setReduzirEspacoEntreLinhas(boolean reduzirEspacoEntreLinhas) {
         this.reduzirEspacoEntreLinhas = reduzirEspacoEntreLinhas;
     }
