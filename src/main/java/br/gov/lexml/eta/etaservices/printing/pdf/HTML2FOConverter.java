@@ -39,21 +39,7 @@ public class HTML2FOConverter {
 
 	private static final Log log = LogFactory.getLog(HTML2FOConverter.class);
 	
-	// Chaves de configuração
-	public static final String CONF_OUTPUT_FORMAT = "conf_output_format";
-	public static final String CONF_PARAGRAPH_MARGIN_BOTTOM = "conf_paragraph_margin_bottom";
-	
-	// Valores default de configuração
-	private static final String DEFAULT_PARAGRAPH_MARGIN_BOTTOM = "0.6em";
-	
-	private String defaultParagraphMarginBottom;
-	
 	public HTML2FOConverter() {
-		configure(new HashMap<String, String>());
-	}
-	
-	public HTML2FOConverter(Map<String, String> config) {
-		configure(config);
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -87,15 +73,6 @@ public class HTML2FOConverter {
 		System.out.println(new HTML2FOConverter().html2fo(html));
 	}
 	
-	private void configure(Map<String, String> config) {
-		defaultParagraphMarginBottom = getConfig(config, CONF_PARAGRAPH_MARGIN_BOTTOM, DEFAULT_PARAGRAPH_MARGIN_BOTTOM);
-	}
-	
-	private String getConfig(Map<String, String> config, String key, String defVal) {
-		String val = config.get(key);
-		return val == null? defVal: val;
-	}
-
 	// HTML to XSL-FO
 	public String html2fo(String html) {
 		String xhtml = html2xhtml(html);
@@ -165,13 +142,8 @@ public class HTML2FOConverter {
 	        		new StreamSource(getClass().getResourceAsStream("/xhtml2fo.xsl")));
 	        
 	        
-	        xhtml = trataMarginBottom(xhtml);
-	        
 	        // Transforma classes de alinhamento em style
 	        xhtml = trataAlinhamentoDePragrafo(xhtml);
-	        
-	        // Transforma <span class='omissis'>... em <omissis/>
-	        xhtml = trataOmissis(xhtml);
 	        
 	        // Coloca div para poder processar conteúdo inline.
 	        xhtml = "<div>" + xhtml + "</div>";
@@ -204,46 +176,6 @@ public class HTML2FOConverter {
 		
 		return ret;
 		
-	}
-
-	/**
-	 * Coloca atributo css "margin-bottom: $pMarginBottomDefault" nos parágrafos
-	 */
-	private String trataMarginBottom(String xhtml) {
-		
-		StringBuffer sb = new StringBuffer();
-		
-		Pattern tagPattern = Pattern.compile("</?(p|table)\\b.*?>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-		Matcher m = tagPattern.matcher(xhtml);
-		
-		String style="style=\"";
-		
-		int i;
-		String tag;
-		String tagName;
-		boolean fecha;
-		int tableDepth = 0;
-		while(m.find()) {
-			tag = m.group();
-			tagName = m.group(1).toLowerCase();
-			fecha = tag.startsWith("</");
-			if(!fecha && tableDepth == 0) {
-				i = tag.indexOf(style);
-				if(i == -1) {
-					tag = tag.replace(">", " style=\"margin-bottom: " + defaultParagraphMarginBottom + ";\">");
-				}
-				else {
-					tag = tag.replace(style, style + "margin-bottom: " + defaultParagraphMarginBottom + "; ");
-				}
-			}
-			if(tagName.equals("table")) {
-				tableDepth += (fecha? -1: 1);
-			}
-			m.appendReplacement(sb, Matcher.quoteReplacement(tag));
-		}
-		m.appendTail(sb);
-		
-		return sb.toString();
 	}
 
 	/**
@@ -282,27 +214,6 @@ public class HTML2FOConverter {
 			mTag.appendReplacement(sb, Matcher.quoteReplacement(tag));
 		}
 		mTag.appendTail(sb);
-		
-		return sb.toString();
-	}
-	
-	/**
-	 * Trata omissis
-	 */
-	private String trataOmissis(String xhtml) {
-		
-		StringBuffer sb = new StringBuffer();
-		
-		Pattern omissisPattern = Pattern.compile("<span\\s+class=['\"]omissis['\"]>([^\\.]*)\\.+([^\\.]*)</span>", 
-				Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-		Matcher m = omissisPattern.matcher(xhtml);
-		
-		String tag;
-		while(m.find()) {
-			tag = m.group(1) + "<omissis/>" + m.group(2);
-			m.appendReplacement(sb, Matcher.quoteReplacement(tag));
-		}
-		m.appendTail(sb);
 		
 		return sb.toString();
 	}

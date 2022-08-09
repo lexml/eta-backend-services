@@ -3,6 +3,8 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
@@ -20,9 +22,7 @@ public class VelocityExtension {
 		try {
 			this.ctx = ctx;
 			this.velocityEngine = velocityEngine;
-			Map<String, String> conf = new HashMap<>();
-//			conf.put(HTML2FOConverter.CONF_PARAGRAPH_MARGIN_BOTTOM, "$pMarginBottomDefault");
-			html2foConverter = new HTML2FOConverter(conf);
+			html2foConverter = new HTML2FOConverter();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -69,6 +69,28 @@ public class VelocityExtension {
 	
 	public boolean isEmpty(Object o) {
 		return size(o) == 0;
+	}
+	
+	public String addStyle(String html, String tagName, String style) {
+		
+		StringBuffer sb = new StringBuffer();
+		
+		Pattern tagPattern = Pattern.compile("<" + tagName + "\\b.*?>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+		Matcher mTag = tagPattern.matcher(html);
+		
+		while(mTag.find()) {
+			String tag = mTag.group();
+			if (tag.contains("style=\"")) {
+				tag = tag.replace("style=\"", "style=\"" + style + ";");
+			}
+			else {
+				tag = tag.replace(">", " style=\"" + style + "\">");
+			}
+			mTag.appendReplacement(sb, Matcher.quoteReplacement(tag));
+		}
+		mTag.appendTail(sb);
+		
+		return sb.toString();
 	}
 
 }
