@@ -13,6 +13,16 @@ public enum ModoEdicaoEmenda {
         this.nome = nome;
     }
 
+    public static ModoEdicaoEmenda parse(String me) {
+        if (EMENDA.nome.equals(me)) {
+            return EMENDA;
+        } else if (EMENDA_ARTIGO_ONDE_COUBER.nome.equals(me)) {
+            return EMENDA_ARTIGO_ONDE_COUBER;
+        }
+
+        return null;
+    }
+
     public String getNome() {
         return nome;
     }
