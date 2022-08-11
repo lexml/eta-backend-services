@@ -29,8 +29,8 @@ public class FOHelper {
 	private String dcCreator;
 	private String xmpCreateDate;
 	
-    private static final Map<String,String> DEFAULT_URI = new HashMap<String,String>();
-    {
+    private static final Map<String,String> DEFAULT_URI = new HashMap<>();
+    static {
 	    DEFAULT_URI.put("x", "adobe:ns:meta/");
 	    DEFAULT_URI.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
 	    DEFAULT_URI.put("xmp", "http://ns.adobe.com/xap/1.0/");

@@ -9,8 +9,12 @@ import java.util.regex.Pattern;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class VelocityExtension {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(VelocityExtension.class);
 
 	private HTML2FOConverter html2foConverter;
 
@@ -29,16 +33,18 @@ public class VelocityExtension {
 	}
 
 	// HTML to XSL-FO
+	@SuppressWarnings("unused")
 	public String html2fo(String html) {
 		try {
 			String fo = html2foConverter.html2fo(StringEscapeUtils.unescapeHtml4(html));
 			return VelocityExtensionUtils.render(fo, ctx, velocityEngine);
 		} catch (Exception e) {
-			System.out.println(e);
+			LOGGER.error("Falha na conversão para FO", e);
 			return e.getLocalizedMessage();
 		}
 	}
-	
+
+	@SuppressWarnings("unused")
 	public String citacao2html(String citacao) {
 		return citacao.replace("Rotulo>", "strong>")
 				.replaceAll("(?i)<omissis ?/>", "<span class=\"omissis\"></span>");

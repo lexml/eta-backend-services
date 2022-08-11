@@ -108,7 +108,4 @@ final class VelocityExtensionUtils {
 		return html;
 	}
 
-//	public static void main(String[] args) {
-//		System.out.println(removeFinalDot("\n      Apurar Isso e <b>aquilo.</b>\n    "));
-//	}
 }

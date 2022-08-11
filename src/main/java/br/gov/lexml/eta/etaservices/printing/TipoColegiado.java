@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TipoColegiado {
     COMISSAO("Comissão"),
+    @SuppressWarnings("unused")
     PLENARIO("Plenário");
 
     @JsonValue
@@ -11,5 +12,10 @@ public enum TipoColegiado {
 
     TipoColegiado(String descricao) {
         this.descricao = descricao;
+    }
+
+    @SuppressWarnings("unused")
+    public String getDescricao() {
+        return descricao;
     }
 }
