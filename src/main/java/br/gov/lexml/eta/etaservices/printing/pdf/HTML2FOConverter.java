@@ -1,22 +1,5 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +17,20 @@ import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.SimpleXmlSerializer;
 import org.htmlcleaner.TagNode;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.ByteArrayInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HTML2FOConverter {
 
@@ -126,14 +123,9 @@ public class HTML2FOConverter {
 			return "";
 		}
 		
-		String ret = "";
+		String ret;
 		
 		try {
-//	        if (log.isDebugEnabled()) {
-//	        	System.out.println(xhtml);
-//	        	log.debug("xhtml2fo: xhtml=\n" + xhtml);
-//	        }
-        	
 			xhtml = unescapeHtmlKeepingXMLEntities(xhtml);	
 			xhtml = xhtml.replaceAll("&(?![lg]t;)", "&amp;");
 			
@@ -153,12 +145,12 @@ public class HTML2FOConverter {
 	        	log.debug("xhtml2fo: xhtml depois=\n"+xhtml);
 	        }
 	        
-	        ByteArrayInputStream bis = new ByteArrayInputStream(xhtml.getBytes("UTF-8"));
+	        ByteArrayInputStream bis = new ByteArrayInputStream(xhtml.getBytes(UTF_8));
 	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
 	        
 	        transformer.transform(new StreamSource(bis), new StreamResult(bos));
 	        
-	        ret = new String(bos.toByteArray(), "UTF-8");
+	        ret = new String(bos.toByteArray(), UTF_8);
 	        
 	        // Retira o block do div
 	        ret = ret.substring(ret.indexOf(">") + 1);
@@ -255,7 +247,7 @@ public class HTML2FOConverter {
 		
 		for(Node r: rows) {
 			m.nextRow();
-			List<Node> cells = ((Element)r).selectNodes("th|td");
+			List<Node> cells = r.selectNodes("th|td");
 			for(Node c: cells) {
 				m.addCell(getCellInfo((Element)c));
 			}
@@ -302,10 +294,10 @@ public class HTML2FOConverter {
 	
 	private static class TableMatrix {
 		
-		List<List<CellInfo>> t = new ArrayList<List<CellInfo>>();
-		List<Integer> qtCells = new ArrayList<Integer>();
-		List<Integer> rowWidths = new ArrayList<Integer>();
-		Map<String, CellInfo> pos = new HashMap<String, CellInfo>();
+		final List<List<CellInfo>> t = new ArrayList<>();
+		final List<Integer> qtCells = new ArrayList<>();
+		final List<Integer> rowWidths = new ArrayList<>();
+		final Map<String, CellInfo> pos = new HashMap<>();
 		
 		int current = -1; // current row index
 		
@@ -355,7 +347,7 @@ public class HTML2FOConverter {
 			int rimax = current + cellInfo.rowspan - 1;
 			if(rimax >= t.size()) {
 				for(int j = t.size(); j <= rimax; j++) {
-					t.add(new ArrayList<CellInfo>());
+					t.add(new ArrayList<>());
 					qtCells.add(0);
 					rowWidths.add(0);
 				}
@@ -369,7 +361,7 @@ public class HTML2FOConverter {
 
 		public int getQtColunas() {
 			if(qtColunas == -1) {
-				qtColunas = qtCells.stream().mapToInt(Integer::intValue).max().getAsInt(); 
+				qtColunas = qtCells.stream().mapToInt(Integer::intValue).max().orElse(0);
 			}
 			return qtColunas;
 		}
@@ -390,7 +382,7 @@ public class HTML2FOConverter {
 			
 			int qtLinhas = getQtLinhas();
 			
-			List<Integer> larguras = new ArrayList<Integer>();
+			List<Integer> larguras = new ArrayList<>();
 			
 			for(int ri = 0; ri < qtLinhas; ri++) {
 				CellInfo cell = pos.get(ri + "," + ci);
@@ -426,9 +418,8 @@ public class HTML2FOConverter {
 			for(String style: styles.split(";")) {
 				if(style.trim().startsWith("width") && style.contains(":")) {
 					String strWidth = style.substring(style.indexOf(":") + 1)
-							.replaceAll("[^\\d]", "");
-					Integer width = Integer.parseInt(strWidth, 10);
-					return width;
+							.replaceAll("\\D", "");
+					return Integer.parseInt(strWidth, 10);
 				}
 			}
 		}
