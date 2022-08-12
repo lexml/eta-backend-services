@@ -275,7 +275,7 @@ public class EmendaXmlMarshaller {
                     .append("\" ");
         }
 
-        // TODO - Avaliar uso do true/false ou s/n por estar dentro de estrutura lexml (não é atributo lexml)
+        // TODO - Avaliar uso do true/false ou s/n por estar na estrutura lexml (não é atributo lexml)
         if (filho.isExisteNaNormaAlterada() != null) {
             sb.append("existeNaNormaAlterada=\"")
                     .append(filho.isExisteNaNormaAlterada())

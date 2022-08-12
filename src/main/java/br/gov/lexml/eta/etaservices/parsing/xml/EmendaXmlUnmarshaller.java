@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda.EMENDA;
 
@@ -32,6 +33,7 @@ public class EmendaXmlUnmarshaller {
         final RefProposicaoEmendada proposicao = parseProposicao(rootElement);
         final ColegiadoApreciador colegiadoApreciador = parseColegiado(rootElement);
         final Epigrafe epigrafe = parseEpigrafe(rootElement);
+        final List<? extends ComponenteEmendado> componentes = parseComponentes(rootElement);
 
         return new EmendaRecord(
                 metadados.getDataUltimaModificacao(),
@@ -42,7 +44,7 @@ public class EmendaXmlUnmarshaller {
                 proposicao,
                 colegiadoApreciador,
                 epigrafe,
-                null,
+                componentes,
                 null,
                 "",
                 atributosEmenda.getLocal(),
@@ -50,6 +52,12 @@ public class EmendaXmlUnmarshaller {
                 null,
                 null
         );
+    }
+
+    private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
+        List<Node> nodes = rootElement.selectNodes("/Componente");
+
+        return nodes.stream().map(this::parseComponente).collect(Collectors.toList());
     }
 
     private AtributosEmenda parseAtributosEmenda(final Element rootElement) {
@@ -132,6 +140,35 @@ public class EmendaXmlUnmarshaller {
         return new EpigrafeRecord(
                 texto,
                 complemento);
+    }
+
+    private ComponenteEmendado parseComponente(final Node componente) {
+
+        final String urn = componente.valueOf("/@urn");
+        final boolean articulado =
+                componente.valueOf("/@articulado").equals("true");
+        final String tituloAnexo =
+                componente.valueOf("/@tituloAnexo");
+        final String rotuloAnexo =
+                componente.valueOf("/@rotuloAnexo");
+
+        final DispositivosEmendaRecord dispositivos = parseDispositivos(componente);
+
+        return new ComponenteEmendadoRecord(
+                urn,
+                articulado,
+                rotuloAnexo,
+                tituloAnexo,
+                dispositivos);
+    }
+
+    private DispositivosEmendaRecord parseDispositivos(final Node componente) {
+        final Node dispositivos = componente.selectSingleNode("/Dispositivos");
+
+        return new DispositivosEmendaRecord(
+                null,
+                null,
+                null);
     }
 
 }
