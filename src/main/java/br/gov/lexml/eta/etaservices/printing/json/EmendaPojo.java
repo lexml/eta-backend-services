@@ -1,14 +1,14 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.Autoria;
-import br.gov.lexml.eta.etaservices.printing.ColegiadoApreciador;
-import br.gov.lexml.eta.etaservices.printing.ComandoEmenda;
-import br.gov.lexml.eta.etaservices.printing.ComponenteEmendado;
-import br.gov.lexml.eta.etaservices.printing.Emenda;
-import br.gov.lexml.eta.etaservices.printing.Epigrafe;
-import br.gov.lexml.eta.etaservices.printing.ModoEdicaoEmenda;
-import br.gov.lexml.eta.etaservices.printing.OpcoesImpressao;
-import br.gov.lexml.eta.etaservices.printing.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.Autoria;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
+import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
+import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 
 import java.time.Instant;
 import java.time.LocalDate;

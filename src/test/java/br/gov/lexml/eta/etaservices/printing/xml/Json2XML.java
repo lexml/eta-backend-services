@@ -11,7 +11,7 @@ import org.apache.commons.io.FileUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import br.gov.lexml.eta.etaservices.printing.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.printing.json.ArquivoEmenda;
 
 class Json2XML {

@@ -1,7 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.ComponenteEmendado;
-import br.gov.lexml.eta.etaservices.printing.DispositivosEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivosEmenda;
 
 import java.util.Objects;
 

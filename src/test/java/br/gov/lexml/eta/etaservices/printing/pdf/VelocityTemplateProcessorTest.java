@@ -1,6 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import br.gov.lexml.eta.etaservices.printing.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
 import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,9 +1,9 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.Autoria;
-import br.gov.lexml.eta.etaservices.printing.ColegiadoAutor;
-import br.gov.lexml.eta.etaservices.printing.Parlamentar;
-import br.gov.lexml.eta.etaservices.printing.TipoAutoria;
+import br.gov.lexml.eta.etaservices.emenda.Autoria;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
+import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
+import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
 
 import java.util.ArrayList;
 import java.util.List;

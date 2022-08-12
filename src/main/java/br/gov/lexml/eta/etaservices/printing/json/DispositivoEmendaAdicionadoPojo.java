@@ -1,7 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionado;
-import br.gov.lexml.eta.etaservices.printing.NotaAlteracao;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
+import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
 
 import java.util.ArrayList;
 import java.util.List;

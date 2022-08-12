@@ -1,6 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.ItemComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
 
 import java.util.Objects;
 

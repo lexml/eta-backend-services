@@ -1,6 +1,6 @@
 package br.gov.lexml.eta.etaservices.parsing.xml;
 
-import br.gov.lexml.eta.etaservices.printing.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import org.dom4j.DocumentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

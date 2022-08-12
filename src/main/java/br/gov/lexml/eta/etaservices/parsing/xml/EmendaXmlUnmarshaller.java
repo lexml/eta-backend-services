@@ -1,7 +1,6 @@
 package br.gov.lexml.eta.etaservices.parsing.xml;
 
-import br.gov.lexml.eta.etaservices.printing.Emenda;
-import br.gov.lexml.eta.etaservices.printing.ModoEdicaoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.*;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -15,26 +14,59 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda.EMENDA;
+
 public class EmendaXmlUnmarshaller {
     public Emenda fromXml(final String xml) throws DocumentException {
 
         SAXReader reader = new SAXReader();
         Document doc = reader.read(new StringReader(xml));
 
-        return parseDocument(doc.getRootElement());
+        return parseEmenda(doc.getRootElement());
     }
 
-    private Emenda parseDocument(final Element rootElement) {
+    private Emenda parseEmenda(final Element rootElement) {
+
+        final AtributosEmenda atributosEmenda = parseAtributosEmenda(rootElement);
+        final Metadados metadados = parseMetadados(rootElement);
+        final RefProposicaoEmendada proposicao = parseProposicao(rootElement);
+        final ColegiadoApreciador colegiadoApreciador = parseColegiado(rootElement);
+        final Epigrafe epigrafe = parseEpigrafe(rootElement);
+
+        return new EmendaRecord(
+                metadados.getDataUltimaModificacao(),
+                metadados.getAplicacao(),
+                metadados.getVersaoAplicacao(),
+                metadados.getModoEdicao(),
+                metadados.getMeta(),
+                proposicao,
+                colegiadoApreciador,
+                epigrafe,
+                null,
+                null,
+                "",
+                atributosEmenda.getLocal(),
+                atributosEmenda.getData(),
+                null,
+                null
+        );
+    }
+
+    private AtributosEmenda parseAtributosEmenda(final Element rootElement) {
         final String local = rootElement.attributeValue("local");
         final String dataAttribute = rootElement.attributeValue("data");
         final LocalDate data = LocalDate.parse(dataAttribute);
+        return new AtributosEmenda(local, data);
+    }
+
+    private Metadados parseMetadados(final Element rootElement) {
         final Node metadadosNode = rootElement.selectSingleNode("/Metadados");
         List<Node> metadados = metadadosNode.selectNodes("");
-        Instant dataUltimaModificacao;
-        String aplicacao;
-        String versaoAplicacao;
-        ModoEdicaoEmenda modoEdicao;
-        final Map<String, String> meta = new LinkedHashMap<>();
+        Instant dataUltimaModificacao = Instant.now();
+        String aplicacao = "";
+        String versaoAplicacao = "";
+        ModoEdicaoEmenda modoEdicao = EMENDA;
+        final Map<String, Object> meta = new LinkedHashMap<>();
         for (Node n : metadados) {
             switch (n.getName()) {
                 case "DataUltimaModificacao":
@@ -57,8 +89,49 @@ public class EmendaXmlUnmarshaller {
             }
 
         }
+        return new Metadados(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, meta);
+    }
 
-        return null;
+    private RefProposicaoEmendada parseProposicao(final Element rootElement) {
+        final Node proposicao = rootElement.selectSingleNode("/Proposicao");
+        final String urn = proposicao.valueOf("/@urn");
+        final String sigla = proposicao.valueOf("/@sigla");
+        final String numero = proposicao.valueOf("/@numero");
+        final String ano = proposicao.valueOf("/@ano");
+        final String ementa = proposicao.valueOf("/@ementa");
+        final String identificacaoTexto = proposicao.valueOf("/@identificacaoTexto");
+
+
+        return new RefProposicaoEmendadaRecord(
+                urn,
+                sigla,
+                numero,
+                ano,
+                ementa,
+                identificacaoTexto);
+    }
+
+    private ColegiadoApreciador parseColegiado(final Element rootElement) {
+        final Node colegiado =
+                rootElement.selectSingleNode("/ColegiadoApreciador");
+        final SiglaCasaLegislativa sigla =
+                SiglaCasaLegislativa.parse(colegiado.valueOf("/@siglaCasaLegislativa"));
+        final TipoColegiado tipoColegiado =
+                TipoColegiado.parse(colegiado.valueOf("/@tipoColegiado"));
+        final String siglaComissao = colegiado.valueOf("/@siglaComissao");
+
+        return new ColegiadoApreciadorRecord(sigla, tipoColegiado, siglaComissao);
+    }
+
+    private Epigrafe parseEpigrafe(final Element rootElement) {
+        final Node epigrafe =
+                rootElement.selectSingleNode("/Epigrafe");
+        final String texto = epigrafe.valueOf("/@texto");
+        final String complemento = epigrafe.valueOf("/@complemento");
+        
+        return new EpigrafeRecord(
+                texto,
+                complemento);
     }
 
 }

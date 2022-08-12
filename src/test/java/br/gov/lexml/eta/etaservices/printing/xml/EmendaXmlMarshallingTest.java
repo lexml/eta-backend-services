@@ -1,7 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
 
-import br.gov.lexml.eta.etaservices.printing.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.printing.json.ArquivoEmenda;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

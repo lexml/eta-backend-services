@@ -1,13 +1,13 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.Parlamentar;
-import br.gov.lexml.eta.etaservices.printing.Sexo;
-import br.gov.lexml.eta.etaservices.printing.SiglaCasaLegislativa;
+import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
+import br.gov.lexml.eta.etaservices.emenda.Sexo;
+import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 
 import java.util.Objects;
 
-import static br.gov.lexml.eta.etaservices.printing.Sexo.M;
-import static br.gov.lexml.eta.etaservices.printing.SiglaCasaLegislativa.CD;
+import static br.gov.lexml.eta.etaservices.emenda.Sexo.M;
+import static br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa.CD;
 
 public class ParlamentarPojo implements Parlamentar {
     private String identificacao;

@@ -1,6 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.OpcoesImpressao;
+import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 
 import java.util.Objects;
 

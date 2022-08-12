@@ -1,6 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.Epigrafe;
+import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 
 import java.util.Objects;
 

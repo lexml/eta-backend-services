@@ -1,25 +1,25 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
-import br.gov.lexml.eta.etaservices.printing.Autoria;
-import br.gov.lexml.eta.etaservices.printing.ColegiadoApreciador;
-import br.gov.lexml.eta.etaservices.printing.ColegiadoAutor;
-import br.gov.lexml.eta.etaservices.printing.ComandoEmenda;
-import br.gov.lexml.eta.etaservices.printing.ComponenteEmendado;
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaAdicionado;
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaModificado;
-import br.gov.lexml.eta.etaservices.printing.DispositivoEmendaSuprimido;
-import br.gov.lexml.eta.etaservices.printing.DispositivosEmenda;
-import br.gov.lexml.eta.etaservices.printing.Emenda;
-import br.gov.lexml.eta.etaservices.printing.Epigrafe;
-import br.gov.lexml.eta.etaservices.printing.ItemComandoEmenda;
-import br.gov.lexml.eta.etaservices.printing.OpcoesImpressao;
-import br.gov.lexml.eta.etaservices.printing.Parlamentar;
-import br.gov.lexml.eta.etaservices.printing.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.Autoria;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaSuprimido;
+import br.gov.lexml.eta.etaservices.emenda.DispositivosEmenda;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
+import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
+import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
+import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import static br.gov.lexml.eta.etaservices.printing.TipoColegiado.COMISSAO;
+import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
 
 public class EmendaXmlMarshaller {
     public static final String FECHA_TAG_SEM_CONTEUDO = "/>\n";
@@ -116,7 +116,7 @@ public class EmendaXmlMarshaller {
                         .getSiglaCasaLegislativa())
                 .append("\" ")
                 .append("tipoColegiado=\"")
-                .append(colegiado.getTipoColegiado())
+                .append(colegiado.getTipoColegiado().getDescricao())
                 .append("\"");
 
         if (colegiado.getTipoColegiado() == COMISSAO) {

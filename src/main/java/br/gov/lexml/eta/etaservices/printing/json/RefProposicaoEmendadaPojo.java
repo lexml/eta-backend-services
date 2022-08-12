@@ -1,6 +1,6 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.printing.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 
 import java.util.Objects;
 
