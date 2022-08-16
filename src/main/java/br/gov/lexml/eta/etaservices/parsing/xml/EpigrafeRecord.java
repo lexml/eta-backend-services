@@ -1,4 +1,6 @@
-package br.gov.lexml.eta.etaservices.emenda;
+package br.gov.lexml.eta.etaservices.parsing.xml;
+
+import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 
 import java.util.Objects;
 

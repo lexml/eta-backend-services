@@ -411,8 +411,14 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("siglaCasaLegislativa=\"")
                 .append(autor.getSiglaCasaLegislativa())
-                .append("\" ")
-                .append(FECHA_TAG_SEM_CONTEUDO);
+                .append("\" ");
+
+        if (autor.getCargo() != null) {
+            sb.append("cargo=\"")
+                    .append(autor.getCargo())
+                    .append("\" ");
+        }
+        sb.append(FECHA_TAG_SEM_CONTEUDO);
     }
 
     private void geraColegiadoAutor(ColegiadoAutor colegiado, StringBuilder sb) {

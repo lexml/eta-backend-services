@@ -1,4 +1,9 @@
-package br.gov.lexml.eta.etaservices.emenda;
+package br.gov.lexml.eta.etaservices.parsing.xml;
+
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaSuprimido;
+import br.gov.lexml.eta.etaservices.emenda.DispositivosEmenda;
 
 import java.util.List;
 import java.util.Objects;

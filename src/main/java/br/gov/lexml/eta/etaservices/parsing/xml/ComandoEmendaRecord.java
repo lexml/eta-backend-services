@@ -1,4 +1,7 @@
-package br.gov.lexml.eta.etaservices.emenda;
+package br.gov.lexml.eta.etaservices.parsing.xml;
+
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
 
 import java.util.List;
 import java.util.Objects;

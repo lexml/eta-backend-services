@@ -1,6 +1,25 @@
 package br.gov.lexml.eta.etaservices.parsing.xml;
 
-import br.gov.lexml.eta.etaservices.emenda.*;
+import br.gov.lexml.eta.etaservices.emenda.Autoria;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaSuprimido;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
+import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
+import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
+import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
+import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.Sexo;
+import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
+import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
+import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -34,6 +53,10 @@ public class EmendaXmlUnmarshaller {
         final ColegiadoApreciador colegiadoApreciador = parseColegiado(rootElement);
         final Epigrafe epigrafe = parseEpigrafe(rootElement);
         final List<? extends ComponenteEmendado> componentes = parseComponentes(rootElement);
+        final ComandoEmenda comandoEmenda = parseComandoEmenda(rootElement);
+        final String justificativa = parseJustificativa(rootElement);
+        final Autoria autoria = parseAutoria(rootElement);
+        final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
 
         return new EmendaRecord(
                 metadados.getDataUltimaModificacao(),
@@ -45,13 +68,12 @@ public class EmendaXmlUnmarshaller {
                 colegiadoApreciador,
                 epigrafe,
                 componentes,
-                null,
-                "",
+                comandoEmenda,
+                justificativa,
                 atributosEmenda.getLocal(),
                 atributosEmenda.getData(),
-                null,
-                null
-        );
+                autoria,
+                opcoesImpressao);
     }
 
     private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
@@ -165,10 +187,196 @@ public class EmendaXmlUnmarshaller {
     private DispositivosEmendaRecord parseDispositivos(final Node componente) {
         final Node dispositivos = componente.selectSingleNode("/Dispositivos");
 
+        List<? extends DispositivoEmendaSuprimido> suprimidos = parseSuprimidos(dispositivos);
+        List<? extends DispositivoEmendaModificado> modificados = parseModificados(dispositivos);
+        List<? extends DispositivoEmendaAdicionado> adicionados = parseAdicionados(dispositivos);
+
         return new DispositivosEmendaRecord(
-                null,
-                null,
-                null);
+                suprimidos,
+                modificados,
+                adicionados);
+    }
+
+    private List<? extends DispositivoEmendaSuprimido> parseSuprimidos(final Node dispositivos) {
+        return dispositivos.selectNodes("/DispositivoSuprimido").stream()
+                .map(this::parseSuprimido)
+                .collect(Collectors.toList());
+    }
+
+    private DispositivoEmendaSuprimido parseSuprimido(final Node suprimido) {
+        String tipo = suprimido.valueOf("/@tipo");
+        String id = suprimido.valueOf("/@id");
+        String rotulo = suprimido.valueOf("/@rotulo");
+        return new DispositivoEmendaSuprimidoRecord(tipo, id, rotulo);
+    }
+
+    private List<? extends DispositivoEmendaModificado> parseModificados(final Node dispositivos) {
+        return dispositivos.selectNodes("/DispositivoModificado").stream()
+                .map(this::parseModificado)
+                .collect(Collectors.toList());
+    }
+
+    private DispositivoEmendaModificado parseModificado(final Node modificado) {
+        String tipo = modificado.valueOf("/@tipo");
+        String id = modificado.valueOf("/@id");
+        String rotulo = modificado.valueOf("/@rotulo");
+        String omitido = modificado.valueOf("/@textoOmitido");
+        Boolean textoOmitido = omitido == null ? null : omitido.equals("true");
+        String aAspas = modificado.valueOf("/@abreAspas");
+        Boolean abreAspas = aAspas == null ? null : aAspas.equals("true");
+        String fAspas = modificado.valueOf("/@abreAspas");
+        Boolean fechaAspas = fAspas == null ? null : fAspas.equals("true");
+        NotaAlteracao nota = NotaAlteracao.parse(modificado.valueOf("/@notaAlteracao"));
+        Node txt = modificado.selectSingleNode("/Texto");
+        String texto = txt.getStringValue();
+
+
+        return new DispositivoEmendaModificadoRecord(
+                tipo,
+                id,
+                rotulo,
+                texto,
+                textoOmitido,
+                abreAspas,
+                fechaAspas,
+                nota);
+    }
+
+
+    private List<? extends DispositivoEmendaAdicionado> parseAdicionados(final Node dispositivos) {
+        return dispositivos.selectNodes("/DispositivoAdicionado").stream()
+                .map(this::parseAdicionado)
+                .collect(Collectors.toList());
+    }
+
+    private DispositivoEmendaAdicionado parseAdicionado(final Node adicionado) {
+        String tipo = adicionado.valueOf("/@tipo");
+        String id = adicionado.valueOf("/@id");
+        String rotulo = adicionado.valueOf("/@rotulo");
+        String omitido = adicionado.valueOf("/@textoOmitido");
+        Boolean textoOmitido = omitido == null ? null : omitido.equals("true");
+        String aAspas = adicionado.valueOf("/@abreAspas");
+        Boolean abreAspas = aAspas == null ? null : aAspas.equals("true");
+        String fAspas = adicionado.valueOf("/@abreAspas");
+        Boolean fechaAspas = fAspas == null ? null : fAspas.equals("true");
+        NotaAlteracao nota = NotaAlteracao.parse(adicionado.valueOf("/@notaAlteracao"));
+        return null;
+    }
+
+    private ComandoEmenda parseComandoEmenda(final Element rootElement) {
+        Node comandoEmenda = rootElement.selectSingleNode("/ComandoEmenda");
+        Node cabecalhoComumNode = comandoEmenda.selectSingleNode("/CabecalhoComum");
+        String cabecalhoComum = cabecalhoComumNode == null ? null : cabecalhoComumNode.getStringValue();
+        List<ItemComandoEmenda> itensComandoEmenda = parseItensComandoEmenda(comandoEmenda);
+
+        return new ComandoEmendaRecord(cabecalhoComum, itensComandoEmenda);
+    }
+
+    private List<ItemComandoEmenda> parseItensComandoEmenda(Node comandoEmenda) {
+        return comandoEmenda.selectNodes("/ItemComandoEmenda").stream()
+                .map(this::parseItem).collect(Collectors.toList());
+    }
+
+    private ItemComandoEmenda parseItem(Node itemComandoEmenda) {
+
+        String rotulo =
+                itemComandoEmenda.selectSingleNode("/Rotulo").getStringValue();
+
+        String cabecalho =
+                itemComandoEmenda.selectSingleNode("/Cabecalho").getStringValue();
+
+        String citacao =
+                itemComandoEmenda.selectSingleNode("/Citacao").getStringValue();
+
+        String complemento =
+                itemComandoEmenda.selectSingleNode("/Complemento").getStringValue();
+
+        return new ItemComandoEmendaRecord(
+                cabecalho,
+                citacao,
+                rotulo,
+                complemento);
+    }
+
+    private String parseJustificativa(final Element rootElement) {
+        return rootElement.selectSingleNode("/Justificativa").getStringValue();
+    }
+
+    private Autoria parseAutoria(final Element rootElement) {
+        Node autoria = rootElement.selectSingleNode("/Autoria");
+
+        TipoAutoria tipo = TipoAutoria.parse(autoria.valueOf("/@tipo"));
+        boolean imprimirPartidoUF = autoria.valueOf("/@imprimirPartidoUF").equals("true");
+        int quantidadeAssinaturasAdicionaisDeputados =
+                Integer.parseInt(autoria.valueOf("/@quantidadeAssinaturasAdicionaisDeputados"));
+        int quantidadeAssinaturasAdicionaisSenadores =
+                Integer.parseInt(autoria.valueOf("/@quantidadeAssinaturasAdicionaisSenadores"));
+
+        List<Parlamentar> parlamentares = parseParlamentares(autoria);
+        ColegiadoAutor colegiado = parseColegiadoAutor(autoria);
+
+
+        return new AutoriaRecord(
+                tipo,
+                imprimirPartidoUF,
+                quantidadeAssinaturasAdicionaisSenadores,
+                quantidadeAssinaturasAdicionaisDeputados,
+                parlamentares,
+                colegiado);
+    }
+
+    private List<Parlamentar> parseParlamentares(final Node autoria) {
+        return autoria.selectNodes("/Parlamentar").stream().map(this::parseParlamentar).collect(Collectors.toList());
+    }
+
+    private Parlamentar parseParlamentar(Node parlamentar) {
+        final String identificacao = parlamentar.valueOf("/@identificacao");
+        final String nome = parlamentar.valueOf("/@nome");
+        final Sexo sexo = Sexo.parse(parlamentar.valueOf("/@sexo"));
+        final String partido = parlamentar.valueOf("/@siglaPartido");
+        final String uf = parlamentar.valueOf("/@siglaUF");
+        final SiglaCasaLegislativa casa =
+                SiglaCasaLegislativa.parse(parlamentar.valueOf("/@siglaCasaLegislativa"));
+        final String cargo = parlamentar.valueOf("/@cargo");
+
+        return new ParlamentarRecord(
+                identificacao,
+                nome,
+                sexo,
+                partido,
+                uf,
+                casa,
+                cargo);
+    }
+
+    private ColegiadoAutor parseColegiadoAutor(Node autoria) {
+
+        Node colegiado = autoria.selectSingleNode("/Colegiado");
+        if (colegiado == null) {
+            return null;
+        }
+        String identificacao = colegiado.valueOf("/@identificacao");
+        String nome = colegiado.valueOf("/@nome");
+        String sigla = colegiado.valueOf("/@sigla");
+
+
+        return new ColegiadoAutorRecord(
+                identificacao,
+                nome,
+                sigla);
+    }
+
+    private OpcoesImpressao parseOpcoesImpressao(final Element rootElement) {
+        Node opcoes = rootElement.selectSingleNode("/OpcoesImpressao");
+
+        boolean imprimirBrasao = opcoes.valueOf("/@imprimirBrasao").equals("true");
+        String textoCabecalho = opcoes.valueOf("/@textoCabecalho");
+        boolean reduzirEspacoEntreLinhas = opcoes.valueOf("/@reduzirEspacoEntreLinhas").equals("true");
+
+        return new OpcoesImpressaoRecord(
+                imprimirBrasao,
+                textoCabecalho,
+                reduzirEspacoEntreLinhas);
     }
 
 }

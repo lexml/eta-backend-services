@@ -1,4 +1,9 @@
-package br.gov.lexml.eta.etaservices.emenda;
+package br.gov.lexml.eta.etaservices.parsing.xml;
+
+import br.gov.lexml.eta.etaservices.emenda.Autoria;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
+import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
+import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
 
 import java.util.List;
 import java.util.Objects;

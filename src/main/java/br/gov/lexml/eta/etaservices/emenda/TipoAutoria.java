@@ -14,6 +14,21 @@ public enum TipoAutoria {
         this.descricao = descricao;
     }
 
+    public static TipoAutoria parse(String tipo) {
+        switch (tipo) {
+            case "Não identificado":
+                return NAO_IDENTIFICADO;
+            case "Parlamentar":
+                return PARLAMENTAR;
+            case "Comissão":
+                return COMISSAO;
+            case "Casa Legislativa":
+                return CASA_LEGISLATIVA;
+            default:
+                return null;
+        }
+    }
+
     @JsonValue
     public String getDescricao() {
         return descricao;
