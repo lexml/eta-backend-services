@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;
@@ -29,13 +30,15 @@ class VelocityTemplateProcessorTest {
 
     public static final String SOURCE_FILE_NAME = "emenda_mpv_905_2019_completa_disp_mpv.json";
     public static final String DESTINATION_FILE_NAME = "test1.pdf";
+
+    public static final String XML_FILE = "emenda_mpv_905_2019_completa_disp_mpv.xml";
     private Emenda emenda;
     private String xml;
 
     private VelocityTemplateProcessor velocityTemplateProcessor;
 
 
-    @Test
+    @Disabled
     @DisplayName("Verifica se nome da aplicação é preenchido")
     void testaMetadadosEmenda() throws IOException, URISyntaxException {
         final String templateResult =
@@ -46,7 +49,7 @@ class VelocityTemplateProcessorTest {
 
         assertThat(result)
                 .withNamespaceContext(getXSLFoNamespaceContext())
-                .valueByXPath("/fo:root/fo:declarations/x:xmpmeta/rdf:RDF/rdf:Description/xmp:CreatorTool[1]")
+                .valueByXPath("/fo:root/fo:declarations/x:xmpmeta/rdf:RDF/rdf:Description/xmp:CreatorTool")
                 .isEqualTo(emenda.getAplicacao());
     }
 

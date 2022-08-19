@@ -39,8 +39,8 @@ import static br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda.EMENDA;
 public class EmendaXmlUnmarshaller {
     public Emenda fromXml(final String xml) throws DocumentException {
 
-        SAXReader reader = new SAXReader();
-        Document doc = reader.read(new StringReader(xml));
+        final SAXReader reader = new SAXReader();
+        final Document doc = reader.read(new StringReader(xml));
 
         return parseEmenda(doc.getRootElement());
     }
@@ -77,7 +77,7 @@ public class EmendaXmlUnmarshaller {
     }
 
     private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
-        List<Node> nodes = rootElement.selectNodes("/Componente");
+        final List<Node> nodes = rootElement.selectNodes("/Componente");
 
         return nodes.stream().map(this::parseComponente).collect(Collectors.toList());
     }
@@ -91,7 +91,7 @@ public class EmendaXmlUnmarshaller {
 
     private Metadados parseMetadados(final Element rootElement) {
         final Node metadadosNode = rootElement.selectSingleNode("/Metadados");
-        List<Node> metadados = metadadosNode.selectNodes("");
+        final  List<Node> metadados = metadadosNode.selectNodes("");
         Instant dataUltimaModificacao = Instant.now();
         String aplicacao = "";
         String versaoAplicacao = "";
@@ -187,9 +187,9 @@ public class EmendaXmlUnmarshaller {
     private DispositivosEmendaRecord parseDispositivos(final Node componente) {
         final Node dispositivos = componente.selectSingleNode("/Dispositivos");
 
-        List<? extends DispositivoEmendaSuprimido> suprimidos = parseSuprimidos(dispositivos);
-        List<? extends DispositivoEmendaModificado> modificados = parseModificados(dispositivos);
-        List<? extends DispositivoEmendaAdicionado> adicionados = parseAdicionados(dispositivos);
+        final List<? extends DispositivoEmendaSuprimido> suprimidos = parseSuprimidos(dispositivos);
+        final List<? extends DispositivoEmendaModificado> modificados = parseModificados(dispositivos);
+        final List<? extends DispositivoEmendaAdicionado> adicionados = parseAdicionados(dispositivos);
 
         return new DispositivosEmendaRecord(
                 suprimidos,
@@ -204,9 +204,9 @@ public class EmendaXmlUnmarshaller {
     }
 
     private DispositivoEmendaSuprimido parseSuprimido(final Node suprimido) {
-        String tipo = suprimido.valueOf("/@tipo");
-        String id = suprimido.valueOf("/@id");
-        String rotulo = suprimido.valueOf("/@rotulo");
+        final String tipo = suprimido.valueOf("/@tipo");
+        final String id = suprimido.valueOf("/@id");
+        final String rotulo = suprimido.valueOf("/@rotulo");
         return new DispositivoEmendaSuprimidoRecord(tipo, id, rotulo);
     }
 
@@ -217,19 +217,18 @@ public class EmendaXmlUnmarshaller {
     }
 
     private DispositivoEmendaModificado parseModificado(final Node modificado) {
-        String tipo = modificado.valueOf("/@tipo");
-        String id = modificado.valueOf("/@id");
-        String rotulo = modificado.valueOf("/@rotulo");
-        String omitido = modificado.valueOf("/@textoOmitido");
-        Boolean textoOmitido = omitido == null ? null : omitido.equals("true");
-        String aAspas = modificado.valueOf("/@abreAspas");
-        Boolean abreAspas = aAspas == null ? null : aAspas.equals("true");
-        String fAspas = modificado.valueOf("/@abreAspas");
-        Boolean fechaAspas = fAspas == null ? null : fAspas.equals("true");
-        NotaAlteracao nota = NotaAlteracao.parse(modificado.valueOf("/@notaAlteracao"));
-        Node txt = modificado.selectSingleNode("/Texto");
-        String texto = txt.getStringValue();
-
+        final String tipo = modificado.valueOf("/@tipo");
+        final String id = modificado.valueOf("/@id");
+        final String rotulo = modificado.valueOf("/@rotulo");
+        final String omitido = modificado.valueOf("/@textoOmitido");
+        final Boolean textoOmitido = omitido == null ? null : omitido.equals("true");
+        final String aAspas = modificado.valueOf("/@abreAspas");
+        final Boolean abreAspas = aAspas == null ? null : aAspas.equals("true");
+        final String fAspas = modificado.valueOf("/@abreAspas");
+        final Boolean fechaAspas = fAspas == null ? null : fAspas.equals("true");
+        final NotaAlteracao nota = NotaAlteracao.parse(modificado.valueOf("/@notaAlteracao"));
+        final Node txt = modificado.selectSingleNode("/Texto");
+        final String texto = txt.getStringValue();
 
         return new DispositivoEmendaModificadoRecord(
                 tipo,
@@ -250,6 +249,13 @@ public class EmendaXmlUnmarshaller {
     }
 
     private DispositivoEmendaAdicionado parseAdicionado(final Node adicionado) {
+
+        boolean ondeCouber = adicionado.valueOf("/@ondeCouber").equals("true");
+        String idPai = adicionado.valueOf("/@idPai");
+        String idIrmao = adicionado.valueOf("/@idIrmaoAnterior");
+
+        
+
         String tipo = adicionado.valueOf("/@tipo");
         String id = adicionado.valueOf("/@id");
         String rotulo = adicionado.valueOf("/@rotulo");
@@ -264,10 +270,10 @@ public class EmendaXmlUnmarshaller {
     }
 
     private ComandoEmenda parseComandoEmenda(final Element rootElement) {
-        Node comandoEmenda = rootElement.selectSingleNode("/ComandoEmenda");
-        Node cabecalhoComumNode = comandoEmenda.selectSingleNode("/CabecalhoComum");
-        String cabecalhoComum = cabecalhoComumNode == null ? null : cabecalhoComumNode.getStringValue();
-        List<ItemComandoEmenda> itensComandoEmenda = parseItensComandoEmenda(comandoEmenda);
+        final Node comandoEmenda = rootElement.selectSingleNode("/ComandoEmenda");
+        final Node cabecalhoComumNode = comandoEmenda.selectSingleNode("/CabecalhoComum");
+        final String cabecalhoComum = cabecalhoComumNode == null ? null : cabecalhoComumNode.getStringValue();
+        final List<ItemComandoEmenda> itensComandoEmenda = parseItensComandoEmenda(comandoEmenda);
 
         return new ComandoEmendaRecord(cabecalhoComum, itensComandoEmenda);
     }
@@ -279,16 +285,16 @@ public class EmendaXmlUnmarshaller {
 
     private ItemComandoEmenda parseItem(Node itemComandoEmenda) {
 
-        String rotulo =
+        final String rotulo =
                 itemComandoEmenda.selectSingleNode("/Rotulo").getStringValue();
 
-        String cabecalho =
+        final String cabecalho =
                 itemComandoEmenda.selectSingleNode("/Cabecalho").getStringValue();
 
-        String citacao =
+        final String citacao =
                 itemComandoEmenda.selectSingleNode("/Citacao").getStringValue();
 
-        String complemento =
+        final String complemento =
                 itemComandoEmenda.selectSingleNode("/Complemento").getStringValue();
 
         return new ItemComandoEmendaRecord(
@@ -303,17 +309,17 @@ public class EmendaXmlUnmarshaller {
     }
 
     private Autoria parseAutoria(final Element rootElement) {
-        Node autoria = rootElement.selectSingleNode("/Autoria");
+        final Node autoria = rootElement.selectSingleNode("/Autoria");
 
-        TipoAutoria tipo = TipoAutoria.parse(autoria.valueOf("/@tipo"));
-        boolean imprimirPartidoUF = autoria.valueOf("/@imprimirPartidoUF").equals("true");
-        int quantidadeAssinaturasAdicionaisDeputados =
+        final TipoAutoria tipo = TipoAutoria.parse(autoria.valueOf("/@tipo"));
+        final boolean imprimirPartidoUF = autoria.valueOf("/@imprimirPartidoUF").equals("true");
+        final int quantidadeAssinaturasAdicionaisDeputados =
                 Integer.parseInt(autoria.valueOf("/@quantidadeAssinaturasAdicionaisDeputados"));
-        int quantidadeAssinaturasAdicionaisSenadores =
+        final int quantidadeAssinaturasAdicionaisSenadores =
                 Integer.parseInt(autoria.valueOf("/@quantidadeAssinaturasAdicionaisSenadores"));
 
-        List<Parlamentar> parlamentares = parseParlamentares(autoria);
-        ColegiadoAutor colegiado = parseColegiadoAutor(autoria);
+        final List<Parlamentar> parlamentares = parseParlamentares(autoria);
+        final ColegiadoAutor colegiado = parseColegiadoAutor(autoria);
 
 
         return new AutoriaRecord(
@@ -351,13 +357,13 @@ public class EmendaXmlUnmarshaller {
 
     private ColegiadoAutor parseColegiadoAutor(Node autoria) {
 
-        Node colegiado = autoria.selectSingleNode("/Colegiado");
+        final Node colegiado = autoria.selectSingleNode("/Colegiado");
         if (colegiado == null) {
             return null;
         }
-        String identificacao = colegiado.valueOf("/@identificacao");
-        String nome = colegiado.valueOf("/@nome");
-        String sigla = colegiado.valueOf("/@sigla");
+        final String identificacao = colegiado.valueOf("/@identificacao");
+        final String nome = colegiado.valueOf("/@nome");
+        final String sigla = colegiado.valueOf("/@sigla");
 
 
         return new ColegiadoAutorRecord(
