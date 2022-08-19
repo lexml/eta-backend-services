@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 
-class VelocityTemplateProcessor {
+public class VelocityTemplateProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(VelocityTemplateProcessor.class);
 
@@ -21,7 +21,7 @@ class VelocityTemplateProcessor {
 
     private String velocityResult;
 
-    VelocityTemplateProcessor(final TemplateLoader templateLoader) {
+    public VelocityTemplateProcessor(final TemplateLoader templateLoader) {
         this.templateLoader = templateLoader;
     }
 
