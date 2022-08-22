@@ -339,6 +339,7 @@
 ## Assinaturas ----------------------------------------------------------------
 				<fo:block font-weight="bold">
 					## Signatários nomeados ----------------------------------------------------------------
+					#if ($emenda.autoria.parlamentares.size() > 0)
 					<fo:block>
 						<fo:table role="Signatários"
 							table-layout="fixed" width="100%">
@@ -393,6 +394,7 @@
 							</fo:table-body>
 						</fo:table>
 					</fo:block>
+					#end
 					## Assinaturas adicionais de senadores ----------------------------------------------------------------
 					#if($emenda.autoria.quantidadeAssinaturasAdicionaisSenadores > 0)
 					<fo:table table-layout="fixed" width="100%">
