@@ -40,11 +40,9 @@ public class VelocityTemplateProcessor {
             //REPLACEMENTS
 
             if (log.isDebugEnabled()) {
-                log.debug("finalTemplate: " + finalTemplate);
+                log.debug("finalTemplate: {}", finalTemplate);
             }
 
-            // processing velocity
-//            velocityResult = replaceHtmlTagsWithFO(getVelocityResult(finalTemplate, emenda));
             velocityResult = getVelocityResult(finalTemplate, emenda);
         }
 
@@ -82,7 +80,7 @@ public class VelocityTemplateProcessor {
         result = result.replaceAll("\\s{2,}", " ");
         result = result.replaceAll("\\s([.,;:!?])", "$1");
 
-        log.debug("getVelocityResult: " + result);
+        log.debug("getVelocityResult: {}", result);
 
         return result;
     }
