@@ -6,21 +6,23 @@ import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
 import java.io.IOException;
 import java.io.OutputStream;
 
+@SuppressWarnings("unused")
 public class PdfGeneratorBean implements PdfGenerator {
-    private final VelocityTemplateProcessor templateProcessor;
+    private final VelocityTemplateProcessorFactory templateProcessorFactory;
     private final EmendaXmlMarshaller emendaXmlMarshaller;
 
-    public PdfGeneratorBean(VelocityTemplateProcessor templateProcessor,
+    public PdfGeneratorBean(VelocityTemplateProcessorFactory templateProcessorFactory,
                             EmendaXmlMarshaller emendaXmlMarshaller) {
-        this.templateProcessor = templateProcessor;
+        this.templateProcessorFactory = templateProcessorFactory;
         this.emendaXmlMarshaller = emendaXmlMarshaller;
     }
 
     @Override
     public void generate(Emenda emenda, OutputStream outputStream) throws IOException {
         final String xml = emendaXmlMarshaller.toXml(emenda);
+
         final String templateResult =
-                templateProcessor.getTemplateResult(emenda);
+                templateProcessorFactory.get().getTemplateResult(emenda);
         new FOPProcessor().processFOP(outputStream, templateResult, xml);
     }
 
