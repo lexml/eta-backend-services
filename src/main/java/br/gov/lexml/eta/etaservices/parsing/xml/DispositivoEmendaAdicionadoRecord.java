@@ -1,10 +1,13 @@
 package br.gov.lexml.eta.etaservices.parsing.xml;
 
-import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
-import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
-
 import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
+import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
 
 public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmendaAdicionado {
     private final String tipo;
@@ -69,14 +72,17 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
         return texto;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isTextoOmitido() {
         return textoOmitido;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isAbreAspas() {
         return abreAspas;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isFechaAspas() {
         return fechaAspas;
     }
@@ -85,6 +91,7 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
         return notaAlteracao;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isOndeCouber() {
         return ondeCouber;
     }
@@ -101,10 +108,12 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
         return urnNormaAlterada;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isExisteNaNormaAlterada() {
         return existeNaNormaAlterada;
     }
 
+    @JsonInclude(Include.NON_EMPTY)
     public List<DispositivoEmendaAdicionadoRecord> getFilhos() {
         return filhos;
     }

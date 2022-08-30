@@ -1,13 +1,15 @@
 package br.gov.lexml.eta.etaservices.parsing.xml;
 
-import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
-import br.gov.lexml.eta.etaservices.emenda.Sexo;
-import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
+import static br.gov.lexml.eta.etaservices.emenda.Sexo.M;
+import static br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa.CD;
 
 import java.util.Objects;
 
-import static br.gov.lexml.eta.etaservices.emenda.Sexo.M;
-import static br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa.CD;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
+import br.gov.lexml.eta.etaservices.emenda.Sexo;
+import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 
 public final class ParlamentarRecord implements Parlamentar {
     private final String identificacao;
@@ -36,6 +38,7 @@ public final class ParlamentarRecord implements Parlamentar {
     }
 
     @Override
+    @JsonIgnore()
     public String getTratamento() {
         return siglaCasaLegislativa == CD ? tratamentoCamara() : tratamentoSenado();
     }

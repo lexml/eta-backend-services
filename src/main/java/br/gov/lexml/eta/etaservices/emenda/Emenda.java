@@ -7,6 +7,8 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface Emenda {
     Instant getDataUltimaModificacao();
 
@@ -35,6 +37,7 @@ public interface Emenda {
     LocalDate getData();
 
     @SuppressWarnings("unused")
+    @JsonIgnore()
     default String getDataFormatada() {
         return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)).toLowerCase();
     }

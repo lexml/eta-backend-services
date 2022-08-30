@@ -6,7 +6,6 @@ public enum TipoColegiado {
     COMISSAO("Comissão"),
     PLENARIO("Plenário");
 
-    @JsonValue
     private final String descricao;
 
     TipoColegiado(final String descricao) {
@@ -14,6 +13,9 @@ public enum TipoColegiado {
     }
 
     public static TipoColegiado parse(String valueOf) {
+    	if (valueOf == null) {
+    		return null;
+    	}
         switch (valueOf) {
             case "Comissão":
                 return COMISSAO;
@@ -24,6 +26,7 @@ public enum TipoColegiado {
         }
     }
 
+    @JsonValue
     public String getDescricao() {
         return descricao;
     }

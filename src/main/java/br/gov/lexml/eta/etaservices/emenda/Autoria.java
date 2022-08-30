@@ -1,10 +1,12 @@
 package br.gov.lexml.eta.etaservices.emenda;
 
-import io.vavr.Tuple2;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import io.vavr.Tuple2;
 
 public interface Autoria {
     TipoAutoria getTipo();
@@ -14,6 +16,7 @@ public interface Autoria {
     int getQuantidadeAssinaturasAdicionaisSenadores();
 
     @SuppressWarnings("unused")
+    @JsonIgnore()
     default int[] getAssinaturasAdicionaisSenadores() {
         return IntStream.range(0, getQuantidadeAssinaturasAdicionaisSenadores())
                 .toArray();
@@ -22,6 +25,7 @@ public interface Autoria {
     int getQuantidadeAssinaturasAdicionaisDeputados();
 
     @SuppressWarnings("unused")
+    @JsonIgnore()
     default int[] getAssinaturasAdicionaisDeputados() {
         return IntStream.range(0, getQuantidadeAssinaturasAdicionaisDeputados())
                 .toArray();
@@ -30,6 +34,7 @@ public interface Autoria {
     List<? extends Parlamentar> getParlamentares();
 
     @SuppressWarnings("unused")
+    @JsonIgnore()
     default List<Tuple2<? extends Parlamentar, ? extends Parlamentar>> getParlamentaresPair() {
         final List<Tuple2<? extends Parlamentar, ? extends Parlamentar>> result = new ArrayList<>();
         final int listSize = getParlamentares().size();

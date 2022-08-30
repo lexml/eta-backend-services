@@ -1,0 +1,999 @@
+<Emenda versaoFormatoArquivo="1.0" local="Sala da comissão" data="2022-07-22">
+  <Metadados>
+    <DataUltimaModificacao>2022-07-22T19:50:51.349Z</DataUltimaModificacao>
+    <Aplicacao></Aplicacao>
+    <VersaoAplicacao></VersaoAplicacao>
+    <ModoEdicao>emenda</ModoEdicao>
+  </Metadados>
+  <Proposicao urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" sigla="MPV" numero="905" ano="2019" ementa="Institui o Contrato de Trabalho Verde e Amarelo, altera a legislação trabalhista, e dá outras providências.
+" identificacaoTexto="Texto da MPV" />
+  <ColegiadoApreciador siglaCasaLegislativa="CN" tipoColegiado="COMISSAO" siglaComissao="CMMPV 905/2019" />
+  <Epigrafe texto="EMENDA Nº         - CMMPV 905/2019" complemento="(à MPV 905/2019)" />
+  <Componente urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" articulado="true" >
+    <Dispositivos>
+      <DispositivoSuprimido tipo="Paragrafo" id="art2_par2" rotulo="§ 2º" />
+      <DispositivoModificado tipo="Paragrafo" id="art2_par3" rotulo="§ 3º" >
+        <Texto>Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum.
+        </Texto>
+      </DispositivoModificado>       <DispositivoAdicionado idIrmaoAnterior="art1" >
+        <Artigo id="art1-1" >
+          <Rotulo>Art. 1º-1.</Rotulo>
+        <Caput id="art1-1_cpt" >
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p>
+        </Caput>
+        <Paragrafo id="art1-1_par1" >
+          <Rotulo>§ 1º</Rotulo>
+          <p>Ut tincidunt rutrum ornare. Praesent rhoncus sem non risus mattis, nec vulputate neque vehicula. Donec quis quam ac massa auctor scelerisque. Nulla facilisi:</p>
+        <Inciso id="art1-1_par1_inc1" >
+          <Rotulo>I –</Rotulo>
+          <p>tincidunt rutrum ornare 1:</p>
+        <Alinea id="art1-1_par1_inc1_ali1" >
+          <Rotulo>a)</Rotulo>
+          <p>laoreet lectus 1:</p>
+        <Item id="art1-1_par1_inc1_ali1_ite1" >
+          <Rotulo>1.</Rotulo>
+          <p>consectetur adipiscing elit 1;</p>
+        </Item>
+        <Item id="art1-1_par1_inc1_ali1_ite2" >
+          <Rotulo>2.</Rotulo>
+          <p>consectetur adipiscing elit 2.</p>
+        </Item>
+        </Alinea>
+        <Alinea id="art1-1_par1_inc1_ali2" >
+          <Rotulo>b)</Rotulo>
+          <p>laoreet lectus 2.</p>
+        </Alinea>
+        </Inciso>
+        <Inciso id="art1-1_par1_inc2" >
+          <Rotulo>II –</Rotulo>
+          <p>tincidunt rutrum ornare 2.</p>
+        </Inciso>
+        </Paragrafo>
+        <Paragrafo id="art1-1_par2" >
+          <Rotulo>§ 2º</Rotulo>
+          <p>Nunc eget diam scelerisque eros consectetur aliquet. Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum.</p>
+        </Paragrafo>
+        </Artigo>
+      </DispositivoAdicionado>
+      <DispositivoAdicionado idIrmaoAnterior="art2" >
+        <Artigo id="art2-1" >
+          <Rotulo>Art. 2º-1.</Rotulo>
+        <Caput id="art2-1_cpt" >
+          <p>A  <a href="urn:lex:br:federal:lei:2012-12-12;123"> Lei nº 123, de 12 de dezembro de 2012 </a>passa a vigorar com a seguinte redação:</p>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="true" textoOmitido="s" >
+          <Rotulo>§ 10.</Rotulo>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        <Alteracao id="art2-1_cpt_alt1" xml:base="urn:lex:br:federal:lei:2012-12-12;123" >
+        <Artigo id="art2-1_cpt_alt1_art10" existeNaNormaAlterada="false" abreAspas="s" notaAlteracao="NR" >
+          <Rotulo>Art. 10.</Rotulo>
+        <Caput id="art2-1_cpt_alt1_art10_cpt" >
+          <p>Texto artigo.</p>
+        </Caput>
+        <Omissis id="art2-1_cpt_alt1_art10_omi1" />
+        <Paragrafo id="art2-1_cpt_alt1_art10_par10" existeNaNormaAlterada="false" >
+          <Rotulo>§ 10.</Rotulo>
+          <p>Texto parágrafo:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_omi1" />
+        <Inciso id="art2-1_cpt_alt1_art10_par10_inc10" existeNaNormaAlterada="false" >
+          <Rotulo>X –</Rotulo>
+          <p>texto inciso:</p>
+        <Omissis id="art2-1_cpt_alt1_art10_par10_inc10_omi1" />
+        <Alinea id="art2-1_cpt_alt1_art10_par10_inc10_ali10" existeNaNormaAlterada="false" >
+          <Rotulo>j)</Rotulo>
+          <p>texto alínea:</p>
+        <Item id="art2-1_cpt_alt1_art10_par10_inc10_ali10_ite1" existeNaNormaAlterada="false" fechaAspas="s" >
+          <Rotulo>1.</Rotulo>
+          <p>texto item.</p>
+        </Item>
+        </Alinea>
+        </Inciso>
+        </Paragrafo>
+        </Artigo>
+        </Alteracao>
+        </Caput>
+        </Artigo>
+      </DispositivoAdicionado>
+    </Dispositivos>
+  </Componente>
+  <ComandoEmenda>
+    <ItemComandoEmenda>
+      <Cabecalho>Acrescentem-se arts. 1º-1 e 2º-1; suprima-se o § 2º do art. 2º; e dê-se nova redação ao § 3º do art. 2º da Medida Provisória, nos termos a seguir:</Cabecalho>
+      <Citacao><p>“<Rotulo>Art. 1º-1.</Rotulo>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p><Rotulo>§ 1º</Rotulo>Ut tincidunt rutrum ornare. Praesent rhoncus sem non risus mattis, nec vulputate neque vehicula. Donec quis quam ac massa auctor scelerisque. Nulla facilisi:</p><p><Rotulo>I –</Rotulo>tincidunt rutrum ornare 1:</p><p><Rotulo>a)</Rotulo>laoreet lectus 1:</p><p><Rotulo>1.</Rotulo>consectetur adipiscing elit 1;</p><p><Rotulo>2.</Rotulo>consectetur adipiscing elit 2.</p><p><Rotulo>b)</Rotulo>laoreet lectus 2.</p><p><Rotulo>II –</Rotulo>tincidunt rutrum ornare 2.</p><p><Rotulo>§ 2º</Rotulo>Nunc eget diam scelerisque eros consectetur aliquet. Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum.”</p><p>“<Rotulo>Art. 2º</Rotulo><Omissis/></p><p><Omissis/></p><p><Rotulo>§ 2º</Rotulo>(Suprimir)</p><p><Rotulo>§ 3º</Rotulo>Nam interdum tincidunt nulla sit amet auctor. Curabitur leo dolor, mattis in sollicitudin ac, lacinia quis velit. Sed rutrum dolor at ex euismod condimentum.</p><p><Omissis/>”</p><p>“<Rotulo>Art. 2º-1.</Rotulo>A  Lei nº 123, de 12 de dezembro de 2012 passa a vigorar com a seguinte redação:</p><Alteracao><p><Rotulo>Art. 10.</Rotulo>Texto artigo.</p><p><Rotulo/>...........................................................................................</p><p><Rotulo>§ 10.</Rotulo>Texto parágrafo:</p><p><Rotulo/>...........................................................................................</p><p><Rotulo>X –</Rotulo>texto inciso:</p><p><Rotulo/>...........................................................................................</p><p><Rotulo>j)</Rotulo>texto alínea:</p><p><Rotulo>1.</Rotulo>texto item.”</p></Alteracao></Citacao>
+      <Complemento>Os dispositivos acima propostos e adjacentes deverão ser devidamente renumerados no momento da consolidação das emendas ao texto da proposição.</Complemento>
+    </ItemComandoEmenda>
+  </ComandoEmenda>
+  <Justificativa><p class="align-justify">Formatação: negrito, itálico, sublinhado, subscrito e sobrescrito.</p><p class="align-justify">Justificado: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p>Esquerda: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p class="align-center">Centro: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><p class="align-right">Direita: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</p><blockquote>Citação: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut laoreet lectus sed lorem aliquet hendrerit. Integer placerat aliquet maximus. In hac habitasse platea dictumst. Donec quis ipsum nunc.</blockquote><p>Lista numerada:</p><ol><li>um</li><li>dois</li></ol><p>Lista não numerada:</p><ul><li>um</li><li>dois</li></ul><p>	</p></Justificativa>
+  <Autoria  tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="6" quantidadeAssinaturasAdicionaisSenadores="3" >
+    <Parlamentar  identificacao="160597" nome="Romário" tratamento="Senador" siglaPartido="PL" siglaUF="RJ" siglaCasaLegislativa="SF" sexo="M" cargo="teste" />
+    <Parlamentar  identificacao="5988" nome="Soraya Thronicke" tratamento="Senadora" siglaPartido="UNIÃO" siglaUF="MS" siglaCasaLegislativa="SF" />
+    <Parlamentar  identificacao="5527" nome="Simone Tebet" tratamento="Senadora" siglaPartido="MDB" siglaUF="MS" siglaCasaLegislativa="SF" />
+  </Autoria>
+  <OpcoesImpressao  imprimirBrasao="true"  textoCabecalho="XXX"  reduzirEspacoEntreLinhas="false" />
+</Emenda>
