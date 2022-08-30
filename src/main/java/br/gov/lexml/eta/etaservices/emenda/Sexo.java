@@ -5,6 +5,9 @@ public enum Sexo {
     M;
 
     public static Sexo parse(String valueOf) {
+    	if (valueOf == null) {
+    		return null;
+    	}
         switch (valueOf) {
             case "F":
                 return F;

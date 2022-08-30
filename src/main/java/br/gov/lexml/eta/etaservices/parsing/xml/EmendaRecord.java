@@ -1,12 +1,23 @@
 package br.gov.lexml.eta.etaservices.parsing.xml;
 
-import br.gov.lexml.eta.etaservices.emenda.*;
-
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+
+import br.gov.lexml.eta.etaservices.emenda.Autoria;
+import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
+import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
+import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 
 public final class EmendaRecord implements Emenda {
     private final Instant dataUltimaModificacao;
@@ -106,6 +117,7 @@ public final class EmendaRecord implements Emenda {
         return local;
     }
 
+    @JsonSerialize(using = LocalDateSerializer.class) 
     public LocalDate getData() {
         return data;
     }

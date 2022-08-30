@@ -1,23 +1,26 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
 
-import br.gov.lexml.eta.etaservices.emenda.Emenda;
-import br.gov.lexml.eta.etaservices.printing.json.ArquivoEmenda;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+import javax.xml.transform.Source;
+
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;
 
-import javax.xml.transform.Source;
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import static org.xmlunit.assertj3.XmlAssert.assertThat;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
 
 class EmendaXmlMarshallingTest {
     private Source xmlSource;
@@ -30,7 +33,8 @@ class EmendaXmlMarshallingTest {
                 .isEqualToIgnoringCase("");
     }
 
-    @Disabled
+//    @Disabled
+    @Test
     void testColegiadoApreciador() {
 
         assertThat(xmlSource)
@@ -54,7 +58,7 @@ class EmendaXmlMarshallingTest {
             String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            return objectMapper.readValue(text, ArquivoEmenda.class).getEmenda();
+            return objectMapper.readValue(text, EmendaPojo.class);
 
         } catch (IOException e) {
             System.err.println(e.getMessage());

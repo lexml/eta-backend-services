@@ -5,6 +5,9 @@ public enum NotaAlteracao {
     NR;
 
     public static NotaAlteracao parse(String valueOf) {
+    	if (valueOf == null) {
+    		return null;
+    	}
         switch (valueOf) {
             case "AC":
                 return AC;

@@ -5,6 +5,11 @@ import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize.Inclusion;
+
 public final class DispositivoEmendaModificadoRecord implements DispositivoEmendaModificado {
     private final String tipo;
     private final String id;
@@ -50,14 +55,17 @@ public final class DispositivoEmendaModificadoRecord implements DispositivoEmend
         return texto;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isTextoOmitido() {
         return textoOmitido;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isAbreAspas() {
         return abreAspas;
     }
 
+    @JsonInclude(Include.NON_DEFAULT)
     public Boolean isFechaAspas() {
         return fechaAspas;
     }

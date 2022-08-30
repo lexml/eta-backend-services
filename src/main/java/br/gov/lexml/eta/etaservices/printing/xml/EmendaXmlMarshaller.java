@@ -1,5 +1,10 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
+import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
+
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
@@ -15,11 +20,6 @@ import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
-
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
 
 public class EmendaXmlMarshaller {
     public static final String FECHA_TAG_SEM_CONTEUDO = "/>\n";
@@ -411,6 +411,9 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("siglaCasaLegislativa=\"")
                 .append(autor.getSiglaCasaLegislativa())
+                .append("\" ")
+                .append("sexo=\"")
+                .append(autor.getSexo())
                 .append("\" ");
 
         if (autor.getCargo() != null) {

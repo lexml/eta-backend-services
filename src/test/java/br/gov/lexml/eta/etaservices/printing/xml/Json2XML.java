@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
-import br.gov.lexml.eta.etaservices.printing.json.ArquivoEmenda;
+import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
 
 class Json2XML {
 
@@ -44,7 +44,7 @@ class Json2XML {
             String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            return objectMapper.readValue(text, ArquivoEmenda.class).getEmenda();
+            return objectMapper.readValue(text, EmendaPojo.class);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
