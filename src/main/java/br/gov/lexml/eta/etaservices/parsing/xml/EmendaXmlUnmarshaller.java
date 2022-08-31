@@ -86,7 +86,7 @@ public class EmendaXmlUnmarshaller {
     private AtributosEmenda parseAtributosEmenda(final Element rootElement) {
         final String local = rootElement.attributeValue("local");
         final String dataAttribute = rootElement.attributeValue("data");
-        final LocalDate data = LocalDate.parse(dataAttribute);
+        final LocalDate data = dataAttribute != null? LocalDate.parse(dataAttribute): null;
         return new AtributosEmenda(local, data);
     }
 
