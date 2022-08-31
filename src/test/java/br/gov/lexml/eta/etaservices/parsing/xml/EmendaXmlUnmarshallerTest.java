@@ -9,8 +9,8 @@ import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import br.gov.lexml.eta.etaservices.EmendaConverterService;
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.EmendaJsonGeneratorBean;
 
 class EmendaXmlUnmarshallerTest {
 
@@ -34,7 +34,7 @@ class EmendaXmlUnmarshallerTest {
         
         FileWriter fileWriter = new FileWriter("target/" + fileName + ".json");
         
-        new EmendaConverterService().writeJson(e, fileWriter);
+        new EmendaJsonGeneratorBean().writeJson(e, fileWriter);
         
         fileWriter.close();
         

@@ -1,4 +1,4 @@
-package br.gov.lexml.eta.etaservices;
+package br.gov.lexml.eta.etaservices.emenda;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -19,13 +18,12 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.parsing.xml.EmendaXmlUnmarshaller;
 import br.gov.lexml.pdfa.PDFAttachmentHelper;
 
-@Service
-public class EmendaConverterService {
+public class EmendaJsonGeneratorBean implements EmendaJsonGenerator {
 	
+	@Override
 	public void extractJsonFromPdf(InputStream pdfStream, Writer jsonWriter) throws Exception {
 		
 		Path attachmentsDirPath = Files.createTempDirectory("extractJsonFromPdf");
@@ -46,6 +44,7 @@ public class EmendaConverterService {
 		
 	}
 
+	@Override
 	public void writeJson(Emenda e, Writer writer) throws Exception {
 		
         ObjectMapper objectMapper = new ObjectMapper();
