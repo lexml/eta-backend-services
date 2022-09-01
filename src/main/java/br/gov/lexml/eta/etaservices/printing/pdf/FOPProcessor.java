@@ -1,27 +1,34 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import br.gov.lexml.pdfa.PDFA;
-import br.gov.lexml.pdfa.PDFAttachmentFile;
-import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.fop.apps.*;
-import org.apache.fop.pdf.PDFAMode;
-import org.apache.xmlgraphics.io.Resource;
-import org.apache.xmlgraphics.io.ResourceResolver;
-import org.dom4j.io.DocumentSource;
-
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.sax.SAXResult;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Date;
+
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.sax.SAXResult;
+
+import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.fop.apps.FOUserAgent;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopConfParser;
+import org.apache.fop.apps.FopFactory;
+import org.apache.fop.apps.FopFactoryBuilder;
+import org.apache.fop.apps.MimeConstants;
+import org.apache.fop.pdf.PDFAMode;
+import org.apache.xmlgraphics.io.Resource;
+import org.apache.xmlgraphics.io.ResourceResolver;
+import org.dom4j.io.DocumentSource;
+
+import br.gov.lexml.pdfa.PDFA;
+import br.gov.lexml.pdfa.PDFAttachmentFile;
 
 public class FOPProcessor {
 
@@ -53,7 +60,7 @@ public class FOPProcessor {
 
 			String strUri = uri.toString().replaceAll("^file://\\.", "");
 
-			InputStream inputStream = FOPProcessor.class
+			InputStream inputStream = FOPProcessor.class.getClassLoader()
 					.getResourceAsStream("/pdfa-fonts/" + strUri);
 			if (inputStream != null) {
 				return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
