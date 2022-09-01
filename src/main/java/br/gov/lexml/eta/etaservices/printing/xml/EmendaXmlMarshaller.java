@@ -5,6 +5,8 @@ import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
@@ -101,15 +103,15 @@ public class EmendaXmlMarshaller {
                 .append(proposicao.getAno())
                 .append("\" ")
                 .append("ementa=\"")
-                .append(proposicao.getEmenta())
+                .append(StringEscapeUtils.escapeXml10(htmlAttribute2txt(proposicao.getEmenta())))
                 .append("\" ")
                 .append("identificacaoTexto=\"")
-                .append(proposicao.getIdentificacaoTexto())
+                .append(StringEscapeUtils.escapeXml10(proposicao.getIdentificacaoTexto()))
                 .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
-    private void geraColegiado(ColegiadoApreciador colegiado, StringBuilder sb) {
+	private void geraColegiado(ColegiadoApreciador colegiado, StringBuilder sb) {
         sb.append("  <ColegiadoApreciador ")
                 .append("siglaCasaLegislativa=\"")
                 .append(colegiado
@@ -131,12 +133,12 @@ public class EmendaXmlMarshaller {
     private void geraEpigrafe(Epigrafe epigrafe, StringBuilder sb) {
         sb.append("  <Epigrafe ")
                 .append("texto=\"")
-                .append(epigrafe.getTexto())
+                .append(StringEscapeUtils.escapeXml10(epigrafe.getTexto()))
                 .append("\" ");
 
         if (epigrafe.getComplemento() != null) {
             sb.append("complemento=\"")
-                    .append(epigrafe.getComplemento())
+                    .append(StringEscapeUtils.escapeXml10(epigrafe.getComplemento()))
                     .append("\" ");
         }
 
@@ -155,13 +157,13 @@ public class EmendaXmlMarshaller {
 
             if (componente.getTituloAnexo() != null) {
                 sb.append("tituloAnexo=\"")
-                        .append(componente.getTituloAnexo())
+                        .append(StringEscapeUtils.escapeXml10(componente.getTituloAnexo()))
                         .append("\" ");
             }
 
             if (componente.getRotuloAnexo() != null) {
                 sb.append("rotuloAnexo=\"")
-                        .append(componente.getRotuloAnexo())
+                        .append(StringEscapeUtils.escapeXml10(componente.getRotuloAnexo()))
                         .append("\" ");
             }
 
@@ -398,7 +400,7 @@ public class EmendaXmlMarshaller {
                 .append(autor.getIdentificacao())
                 .append("\" ")
                 .append("nome=\"")
-                .append(autor.getNome())
+                .append(StringEscapeUtils.escapeXml10(autor.getNome()))
                 .append("\" ")
                 .append("tratamento=\"")
                 .append(autor.getTratamento())
@@ -418,7 +420,7 @@ public class EmendaXmlMarshaller {
 
         if (autor.getCargo() != null) {
             sb.append("cargo=\"")
-                    .append(autor.getCargo())
+                    .append(StringEscapeUtils.escapeXml10(autor.getCargo()))
                     .append("\" ");
         }
         sb.append(FECHA_TAG_SEM_CONTEUDO);
@@ -430,7 +432,7 @@ public class EmendaXmlMarshaller {
                 .append(colegiado.getIdentificacao())
                 .append("\" ")
                 .append("nome=\"")
-                .append(colegiado.getNome())
+                .append(StringEscapeUtils.escapeXml10(colegiado.getNome()))
                 .append("\" ")
                 .append("sigla=\"")
                 .append(colegiado.getSigla())
@@ -446,7 +448,7 @@ public class EmendaXmlMarshaller {
 
         if (opcoesImpressao.getTextoCabecalho() != null) {
             sb.append(" textoCabecalho=\"")
-                    .append(opcoesImpressao.getTextoCabecalho())
+                    .append(StringEscapeUtils.escapeXml10(opcoesImpressao.getTextoCabecalho()))
                     .append("\" ");
         }
 
@@ -457,5 +459,19 @@ public class EmendaXmlMarshaller {
 
 
     }
+
+    private static String htmlAttribute2txt(String html) {
+    	if (html == null) {
+    		return null;
+    	}
+		return html.replaceAll("(?i)<br/?>", " ")
+				.replaceAll("<.+?>", "")
+				.replaceAll("\\s{2,}", " ")
+				.trim();
+	}
+    
+//    public static void main(String[] args) {
+//		System.out.println(html2txt("teste  <a href=\"...\">link</a> <br>Nova linha."));
+//	}
 
 }
