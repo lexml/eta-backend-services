@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.gov.lexml.eta</groupId>
     <artifactId>eta-backend-services</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <name>ETA Backend Services</name>
     <description>Library to generate/parse pdf for the editor-emendas application</description>
-    <url>https://github.com/lexml/${project.artifactId}</url>
+    <url>https://github.com/lexml/eta-backend-services</url>
 
     <organization>
         <name>LexML</name>
@@ -33,10 +33,10 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/lexml/${project.artifactId}</url>
+        <url>https://github.com/lexml/eta-backend-services</url>
         <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
         <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
-        <tag>0.0.2</tag>
+        <tag>0.0.3</tag>
     </scm>
 
     <distributionManagement>
