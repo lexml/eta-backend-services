@@ -26,6 +26,7 @@ import org.apache.fop.pdf.PDFAMode;
 import org.apache.xmlgraphics.io.Resource;
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.dom4j.io.DocumentSource;
+import org.springframework.core.io.ClassPathResource;
 
 import br.gov.lexml.pdfa.PDFA;
 import br.gov.lexml.pdfa.PDFAttachmentFile;
@@ -60,11 +61,18 @@ public class FOPProcessor {
 
 			String strUri = uri.toString().replaceAll("^file://\\.", "");
 
-			InputStream inputStream = FOPProcessor.class.getClassLoader()
-					.getResourceAsStream("/pdfa-fonts/" + strUri);
-			if (inputStream != null) {
-				return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
+			try {				
+				ClassPathResource resource = new ClassPathResource("pdfa-fonts/" + strUri);
+				InputStream inputStream = resource.getInputStream();
+				if (inputStream != null) {
+					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
+				}
 			}
+			catch(Exception e) {
+				log.error("Arquivo de fonte /pdfa-fonts/" + strUri + " não encontrado.");
+			}
+//			InputStream inputStream = FOPProcessor.class.getClassLoader()
+//					.getResourceAsStream("/pdfa-fonts/" + strUri);
 			return null;
 		}
 
