@@ -36,8 +36,7 @@
         <url>https://github.com/lexml/eta-backend-services</url>
         <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
         <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
-      <tag>0.0.4</tag>
-  </scm>
+    </scm>
 
     <distributionManagement>
         <snapshotRepository>
@@ -262,6 +261,16 @@
                 </plugins>
             </build>
 
+        </profile>
+        <profile>
+            <id>github</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>gh-eta-backend-services</id>
+                    <name>Github Lexml Snapshot Repository</name>
+                    <url>https://maven.pkg.github.com/lexml/eta-backend-services</url>
+                </snapshotRepository>
+            </distributionManagement>
         </profile>
     </profiles>
 
