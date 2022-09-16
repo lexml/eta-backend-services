@@ -47,7 +47,8 @@ public class VelocityExtension {
 	@SuppressWarnings("unused")
 	public String citacao2html(String citacao) {
 		return citacao.replace("Rotulo>", "strong>")
-				.replaceAll("(?i)<omissis ?/>", "<span class=\"omissis\"></span>");
+				.replaceAll("(?i)<omissis ?/>", "<span class=\"omissis\"></span>")
+				.replaceAll("class=\"agrupador","align=\"center\" class=\"agrupador");
 	}
 	
 	/**
