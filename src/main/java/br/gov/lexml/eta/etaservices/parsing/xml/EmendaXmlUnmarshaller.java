@@ -329,7 +329,7 @@ public class EmendaXmlUnmarshaller {
     }
 
     private String parseJustificativa(final Element rootElement) {
-        return nodeContentWithTags(rootElement.selectSingleNode("Justificativa"));
+        return nodeStringValue(rootElement.selectSingleNode("Justificativa"));
     }
 
     private Autoria parseAutoria(final Element rootElement) {

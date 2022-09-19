@@ -367,7 +367,7 @@ public class EmendaXmlMarshaller {
 
     private void geraJustificativa(String justificativa, StringBuilder sb) {
         sb.append("  <Justificativa>")
-                .append(justificativa)
+                .append(StringEscapeUtils.escapeXml10(justificativa))
                 .append("</Justificativa>\n");
     }
 
