@@ -7,7 +7,7 @@
 	font-family="Gentium Basic">
 	<fo:layout-master-set>
 		<fo:simple-page-master margin-bottom="2cm"
-			margin-left="2.5cm" margin-right="2cm" margin-top="2.5cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
 			master-name="firstPage" page-height="29.7cm" page-width="21cm">
 			#if($emenda.opcoesImpressao.imprimirBrasao || !$ve.isEmpty($emenda.opcoesImpressao.textoCabecalho))
 				#set($temCabecalhoPrincipal = true)
@@ -18,7 +18,7 @@
 			#end
 		</fo:simple-page-master>
 		<fo:simple-page-master margin-bottom="2cm"
-			margin-left="2.5cm" margin-right="2cm" margin-top="2.5cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
 			master-name="restPage" page-height="29.7cm" page-width="21cm">
 			<fo:region-body/>
 			#*
