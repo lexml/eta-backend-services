@@ -24,7 +24,7 @@ public class EtaFileUtil {
 				        .collect(Collectors.joining("\n"));
 				        
 		} catch (Exception e) {
-			throw new RuntimeException("Arquivo " + resourceName + " n„o encontrado.", e);
+			throw new RuntimeException("Arquivo " + resourceName + " n√£o encontrado.", e);
 		} 		
 	}
 
