@@ -19,54 +19,54 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class EmendaJsonGeneratorBean implements EmendaJsonGenerator {
-	
-	@Override
-	public void extractJsonFromPdf(InputStream pdfStream, Writer jsonWriter) throws Exception {
-		
-		Path attachmentsDirPath = Files.createTempDirectory("extractJsonFromPdf");
-		
-		File pdfFile = new File(attachmentsDirPath.toFile(), "emenda.pdf");
 
-		try (OutputStream fos = Files.newOutputStream(pdfFile.toPath())) {
-			IOUtils.copy(pdfStream, fos);
-		}
-		
-		PDFAttachmentHelper.extractAttachments(pdfFile.getPath(), 
-				attachmentsDirPath.toAbsolutePath().toString());
-		
-		File xmlFile = new File(attachmentsDirPath.toFile(), "emenda.xml");
+    @Override
+    public void extractJsonFromPdf(InputStream pdfStream, Writer jsonWriter) throws Exception {
 
-		try (InputStream fin  = Files.newInputStream(xmlFile.toPath())) {
+        Path attachmentsDirPath = Files.createTempDirectory("extractJsonFromPdf");
 
-			String xml = IOUtils.toString(fin, StandardCharsets.UTF_8);
+        File pdfFile = new File(attachmentsDirPath.toFile(), "emenda.pdf");
 
-			Emenda e = new EmendaXmlUnmarshaller().fromXml(xml);
+        try (OutputStream fos = Files.newOutputStream(pdfFile.toPath())) {
+            IOUtils.copy(pdfStream, fos);
+        }
 
-			writeJson(e, jsonWriter);
-		}
-		
-	}
+        PDFAttachmentHelper.extractAttachments(pdfFile.getPath(),
+                attachmentsDirPath.toAbsolutePath().toString());
 
-	@Override
-	public void writeJson(Emenda e, Writer writer) throws Exception {
-		
+        File xmlFile = new File(attachmentsDirPath.toFile(), "emenda.xml");
+
+        try (InputStream fin  = Files.newInputStream(xmlFile.toPath())) {
+
+            String xml = IOUtils.toString(fin, StandardCharsets.UTF_8);
+
+            Emenda e = new EmendaXmlUnmarshaller().fromXml(xml);
+
+            writeJson(e, jsonWriter);
+        }
+
+    }
+
+    @Override
+    public void writeJson(Emenda e, Writer writer) throws Exception {
+
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
-        
+
         ObjectWriter objectWriter = objectMapper
-        		.setSerializationInclusion(Include.NON_NULL)
-        		.registerModule(new JavaTimeModule())
-        		.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)        		
-        		.writerWithDefaultPrettyPrinter()
-        		.forType(Emenda.class);
+                .setSerializationInclusion(Include.NON_NULL)
+                .registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .writerWithDefaultPrettyPrinter()
+                .forType(Emenda.class);
 
 
-		try(JsonGenerator jsonGenerator = objectWriter.createGenerator(writer)) {
-			jsonGenerator.writeObject(e);
-			jsonGenerator.flush();
-		}
-        
-	}
-	
+        try(JsonGenerator jsonGenerator = objectWriter.createGenerator(writer)) {
+            jsonGenerator.writeObject(e);
+            jsonGenerator.flush();
+        }
+
+    }
+
 
 }
