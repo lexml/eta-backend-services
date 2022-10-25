@@ -14,8 +14,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopConfParser;
@@ -26,6 +24,8 @@ import org.apache.fop.pdf.PDFAMode;
 import org.apache.xmlgraphics.io.Resource;
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.dom4j.io.DocumentSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import br.gov.lexml.pdfa.PDFA;
@@ -33,7 +33,7 @@ import br.gov.lexml.pdfa.PDFAttachmentFile;
 
 public class FOPProcessor {
 
-	private static final Log log = LogFactory.getLog(FOPProcessor.class);
+	private static final Logger log = LoggerFactory.getLogger(FOPProcessor.class);
 
 	private static FopFactory fopFactory;
 
@@ -45,7 +45,7 @@ public class FOPProcessor {
 			FopFactoryBuilder builder = parser.getFopFactoryBuilder();
 			fopFactory = builder.build();
 		} catch (Exception e) {
-			log.fatal("Não foi possível configurar o FOP.", e);
+			log.error("Não foi possível configurar o FOP.", e);
 		}
 	}
 

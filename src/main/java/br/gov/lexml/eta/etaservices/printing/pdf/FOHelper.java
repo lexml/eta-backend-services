@@ -4,8 +4,6 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.fop.pdf.PDFAMode;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -13,6 +11,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FOHelper {
 
@@ -22,7 +22,7 @@ public class FOHelper {
 	private Node xmpmetaNode;
 	private String xmpmetaString;
 	
-	private static final Log log = LogFactory.getLog(FOHelper.class);
+	private static final Logger log = LoggerFactory.getLogger(FOHelper.class);
 	
 	private String pdfaidPart;
 	private String pdfaidConformance;

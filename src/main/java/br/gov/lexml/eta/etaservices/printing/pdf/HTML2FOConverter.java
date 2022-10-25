@@ -3,8 +3,8 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.dom4j.Document;
@@ -34,7 +34,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HTML2FOConverter {
 
-	private static final Log log = LogFactory.getLog(HTML2FOConverter.class);
+	private static final Logger log = LoggerFactory.getLogger(HTML2FOConverter.class);
 	
 	public HTML2FOConverter() {
 	}
