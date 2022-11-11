@@ -255,14 +255,15 @@ public class EmendaXmlUnmarshaller {
         boolean ondeCouber = booleanAttributeValue(adicionado.attributeValue("ondeCouber"));
         String idPai = adicionado.attributeValue("idPai");
         String idIrmaoAnterior = adicionado.attributeValue("idIrmaoAnterior");  
+        String idPosicaoAgrupador = adicionado.attributeValue("idPosicaoAgrupador");
         
         Node filho = nodeAdicionado.selectSingleNode("*");
-        return parseAdicionadoLexml(filho, ondeCouber, idPai, idIrmaoAnterior);
+        return parseAdicionadoLexml(filho, ondeCouber, idPai, idIrmaoAnterior, idPosicaoAgrupador);
 
     }
     
     private DispositivoEmendaAdicionadoRecord parseAdicionadoLexml(final Node nodeAdicionado,
-    		boolean ondeCouber, String idPai, String idIrmaoAnterior) {
+    		boolean ondeCouber, String idPai, String idIrmaoAnterior, String idPosicaoAgrupador) {
     	
     	Element adicionado = (Element) nodeAdicionado;
     	
@@ -285,12 +286,12 @@ public class EmendaXmlUnmarshaller {
         return new DispositivoEmendaAdicionadoRecord(
         		tipo, id, rotulo, texto, 
         		textoOmitido, abreAspas, fechaAspas, notaAlteracao, ondeCouber, 
-        		idPai, idIrmaoAnterior, 
+        		idPai, idIrmaoAnterior, idPosicaoAgrupador,
         		urnNormaAlterada, existeNaNormaAlterada, filhos);
     }
 
     private DispositivoEmendaAdicionadoRecord parseAdicionadoLexml(final Node nodeAdicionado) {
-    	return parseAdicionadoLexml(nodeAdicionado, false, null, null);
+    	return parseAdicionadoLexml(nodeAdicionado, false, null, null, null);
     }
     
 	private ComandoEmenda parseComandoEmenda(final Element rootElement) {

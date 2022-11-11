@@ -19,6 +19,7 @@ class Json2XML {
     public static void main(String[] args) {
     	Json2XML.process("emenda_mpv_885_2019_incompleta_dois_itens");
     	Json2XML.process("emenda_mpv_905_2019_completa_disp_mpv");
+    	Json2XML.process("emenda_mpv_905_2019_agrupadores");
     	System.out.println("Feito.");
 	}
   

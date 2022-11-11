@@ -1,11 +1,11 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
-import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
+import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
 
 public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicionado {
     private String tipo;
@@ -19,6 +19,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
     private Boolean ondeCouber;
     private String idPai;
     private String idIrmaoAnterior;
+    private String idPosicaoAgrupador;
     private String urnNormaAlterada;
     private Boolean existeNaNormaAlterada;
     private List<DispositivoEmendaAdicionadoPojo> filhos = new ArrayList<>();
@@ -63,7 +64,8 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         this.texto = texto;
     }
 
-    public Boolean isTextoOmitido() {
+    @Override
+	public Boolean isTextoOmitido() {
         return textoOmitido;
     }
 
@@ -72,7 +74,8 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         this.textoOmitido = textoOmitido;
     }
 
-    public Boolean isAbreAspas() {
+    @Override
+	public Boolean isAbreAspas() {
         return abreAspas;
     }
 
@@ -81,7 +84,8 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         this.abreAspas = abreAspas;
     }
 
-    public Boolean isFechaAspas() {
+    @Override
+	public Boolean isFechaAspas() {
         return fechaAspas;
     }
 
@@ -100,7 +104,8 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         this.notaAlteracao = notaAlteracao;
     }
 
-    public Boolean isOndeCouber() {
+    @Override
+	public Boolean isOndeCouber() {
         return ondeCouber;
     }
 
@@ -130,6 +135,16 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
     }
 
     @Override
+    public String getIdPosicaoAgrupador() {
+		return idPosicaoAgrupador;
+	}
+
+    @SuppressWarnings("unused")
+	public void setIdPosicaoAgrupador(String idPosicaoAgrupador) {
+		this.idPosicaoAgrupador = idPosicaoAgrupador;
+	}
+
+	@Override
     public String getUrnNormaAlterada() {
         return urnNormaAlterada;
     }
@@ -139,7 +154,8 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         this.urnNormaAlterada = urnNormaAlterada;
     }
 
-    public Boolean isExisteNaNormaAlterada() {
+    @Override
+	public Boolean isExisteNaNormaAlterada() {
         return existeNaNormaAlterada;
     }
 
@@ -148,7 +164,8 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
         this.existeNaNormaAlterada = existeNaNormaAlterada;
     }
 
-    public List<? extends DispositivoEmendaAdicionado> getFilhos() {
+    @Override
+	public List<? extends DispositivoEmendaAdicionado> getFilhos() {
         return filhos;
     }
 

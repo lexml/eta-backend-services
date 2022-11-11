@@ -255,6 +255,12 @@ public class EmendaXmlMarshaller {
                     .append("\" ");
         }
 
+        if (adicionado.getIdPosicaoAgrupador() != null) {
+            sb.append("idPosicaoAgrupador=\"")
+                    .append(adicionado.getIdPosicaoAgrupador())
+                    .append("\" ");
+        }
+
         sb.append(">\n");
 
         geraFilhosDispositivosAdicionados(adicionado, sb);

@@ -21,6 +21,7 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
     private final Boolean ondeCouber;
     private final String idPai;
     private final String idIrmaoAnterior;
+    private final String idPosicaoAgrupador;
     private final String urnNormaAlterada;
     private final Boolean existeNaNormaAlterada;
     private final List<DispositivoEmendaAdicionadoRecord> filhos;
@@ -37,6 +38,7 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
             Boolean ondeCouber,
             String idPai,
             String idIrmaoAnterior,
+            String idPosicaoAgrupador,
             String urnNormaAlterada,
             Boolean existeNaNormaAlterada,
             List<DispositivoEmendaAdicionadoRecord> filhos) {
@@ -51,69 +53,89 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
         this.ondeCouber = ondeCouber;
         this.idPai = idPai;
         this.idIrmaoAnterior = idIrmaoAnterior;
+        this.idPosicaoAgrupador = idPosicaoAgrupador;
         this.urnNormaAlterada = urnNormaAlterada;
         this.existeNaNormaAlterada = existeNaNormaAlterada;
         this.filhos = filhos;
     }
 
-    public String getTipo() {
+    @Override
+	public String getTipo() {
         return tipo;
     }
 
-    public String getId() {
+    @Override
+	public String getId() {
         return id;
     }
 
-    public String getRotulo() {
+    @Override
+	public String getRotulo() {
         return rotulo;
     }
 
-    public String getTexto() {
+    @Override
+	public String getTexto() {
         return texto;
     }
 
-    @JsonInclude(Include.NON_DEFAULT)
+    @Override
+	@JsonInclude(Include.NON_DEFAULT)
     public Boolean isTextoOmitido() {
         return textoOmitido;
     }
 
-    @JsonInclude(Include.NON_DEFAULT)
+    @Override
+	@JsonInclude(Include.NON_DEFAULT)
     public Boolean isAbreAspas() {
         return abreAspas;
     }
 
-    @JsonInclude(Include.NON_DEFAULT)
+    @Override
+	@JsonInclude(Include.NON_DEFAULT)
     public Boolean isFechaAspas() {
         return fechaAspas;
     }
 
-    public NotaAlteracao getNotaAlteracao() {
+    @Override
+	public NotaAlteracao getNotaAlteracao() {
         return notaAlteracao;
     }
 
-    @JsonInclude(Include.NON_DEFAULT)
+    @Override
+	@JsonInclude(Include.NON_DEFAULT)
     public Boolean isOndeCouber() {
         return ondeCouber;
     }
 
-    public String getIdPai() {
+    @Override
+	public String getIdPai() {
         return idPai;
     }
 
-    public String getIdIrmaoAnterior() {
+    @Override
+	public String getIdIrmaoAnterior() {
         return idIrmaoAnterior;
     }
+    
+    @Override
+    public String getIdPosicaoAgrupador() {
+    	return idPosicaoAgrupador;
+    }
 
-    public String getUrnNormaAlterada() {
+    @Override
+	public String getUrnNormaAlterada() {
         return urnNormaAlterada;
     }
 
-    @JsonInclude(Include.NON_DEFAULT)
+    @Override
+	@JsonInclude(Include.NON_DEFAULT)
     public Boolean isExisteNaNormaAlterada() {
         return existeNaNormaAlterada;
     }
 
-    @JsonInclude(Include.NON_EMPTY)
+    @Override
+	@JsonInclude(Include.NON_EMPTY)
     public List<DispositivoEmendaAdicionadoRecord> getFilhos() {
         return filhos;
     }

@@ -8,6 +8,8 @@ public interface DispositivoEmendaAdicionado extends DispositivoEmendaModificado
     String getIdPai();
 
     String getIdIrmaoAnterior();
+    
+    String getIdPosicaoAgrupador();
 
     String getUrnNormaAlterada();
 

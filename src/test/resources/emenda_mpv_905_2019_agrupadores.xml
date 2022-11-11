@@ -1,0 +1,65 @@
+<Emenda versaoFormatoArquivo="1.0" local="Sala da comissão">
+  <Metadados>
+    <DataUltimaModificacao>2022-11-11T19:05:10.869Z</DataUltimaModificacao>
+    <Aplicacao></Aplicacao>
+    <VersaoAplicacao></VersaoAplicacao>
+    <ModoEdicao>emenda</ModoEdicao>
+  </Metadados>
+  <Proposicao urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" sigla="MPV" numero="905" ano="2019" ementa="Institui o Contrato de Trabalho Verde e Amarelo, altera a legislação trabalhista, e dá outras providências." identificacaoTexto="Texto da MPV" />
+  <ColegiadoApreciador siglaCasaLegislativa="CN" tipoColegiado="Comissão" siglaComissao="CMMPV 905/2019" />
+  <Epigrafe texto="EMENDA Nº         - CMMPV 905/2019" complemento="(à MPV 905/2019)" />
+  <Componente urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" articulado="true" >
+    <Dispositivos>
+      <DispositivoAdicionado idPosicaoAgrupador="cap1" >
+        <Secao id="cap1_sec1" >
+          <Rotulo>SEÇÃO ÚNICA</Rotulo>
+          <p>TESTE</p>
+        </Secao>
+      </DispositivoAdicionado>
+      <DispositivoAdicionado idPai="cap1_sec1" >
+        <Artigo id="art0" >
+          <Rotulo>Art. 0.</Rotulo>
+        <Caput id="art0_cpt" >
+          <p>Teste.</p>
+        </Caput>
+        <Paragrafo id="art0_par1u" >
+          <Rotulo>Parágrafo único.</Rotulo>
+          <p>Par.</p>
+        </Paragrafo>
+        </Artigo>
+      </DispositivoAdicionado>
+      <DispositivoAdicionado idPosicaoAgrupador="art0" >
+        <Subsecao id="cap1_sec1_sub1" >
+          <Rotulo>SUBSEÇÃO ÚNICA</Rotulo>
+          <p>SUBSEC</p>
+        </Subsecao>
+      </DispositivoAdicionado>
+      <DispositivoAdicionado idPai="cap1_sec1_sub1" >
+        <Artigo id="art0-1" >
+          <Rotulo>Art. 0-1.</Rotulo>
+        <Caput id="art0-1_cpt" >
+          <p>Outro artigo.</p>
+        </Caput>
+        </Artigo>
+      </DispositivoAdicionado>
+      <DispositivoAdicionado idIrmaoAnterior="art0-1" >
+        <Artigo id="art0-2" >
+          <Rotulo>Art. 0-2.</Rotulo>
+        <Caput id="art0-2_cpt" >
+          <p>Mais 1.</p>
+        </Caput>
+        </Artigo>
+      </DispositivoAdicionado>
+    </Dispositivos>
+  </Componente>
+  <ComandoEmenda>
+    <ItemComandoEmenda>
+      <Cabecalho>Acrescente-se seção Seção Única do Capítulo I da Medida Provisória, com a seguinte redação:</Cabecalho>
+      <Citacao><p class="agrupador">“<Rotulo>SEÇÃO ÚNICA</Rotulo></p><p class="agrupador"> TESTE”</p><p>“<Rotulo>Art. 0.</Rotulo> Teste.</p><p><Rotulo>Parágrafo único.</Rotulo> Par.”</p><p class="agrupador">“<Rotulo>SUBSEÇÃO ÚNICA</Rotulo></p><p class="agrupador"> SUBSEC”</p><p>“<Rotulo>Art. 0-1.</Rotulo> Outro artigo.”</p><p>“<Rotulo>Art. 0-2.</Rotulo> Mais 1.”</p></Citacao>
+    </ItemComandoEmenda>
+  </ComandoEmenda>
+  <Justificativa></Justificativa>
+  <Autoria  tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="0" quantidadeAssinaturasAdicionaisSenadores="0" >
+  </Autoria>
+  <OpcoesImpressao  imprimirBrasao="true"  textoCabecalho=""  reduzirEspacoEntreLinhas="false" />
+</Emenda>
