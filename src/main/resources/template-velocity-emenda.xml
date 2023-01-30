@@ -148,26 +148,18 @@
 #if($emenda.opcoesImpressao.reduzirEspacoEntreLinhas)
 	#set($lineHeight = "120%")
 	#set($pMarginBottom = "0.45em")
-	#*
-	#set($spacing1 = "12pt")
-	#set($spacing2 = "18pt")
-	#set($spacing3 = "24pt")
-	#set($spacing4 = "32pt")
-	#set($spacing5 = "36pt")
-	#set($spacing6 = "48pt")
-	*#
+	#set($spacing1 = "10pt")
+	#set($spacing2 = "19pt")
+	#set($spacing3 = "22pt")
+	#set($spacing4 = "26pt")
 #else
 	#set($lineHeight = "150%")
 	#set($pMarginBottom = "0.6em")
-	#*
-	#set($spacing1 = "10pt")
-	#set($spacing2 = "14pt")
-	#set($spacing3 = "21pt")
-	#set($spacing4 = "26pt")
-	#set($spacing5 = "29pt")
-	#set($spacing6 = "40pt")
-1	*#
-#end				
+	#set($spacing1 = "14pt")
+	#set($spacing2 = "21pt")
+	#set($spacing3 = "26pt")
+	#set($spacing4 = "34pt")
+#end
 	<fo:page-sequence master-reference="document">
 ## Brasão e texto do cabeçalho -------------------------------------------------------------------------
 		#if ($temCabecalhoPrincipal)
@@ -202,7 +194,7 @@
 						$emenda.epigrafe.texto.replace(' ', '&#160;')
 					</fo:block>
 				</fo:block>
-				<fo:block space-after="21pt" text-align="center"
+				<fo:block space-after="$spacing2" text-align="center"
 					white-space-collapse="false">
 					<fo:block font-size="16pt">$emenda.epigrafe.complemento</fo:block>
 				</fo:block>
@@ -242,10 +234,10 @@
 ## Justificativa ----------------------------------------------------------------
 				#if ($emenda.justificativa)
 				<fo:block font-size="16pt" font-weight="bold"
-					keep-with-next="always" space-before="26pt" text-align="center"
+					keep-with-next="always" space-before="$spacing3" text-align="center"
 					white-space-collapse="false">JUSTIFICATIVA</fo:block>
 				<fo:block keep-with-previous="always" line-height="$lineHeight"
-					role="Justificativa" space-before="14pt" text-align="justify"
+					role="Justificativa" space-before="$spacing1" text-align="justify"
 					text-indent="2.5cm" white-space-collapse="false">
 					<fo:block>
 						$ve.html2fo($ve.addStyle($emenda.justificativa, '(p|ol|ul)', 'margin-bottom: $pMarginBottom'))
@@ -324,8 +316,8 @@
 			<fo:block-container>
 ## Local e data ----------------------------------------------------------------
 				<fo:block keep-with-next.within-page="always"
-					keep-with-previous="10" margin-top="1.3cm" margin-bottom=".3cm" role="fecho"
-					space-after="0pt" space-before="14pt" text-align="justify"
+					keep-with-previous="10" role="fecho"
+					space-after="0pt" space-before="$spacing4" text-align="justify"
 					text-indent="2.5cm" white-space-collapse="false">
 						$emenda.local, 
 						#if($ve.isEmpty($emenda.data))
