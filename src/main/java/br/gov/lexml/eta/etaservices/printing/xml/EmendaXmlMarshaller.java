@@ -133,7 +133,7 @@ public class EmendaXmlMarshaller {
     private void geraEpigrafe(Epigrafe epigrafe, StringBuilder sb) {
         sb.append("  <Epigrafe ")
                 .append("texto=\"")
-                .append(StringEscapeUtils.escapeXml10(epigrafe.getTexto()))
+                .append(StringEscapeUtils.escapeXml10(epigrafe.getTexto()).trim())
                 .append("\" ");
 
         if (epigrafe.getComplemento() != null) {
@@ -228,8 +228,8 @@ public class EmendaXmlMarshaller {
         }
         sb.append(">\n");
         sb.append("        <Texto>")
-                .append(modificado.getTexto())
-                .append("\n        </Texto>\n");
+                .append(modificado.getTexto().trim())
+                .append("</Texto>\n");
         sb.append("      </DispositivoModificado> ");
 
     }
