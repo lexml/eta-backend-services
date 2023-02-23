@@ -19,6 +19,7 @@ public final class DispositivoEmendaModificadoRecord implements DispositivoEmend
     private final Boolean abreAspas;
     private final Boolean fechaAspas;
     private final NotaAlteracao notaAlteracao;
+    private final String urnNormaAlterada;
 
     public DispositivoEmendaModificadoRecord(
             String tipo,
@@ -28,7 +29,8 @@ public final class DispositivoEmendaModificadoRecord implements DispositivoEmend
             Boolean textoOmitido,
             Boolean abreAspas,
             Boolean fechaAspas,
-            NotaAlteracao notaAlteracao) {
+            NotaAlteracao notaAlteracao,
+            String urnNormaAlterada) {
         this.tipo = tipo;
         this.id = id;
         this.rotulo = rotulo;
@@ -37,6 +39,7 @@ public final class DispositivoEmendaModificadoRecord implements DispositivoEmend
         this.abreAspas = abreAspas;
         this.fechaAspas = fechaAspas;
         this.notaAlteracao = notaAlteracao;
+        this.urnNormaAlterada = urnNormaAlterada;
     }
 
     public String getTipo() {
@@ -75,6 +78,11 @@ public final class DispositivoEmendaModificadoRecord implements DispositivoEmend
     }
 
     @Override
+	public String getUrnNormaAlterada() {
+        return urnNormaAlterada;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
@@ -86,12 +94,13 @@ public final class DispositivoEmendaModificadoRecord implements DispositivoEmend
                 Objects.equals(this.textoOmitido, that.textoOmitido) &&
                 Objects.equals(this.abreAspas, that.abreAspas) &&
                 Objects.equals(this.fechaAspas, that.fechaAspas) &&
-                Objects.equals(this.notaAlteracao, that.notaAlteracao);
+                Objects.equals(this.notaAlteracao, that.notaAlteracao) &&
+                Objects.equals(this.urnNormaAlterada, this.urnNormaAlterada);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tipo, id, rotulo, texto, textoOmitido, abreAspas, fechaAspas, notaAlteracao);
+        return Objects.hash(tipo, id, rotulo, texto, textoOmitido, abreAspas, fechaAspas, notaAlteracao, urnNormaAlterada);
     }
 
     @Override
@@ -104,7 +113,8 @@ public final class DispositivoEmendaModificadoRecord implements DispositivoEmend
                 "textoOmitido=" + textoOmitido + ", " +
                 "abreAspas=" + abreAspas + ", " +
                 "fechaAspas=" + fechaAspas + ", " +
-                "notaAlteracao=" + notaAlteracao + ']';
+                "notaAlteracao=" + notaAlteracao + ", " +
+                "urnNormaAlterada=" + urnNormaAlterada + ']';
     }
 
 

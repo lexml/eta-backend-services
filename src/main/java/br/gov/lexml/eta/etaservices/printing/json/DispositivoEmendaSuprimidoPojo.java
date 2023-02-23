@@ -8,6 +8,7 @@ public class DispositivoEmendaSuprimidoPojo implements DispositivoEmendaSuprimid
     private String tipo;
     private String id;
     private String rotulo;
+    private String urnNormaAlterada;
 
     @Override
     public String getTipo() {
@@ -37,17 +38,27 @@ public class DispositivoEmendaSuprimidoPojo implements DispositivoEmendaSuprimid
         this.rotulo = rotulo;
     }
 
+	@Override
+    public String getUrnNormaAlterada() {
+        return urnNormaAlterada;
+    }
+
+    @SuppressWarnings("unused")
+    public void setUrnNormaAlterada(String urnNormaAlterada) {
+        this.urnNormaAlterada = urnNormaAlterada;
+    }    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DispositivoEmendaSuprimidoPojo that = (DispositivoEmendaSuprimidoPojo) o;
-        return tipo.equals(that.tipo) && id.equals(that.id) && rotulo.equals(that.rotulo);
+        return tipo.equals(that.tipo) && id.equals(that.id) && rotulo.equals(that.rotulo) && urnNormaAlterada.equals(that.urnNormaAlterada);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tipo, id, rotulo);
+        return Objects.hash(tipo, id, rotulo, urnNormaAlterada);
     }
 
     @Override
@@ -56,6 +67,7 @@ public class DispositivoEmendaSuprimidoPojo implements DispositivoEmendaSuprimid
                 "tipo='" + tipo + '\'' +
                 ", id='" + id + '\'' +
                 ", rotulo='" + rotulo + '\'' +
+                ", urnNormaAlterada='" + urnNormaAlterada + '\'' +
                 '}';
     }
 }

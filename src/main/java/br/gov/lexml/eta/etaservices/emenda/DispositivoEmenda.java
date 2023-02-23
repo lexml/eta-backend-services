@@ -4,4 +4,5 @@ public interface DispositivoEmenda {
     String getTipo();
     String getId();
     String getRotulo();
+    String getUrnNormaAlterada();
 }

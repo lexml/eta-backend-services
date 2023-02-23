@@ -191,8 +191,15 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("rotulo=\"")
                 .append(suprimido.getRotulo())
-                .append("\" ")
-                .append(FECHA_TAG_SEM_CONTEUDO);
+                .append("\" ");
+        
+        if (suprimido.getUrnNormaAlterada() != null) {
+            sb.append("xml:base=\"")
+                    .append(suprimido.getUrnNormaAlterada())
+                    .append("\" ");
+        }
+        
+        sb.append(FECHA_TAG_SEM_CONTEUDO);
     }
 
     private void geraDispositivosModificados(DispositivoEmendaModificado modificado, StringBuilder sb) {
@@ -226,6 +233,13 @@ public class EmendaXmlMarshaller {
                     .append(modificado.getNotaAlteracao())
                     .append("\" ");
         }
+        
+        if (modificado.getUrnNormaAlterada() != null) {
+            sb.append("xml:base=\"")
+                    .append(modificado.getUrnNormaAlterada())
+                    .append("\" ");
+        }
+        
         sb.append(">\n");
         sb.append("        <Texto>")
                 .append(modificado.getTexto().trim())

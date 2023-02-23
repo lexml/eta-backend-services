@@ -210,7 +210,8 @@ public class EmendaXmlUnmarshaller {
         final String tipo = suprimido.attributeValue("tipo");
         final String id = suprimido.attributeValue("id");
         final String rotulo = suprimido.attributeValue("rotulo");
-        return new DispositivoEmendaSuprimidoRecord(tipo, id, rotulo);
+        final String urnNormaAlterada = suprimido.attributeValue("base");
+        return new DispositivoEmendaSuprimidoRecord(tipo, id, rotulo, urnNormaAlterada);
     }
 
     private List<? extends DispositivoEmendaModificado> parseModificados(final Node dispositivos) {
@@ -229,6 +230,7 @@ public class EmendaXmlUnmarshaller {
         final Boolean fechaAspas = booleanAttributeValue(modificado.attributeValue("fechaAspas"));
         final NotaAlteracao nota = NotaAlteracao.parse(modificado.attributeValue("notaAlteracao"));
         final String texto = nodeContentWithTags(modificado.selectSingleNode("Texto"));
+        final String urnNormaAlterada = modificado.attributeValue("base");
 
         return new DispositivoEmendaModificadoRecord(
                 tipo,
@@ -238,7 +240,8 @@ public class EmendaXmlUnmarshaller {
                 textoOmitido,
                 abreAspas,
                 fechaAspas,
-                nota);
+                nota,
+                urnNormaAlterada);
     }
 
 
