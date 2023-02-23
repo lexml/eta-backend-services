@@ -11,8 +11,6 @@ public interface DispositivoEmendaAdicionado extends DispositivoEmendaModificado
     
     String getIdPosicaoAgrupador();
 
-    String getUrnNormaAlterada();
-
     Boolean isExisteNaNormaAlterada();
 
     List<? extends DispositivoEmendaAdicionado> getFilhos();

@@ -14,6 +14,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
     private boolean abreAspas;
     private boolean fechaAspas;
     private NotaAlteracao notaAlteracao;
+    private String urnNormaAlterada;
 
     @Override
     public String getTipo() {
@@ -95,17 +96,27 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
         this.notaAlteracao = notaAlteracao;
     }
 
+	@Override
+    public String getUrnNormaAlterada() {
+        return urnNormaAlterada;
+    }
+
+	@SuppressWarnings("unused")
+    public String setUrnNormaAlterada(String urnNormaAlterada) {
+        return this.urnNormaAlterada = urnNormaAlterada;
+    }    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DispositivoEmendaModificadoPojo that = (DispositivoEmendaModificadoPojo) o;
-        return textoOmitido == that.textoOmitido && abreAspas == that.abreAspas && fechaAspas == that.fechaAspas && tipo.equals(that.tipo) && id.equals(that.id) && rotulo.equals(that.rotulo) && texto.equals(that.texto) && notaAlteracao == that.notaAlteracao;
+        return textoOmitido == that.textoOmitido && abreAspas == that.abreAspas && fechaAspas == that.fechaAspas && tipo.equals(that.tipo) && id.equals(that.id) && rotulo.equals(that.rotulo) && texto.equals(that.texto) && notaAlteracao == that.notaAlteracao && urnNormaAlterada.equals(that.urnNormaAlterada);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(tipo, id, rotulo, texto, textoOmitido, abreAspas, fechaAspas, notaAlteracao);
+        return Objects.hash(tipo, id, rotulo, texto, textoOmitido, abreAspas, fechaAspas, notaAlteracao, urnNormaAlterada);
     }
 
     @Override
@@ -119,6 +130,7 @@ public class DispositivoEmendaModificadoPojo implements DispositivoEmendaModific
                 ", abreAspas=" + abreAspas +
                 ", fechaAspas=" + fechaAspas +
                 ", notaAlteracao=" + notaAlteracao +
+                ", urnNormaAlterada='" + urnNormaAlterada + '\'' +
                 '}';
     }
 }
