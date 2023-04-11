@@ -33,7 +33,6 @@ public class VelocityExtension {
 	}
 
 	// HTML to XSL-FO
-	@SuppressWarnings("unused")
 	public String html2fo(String html) {
 		try {
 			String fo = html2foConverter.html2fo(StringEscapeUtils.unescapeHtml4(html));
@@ -44,12 +43,12 @@ public class VelocityExtension {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	public String citacao2html(String citacao) {
 		return citacao.replace("Rotulo>", "strong>")
 				.replaceAll("(?i)<omissis ?/>", "<span class=\"omissis\"></span>")
-				.replaceAll("class=\"agrupador", "class=\"align-center")
-				.replaceAll("class=\"ementa", "style=\"margin-left: 40%; text-indent: 0");
+				.replaceAll("(class=\"[^\"]*)agrupador", "align=\"center\" $1")
+				.replaceAll("(class=\"[^\"]*)(?:sub)?secao", "style=\"font-weight: bold\" $1")
+				.replace("class=\"ementa", "style=\"margin-left: 40%; text-indent: 0");
 	}
 	
 	/**
