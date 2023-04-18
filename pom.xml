@@ -178,7 +178,7 @@
 	    <dependency>
 	      <groupId>br.gov.lexml.parser.pl</groupId>
 	      <artifactId>lexml-parser-projeto-lei</artifactId>
-	      <version>1.13.9</version>
+	      <version>1.14.1</version>
 	    </dependency>
     </dependencies>
 
