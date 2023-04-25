@@ -160,6 +160,13 @@
 	#set($spacing3 = "26pt")
 	#set($spacing4 = "34pt")
 #end
+
+## Impressão tamanho fonte ------------------------------------------------------------				
+#if($emenda.opcoesImpressao.tamanhoFonte  == 18)
+	#set($maxTamanhoFonte = "18pt")	
+#else
+	#set($maxTamanhoFonte = "16pt")
+#end
 	<fo:page-sequence master-reference="document">
 ## Brasão e texto do cabeçalho -------------------------------------------------------------------------
 		#if ($temCabecalhoPrincipal)
@@ -184,19 +191,19 @@
 			</fo:block>
 		</fo:static-content>
 		*#
-		<fo:flow flow-name="xsl-region-body" font-size="14pt">
+		<fo:flow flow-name="xsl-region-body" font-size="${emenda.opcoesImpressao.tamanhoFonte}pt">
 			<fo:block-container>
 				<fo:marker marker-class-name="marker.texto" />
 ## Epígrafe -------------------------------------------------------------------------
 				<fo:block text-align="center"
 					white-space-collapse="false">
-					<fo:block font-size="16pt" font-weight="bold">
+					<fo:block font-size="$maxTamanhoFonte" font-weight="bold">
 						$emenda.epigrafe.texto.replace(' ', '&#160;')
 					</fo:block>
 				</fo:block>
 				<fo:block space-after="$spacing2" text-align="center"
 					white-space-collapse="false">
-					<fo:block font-size="16pt">$emenda.epigrafe.complemento</fo:block>
+					<fo:block font-size="$maxTamanhoFonte">$emenda.epigrafe.complemento</fo:block>
 				</fo:block>
 ## Comando de emenda ----------------------------------------------------------------
 				<fo:block role="Comando de emenda" line-height="$lineHeight"
@@ -233,7 +240,7 @@
 				</fo:block>
 ## Justificativa ----------------------------------------------------------------
 				#if ($emenda.justificativa)
-				<fo:block font-size="16pt" font-weight="bold"
+				<fo:block font-size="$maxTamanhoFonte" font-weight="bold"
 					keep-with-next="always" space-before="$spacing3" text-align="center"
 					white-space-collapse="false">JUSTIFICATIVA</fo:block>
 				<fo:block keep-with-previous="always" line-height="$lineHeight"

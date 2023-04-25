@@ -8,6 +8,7 @@ public class OpcoesImpressaoPojo implements OpcoesImpressao {
     private boolean imprimirBrasao;
     private String textoCabecalho;
     private boolean reduzirEspacoEntreLinhas;
+    private Integer tamanhoFonte; 
 
     @Override
     public boolean isImprimirBrasao() {
@@ -30,9 +31,19 @@ public class OpcoesImpressaoPojo implements OpcoesImpressao {
     }
 
     @Override
+    public Integer getTamanhoFonte() {
+    	return this.tamanhoFonte;
+    }
+    
+    public void setTamanhoFonte(Integer tamanhoFonte) {
+		this.tamanhoFonte = tamanhoFonte;
+	}
+
+	@Override
     public boolean isReduzirEspacoEntreLinhas() {
         return reduzirEspacoEntreLinhas;
     }
+    
 
     @SuppressWarnings("unused")
     public void setReduzirEspacoEntreLinhas(boolean reduzirEspacoEntreLinhas) {
@@ -44,12 +55,12 @@ public class OpcoesImpressaoPojo implements OpcoesImpressao {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OpcoesImpressaoPojo that = (OpcoesImpressaoPojo) o;
-        return imprimirBrasao == that.imprimirBrasao && reduzirEspacoEntreLinhas == that.reduzirEspacoEntreLinhas && Objects.equals(textoCabecalho, that.textoCabecalho);
+        return imprimirBrasao == that.imprimirBrasao && reduzirEspacoEntreLinhas == that.reduzirEspacoEntreLinhas && Objects.equals(textoCabecalho, that.textoCabecalho) && Objects.equals(tamanhoFonte, that.tamanhoFonte);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imprimirBrasao, textoCabecalho, reduzirEspacoEntreLinhas);
+        return Objects.hash(imprimirBrasao, textoCabecalho, reduzirEspacoEntreLinhas, tamanhoFonte);
     }
 
     @Override
@@ -58,7 +69,9 @@ public class OpcoesImpressaoPojo implements OpcoesImpressao {
                 "imprimirBrasao=" + imprimirBrasao +
                 ", textoCabecalho='" + textoCabecalho + '\'' +
                 ", reduzirEspacoEntreLinhas=" + reduzirEspacoEntreLinhas +
+                ", tamanhoFonte=" + tamanhoFonte +
                 '}';
     }
+
 }
 

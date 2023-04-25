@@ -407,15 +407,21 @@ public class EmendaXmlUnmarshaller {
         boolean imprimirBrasao = booleanAttributeValue(opcoes.attributeValue("imprimirBrasao"));
         String textoCabecalho = opcoes.attributeValue("textoCabecalho");
         boolean reduzirEspacoEntreLinhas = booleanAttributeValue(opcoes.attributeValue("reduzirEspacoEntreLinhas"));
+        Integer tamanhoFonte = integerAttributeValue(opcoes.attributeValue("tamanhoFonte"));
 
         return new OpcoesImpressaoRecord(
                 imprimirBrasao,
                 textoCabecalho,
-                reduzirEspacoEntreLinhas);
+                reduzirEspacoEntreLinhas,
+                tamanhoFonte);
     }
 
     private boolean booleanAttributeValue(String attributeValue) {
 		return attributeValue != null && (attributeValue.equals("true") || attributeValue.equalsIgnoreCase("s"));
+	}
+    
+    private Integer integerAttributeValue(String attributeValue) {
+		return attributeValue != null ? Integer.parseInt(attributeValue) : null;
 	}
     
     private String nodeStringValue(Node node) {

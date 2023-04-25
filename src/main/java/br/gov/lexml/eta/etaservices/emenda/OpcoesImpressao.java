@@ -6,4 +6,6 @@ public interface OpcoesImpressao {
     String getTextoCabecalho();
 
     boolean isReduzirEspacoEntreLinhas();
+    
+    Integer getTamanhoFonte();
 }

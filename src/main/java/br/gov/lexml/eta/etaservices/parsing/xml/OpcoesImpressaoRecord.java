@@ -8,14 +8,17 @@ public final class OpcoesImpressaoRecord implements OpcoesImpressao {
     private final boolean imprimirBrasao;
     private final String textoCabecalho;
     private final boolean reduzirEspacoEntreLinhas;
+    private final Integer tamanhoFonte;
 
     public OpcoesImpressaoRecord(
             boolean imprimirBrasao,
             String textoCabecalho,
-            boolean reduzirEspacoEntreLinhas) {
+            boolean reduzirEspacoEntreLinhas,
+            Integer tamanhoFonte) {
         this.imprimirBrasao = imprimirBrasao;
         this.textoCabecalho = textoCabecalho;
         this.reduzirEspacoEntreLinhas = reduzirEspacoEntreLinhas;
+        this.tamanhoFonte = tamanhoFonte;
     }
 
     public boolean isImprimirBrasao() {
@@ -30,7 +33,12 @@ public final class OpcoesImpressaoRecord implements OpcoesImpressao {
         return reduzirEspacoEntreLinhas;
     }
 
-    @Override
+  
+    public Integer getTamanhoFonte() {
+		return tamanhoFonte;
+	}
+
+	@Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
@@ -50,7 +58,8 @@ public final class OpcoesImpressaoRecord implements OpcoesImpressao {
         return "OpcoesImpressaoRecord[" +
                 "imprimirBrasao=" + imprimirBrasao + ", " +
                 "textoCabecalho=" + textoCabecalho + ", " +
-                "reduzirEspacoEntreLinhas=" + reduzirEspacoEntreLinhas + ']';
+                "reduzirEspacoEntreLinhas=" + reduzirEspacoEntreLinhas + ", " +
+                "tamanhoFonte=" + tamanhoFonte + ']';
     }
 
 

@@ -471,7 +471,11 @@ public class EmendaXmlMarshaller {
                     .append(StringEscapeUtils.escapeXml10(opcoesImpressao.getTextoCabecalho()))
                     .append("\" ");
         }
-
+        
+        sb.append(" tamanhoFonte=\"")
+        .append(opcoesImpressao.getTamanhoFonte())
+        .append("\" ");
+        
         sb.append(" reduzirEspacoEntreLinhas=\"")
                 .append(opcoesImpressao.isReduzirEspacoEntreLinhas())
                 .append("\" ")
