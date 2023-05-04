@@ -62,17 +62,21 @@ public class FOPProcessor {
 			String strUri = uri.toString().replaceAll("^file://\\.", "");
 
 			try {				
-				ClassPathResource resource = new ClassPathResource("pdfa-fonts/" + strUri);
+				ClassPathResource resource = new ClassPathResource("/pdfa-fonts/" + strUri, FOPProcessor.class.getClassLoader());
 				InputStream inputStream = resource.getInputStream();
 				if (inputStream != null) {
 					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
 				}
+				log.info("Não consegui carregr a fonte " + strUri + " via ClassPathResource.");
+				inputStream = FOPProcessor.class.getClassLoader().getResourceAsStream("/pdfa-fonts/" + strUri);
+				if (inputStream != null) {
+					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
+				}
+				log.info("Não consegui carregr a fonte " + strUri + " via FOPProcessor.class.getClassLoader().");
 			}
 			catch(Exception e) {
 				log.error("Arquivo de fonte /pdfa-fonts/" + strUri + " não encontrado.");
 			}
-//			InputStream inputStream = FOPProcessor.class.getClassLoader()
-//					.getResourceAsStream("/pdfa-fonts/" + strUri);
 			return null;
 		}
 
