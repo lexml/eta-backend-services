@@ -1,6 +1,11 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -13,6 +18,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.fop.apps.FOUserAgent;
 import org.apache.fop.apps.Fop;
@@ -26,7 +32,6 @@ import org.apache.xmlgraphics.io.ResourceResolver;
 import org.dom4j.io.DocumentSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.ClassPathResource;
 
 import br.gov.lexml.pdfa.PDFA;
 import br.gov.lexml.pdfa.PDFAttachmentFile;
@@ -39,17 +44,27 @@ public class FOPProcessor {
 
 	static {
 		try {
+			new File("pdfa-fonts").mkdir();
+			exportaFonte("GenBasB.ttf");
+			exportaFonte("GenBasBI.ttf");
+			exportaFonte("GenBasI.ttf");
+			exportaFonte("GenBasR.ttf");
 			InputStream xconf = FOPProcessor.class.getResourceAsStream("/fop.xconf");
-			ResourceResolver resolver = new ClasspathUriResolver();
-			FopConfParser parser = new FopConfParser(xconf, new URI("file://."), resolver);
+			ResourceResolver resolver = new UriResolver();
+			FopConfParser parser = new FopConfParser(xconf, new URI("file://./"), resolver);
 			FopFactoryBuilder builder = parser.getFopFactoryBuilder();
 			fopFactory = builder.build();
 		} catch (Exception e) {
 			log.error("Não foi possível configurar o FOP.", e);
 		}
 	}
+	
+	private static void exportaFonte(String fonte) throws FileNotFoundException, IOException {
+		InputStream is = FOPProcessor.class.getResourceAsStream("/pdfa-fonts/" + fonte);
+		IOUtils.copy(is, new FileOutputStream(new File("pdfa-fonts/" + fonte)));
+	}
 
-	static class ClasspathUriResolver implements ResourceResolver {
+	static class UriResolver implements ResourceResolver {
 
 		@Override
 		public OutputStream getOutputStream(URI arg0) {
@@ -61,18 +76,23 @@ public class FOPProcessor {
 
 			String strUri = uri.toString().replaceAll("^file://\\.", "");
 
-			try {				
-				ClassPathResource resource = new ClassPathResource("pdfa-fonts/" + strUri);
-				InputStream inputStream = resource.getInputStream();
-				if (inputStream != null) {
-					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
-				}
+			try {	
+				return new Resource(MimeConstants.MIME_AFP_TRUETYPE, new FileInputStream(new File("pdfa-fonts/" + strUri)));
+//				ClassPathResource resource = new ClassPathResource("/pdfa-fonts/" + strUri, FOPProcessor.class.getClassLoader());
+//				InputStream inputStream = resource.getInputStream();
+//				if (inputStream != null) {
+//					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
+//				}
+//				log.info("Não consegui carregr a fonte " + strUri + " via ClassPathResource.");
+//				inputStream = FOPProcessor.class.getClassLoader().getResourceAsStream("/pdfa-fonts/" + strUri);
+//				if (inputStream != null) {
+//					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
+//				}
+//				log.info("Não consegui carregr a fonte " + strUri + " via FOPProcessor.class.getClassLoader().");
 			}
 			catch(Exception e) {
 				log.error("Arquivo de fonte /pdfa-fonts/" + strUri + " não encontrado.");
 			}
-//			InputStream inputStream = FOPProcessor.class.getClassLoader()
-//					.getResourceAsStream("/pdfa-fonts/" + strUri);
 			return null;
 		}
 
