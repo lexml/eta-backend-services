@@ -36,7 +36,6 @@ public interface Emenda {
 
     LocalDate getData();
 
-    @SuppressWarnings("unused")
     @JsonIgnore()
     default String getDataFormatada() {
         return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)).toLowerCase();
@@ -47,5 +46,10 @@ public interface Emenda {
     OpcoesImpressao getOpcoesImpressao();
     
     List<? extends Revisao> getRevisoes();
+    
+    @JsonIgnore()
+    default boolean isPossuiMarcasRevisao() {
+    	return getRevisoes() != null && !getRevisoes().isEmpty();
+    }
     
 }
