@@ -9,17 +9,22 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 
 class Json2XML {
 
     public static void main(String[] args) {
-    	Json2XML.process("emenda_mpv_885_2019_incompleta_dois_itens");
-    	Json2XML.process("emenda_mpv_905_2019_completa_disp_mpv");
-    	Json2XML.process("emenda_mpv_905_2019_agrupadores");
+//    	Json2XML.process("emenda_mpv_885_2019_incompleta_dois_itens");
+//    	Json2XML.process("emenda_mpv_905_2019_completa_disp_mpv");
+//    	Json2XML.process("emenda_mpv_905_2019_agrupadores");
+    	Json2XML.process("mp-com-revisoes");
+//    	Json2XML.process("mp-com-revisoes-2");
     	System.out.println("Feito.");
 	}
   
@@ -45,6 +50,9 @@ class Json2XML {
             String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
+            objectMapper.registerSubtypes(
+                new NamedType(RevisaoElementoPojo.class, "RevisaoElemento"),
+                new NamedType(RevisaoJustificativaPojo.class, "RevisaoJustificativa"));
             return objectMapper.readValue(text, EmendaPojo.class);
 
         } catch (IOException e) {

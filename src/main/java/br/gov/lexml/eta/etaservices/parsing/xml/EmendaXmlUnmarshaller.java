@@ -3,12 +3,17 @@ package br.gov.lexml.eta.etaservices.parsing.xml;
 import static br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda.EMENDA;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -32,10 +37,14 @@ import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.emenda.Sexo;
 import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
 import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
 
 public class EmendaXmlUnmarshaller {
     public Emenda fromXml(final String xml) throws DocumentException {
@@ -58,6 +67,7 @@ public class EmendaXmlUnmarshaller {
         final String justificativa = parseJustificativa(rootElement);
         final Autoria autoria = parseAutoria(rootElement);
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
+        final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
 
         return new EmendaRecord(
                 metadados.getDataUltimaModificacao(),
@@ -74,10 +84,11 @@ public class EmendaXmlUnmarshaller {
                 atributosEmenda.getLocal(),
                 atributosEmenda.getData(),
                 autoria,
-                opcoesImpressao);
+                opcoesImpressao,
+                revisoes);
     }
 
-    private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
+	private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
         final List<Node> nodes = rootElement.selectNodes("Componente");
 
         return nodes.stream().map(this::parseComponente).collect(Collectors.toList());
@@ -280,6 +291,7 @@ public class EmendaXmlUnmarshaller {
         Boolean existeNaNormaAlterada = booleanAttributeValue(adicionado.attributeValue("existeNaNormaAlterada"));
         String rotulo = nodeStringValue(adicionado.selectSingleNode("Rotulo"));
         String texto = nodeContentWithTags(adicionado.selectSingleNode("p"));
+        String uuid2 = adicionado.attributeValue("uuid2");
         
         List<Node> nodesFilhos = adicionado.selectNodes("*[not(self::Rotulo or self::p)]");
         List<DispositivoEmendaAdicionadoRecord> filhos = nodesFilhos.stream() 
@@ -290,7 +302,7 @@ public class EmendaXmlUnmarshaller {
         		tipo, id, rotulo, texto, 
         		textoOmitido, abreAspas, fechaAspas, notaAlteracao, ondeCouber, 
         		idPai, idIrmaoAnterior, idPosicaoAgrupador,
-        		urnNormaAlterada, existeNaNormaAlterada, filhos);
+        		urnNormaAlterada, existeNaNormaAlterada, filhos, uuid2);
     }
 
     private DispositivoEmendaAdicionadoRecord parseAdicionadoLexml(final Node nodeAdicionado) {
@@ -430,6 +442,48 @@ public class EmendaXmlUnmarshaller {
 
     private String nodeContentWithTags(Node node) {
     	return node == null ? null : node.asXML().trim().replaceAll("^<[^>]+>", "").replaceAll("</[^>]+>$", ""); 
+    }
+
+    private List<? extends Revisao> parseRevisoes(Element rootElement) {
+    	
+    	List<Revisao> ret = new ArrayList<>();
+    	
+    	Element revisoesElement = (Element) rootElement.selectSingleNode("Revisoes");
+    	if (revisoesElement != null) {
+    		List<Element> revisoes = revisoesElement.elements();
+    		
+    		for(Element eRevisao: revisoes) {
+    			ret.add(parseRevisao(eRevisao));
+    		}
+    		
+    	}
+    	
+		return ret;
+	}
+    
+    private RevisaoPojo parseRevisao(Element eRevisao) {
+    	Class<? extends RevisaoPojo> classePojo;
+		if(eRevisao.getName().equals("RevisaoElemento")) {
+			classePojo = RevisaoElementoPojo.class;
+		}
+		else if(eRevisao.getName().equals("RevisaoJustificativa")) {
+			classePojo = RevisaoJustificativaPojo.class;
+		}
+		else {
+			throw new RuntimeException("Elemento " + eRevisao.getName() + " desconhecido na lista de revisões.");
+		}
+		
+		try {
+			JAXBContext jaxbContext 	= JAXBContext.newInstance(classePojo);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			StringWriter sw = new StringWriter();
+			eRevisao.write(sw);
+			RevisaoPojo revisao = (RevisaoPojo) jaxbUnmarshaller.unmarshal(new StringReader(sw.toString()));
+	    	return revisao;
+		}
+		catch(Exception e) {
+			throw new RuntimeException("Falha ao fazer unmarshalling de revisao.", e);
+		}
     }
 
 }

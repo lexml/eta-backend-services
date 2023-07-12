@@ -25,6 +25,7 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
     private final String urnNormaAlterada;
     private final Boolean existeNaNormaAlterada;
     private final List<DispositivoEmendaAdicionadoRecord> filhos;
+    private final String uuid2;
 
     public DispositivoEmendaAdicionadoRecord(
             String tipo,
@@ -41,7 +42,8 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
             String idPosicaoAgrupador,
             String urnNormaAlterada,
             Boolean existeNaNormaAlterada,
-            List<DispositivoEmendaAdicionadoRecord> filhos) {
+            List<DispositivoEmendaAdicionadoRecord> filhos,
+            String uuid2) {
         this.tipo = tipo;
         this.id = id;
         this.rotulo = rotulo;
@@ -57,6 +59,7 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
         this.urnNormaAlterada = urnNormaAlterada;
         this.existeNaNormaAlterada = existeNaNormaAlterada;
         this.filhos = filhos;
+        this.uuid2 = uuid2;
     }
 
     @Override
@@ -139,6 +142,11 @@ public final class DispositivoEmendaAdicionadoRecord implements DispositivoEmend
     public List<DispositivoEmendaAdicionadoRecord> getFilhos() {
         return filhos;
     }
+    
+    @Override
+	public String getUuid2() {
+		return uuid2;
+	}
 
     @Override
     public boolean equals(Object obj) {

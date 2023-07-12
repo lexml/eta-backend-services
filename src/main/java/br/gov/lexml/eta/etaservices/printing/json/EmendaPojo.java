@@ -1,5 +1,11 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
@@ -9,12 +15,6 @@ import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class EmendaPojo implements Emenda {
     private Instant dataUltimaModificacao;
@@ -32,6 +32,7 @@ public class EmendaPojo implements Emenda {
     private LocalDate data;
     private AutoriaPojo autoria;
     private OpcoesImpressaoPojo opcoesImpressao;
+    private List<? extends RevisaoPojo> revisoes;
 
     @Override
     public Instant getDataUltimaModificacao() {
@@ -184,19 +185,42 @@ public class EmendaPojo implements Emenda {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EmendaPojo that = (EmendaPojo) o;
-        return dataUltimaModificacao.equals(that.dataUltimaModificacao) && aplicacao.equals(that.aplicacao) && versaoAplicacao.equals(that.versaoAplicacao) && modoEdicao == that.modoEdicao && metadados.equals(that.metadados) && proposicao.equals(that.proposicao) && colegiado.equals(that.colegiado) && epigrafe.equals(that.epigrafe) && componentes.equals(that.componentes) && comandoEmenda.equals(that.comandoEmenda) && justificativa.equals(that.justificativa) && local.equals(that.local) && data.equals(that.data) && autoria.equals(that.autoria) && opcoesImpressao.equals(that.opcoesImpressao);
+    public List<? extends RevisaoPojo> getRevisoes() {
+    	return revisoes;
     }
+    
+    public void setRevisoes(List<? extends RevisaoPojo> revisoes) {
+		this.revisoes = revisoes;
+	}
 
     @Override
-    public int hashCode() {
-        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao);
-    }
+	public int hashCode() {
+		return Objects.hash(aplicacao, autoria, colegiado, comandoEmenda, componentes, data, dataUltimaModificacao,
+				epigrafe, justificativa, local, metadados, modoEdicao, opcoesImpressao, proposicao, revisoes,
+				versaoAplicacao);
+	}
 
-    @Override
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmendaPojo other = (EmendaPojo) obj;
+		return Objects.equals(aplicacao, other.aplicacao) && Objects.equals(autoria, other.autoria)
+				&& Objects.equals(colegiado, other.colegiado) && Objects.equals(comandoEmenda, other.comandoEmenda)
+				&& Objects.equals(componentes, other.componentes) && Objects.equals(data, other.data)
+				&& Objects.equals(dataUltimaModificacao, other.dataUltimaModificacao)
+				&& Objects.equals(epigrafe, other.epigrafe) && Objects.equals(justificativa, other.justificativa)
+				&& Objects.equals(local, other.local) && Objects.equals(metadados, other.metadados)
+				&& modoEdicao == other.modoEdicao && Objects.equals(opcoesImpressao, other.opcoesImpressao)
+				&& Objects.equals(proposicao, other.proposicao) && Objects.equals(revisoes, other.revisoes)
+				&& Objects.equals(versaoAplicacao, other.versaoAplicacao);
+	}
+
+	@Override
     public String toString() {
         return "EmendaPojo{" +
                 "dataUltimaModificacao=" + dataUltimaModificacao +

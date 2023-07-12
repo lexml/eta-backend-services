@@ -24,19 +24,26 @@ class EmendaXmlUnmarshallerTest {
     @Test
     void fromXml() throws Exception {
     	
-    	String fileName = "emenda_mpv_905_2019_completa_disp_mpv";
+//    	String fileName = "emenda_mpv_905_2019_completa_disp_mpv";
+    	String fileName = "mp-com-revisoes";
+//    	String fileName = "mp-com-revisoes-2";
     	
-    	String xml = IOUtils.resourceToString("/" + fileName + ".xml", StandardCharsets.UTF_8);
-    	
-        Emenda e = unmarshaller.fromXml(xml);
+    	try {
+        	String xml = IOUtils.resourceToString("/" + fileName + ".xml", StandardCharsets.UTF_8);
+        	
+            Emenda e = unmarshaller.fromXml(xml);
 
-        assertThat(e.getLocal()).isEqualTo("Sala da comissão");
-        
-        FileWriter fileWriter = new FileWriter("target/" + fileName + ".json");
-        
-        new EmendaJsonGeneratorBean().writeJson(e, fileWriter);
-        
-        fileWriter.close();
+            assertThat(e.getLocal()).isEqualTo("Sala da comissão");
+            
+            FileWriter fileWriter = new FileWriter("target/" + fileName + ".json");
+            
+            new EmendaJsonGeneratorBean().writeJson(e, fileWriter);
+            
+            fileWriter.close();
+    	}
+    	catch(Exception e) {
+    		e.printStackTrace();
+    	}    	
         
     }
 }

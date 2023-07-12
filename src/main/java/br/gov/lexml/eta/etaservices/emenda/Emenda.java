@@ -45,4 +45,7 @@ public interface Emenda {
     Autoria getAutoria();
 
     OpcoesImpressao getOpcoesImpressao();
+    
+    List<? extends Revisao> getRevisoes();
+    
 }

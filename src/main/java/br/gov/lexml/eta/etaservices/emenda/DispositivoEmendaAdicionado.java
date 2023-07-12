@@ -14,4 +14,6 @@ public interface DispositivoEmendaAdicionado extends DispositivoEmendaModificado
     Boolean isExisteNaNormaAlterada();
 
     List<? extends DispositivoEmendaAdicionado> getFilhos();
+    
+    String getUuid2();
 }

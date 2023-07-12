@@ -1,0 +1,139 @@
+<Emenda versaoFormatoArquivo="1.0" local="Sala da comissão" data="2023-07-12">
+  <Metadados>
+    <DataUltimaModificacao>2023-07-12T18:28:52.463Z</DataUltimaModificacao>
+    <Aplicacao></Aplicacao>
+    <VersaoAplicacao></VersaoAplicacao>
+    <ModoEdicao>emenda</ModoEdicao>
+  </Metadados>
+  <Proposicao urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" sigla="MPV" numero="905" ano="2019" ementa="Institui o Contrato de Trabalho Verde e Amarelo, altera a legislação trabalhista, e dá outras providências." identificacaoTexto="Texto da MPV" />
+  <ColegiadoApreciador siglaCasaLegislativa="CN" tipoColegiado="Comissão" siglaComissao="CMMPV 905/2019" />
+  <Epigrafe texto="EMENDA Nº         - CMMPV 905/2019" complemento="(à MPV 905/2019)" />
+  <Componente urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" articulado="true" >
+    <Dispositivos>
+      <DispositivoSuprimido tipo="Inciso" id="art1_par1u_inc2" rotulo="II –" />
+      <DispositivoModificado tipo="Inciso" id="art1_par1u_inc3" rotulo="III –" >
+        <Texto>trabalho intermitente ou nao; e</Texto>
+      </DispositivoModificado>     </Dispositivos>
+  </Componente>
+  <ComandoEmenda>
+    <ItemComandoEmenda>
+      <Cabecalho>Suprima-se o inciso II do parágrafo único do art. 1º; e dê-se nova redação ao inciso III do parágrafo único do art. 1º da Medida Provisória, nos termos a seguir:</Cabecalho>
+      <Citacao><p class="artigo">“<Rotulo>Art. 1º</Rotulo> <Omissis/></p><p class="paragrafo"><Rotulo>Parágrafo único.</Rotulo> <Omissis/></p><p class="omissis"><Omissis/></p><p class="inciso"><Rotulo>II –</Rotulo> (Suprimir)</p><p class="inciso"><Rotulo>III –</Rotulo> trabalho intermitente ou nao; e</p><p class="omissis"><Omissis/>”</p></Citacao>
+    </ItemComandoEmenda>
+  </ComandoEmenda>
+  <Justificativa></Justificativa>
+  <Autoria  tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="0" quantidadeAssinaturasAdicionaisSenadores="0" >
+  </Autoria>
+  <OpcoesImpressao  imprimirBrasao="true"  textoCabecalho=""  tamanhoFonte="14"  reduzirEspacoEntreLinhas="false" />
+<Revisoes>
+<RevisaoElemento actionType="RESTAURAR_ELEMENTO" stateType="ElementoRestaurado" id="91db7d97-b88f-4134-9387-d6eff03ab458" dataHora="2023-07-12 15:28:11" descricao="Dispositivo restaurado">
+    <Usuario nome="Anônimo"/>
+    <ElementoAntesRevisao nivel="0" numero="1" rotulo="Art. 1º" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Artigo" uuid="6" uuid2="cfa42029-07ef-4fe9-beba-01541a958681" lexmlId="art1" descricaoSituacao="Dispositivo Modificado">
+        <Conteudo>
+            <Texto>xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</Texto>
+        </Conteudo>
+        <Mensagens tipo="ERROR" descricao="Artigo deveria iniciar com letra maiúscula."/>
+        <Hierarquia posicao="0" numero="1">
+            <Pai tipo="Capitulo" uuid="4" uuid2="262d6703-c795-4118-8d30-3cd4303da985" lexmlId="cap1" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+        <Revisao xsi:type="revisaoElementoPojo" actionType="RESTAURAR_ELEMENTO" stateType="ElementoRestaurado" id="91db7d97-b88f-4134-9387-d6eff03ab458" dataHora="2023-07-12 15:28:11" descricao="Dispositivo restaurado" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+            <Usuario nome="Anônimo"/>
+            <ElementoAntesRevisao nivel="0" numero="1" rotulo="Art. 1º" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Artigo" uuid="6" uuid2="cfa42029-07ef-4fe9-beba-01541a958681" lexmlId="art1" descricaoSituacao="Dispositivo Modificado">
+                <Conteudo>
+                    <Texto>xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</Texto>
+                </Conteudo>
+                <Mensagens tipo="ERROR" descricao="Artigo deveria iniciar com letra maiúscula."/>
+                <Hierarquia posicao="0" numero="1">
+                    <Pai tipo="Capitulo" uuid="4" uuid2="262d6703-c795-4118-8d30-3cd4303da985" lexmlId="cap1" descricaoSituacao="Dispositivo Original"/>
+                </Hierarquia>
+            </ElementoAntesRevisao>
+            <ElementoAposRevisao nivel="0" numero="1" rotulo="Art. 1º" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Artigo" uuid="6" uuid2="cfa42029-07ef-4fe9-beba-01541a958681" lexmlId="art1" descricaoSituacao="Dispositivo Modificado">
+                <Conteudo>
+                    <Texto>xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</Texto>
+                </Conteudo>
+                <Mensagens tipo="ERROR" descricao="Artigo deveria iniciar com letra maiúscula."/>
+                <Hierarquia posicao="0" numero="1">
+                    <Pai tipo="Capitulo" uuid="4" uuid2="262d6703-c795-4118-8d30-3cd4303da985" lexmlId="cap1" descricaoSituacao="Dispositivo Original"/>
+                </Hierarquia>
+            </ElementoAposRevisao>
+        </Revisao>
+    </ElementoAntesRevisao>
+    <ElementoAposRevisao nivel="0" numero="1" rotulo="Art. 1º" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Artigo" uuid="6" uuid2="cfa42029-07ef-4fe9-beba-01541a958681" lexmlId="art1" descricaoSituacao="Dispositivo Modificado">
+        <Conteudo>
+            <Texto>xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</Texto>
+        </Conteudo>
+        <Mensagens tipo="ERROR" descricao="Artigo deveria iniciar com letra maiúscula."/>
+        <Hierarquia posicao="0" numero="1">
+            <Pai tipo="Capitulo" uuid="4" uuid2="262d6703-c795-4118-8d30-3cd4303da985" lexmlId="cap1" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+    </ElementoAposRevisao>
+</RevisaoElemento>
+<RevisaoElemento actionType="SUPRIMIR_ELEMENTO" stateType="ElementoSuprimido" id="e76aaaf0-c17b-43c4-a766-092a72146f23" dataHora="2023-07-12 15:28:17" descricao="Dispositivo suprimido">
+    <Usuario nome="Anônimo"/>
+    <ElementoAntesRevisao nivel="2" numero="2" rotulo="II –" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Inciso" uuid="9" uuid2="3ac715cf-38c6-485a-9164-735e5e438b8f" lexmlId="art1_par1u_inc2" descricaoSituacao="Dispositivo Original">
+        <Conteudo>
+            <Texto>contrato de experiência;</Texto>
+        </Conteudo>
+        <Hierarquia posicao="1" numero="2">
+            <Pai tipo="Paragrafo" uuid="7" uuid2="f988d52f-7fd6-42a2-b880-f49b21c710eb" lexmlId="art1_par1u" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+    </ElementoAntesRevisao>
+    <ElementoAposRevisao nivel="2" numero="2" rotulo="II –" agrupador="false" editavel="false" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Inciso" uuid="9" uuid2="3ac715cf-38c6-485a-9164-735e5e438b8f" lexmlId="art1_par1u_inc2" descricaoSituacao="Dispositivo Suprimido">
+        <Conteudo>
+            <Texto>contrato de experiência;</Texto>
+        </Conteudo>
+        <Hierarquia posicao="1" numero="2">
+            <Pai tipo="Paragrafo" uuid="7" uuid2="f988d52f-7fd6-42a2-b880-f49b21c710eb" lexmlId="art1_par1u" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+    </ElementoAposRevisao>
+</RevisaoElemento>
+<RevisaoElemento actionType="ATUALIZAR_TEXTO_ELEMENTO" stateType="ElementoModificado" id="4232d32a-b7cb-4478-bf9d-6ee65fe6320f" dataHora="2023-07-12 15:28:26" descricao="Texto do dispositivo foi alterado">
+    <Usuario nome="Anônimo"/>
+    <ElementoAntesRevisao nivel="2" numero="3" rotulo="III –" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Inciso" uuid="10" uuid2="5f5db861-5ae0-4227-be90-8cb63ca78f10" lexmlId="art1_par1u_inc3" descricaoSituacao="Dispositivo Original">
+        <Conteudo>
+            <Texto>trabalho intermitente; e</Texto>
+        </Conteudo>
+        <Hierarquia posicao="2" numero="3">
+            <Pai tipo="Paragrafo" uuid="7" uuid2="f988d52f-7fd6-42a2-b880-f49b21c710eb" lexmlId="art1_par1u" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+    </ElementoAntesRevisao>
+    <ElementoAposRevisao nivel="2" numero="3" rotulo="III –" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Inciso" uuid="10" uuid2="5f5db861-5ae0-4227-be90-8cb63ca78f10" lexmlId="art1_par1u_inc3" descricaoSituacao="Dispositivo Modificado">
+        <Conteudo>
+            <Texto>trabalho intermitente ou nao; e</Texto>
+        </Conteudo>
+        <Hierarquia posicao="2" numero="3">
+            <Pai tipo="Paragrafo" uuid="7" uuid2="f988d52f-7fd6-42a2-b880-f49b21c710eb" lexmlId="art1_par1u" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+    </ElementoAposRevisao>
+</RevisaoElemento>
+<RevisaoElemento actionType="REMOVER_ELEMENTO" stateType="ElementoRemovido" id="0e0c0e09-781e-492b-8acb-c19953fe65cc" dataHora="2023-07-12 15:28:14" descricao="Dispositivo removido">
+    <Usuario nome="Anônimo"/>
+    <ElementoAntesRevisao nivel="2" numero="2-1" rotulo="II-1 –" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Inciso" uuid="744" uuid2="13dd0e7f-3a50-4b1b-aedc-0567e995f74a" lexmlId="art1_par1u_inc2-1" descricaoSituacao="Dispositivo Adicionado">
+        <Conteudo>
+            <Texto>novo;</Texto>
+        </Conteudo>
+        <Hierarquia posicao="2" numero="2-1">
+            <Pai tipo="Paragrafo" uuid="7" uuid2="f988d52f-7fd6-42a2-b880-f49b21c710eb" lexmlId="art1_par1u" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+        <ElementoAnteriorNaSequenciaDeLeitura tipo="Inciso" uuid="9" uuid2="3ac715cf-38c6-485a-9164-735e5e438b8f" lexmlId="art1_par1u_inc2" descricaoSituacao="Dispositivo Original">
+            <Conteudo>
+                <Texto>contrato de experiência;</Texto>
+            </Conteudo>
+        </ElementoAnteriorNaSequenciaDeLeitura>
+    </ElementoAntesRevisao>
+    <ElementoAposRevisao nivel="2" numero="2-1" rotulo="II-1 –" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Inciso" uuid="744" uuid2="13dd0e7f-3a50-4b1b-aedc-0567e995f74a" lexmlId="art1_par1u_inc2-1" descricaoSituacao="Dispositivo Adicionado">
+        <Conteudo>
+            <Texto>novo;</Texto>
+        </Conteudo>
+        <Hierarquia posicao="2" numero="2-1">
+            <Pai tipo="Paragrafo" uuid="7" uuid2="f988d52f-7fd6-42a2-b880-f49b21c710eb" lexmlId="art1_par1u" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+        <ElementoAnteriorNaSequenciaDeLeitura tipo="Inciso" uuid="9" uuid2="3ac715cf-38c6-485a-9164-735e5e438b8f" lexmlId="art1_par1u_inc2" descricaoSituacao="Dispositivo Original">
+            <Conteudo>
+                <Texto>contrato de experiência;</Texto>
+            </Conteudo>
+        </ElementoAnteriorNaSequenciaDeLeitura>
+    </ElementoAposRevisao>
+</RevisaoElemento>
+</Revisoes>
+</Emenda>

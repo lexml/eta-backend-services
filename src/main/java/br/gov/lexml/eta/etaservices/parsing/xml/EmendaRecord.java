@@ -18,6 +18,7 @@ import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.Revisao;
 
 public final class EmendaRecord implements Emenda {
     private final Instant dataUltimaModificacao;
@@ -35,6 +36,8 @@ public final class EmendaRecord implements Emenda {
     private final LocalDate data;
     private final Autoria autoria;
     private final OpcoesImpressao opcoesImpressao;
+    // Utilizando RevisaoPojo para permitir marshaling jaxb entre jsone xml e vice versa.
+    private final List<? extends Revisao> revisoes;
 
     public EmendaRecord(
             Instant dataUltimaModificacao,
@@ -51,7 +54,8 @@ public final class EmendaRecord implements Emenda {
             String local,
             LocalDate data,
             Autoria autoria,
-            OpcoesImpressao opcoesImpressao) {
+            OpcoesImpressao opcoesImpressao,
+            List<? extends Revisao> revisoes) {
         this.dataUltimaModificacao = dataUltimaModificacao;
         this.aplicacao = aplicacao;
         this.versaoAplicacao = versaoAplicacao;
@@ -67,66 +71,82 @@ public final class EmendaRecord implements Emenda {
         this.data = data;
         this.autoria = autoria;
         this.opcoesImpressao = opcoesImpressao;
+        this.revisoes = revisoes;
     }
 
-    public Instant getDataUltimaModificacao() {
+    @Override
+	public Instant getDataUltimaModificacao() {
         return dataUltimaModificacao;
     }
 
-    public String getAplicacao() {
+    @Override
+	public String getAplicacao() {
         return aplicacao;
     }
 
-    public String getVersaoAplicacao() {
+    @Override
+	public String getVersaoAplicacao() {
         return versaoAplicacao;
     }
 
-    public ModoEdicaoEmenda getModoEdicao() {
+    @Override
+	public ModoEdicaoEmenda getModoEdicao() {
         return modoEdicao;
     }
 
-    public Map<String, Object> getMetadados() {
+    @Override
+	public Map<String, Object> getMetadados() {
         return metadados;
     }
 
-    public RefProposicaoEmendada getProposicao() {
+    @Override
+	public RefProposicaoEmendada getProposicao() {
         return proposicao;
     }
 
-    public ColegiadoApreciador getColegiadoApreciador() {
+    @Override
+	public ColegiadoApreciador getColegiadoApreciador() {
         return colegiado;
     }
 
-    public Epigrafe getEpigrafe() {
+    @Override
+	public Epigrafe getEpigrafe() {
         return epigrafe;
     }
 
-    public List<? extends ComponenteEmendado> getComponentes() {
+    @Override
+	public List<? extends ComponenteEmendado> getComponentes() {
         return componentes;
     }
 
-    public ComandoEmenda getComandoEmenda() {
+    @Override
+	public ComandoEmenda getComandoEmenda() {
         return comandoEmenda;
     }
 
-    public String getJustificativa() {
+    @Override
+	public String getJustificativa() {
         return justificativa;
     }
 
-    public String getLocal() {
+    @Override
+	public String getLocal() {
         return local;
     }
 
-    @JsonSerialize(using = LocalDateSerializer.class) 
+    @Override
+	@JsonSerialize(using = LocalDateSerializer.class) 
     public LocalDate getData() {
         return data;
     }
 
-    public Autoria getAutoria() {
+    @Override
+	public Autoria getAutoria() {
         return autoria;
     }
 
-    public OpcoesImpressao getOpcoesImpressao() {
+    @Override
+	public OpcoesImpressao getOpcoesImpressao() {
         return opcoesImpressao;
     }
 
@@ -155,6 +175,11 @@ public final class EmendaRecord implements Emenda {
     @Override
     public int hashCode() {
         return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao);
+    }
+    
+    @Override
+    public List<? extends Revisao> getRevisoes() {
+    	return revisoes;
     }
 
     @Override

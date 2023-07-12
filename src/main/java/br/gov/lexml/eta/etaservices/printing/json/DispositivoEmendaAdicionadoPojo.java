@@ -23,6 +23,7 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
     private String urnNormaAlterada;
     private Boolean existeNaNormaAlterada;
     private List<DispositivoEmendaAdicionadoPojo> filhos = new ArrayList<>();
+    private String uuid2;
 
     @Override
     public String getTipo() {
@@ -173,7 +174,16 @@ public class DispositivoEmendaAdicionadoPojo implements DispositivoEmendaAdicion
     public void setFilhos(List<DispositivoEmendaAdicionadoPojo> filhos) {
         this.filhos = filhos;
     }
+    
+    @Override
+	public String getUuid2() {
+		return uuid2;
+	}
 
+    public void setUuid2(String uuid2) {
+		this.uuid2 = uuid2;
+	}
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

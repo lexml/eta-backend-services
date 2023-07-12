@@ -5,6 +5,10 @@ import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+
+import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.text.StringEscapeUtils;
 
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
@@ -22,30 +26,38 @@ import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 
 public class EmendaXmlMarshaller {
+	
     public static final String FECHA_TAG_SEM_CONTEUDO = "/>\n";
 
     public String toXml(Emenda emenda) {
-        final StringBuilder sb = new StringBuilder();
-        geraCabecalhoEmenda(emenda, sb);
-        geraMetadados(emenda, sb);
-        geraProposicao(emenda.getProposicao(), sb);
-        geraColegiado(emenda.getColegiadoApreciador(), sb);
-        geraEpigrafe(emenda.getEpigrafe(), sb);
-        geraComponentes(emenda.getComponentes(), sb);
-        geraComandoEmenda(emenda.getComandoEmenda(), sb);
-        geraJustificativa(emenda.getJustificativa(), sb);
-        geraAutoria(emenda.getAutoria(), sb);
-        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
-
-        sb.append("</Emenda>");
-        return sb.toString();
-
-
+    	try {    		
+    		final StringBuilder sb = new StringBuilder();
+    		geraCabecalhoEmenda(emenda, sb);
+    		geraMetadados(emenda, sb);
+    		geraProposicao(emenda.getProposicao(), sb);
+    		geraColegiado(emenda.getColegiadoApreciador(), sb);
+    		geraEpigrafe(emenda.getEpigrafe(), sb);
+    		geraComponentes(emenda.getComponentes(), sb);
+    		geraComandoEmenda(emenda.getComandoEmenda(), sb);
+    		geraJustificativa(emenda.getJustificativa(), sb);
+    		geraAutoria(emenda.getAutoria(), sb);
+    		geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
+    		geraRevisoes(emenda.getRevisoes(), sb);
+    		
+    		sb.append("</Emenda>");
+    		return sb.toString();
+    	}
+    	catch(Exception e) {
+    		throw new RuntimeException("Falha ao gerar XML", e);
+    	}
     }
 
-    private void geraCabecalhoEmenda(Emenda emenda, StringBuilder sb) {
+	private void geraCabecalhoEmenda(Emenda emenda, StringBuilder sb) {
         sb.append("<Emenda versaoFormatoArquivo=\"1.0\" local=\"").append(emenda.getLocal()).append("\"");
 
         if (emenda.getData() != null) {
@@ -291,6 +303,12 @@ public class EmendaXmlMarshaller {
         	.append(filho.getId())
         	.append("\" ");
 
+        if (filho.getUuid2() != null) {
+            sb.append("uuid2=\"")
+                    .append(filho.getUuid2())
+                    .append("\" ");
+        }
+
         if (filho.getUrnNormaAlterada() != null) {
             sb.append("xml:base=\"")
                     .append(filho.getUrnNormaAlterada())
@@ -493,7 +511,39 @@ public class EmendaXmlMarshaller {
 				.replaceAll("\\s{2,}", " ")
 				.trim();
 	}
-    
+
+    private void geraRevisoes(List<? extends Revisao> revisoes, StringBuilder sb) throws Exception {
+    	
+    	if(revisoes == null || revisoes.isEmpty()) {
+    		return;
+    	}
+    	
+    	JAXBContext jcRevisaoJustificativa = JAXBContext.newInstance(RevisaoJustificativaPojo.class);    	
+    	Marshaller jmRevisaoJustificativa = jcRevisaoJustificativa.createMarshaller();
+    	jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FRAGMENT, true);
+    	jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+    	JAXBContext jcRevisaoElemento = JAXBContext.newInstance(RevisaoElementoPojo.class);    	
+    	Marshaller jmRevisaoElemento = jcRevisaoElemento.createMarshaller();
+    	jmRevisaoElemento.setProperty(Marshaller.JAXB_FRAGMENT, true);
+    	jmRevisaoElemento.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+    	
+    	sb.append("<Revisoes>\n");
+
+    	StringBuilderWriter sw = new StringBuilderWriter(sb);
+    	for(Revisao r: revisoes) { 
+    		if (r instanceof RevisaoElementoPojo) {    			
+    			jmRevisaoElemento.marshal(r, sw);
+    		}
+    		else {
+    			jmRevisaoJustificativa.marshal(r, sw);
+    		}
+        	sb.append("\n");
+    	}
+    	
+    	sb.append("</Revisoes>\n");
+	}
+
 //    public static void main(String[] args) {
 //		System.out.println(html2txt("teste  <a href=\"...\">link</a> <br>Nova linha."));
 //	}
