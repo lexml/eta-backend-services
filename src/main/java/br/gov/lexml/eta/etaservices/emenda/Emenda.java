@@ -29,6 +29,8 @@ public interface Emenda {
     List<? extends ComponenteEmendado> getComponentes();
 
     ComandoEmenda getComandoEmenda();
+    
+    ComandoEmendaTextoLivre getComandoEmendaTextoLivre();
 
     String getJustificativa();
 

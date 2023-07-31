@@ -12,6 +12,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
 import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
@@ -29,6 +30,7 @@ public final class EmendaRecord implements Emenda {
     private final ColegiadoApreciador colegiado;
     private final Epigrafe epigrafe;
     private final List<? extends ComponenteEmendado> componentes;
+    private final ComandoEmendaTextoLivre comandoEmendaTextoLivre;
     private final ComandoEmenda comandoEmenda;
     private final String justificativa;
     private final String local;
@@ -47,6 +49,7 @@ public final class EmendaRecord implements Emenda {
             Epigrafe epigrafe,
             List<? extends ComponenteEmendado> componentes,
             ComandoEmenda comandoEmenda,
+            ComandoEmendaTextoLivre comandoEmendaTextoLivre,
             String justificativa,
             String local,
             LocalDate data,
@@ -61,6 +64,7 @@ public final class EmendaRecord implements Emenda {
         this.colegiado = colegiado;
         this.epigrafe = epigrafe;
         this.componentes = componentes;
+        this.comandoEmendaTextoLivre = comandoEmendaTextoLivre;
         this.comandoEmenda = comandoEmenda;
         this.justificativa = justificativa;
         this.local = local;
@@ -105,6 +109,11 @@ public final class EmendaRecord implements Emenda {
         return componentes;
     }
 
+    @Override
+    public ComandoEmendaTextoLivre getComandoEmendaTextoLivre() {
+    	return comandoEmendaTextoLivre;
+    }
+    
     public ComandoEmenda getComandoEmenda() {
         return comandoEmenda;
     }
@@ -144,6 +153,7 @@ public final class EmendaRecord implements Emenda {
                 Objects.equals(this.colegiado, that.colegiado) &&
                 Objects.equals(this.epigrafe, that.epigrafe) &&
                 Objects.equals(this.componentes, that.componentes) &&
+                Objects.equals(this.comandoEmendaTextoLivre, that.comandoEmendaTextoLivre) &&
                 Objects.equals(this.comandoEmenda, that.comandoEmenda) &&
                 Objects.equals(this.justificativa, that.justificativa) &&
                 Objects.equals(this.local, that.local) &&
@@ -154,7 +164,7 @@ public final class EmendaRecord implements Emenda {
 
     @Override
     public int hashCode() {
-        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao);
+        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmendaTextoLivre, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao);
     }
 
     @Override
@@ -169,6 +179,7 @@ public final class EmendaRecord implements Emenda {
                 "colegiado=" + colegiado + ", " +
                 "epigrafe=" + epigrafe + ", " +
                 "componentes=" + componentes + ", " +
+                "comandoEmendaTextoLivre=" + comandoEmendaTextoLivre + ", " +
                 "comandoEmenda=" + comandoEmenda + ", " +
                 "justificativa=" + justificativa + ", " +
                 "local=" + local + ", " +
@@ -176,5 +187,6 @@ public final class EmendaRecord implements Emenda {
                 "autoria=" + autoria + ", " +
                 "opcoesImpressao=" + opcoesImpressao + ']';
     }
+
 
 }

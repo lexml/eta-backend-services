@@ -5,12 +5,14 @@ import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.apache.batik.bridge.svg12.XBLShadowTreeElementBridge;
 import org.apache.commons.text.StringEscapeUtils;
 
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
 import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
@@ -34,6 +36,7 @@ public class EmendaXmlMarshaller {
         geraColegiado(emenda.getColegiadoApreciador(), sb);
         geraEpigrafe(emenda.getEpigrafe(), sb);
         geraComponentes(emenda.getComponentes(), sb);
+        geraComandoEmendaTextoLivre(emenda.getComandoEmendaTextoLivre(), sb);
         geraComandoEmenda(emenda.getComandoEmenda(), sb);
         geraJustificativa(emenda.getJustificativa(), sb);
         geraAutoria(emenda.getAutoria(), sb);
@@ -355,6 +358,16 @@ public class EmendaXmlMarshaller {
 
         comandoEmenda.getComandos().forEach(comando -> geraComando(comando, sb));
         sb.append("  </ComandoEmenda>\n");
+    }
+
+    private void geraComandoEmendaTextoLivre(ComandoEmendaTextoLivre comandoEmendaTextoLivre, StringBuilder sb) {
+        sb.append("  <ComandoEmendaTextoLivre ");
+        sb.append("motivo=\"")
+        	.append(comandoEmendaTextoLivre.getMotivo())
+        	.append("\" ");
+        sb.append(">\n");
+        sb.append(comandoEmendaTextoLivre.getTexto());
+        sb.append("  </ComandoEmendaTextoLivre>\n");
     }
 
     private void geraComando(ItemComandoEmenda comando, StringBuilder sb) {

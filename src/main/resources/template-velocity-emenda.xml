@@ -238,6 +238,17 @@
 					#end
 				#end
 				</fo:block>
+## Comando de emenda Texto Livre ----------------------------------------------------------------
+				<fo:block role="Comando de emenda Texto Livre" line-height="$lineHeight"
+					text-align="justify" text-indent="2.5cm" white-space-collapse="false">
+					
+					#if ($emenda.comandoEmendaTextoLivre.texto)
+						<fo:block margin-bottom="$pMarginBottom">							
+							$ve.html2fo($ve.addStyle($emenda.comandoEmendaTextoLivre.texto, '(p|ol|ul)', 'margin-bottom: $pMarginBottom'))
+						</fo:block>
+					#end					
+				</fo:block>	
+
 ## Justificativa ----------------------------------------------------------------
 				#if ($emenda.justificativa)
 				<fo:block font-size="$maxTamanhoFonte" font-weight="bold"

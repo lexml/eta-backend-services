@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ModoEdicaoEmenda {
     EMENDA("emenda"),
+    EMENDA_TEXTO_LIVRE("emendaTextoLivre"),
     EMENDA_ARTIGO_ONDE_COUBER("emendaArtigoOndeCouber");
 
     @JsonValue
@@ -18,6 +19,8 @@ public enum ModoEdicaoEmenda {
             return EMENDA;
         } else if (EMENDA_ARTIGO_ONDE_COUBER.nome.equals(me)) {
             return EMENDA_ARTIGO_ONDE_COUBER;
+        } else if (EMENDA_TEXTO_LIVRE.nome.equals(me)) {
+        	return EMENDA_TEXTO_LIVRE;
         }
 
         return null;

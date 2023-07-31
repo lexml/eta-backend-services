@@ -20,6 +20,7 @@ import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
 import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
@@ -54,6 +55,7 @@ public class EmendaXmlUnmarshaller {
         final ColegiadoApreciador colegiadoApreciador = parseColegiado(rootElement);
         final Epigrafe epigrafe = parseEpigrafe(rootElement);
         final List<? extends ComponenteEmendado> componentes = parseComponentes(rootElement);
+        final ComandoEmendaTextoLivre comandoEmendaTextoLivre = parseComandoEmendaTextoLivre(rootElement);
         final ComandoEmenda comandoEmenda = parseComandoEmenda(rootElement);
         final String justificativa = parseJustificativa(rootElement);
         final Autoria autoria = parseAutoria(rootElement);
@@ -70,6 +72,7 @@ public class EmendaXmlUnmarshaller {
                 epigrafe,
                 componentes,
                 comandoEmenda,
+                comandoEmendaTextoLivre,
                 justificativa,
                 atributosEmenda.getLocal(),
                 atributosEmenda.getData(),
@@ -304,6 +307,15 @@ public class EmendaXmlUnmarshaller {
         final List<ItemComandoEmenda> itensComandoEmenda = parseItensComandoEmenda(comandoEmenda);
 
         return new ComandoEmendaRecord(cabecalhoComum, itensComandoEmenda);
+    }
+	
+	private ComandoEmendaTextoLivre parseComandoEmendaTextoLivre(final Element rootElement) {
+        final Node comandoEmendaTextoLivre = rootElement.selectSingleNode("ComandoEmendaTextoLivre");
+        final String motivo = ((Element)comandoEmendaTextoLivre).attributeValue("motivo");
+        final String texto = nodeContentWithTags(comandoEmendaTextoLivre);
+        
+
+        return new ComandoEmendaTextoLivreRecord(motivo, texto);
     }
 
     private List<ItemComandoEmenda> parseItensComandoEmenda(Node comandoEmenda) {

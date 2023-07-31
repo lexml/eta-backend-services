@@ -1,8 +1,10 @@
+
 package br.gov.lexml.eta.etaservices.printing.json;
 
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
 import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
@@ -27,6 +29,7 @@ public class EmendaPojo implements Emenda {
     private EpigrafePojo epigrafe;
     private List<? extends ComponenteEmendadoPojo> componentes;
     private ComandoEmendaPojo comandoEmenda;
+    private ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre;
     private String justificativa;
     private String local;
     private LocalDate data;
@@ -127,10 +130,19 @@ public class EmendaPojo implements Emenda {
     public ComandoEmenda getComandoEmenda() {
         return comandoEmenda;
     }
+    
+    @Override
+    public ComandoEmendaTextoLivre getComandoEmendaTextoLivre() {
+        return comandoEmendaTextoLivre;
+    }
 
     @SuppressWarnings("unused")
     public void setComandoEmenda(ComandoEmendaPojo comandoEmenda) {
         this.comandoEmenda = comandoEmenda;
+    }
+    
+    public void setComandoEmendaTextoLivre(ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre) {
+        this.comandoEmendaTextoLivre = comandoEmendaTextoLivre;
     }
 
     @Override
