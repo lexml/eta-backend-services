@@ -361,13 +361,15 @@ public class EmendaXmlMarshaller {
     }
 
     private void geraComandoEmendaTextoLivre(ComandoEmendaTextoLivre comandoEmendaTextoLivre, StringBuilder sb) {
-        sb.append("  <ComandoEmendaTextoLivre ");
-        sb.append("motivo=\"")
-        	.append(comandoEmendaTextoLivre.getMotivo())
-        	.append("\" ");
-        sb.append(">\n");
-        sb.append(comandoEmendaTextoLivre.getTexto());
-        sb.append("  </ComandoEmendaTextoLivre>\n");
+    	if(comandoEmendaTextoLivre != null) {
+    		sb.append("  <ComandoEmendaTextoLivre ");
+    		sb.append("motivo=\"")
+    		.append(comandoEmendaTextoLivre.getMotivo())
+    		.append("\" ");
+    		sb.append(">\n");
+    		sb.append(comandoEmendaTextoLivre.getTexto());
+    		sb.append("  </ComandoEmendaTextoLivre>\n");    		
+    	}
     }
 
     private void geraComando(ItemComandoEmenda comando, StringBuilder sb) {

@@ -311,6 +311,9 @@ public class EmendaXmlUnmarshaller {
 	
 	private ComandoEmendaTextoLivre parseComandoEmendaTextoLivre(final Element rootElement) {
         final Node comandoEmendaTextoLivre = rootElement.selectSingleNode("ComandoEmendaTextoLivre");
+        if(comandoEmendaTextoLivre == null ) {
+        	return null;
+        }
         final String motivo = ((Element)comandoEmendaTextoLivre).attributeValue("motivo");
         final String texto = nodeContentWithTags(comandoEmendaTextoLivre);
         

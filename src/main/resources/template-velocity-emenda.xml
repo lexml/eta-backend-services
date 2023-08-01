@@ -244,7 +244,7 @@
 					
 					#if ($emenda.comandoEmendaTextoLivre.texto)
 						<fo:block margin-bottom="$pMarginBottom">							
-							$ve.html2fo($ve.addStyle($emenda.comandoEmendaTextoLivre.texto, '(p|ol|ul)', 'margin-bottom: $pMarginBottom'))
+							$ve.html2foEmendaTextoLivre($ve.addStyle($emenda.comandoEmendaTextoLivre.texto, '(p|ol|ul)', 'margin-bottom: $pMarginBottom'))
 						</fo:block>
 					#end					
 				</fo:block>	

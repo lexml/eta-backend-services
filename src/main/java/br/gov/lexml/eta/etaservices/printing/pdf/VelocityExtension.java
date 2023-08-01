@@ -42,6 +42,14 @@ public class VelocityExtension {
 			return e.getLocalizedMessage();
 		}
 	}
+	
+	public String html2foEmendaTextoLivre(String html) {
+		String htmlAttrFo = html
+			.replaceAll("class=\"estilo-artigo-subordinados\"", "align=\"justify\" text-indent=\"0\"")
+			.replaceAll("class=\"estilo-agrupador-artigo\"", "align=\"center\" text-indent=\"0\"")
+			.replaceAll("class=\"estilo-emenda\"", "margin-left=\"40%\" align=\"center\" text-indent=\"0\"");
+		return this.html2fo(htmlAttrFo);
+	}
 
 	public String citacao2html(String citacao) {
 		return citacao.replace("Rotulo>", "strong>")
