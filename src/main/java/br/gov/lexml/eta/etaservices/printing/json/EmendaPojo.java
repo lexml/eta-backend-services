@@ -36,6 +36,7 @@ public class EmendaPojo implements Emenda {
     private LocalDate data;
     private AutoriaPojo autoria;
     private OpcoesImpressaoPojo opcoesImpressao;
+    private List<? extends RevisaoPojo> revisoes;
 
     @Override
     public Instant getDataUltimaModificacao() {
@@ -201,6 +202,14 @@ public class EmendaPojo implements Emenda {
     	return this.anexos;
     }
 
+    public List<? extends RevisaoPojo> getRevisoes() {
+    	return revisoes;
+    }
+    
+    public void setRevisoes(List<? extends RevisaoPojo> revisoes) {
+		this.revisoes = revisoes;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -221,6 +230,7 @@ public class EmendaPojo implements Emenda {
 		result = prime * result + ((modoEdicao == null) ? 0 : modoEdicao.hashCode());
 		result = prime * result + ((opcoesImpressao == null) ? 0 : opcoesImpressao.hashCode());
 		result = prime * result + ((proposicao == null) ? 0 : proposicao.hashCode());
+		result = prime * result + ((revisoes == null) ? 0 : revisoes.hashCode());
 		result = prime * result + ((versaoAplicacao == null) ? 0 : versaoAplicacao.hashCode());
 		return result;
 	}
@@ -311,6 +321,11 @@ public class EmendaPojo implements Emenda {
 				return false;
 		} else if (!proposicao.equals(other.proposicao))
 			return false;
+		if (revisoes == null) {
+			if (other.revisoes != null)
+				return false;
+		} else if (!revisoes.equals(other.revisoes))
+			return false;
 		if (versaoAplicacao == null) {
 			if (other.versaoAplicacao != null)
 				return false;
@@ -326,9 +341,11 @@ public class EmendaPojo implements Emenda {
 				+ ", proposicao=" + proposicao + ", colegiado=" + colegiado + ", epigrafe=" + epigrafe
 				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre="
 				+ comandoEmendaTextoLivre + ", anexos=" + anexos + ", justificativa=" + justificativa + ", local="
-				+ local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao + "]";
+				+ local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao
+				+ ", revisoes=" + revisoes + "]";
 	}
 
+     
     
-
+    
 }

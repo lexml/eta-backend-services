@@ -40,7 +40,6 @@ public interface Emenda {
     
     List<? extends Anexo> getAnexos();
 
-    @SuppressWarnings("unused")
     @JsonIgnore()
     default String getDataFormatada() {
         return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)).toLowerCase();
@@ -49,4 +48,12 @@ public interface Emenda {
     Autoria getAutoria();
 
     OpcoesImpressao getOpcoesImpressao();
+    
+    List<? extends Revisao> getRevisoes();
+    
+    @JsonIgnore()
+    default boolean isPossuiMarcasRevisao() {
+    	return getRevisoes() != null && !getRevisoes().isEmpty();
+    }
+    
 }

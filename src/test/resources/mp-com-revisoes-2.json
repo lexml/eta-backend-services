@@ -1,0 +1,494 @@
+{
+  "aplicacao": "",
+  "autoria": {
+    "imprimirPartidoUF": true,
+    "parlamentares": [],
+    "quantidadeAssinaturasAdicionaisDeputados": 0,
+    "quantidadeAssinaturasAdicionaisSenadores": 0,
+    "tipo": "Parlamentar"
+  },
+  "colegiadoApreciador": {
+    "siglaCasaLegislativa": "CN",
+    "siglaComissao": "CMMPV 905/2019",
+    "tipoColegiado": "Comissão"
+  },
+  "comandoEmenda": {
+    "comandos": [
+      {
+        "cabecalho": "Suprima-se o inciso II do parágrafo único do art. 1º; e dê-se nova redação ao inciso III do parágrafo único do art. 1º da Medida Provisória, nos termos a seguir:",
+        "citacao": "<p class=\"artigo\">“<Rotulo>Art. 1º</Rotulo> <Omissis/></p><p class=\"paragrafo\"><Rotulo>Parágrafo único.</Rotulo> <Omissis/></p><p class=\"omissis\"><Omissis/></p><p class=\"inciso\"><Rotulo>II –</Rotulo> (Suprimir)</p><p class=\"inciso\"><Rotulo>III –</Rotulo> trabalho intermitente ou nao; e</p><p class=\"omissis\"><Omissis/>”</p>"
+      }
+    ]
+  },
+  "componentes": [
+    {
+      "articulado": true,
+      "dispositivos": {
+        "dispositivosAdicionados": [],
+        "dispositivosModificados": [
+          {
+            "id": "art1_par1u_inc3",
+            "rotulo": "III –",
+            "texto": "trabalho intermitente ou nao; e",
+            "tipo": "Inciso"
+          }
+        ],
+        "dispositivosSuprimidos": [
+          {
+            "id": "art1_par1u_inc2",
+            "rotulo": "II –",
+            "tipo": "Inciso"
+          }
+        ]
+      },
+      "urn": "urn:lex:br:federal:medida.provisoria:2019-11-11;905"
+    }
+  ],
+  "data": "2023-07-12",
+  "dataUltimaModificacao": "2023-07-12T18:28:52.463Z",
+  "epigrafe": {
+    "complemento": "(à MPV 905/2019)",
+    "texto": "EMENDA Nº         - CMMPV 905/2019"
+  },
+  "justificativa": "",
+  "local": "Sala da comissão",
+  "metadados": {},
+  "modoEdicao": "emenda",
+  "opcoesImpressao": {
+    "imprimirBrasao": true,
+    "reduzirEspacoEntreLinhas": false,
+    "tamanhoFonte": 14,
+    "textoCabecalho": ""
+  },
+  "proposicao": {
+    "ano": "2019",
+    "ementa": "Institui o Contrato de Trabalho Verde e Amarelo, altera a legislação trabalhista, e dá outras providências.\n",
+    "identificacaoTexto": "Texto da MPV",
+    "numero": "905",
+    "sigla": "MPV",
+    "urn": "urn:lex:br:federal:medida.provisoria:2019-11-11;905"
+  },
+  "revisoes": [
+    {
+      "actionType": "RESTAURAR_ELEMENTO",
+      "dataHora": "2023-07-12 15:28:11",
+      "descricao": "Dispositivo restaurado",
+      "elementoAntesRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social."
+        },
+        "descricaoSituacao": "Dispositivo Modificado",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "1",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "cap1",
+            "tipo": "Capitulo",
+            "uuid": 4,
+            "uuid2": "262d6703-c795-4118-8d30-3cd4303da985"
+          },
+          "posicao": 0
+        },
+        "index": 0,
+        "lexmlId": "art1",
+        "mensagens": [
+          {
+            "descricao": "Artigo deveria iniciar com letra maiúscula.",
+            "tipo": "ERROR"
+          }
+        ],
+        "nivel": 0,
+        "numero": "1",
+        "revisao": {
+          "actionType": "RESTAURAR_ELEMENTO",
+          "dataHora": "2023-07-12 15:28:11",
+          "descricao": "Dispositivo restaurado",
+          "elementoAntesRevisao": {
+            "abreAspas": false,
+            "agrupador": false,
+            "artigoDefinido": "o",
+            "conteudo": {
+              "texto": "xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social."
+            },
+            "descricaoSituacao": "Dispositivo Modificado",
+            "dispositivoAlteracao": false,
+            "editavel": true,
+            "fechaAspas": false,
+            "hierarquia": {
+              "numero": "1",
+              "pai": {
+                "descricaoSituacao": "Dispositivo Original",
+                "lexmlId": "cap1",
+                "tipo": "Capitulo",
+                "uuid": 4,
+                "uuid2": "262d6703-c795-4118-8d30-3cd4303da985"
+              },
+              "posicao": 0
+            },
+            "index": 0,
+            "lexmlId": "art1",
+            "mensagens": [
+              {
+                "descricao": "Artigo deveria iniciar com letra maiúscula.",
+                "tipo": "ERROR"
+              }
+            ],
+            "nivel": 0,
+            "numero": "1",
+            "rotulo": "Art. 1º",
+            "sendoEditado": false,
+            "tipo": "Artigo",
+            "uuid": 6,
+            "uuid2": "cfa42029-07ef-4fe9-beba-01541a958681"
+          },
+          "elementoAposRevisao": {
+            "abreAspas": false,
+            "agrupador": false,
+            "artigoDefinido": "o",
+            "conteudo": {
+              "texto": "xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social."
+            },
+            "descricaoSituacao": "Dispositivo Modificado",
+            "dispositivoAlteracao": false,
+            "editavel": true,
+            "fechaAspas": false,
+            "hierarquia": {
+              "numero": "1",
+              "pai": {
+                "descricaoSituacao": "Dispositivo Original",
+                "lexmlId": "cap1",
+                "tipo": "Capitulo",
+                "uuid": 4,
+                "uuid2": "262d6703-c795-4118-8d30-3cd4303da985"
+              },
+              "posicao": 0
+            },
+            "index": 0,
+            "lexmlId": "art1",
+            "mensagens": [
+              {
+                "descricao": "Artigo deveria iniciar com letra maiúscula.",
+                "tipo": "ERROR"
+              }
+            ],
+            "nivel": 0,
+            "numero": "1",
+            "rotulo": "Art. 1º",
+            "sendoEditado": false,
+            "tipo": "Artigo",
+            "uuid": 6,
+            "uuid2": "cfa42029-07ef-4fe9-beba-01541a958681"
+          },
+          "id": "91db7d97-b88f-4134-9387-d6eff03ab458",
+          "stateType": "ElementoRestaurado",
+          "usuario": {
+            "nome": "Anônimo"
+          }
+        },
+        "rotulo": "Art. 1º",
+        "sendoEditado": false,
+        "tipo": "Artigo",
+        "uuid": 6,
+        "uuid2": "cfa42029-07ef-4fe9-beba-01541a958681"
+      },
+      "elementoAposRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "xica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social."
+        },
+        "descricaoSituacao": "Dispositivo Modificado",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "1",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "cap1",
+            "tipo": "Capitulo",
+            "uuid": 4,
+            "uuid2": "262d6703-c795-4118-8d30-3cd4303da985"
+          },
+          "posicao": 0
+        },
+        "index": 0,
+        "lexmlId": "art1",
+        "mensagens": [
+          {
+            "descricao": "Artigo deveria iniciar com letra maiúscula.",
+            "tipo": "ERROR"
+          }
+        ],
+        "nivel": 0,
+        "numero": "1",
+        "rotulo": "Art. 1º",
+        "sendoEditado": false,
+        "tipo": "Artigo",
+        "uuid": 6,
+        "uuid2": "cfa42029-07ef-4fe9-beba-01541a958681"
+      },
+      "id": "91db7d97-b88f-4134-9387-d6eff03ab458",
+      "stateType": "ElementoRestaurado",
+      "usuario": {
+        "nome": "Anônimo"
+      }
+    },
+    {
+      "actionType": "SUPRIMIR_ELEMENTO",
+      "dataHora": "2023-07-12 15:28:17",
+      "descricao": "Dispositivo suprimido",
+      "elementoAntesRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "contrato de experiência;"
+        },
+        "descricaoSituacao": "Dispositivo Original",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "2",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "art1_par1u",
+            "tipo": "Paragrafo",
+            "uuid": 7,
+            "uuid2": "f988d52f-7fd6-42a2-b880-f49b21c710eb"
+          },
+          "posicao": 1
+        },
+        "index": 0,
+        "lexmlId": "art1_par1u_inc2",
+        "mensagens": [],
+        "nivel": 2,
+        "numero": "2",
+        "rotulo": "II –",
+        "sendoEditado": false,
+        "tipo": "Inciso",
+        "uuid": 9,
+        "uuid2": "3ac715cf-38c6-485a-9164-735e5e438b8f"
+      },
+      "elementoAposRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "contrato de experiência;"
+        },
+        "descricaoSituacao": "Dispositivo Suprimido",
+        "dispositivoAlteracao": false,
+        "editavel": false,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "2",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "art1_par1u",
+            "tipo": "Paragrafo",
+            "uuid": 7,
+            "uuid2": "f988d52f-7fd6-42a2-b880-f49b21c710eb"
+          },
+          "posicao": 1
+        },
+        "index": 0,
+        "lexmlId": "art1_par1u_inc2",
+        "mensagens": [],
+        "nivel": 2,
+        "numero": "2",
+        "rotulo": "II –",
+        "sendoEditado": false,
+        "tipo": "Inciso",
+        "uuid": 9,
+        "uuid2": "3ac715cf-38c6-485a-9164-735e5e438b8f"
+      },
+      "id": "e76aaaf0-c17b-43c4-a766-092a72146f23",
+      "stateType": "ElementoSuprimido",
+      "usuario": {
+        "nome": "Anônimo"
+      }
+    },
+    {
+      "actionType": "ATUALIZAR_TEXTO_ELEMENTO",
+      "dataHora": "2023-07-12 15:28:26",
+      "descricao": "Texto do dispositivo foi alterado",
+      "elementoAntesRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "trabalho intermitente; e"
+        },
+        "descricaoSituacao": "Dispositivo Original",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "3",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "art1_par1u",
+            "tipo": "Paragrafo",
+            "uuid": 7,
+            "uuid2": "f988d52f-7fd6-42a2-b880-f49b21c710eb"
+          },
+          "posicao": 2
+        },
+        "index": 0,
+        "lexmlId": "art1_par1u_inc3",
+        "mensagens": [],
+        "nivel": 2,
+        "numero": "3",
+        "rotulo": "III –",
+        "sendoEditado": false,
+        "tipo": "Inciso",
+        "uuid": 10,
+        "uuid2": "5f5db861-5ae0-4227-be90-8cb63ca78f10"
+      },
+      "elementoAposRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "trabalho intermitente ou nao; e"
+        },
+        "descricaoSituacao": "Dispositivo Modificado",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "3",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "art1_par1u",
+            "tipo": "Paragrafo",
+            "uuid": 7,
+            "uuid2": "f988d52f-7fd6-42a2-b880-f49b21c710eb"
+          },
+          "posicao": 2
+        },
+        "index": 0,
+        "lexmlId": "art1_par1u_inc3",
+        "mensagens": [],
+        "nivel": 2,
+        "numero": "3",
+        "rotulo": "III –",
+        "sendoEditado": false,
+        "tipo": "Inciso",
+        "uuid": 10,
+        "uuid2": "5f5db861-5ae0-4227-be90-8cb63ca78f10"
+      },
+      "id": "4232d32a-b7cb-4478-bf9d-6ee65fe6320f",
+      "stateType": "ElementoModificado",
+      "usuario": {
+        "nome": "Anônimo"
+      }
+    },
+    {
+      "actionType": "REMOVER_ELEMENTO",
+      "dataHora": "2023-07-12 15:28:14",
+      "descricao": "Dispositivo removido",
+      "elementoAntesRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "novo;"
+        },
+        "descricaoSituacao": "Dispositivo Adicionado",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "elementoAnteriorNaSequenciaDeLeitura": {
+          "conteudo": {
+            "texto": "contrato de experiência;"
+          },
+          "descricaoSituacao": "Dispositivo Original",
+          "lexmlId": "art1_par1u_inc2",
+          "tipo": "Inciso",
+          "uuid": 9,
+          "uuid2": "3ac715cf-38c6-485a-9164-735e5e438b8f"
+        },
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "2-1",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "art1_par1u",
+            "tipo": "Paragrafo",
+            "uuid": 7,
+            "uuid2": "f988d52f-7fd6-42a2-b880-f49b21c710eb"
+          },
+          "posicao": 2
+        },
+        "index": 0,
+        "lexmlId": "art1_par1u_inc2-1",
+        "mensagens": [],
+        "nivel": 2,
+        "numero": "2-1",
+        "rotulo": "II-1 –",
+        "sendoEditado": false,
+        "tipo": "Inciso",
+        "uuid": 744,
+        "uuid2": "13dd0e7f-3a50-4b1b-aedc-0567e995f74a"
+      },
+      "elementoAposRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "novo;"
+        },
+        "descricaoSituacao": "Dispositivo Adicionado",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "elementoAnteriorNaSequenciaDeLeitura": {
+          "conteudo": {
+            "texto": "contrato de experiência;"
+          },
+          "descricaoSituacao": "Dispositivo Original",
+          "lexmlId": "art1_par1u_inc2",
+          "tipo": "Inciso",
+          "uuid": 9,
+          "uuid2": "3ac715cf-38c6-485a-9164-735e5e438b8f"
+        },
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "2-1",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "art1_par1u",
+            "tipo": "Paragrafo",
+            "uuid": 7,
+            "uuid2": "f988d52f-7fd6-42a2-b880-f49b21c710eb"
+          },
+          "posicao": 2
+        },
+        "index": 0,
+        "lexmlId": "art1_par1u_inc2-1",
+        "mensagens": [],
+        "nivel": 2,
+        "numero": "2-1",
+        "rotulo": "II-1 –",
+        "sendoEditado": false,
+        "tipo": "Inciso",
+        "uuid": 744,
+        "uuid2": "13dd0e7f-3a50-4b1b-aedc-0567e995f74a"
+      },
+      "id": "0e0c0e09-781e-492b-8acb-c19953fe65cc",
+      "stateType": "ElementoRemovido",
+      "usuario": {
+        "nome": "Anônimo"
+      }
+    }
+  ],
+  "versaoAplicacao": ""
+}

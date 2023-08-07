@@ -71,8 +71,6 @@ class EmendaXmlMarshallingTest {
 
         final String xml = marshaller.toXml(emenda);
 
-        System.out.println(xml);
-
         return Input.fromString(xml).build();
     }
 

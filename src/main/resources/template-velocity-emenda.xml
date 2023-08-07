@@ -199,6 +199,13 @@
 		<fo:flow flow-name="xsl-region-body" font-size="${emenda.opcoesImpressao.tamanhoFonte}pt">
 			<fo:block-container>
 				<fo:marker marker-class-name="marker.texto" />
+## Alertas -------------------------------------------------------------------------
+				#if($emenda.revisoes.size() > 0)
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold" 
+					text-align="center" padding=".1cm" space-after=".3cm">
+					Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.
+				</fo:block>
+				#end				
 ## Epígrafe -------------------------------------------------------------------------
 				<fo:block text-align="center"
 					white-space-collapse="false">
@@ -364,28 +371,28 @@
 							<fo:table-column
 								column-width="proportional-column-width(50)" />
 							<fo:table-body>
-								#foreach ($assinatura in $emenda.autoria.parlamentaresPair) 
-								#if ($assinatura._2())
+								#foreach ($assinatura in $emenda.autoria.parlamentaresPair)
+								#if ($assinatura[1])
 								<fo:table-row>
 									<fo:table-cell text-align="center">
-										<fo:block margin-top="30pt">$assinatura._1().tratamento $assinatura._1().nome
+										<fo:block margin-top="30pt">$assinatura[0].tratamento $assinatura[0].nome
 										</fo:block>
 										#if ($emenda.autoria.imprimirPartidoUF)
-										<fo:block keep-with-previous="always">($assinatura._1().siglaPartido - $assinatura._1().siglaUF)</fo:block>
+										<fo:block keep-with-previous="always">($assinatura[0].siglaPartido - $assinatura[0].siglaUF)</fo:block>
 										#end
-										#if ($assinatura._1().cargo)
-										<fo:block keep-with-previous="always">$assinatura._1().cargo
+										#if ($assinatura[0].cargo)
+										<fo:block keep-with-previous="always">$assinatura[0].cargo
 										</fo:block>
 										#end
 									</fo:table-cell>
 									<fo:table-cell text-align="center">
-										<fo:block margin-top="30pt">$assinatura._2().tratamento $assinatura._2().nome
+										<fo:block margin-top="30pt">$assinatura[1].tratamento $assinatura[1].nome
 										</fo:block>
 										#if ($emenda.autoria.imprimirPartidoUF)
-										<fo:block keep-with-previous="always">($assinatura._2().siglaPartido - $assinatura._2().siglaUF)</fo:block>
+										<fo:block keep-with-previous="always">($assinatura[1].siglaPartido - $assinatura[1].siglaUF)</fo:block>
 										#end
-										#if ($assinatura._2().cargo)
-										<fo:block keep-with-previous="always">$assinatura._2().cargo
+										#if ($assinatura[1].cargo)
+										<fo:block keep-with-previous="always">$assinatura[1].cargo
 										</fo:block>
 										#end
 									</fo:table-cell>
@@ -394,13 +401,13 @@
 								<fo:table-row>
 									<fo:table-cell number-columns-spanned="2"
 										text-align="center">
-										<fo:block margin-top="30pt">$assinatura._1().tratamento $assinatura._1().nome
+										<fo:block margin-top="30pt">$assinatura[0].tratamento $assinatura[0].nome
 										</fo:block>
 										#if ($emenda.autoria.imprimirPartidoUF)
-										<fo:block keep-with-previous="always">($assinatura._1().siglaPartido - $assinatura._1().siglaUF)</fo:block>
+										<fo:block keep-with-previous="always">($assinatura[0].siglaPartido - $assinatura[0].siglaUF)</fo:block>
 										#end
-										#if ($assinatura._1().cargo)
-										<fo:block keep-with-previous="always">$assinatura._1().cargo
+										#if ($assinatura[0].cargo)
+										<fo:block keep-with-previous="always">$assinatura[0].cargo
 										</fo:block>
 										#end
 									</fo:table-cell>

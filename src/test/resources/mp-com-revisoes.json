@@ -1,0 +1,154 @@
+{
+  "aplicacao": "",
+  "autoria": {
+    "imprimirPartidoUF": true,
+    "parlamentares": [],
+    "quantidadeAssinaturasAdicionaisDeputados": 0,
+    "quantidadeAssinaturasAdicionaisSenadores": 0,
+    "tipo": "Parlamentar"
+  },
+  "colegiadoApreciador": {
+    "siglaCasaLegislativa": "CN",
+    "siglaComissao": "CMMPV 905/2019",
+    "tipoColegiado": "Comissão"
+  },
+  "comandoEmenda": {
+    "comandos": [
+      {
+        "cabecalho": "Dê-se ao <i>caput</i> do art. 1º da Medida Provisória a seguinte redação:",
+        "citacao": "<p class=\"artigo\">“<Rotulo>Art. 1º</Rotulo> XFica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</p><p class=\"omissis\"><Omissis/>”</p>"
+      }
+    ]
+  },
+  "componentes": [
+    {
+      "articulado": true,
+      "dispositivos": {
+        "dispositivosAdicionados": [],
+        "dispositivosModificados": [
+          {
+            "id": "art1_cpt",
+            "rotulo": "Art. 1º",
+            "texto": "XFica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.",
+            "tipo": "Caput"
+          }
+        ],
+        "dispositivosSuprimidos": []
+      },
+      "urn": "urn:lex:br:federal:medida.provisoria:2019-11-11;905"
+    }
+  ],
+  "data": "2023-07-12",
+  "dataUltimaModificacao": "2023-07-12T18:58:33.781Z",
+  "epigrafe": {
+    "complemento": "(à MPV 905/2019)",
+    "texto": "EMENDA Nº         - CMMPV 905/2019"
+  },
+  "justificativa": "<p>Justificativa</p>",
+  "local": "Sala da comissão",
+  "metadados": {},
+  "modoEdicao": "emenda",
+  "opcoesImpressao": {
+    "imprimirBrasao": true,
+    "reduzirEspacoEntreLinhas": false,
+    "tamanhoFonte": 14,
+    "textoCabecalho": ""
+  },
+  "proposicao": {
+    "ano": "2019",
+    "ementa": "Institui o Contrato de Trabalho Verde e Amarelo, altera a legislação trabalhista, e dá outras providências.\n",
+    "identificacaoTexto": "Texto da MPV",
+    "numero": "905",
+    "sigla": "MPV",
+    "urn": "urn:lex:br:federal:medida.provisoria:2019-11-11;905"
+  },
+  "revisoes": [
+    {
+      "actionType": "ATUALIZAR_TEXTO_ELEMENTO",
+      "dataHora": "2023-07-12 15:58:27",
+      "descricao": "Texto do dispositivo foi alterado",
+      "elementoAntesRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "Fica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social."
+        },
+        "descricaoSituacao": "Dispositivo Original",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "1",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "cap1",
+            "tipo": "Capitulo",
+            "uuid": 4,
+            "uuid2": "b4ba0e3f-7429-4d55-a0ab-8c3e68643801"
+          },
+          "posicao": 0
+        },
+        "index": 0,
+        "lexmlId": "art1",
+        "mensagens": [],
+        "nivel": 0,
+        "numero": "1",
+        "rotulo": "Art. 1º",
+        "sendoEditado": false,
+        "tipo": "Artigo",
+        "uuid": 6,
+        "uuid2": "e5df7e70-5d4b-4f41-a0ea-308fdd448d85"
+      },
+      "elementoAposRevisao": {
+        "abreAspas": false,
+        "agrupador": false,
+        "artigoDefinido": "o",
+        "conteudo": {
+          "texto": "XFica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social."
+        },
+        "descricaoSituacao": "Dispositivo Modificado",
+        "dispositivoAlteracao": false,
+        "editavel": true,
+        "fechaAspas": false,
+        "hierarquia": {
+          "numero": "1",
+          "pai": {
+            "descricaoSituacao": "Dispositivo Original",
+            "lexmlId": "cap1",
+            "tipo": "Capitulo",
+            "uuid": 4,
+            "uuid2": "b4ba0e3f-7429-4d55-a0ab-8c3e68643801"
+          },
+          "posicao": 0
+        },
+        "index": 0,
+        "lexmlId": "art1",
+        "mensagens": [],
+        "nivel": 0,
+        "numero": "1",
+        "rotulo": "Art. 1º",
+        "sendoEditado": false,
+        "tipo": "Artigo",
+        "uuid": 6,
+        "uuid2": "e5df7e70-5d4b-4f41-a0ea-308fdd448d85"
+      },
+      "id": "720b9b88-4b9c-4527-ae51-a089f657fbc7",
+      "stateType": "ElementoModificado",
+      "type": "RevisaoElemento",
+      "usuario": {
+        "nome": "Anônimo"
+      }
+    },
+    {
+      "dataHora": "2023-07-12 15:58:31",
+      "descricao": "Justificativa Alterada",
+      "id": "a71d6b42-461f-457b-8d51-99e64a971db0",
+      "type": "RevisaoJustificativa",
+      "usuario": {
+        "nome": "Anônimo"
+      }
+    }
+  ],
+  "versaoAplicacao": ""
+}

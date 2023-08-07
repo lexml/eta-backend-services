@@ -1,0 +1,51 @@
+<Emenda versaoFormatoArquivo="1.0" local="Sala da comissão" data="2023-07-12">
+  <Metadados>
+    <DataUltimaModificacao>2023-07-12T18:58:33.781Z</DataUltimaModificacao>
+    <Aplicacao></Aplicacao>
+    <VersaoAplicacao></VersaoAplicacao>
+    <ModoEdicao>emenda</ModoEdicao>
+  </Metadados>
+  <Proposicao urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" sigla="MPV" numero="905" ano="2019" ementa="Institui o Contrato de Trabalho Verde e Amarelo, altera a legislação trabalhista, e dá outras providências." identificacaoTexto="Texto da MPV" />
+  <ColegiadoApreciador siglaCasaLegislativa="CN" tipoColegiado="Comissão" siglaComissao="CMMPV 905/2019" />
+  <Epigrafe texto="EMENDA Nº         - CMMPV 905/2019" complemento="(à MPV 905/2019)" />
+  <Componente urn="urn:lex:br:federal:medida.provisoria:2019-11-11;905" articulado="true" >
+    <Dispositivos>
+      <DispositivoModificado tipo="Caput" id="art1_cpt" rotulo="Art. 1º" >
+        <Texto>XFica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</Texto>
+      </DispositivoModificado>     </Dispositivos>
+  </Componente>
+  <ComandoEmenda>
+    <ItemComandoEmenda>
+      <Cabecalho>Dê-se ao <i>caput</i> do art. 1º da Medida Provisória a seguinte redação:</Cabecalho>
+      <Citacao><p class="artigo">“<Rotulo>Art. 1º</Rotulo> XFica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</p><p class="omissis"><Omissis/>”</p></Citacao>
+    </ItemComandoEmenda>
+  </ComandoEmenda>
+  <Justificativa>&lt;p&gt;Justificativa&lt;/p&gt;</Justificativa>
+  <Autoria  tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="0" quantidadeAssinaturasAdicionaisSenadores="0" >
+  </Autoria>
+  <OpcoesImpressao  imprimirBrasao="true"  textoCabecalho=""  tamanhoFonte="14"  reduzirEspacoEntreLinhas="false" />
+<Revisoes>
+<RevisaoElemento actionType="ATUALIZAR_TEXTO_ELEMENTO" stateType="ElementoModificado" id="720b9b88-4b9c-4527-ae51-a089f657fbc7" dataHora="2023-07-12 15:58:27" descricao="Texto do dispositivo foi alterado">
+    <Usuario nome="Anônimo"/>
+    <ElementoAntesRevisao nivel="0" numero="1" rotulo="Art. 1º" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Artigo" uuid="6" uuid2="e5df7e70-5d4b-4f41-a0ea-308fdd448d85" lexmlId="art1" descricaoSituacao="Dispositivo Original">
+        <Conteudo>
+            <Texto>Fica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</Texto>
+        </Conteudo>
+        <Hierarquia posicao="0" numero="1">
+            <Pai tipo="Capitulo" uuid="4" uuid2="b4ba0e3f-7429-4d55-a0ab-8c3e68643801" lexmlId="cap1" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+    </ElementoAntesRevisao>
+    <ElementoAposRevisao nivel="0" numero="1" rotulo="Art. 1º" agrupador="false" editavel="true" sendoEditado="false" index="0" abreAspas="false" fechaAspas="false" dispositivoAlteracao="false" podeEditarNotaAlteracao="false" manterNoMesmoGrupoDeAspas="false" artigoDefinido="o" tipo="Artigo" uuid="6" uuid2="e5df7e70-5d4b-4f41-a0ea-308fdd448d85" lexmlId="art1" descricaoSituacao="Dispositivo Modificado">
+        <Conteudo>
+            <Texto>XFica instituído o Contrato de Trabalho Verde e Amarelo, modalidade de contratação destinada à criação de novos postos de trabalho para as pessoas entre dezoito e vinte e nove anos de idade, para fins de registro do primeiro emprego em Carteira de Trabalho e Previdência Social.</Texto>
+        </Conteudo>
+        <Hierarquia posicao="0" numero="1">
+            <Pai tipo="Capitulo" uuid="4" uuid2="b4ba0e3f-7429-4d55-a0ab-8c3e68643801" lexmlId="cap1" descricaoSituacao="Dispositivo Original"/>
+        </Hierarquia>
+    </ElementoAposRevisao>
+</RevisaoElemento>
+<RevisaoJustificativa id="a71d6b42-461f-457b-8d51-99e64a971db0" dataHora="2023-07-12 15:58:31" descricao="Justificativa Alterada">
+    <Usuario nome="Anônimo"/>
+</RevisaoJustificativa>
+</Revisoes>
+</Emenda>
