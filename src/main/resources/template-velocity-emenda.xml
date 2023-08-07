@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+         xmlns:pdf="http://xmlgraphics.apache.org/fop/extensions/pdf"
 	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
 	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -143,6 +144,10 @@
 				</rdf:Description>
 			</rdf:RDF>
 		</x:xmpmeta>
+		## Anexos ----------------------------------------------------------------	
+			#foreach ($anexo in $emenda.anexos)   							
+				<pdf:embedded-file filename="$anexo.nomeArquivo" src="data:application/pdf;base64,$anexo.base64"/>
+			#end
 	</fo:declarations>
 ## Impressão compacta ------------------------------------------------------------				
 #if($emenda.opcoesImpressao.reduzirEspacoEntreLinhas)
@@ -247,8 +252,9 @@
 							$ve.html2foEmendaTextoLivre($ve.addStyle($emenda.comandoEmendaTextoLivre.texto, '(p|ol|ul)', 'margin-bottom: $pMarginBottom'))
 						</fo:block>
 					#end					
-				</fo:block>	
+				</fo:block>			
 
+				
 ## Justificativa ----------------------------------------------------------------
 				#if ($emenda.justificativa)
 				<fo:block font-size="$maxTamanhoFonte" font-weight="bold"
@@ -358,7 +364,7 @@
 							<fo:table-column
 								column-width="proportional-column-width(50)" />
 							<fo:table-body>
-								#foreach ($assinatura in $emenda.autoria.parlamentaresPair)
+								#foreach ($assinatura in $emenda.autoria.parlamentaresPair) 
 								#if ($assinatura._2())
 								<fo:table-row>
 									<fo:table-cell text-align="center">

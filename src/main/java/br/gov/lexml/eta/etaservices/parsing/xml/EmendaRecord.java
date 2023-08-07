@@ -9,6 +9,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
+import br.gov.lexml.eta.etaservices.emenda.Anexo;
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
@@ -32,6 +33,7 @@ public final class EmendaRecord implements Emenda {
     private final List<? extends ComponenteEmendado> componentes;
     private final ComandoEmendaTextoLivre comandoEmendaTextoLivre;
     private final ComandoEmenda comandoEmenda;
+    private final List<? extends Anexo> anexos;
     private final String justificativa;
     private final String local;
     private final LocalDate data;
@@ -50,6 +52,7 @@ public final class EmendaRecord implements Emenda {
             List<? extends ComponenteEmendado> componentes,
             ComandoEmenda comandoEmenda,
             ComandoEmendaTextoLivre comandoEmendaTextoLivre,
+            List<? extends Anexo> anexos,
             String justificativa,
             String local,
             LocalDate data,
@@ -65,6 +68,7 @@ public final class EmendaRecord implements Emenda {
         this.epigrafe = epigrafe;
         this.componentes = componentes;
         this.comandoEmendaTextoLivre = comandoEmendaTextoLivre;
+        this.anexos = anexos;
         this.comandoEmenda = comandoEmenda;
         this.justificativa = justificativa;
         this.local = local;
@@ -138,7 +142,12 @@ public final class EmendaRecord implements Emenda {
     public OpcoesImpressao getOpcoesImpressao() {
         return opcoesImpressao;
     }
-
+    
+    @Override
+	public List<? extends Anexo> getAnexos() {
+		return this.anexos;
+	}
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -187,6 +196,5 @@ public final class EmendaRecord implements Emenda {
                 "autoria=" + autoria + ", " +
                 "opcoesImpressao=" + opcoesImpressao + ']';
     }
-
 
 }

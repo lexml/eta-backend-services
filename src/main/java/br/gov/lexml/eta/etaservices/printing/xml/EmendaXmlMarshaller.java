@@ -5,9 +5,9 @@ import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.apache.batik.bridge.svg12.XBLShadowTreeElementBridge;
 import org.apache.commons.text.StringEscapeUtils;
 
+import br.gov.lexml.eta.etaservices.emenda.Anexo;
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
@@ -38,6 +38,7 @@ public class EmendaXmlMarshaller {
         geraComponentes(emenda.getComponentes(), sb);
         geraComandoEmendaTextoLivre(emenda.getComandoEmendaTextoLivre(), sb);
         geraComandoEmenda(emenda.getComandoEmenda(), sb);
+        geraAnexos(emenda.getAnexos(), sb);
         geraJustificativa(emenda.getJustificativa(), sb);
         geraAutoria(emenda.getAutoria(), sb);
         geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
@@ -173,6 +174,19 @@ public class EmendaXmlMarshaller {
             sb.append(">\n");
             geraDispositivos(componente.getDispositivos(), sb);
             sb.append("  </Componente>\n");
+        });
+    }
+
+    private void geraAnexos(List<? extends Anexo> anexos, StringBuilder sb) {
+        anexos.forEach(anexo -> {
+            sb.append("  <Anexo ")
+                    .append("nomeArquivo=\"")
+                    .append(anexo.getNomeArquivo())
+                    .append("\" ")
+                    .append("base64=\"")
+                    .append(anexo.getBase64())
+                    .append("\" ")
+                    .append(FECHA_TAG_SEM_CONTEUDO);
         });
     }
 

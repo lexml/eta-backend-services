@@ -1,6 +1,12 @@
 
 package br.gov.lexml.eta.etaservices.printing.json;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+
+import br.gov.lexml.eta.etaservices.emenda.Anexo;
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
@@ -11,12 +17,6 @@ import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 public class EmendaPojo implements Emenda {
     private Instant dataUltimaModificacao;
@@ -30,6 +30,7 @@ public class EmendaPojo implements Emenda {
     private List<? extends ComponenteEmendadoPojo> componentes;
     private ComandoEmendaPojo comandoEmenda;
     private ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre;
+    private List<? extends AnexoPojo> anexos;
     private String justificativa;
     private String local;
     private LocalDate data;
@@ -196,36 +197,138 @@ public class EmendaPojo implements Emenda {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        EmendaPojo that = (EmendaPojo) o;
-        return dataUltimaModificacao.equals(that.dataUltimaModificacao) && aplicacao.equals(that.aplicacao) && versaoAplicacao.equals(that.versaoAplicacao) && modoEdicao == that.modoEdicao && metadados.equals(that.metadados) && proposicao.equals(that.proposicao) && colegiado.equals(that.colegiado) && epigrafe.equals(that.epigrafe) && componentes.equals(that.componentes) && comandoEmenda.equals(that.comandoEmenda) && justificativa.equals(that.justificativa) && local.equals(that.local) && data.equals(that.data) && autoria.equals(that.autoria) && opcoesImpressao.equals(that.opcoesImpressao);
+    public List<? extends Anexo> getAnexos() {
+    	return this.anexos;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao);
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((anexos == null) ? 0 : anexos.hashCode());
+		result = prime * result + ((aplicacao == null) ? 0 : aplicacao.hashCode());
+		result = prime * result + ((autoria == null) ? 0 : autoria.hashCode());
+		result = prime * result + ((colegiado == null) ? 0 : colegiado.hashCode());
+		result = prime * result + ((comandoEmenda == null) ? 0 : comandoEmenda.hashCode());
+		result = prime * result + ((comandoEmendaTextoLivre == null) ? 0 : comandoEmendaTextoLivre.hashCode());
+		result = prime * result + ((componentes == null) ? 0 : componentes.hashCode());
+		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((dataUltimaModificacao == null) ? 0 : dataUltimaModificacao.hashCode());
+		result = prime * result + ((epigrafe == null) ? 0 : epigrafe.hashCode());
+		result = prime * result + ((justificativa == null) ? 0 : justificativa.hashCode());
+		result = prime * result + ((local == null) ? 0 : local.hashCode());
+		result = prime * result + ((metadados == null) ? 0 : metadados.hashCode());
+		result = prime * result + ((modoEdicao == null) ? 0 : modoEdicao.hashCode());
+		result = prime * result + ((opcoesImpressao == null) ? 0 : opcoesImpressao.hashCode());
+		result = prime * result + ((proposicao == null) ? 0 : proposicao.hashCode());
+		result = prime * result + ((versaoAplicacao == null) ? 0 : versaoAplicacao.hashCode());
+		return result;
+	}
 
-    @Override
-    public String toString() {
-        return "EmendaPojo{" +
-                "dataUltimaModificacao=" + dataUltimaModificacao +
-                ", aplicacao='" + aplicacao + '\'' +
-                ", versaoAplicacao='" + versaoAplicacao + '\'' +
-                ", modoEdicao=" + modoEdicao +
-                ", metadados=" + metadados +
-                ", proposicao=" + proposicao +
-                ", colegiado=" + colegiado +
-                ", epigrafe=" + epigrafe +
-                ", componentes=" + componentes +
-                ", comandoEmenda=" + comandoEmenda +
-                ", justificativa='" + justificativa + '\'' +
-                ", local='" + local + '\'' +
-                ", data=" + data +
-                ", autoria=" + autoria +
-                ", opcoesImpressao=" + opcoesImpressao +
-                '}';
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmendaPojo other = (EmendaPojo) obj;
+		if (anexos == null) {
+			if (other.anexos != null)
+				return false;
+		} else if (!anexos.equals(other.anexos))
+			return false;
+		if (aplicacao == null) {
+			if (other.aplicacao != null)
+				return false;
+		} else if (!aplicacao.equals(other.aplicacao))
+			return false;
+		if (autoria == null) {
+			if (other.autoria != null)
+				return false;
+		} else if (!autoria.equals(other.autoria))
+			return false;
+		if (colegiado == null) {
+			if (other.colegiado != null)
+				return false;
+		} else if (!colegiado.equals(other.colegiado))
+			return false;
+		if (comandoEmenda == null) {
+			if (other.comandoEmenda != null)
+				return false;
+		} else if (!comandoEmenda.equals(other.comandoEmenda))
+			return false;
+		if (comandoEmendaTextoLivre == null) {
+			if (other.comandoEmendaTextoLivre != null)
+				return false;
+		} else if (!comandoEmendaTextoLivre.equals(other.comandoEmendaTextoLivre))
+			return false;
+		if (componentes == null) {
+			if (other.componentes != null)
+				return false;
+		} else if (!componentes.equals(other.componentes))
+			return false;
+		if (data == null) {
+			if (other.data != null)
+				return false;
+		} else if (!data.equals(other.data))
+			return false;
+		if (dataUltimaModificacao == null) {
+			if (other.dataUltimaModificacao != null)
+				return false;
+		} else if (!dataUltimaModificacao.equals(other.dataUltimaModificacao))
+			return false;
+		if (epigrafe == null) {
+			if (other.epigrafe != null)
+				return false;
+		} else if (!epigrafe.equals(other.epigrafe))
+			return false;
+		if (justificativa == null) {
+			if (other.justificativa != null)
+				return false;
+		} else if (!justificativa.equals(other.justificativa))
+			return false;
+		if (local == null) {
+			if (other.local != null)
+				return false;
+		} else if (!local.equals(other.local))
+			return false;
+		if (metadados == null) {
+			if (other.metadados != null)
+				return false;
+		} else if (!metadados.equals(other.metadados))
+			return false;
+		if (modoEdicao != other.modoEdicao)
+			return false;
+		if (opcoesImpressao == null) {
+			if (other.opcoesImpressao != null)
+				return false;
+		} else if (!opcoesImpressao.equals(other.opcoesImpressao))
+			return false;
+		if (proposicao == null) {
+			if (other.proposicao != null)
+				return false;
+		} else if (!proposicao.equals(other.proposicao))
+			return false;
+		if (versaoAplicacao == null) {
+			if (other.versaoAplicacao != null)
+				return false;
+		} else if (!versaoAplicacao.equals(other.versaoAplicacao))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "EmendaPojo [dataUltimaModificacao=" + dataUltimaModificacao + ", aplicacao=" + aplicacao
+				+ ", versaoAplicacao=" + versaoAplicacao + ", modoEdicao=" + modoEdicao + ", metadados=" + metadados
+				+ ", proposicao=" + proposicao + ", colegiado=" + colegiado + ", epigrafe=" + epigrafe
+				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre="
+				+ comandoEmendaTextoLivre + ", anexos=" + anexos + ", justificativa=" + justificativa + ", local="
+				+ local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao + "]";
+	}
+
+    
+
 }

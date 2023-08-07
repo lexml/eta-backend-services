@@ -20,7 +20,7 @@ public class PdfGeneratorBean implements PdfGenerator {
     @Override
     public void generate(Emenda emenda, OutputStream outputStream) throws IOException {
         final String xml = emendaXmlMarshaller.toXml(emenda);
-
+        System.out.println(xml);
         final String templateResult =
                 templateProcessorFactory.get().getTemplateResult(emenda);
         new FOPProcessor().processFOP(outputStream, templateResult, xml);

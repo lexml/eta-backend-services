@@ -9,6 +9,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;
 
 import javax.xml.transform.Source;
@@ -27,7 +28,8 @@ import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 class VelocityTemplateProcessorTest {
 
-    public static final String SOURCE_FILE_NAME = "emenda_mpv_905_2019_completa_disp_mpv.json";
+    // public static final String SOURCE_FILE_NAME = "emenda_mpv_905_2019_completa_disp_mpv.json";
+	public static final String SOURCE_FILE_NAME = "test1.json";
     public static final String DESTINATION_FILE_NAME = "test1.pdf";
 
     public static final String XML_FILE = "emenda_mpv_905_2019_completa_disp_mpv.xml";
@@ -36,8 +38,7 @@ class VelocityTemplateProcessorTest {
 
     private VelocityTemplateProcessor velocityTemplateProcessor;
 
-
-    @Disabled
+    
     @DisplayName("Verifica se nome da aplicação é preenchido")
     void testaMetadadosEmenda() throws IOException, URISyntaxException {
         final String templateResult =

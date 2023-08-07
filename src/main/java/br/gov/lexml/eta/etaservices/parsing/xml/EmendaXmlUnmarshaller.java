@@ -16,6 +16,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
+import br.gov.lexml.eta.etaservices.emenda.Anexo;
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
@@ -55,6 +56,7 @@ public class EmendaXmlUnmarshaller {
         final ColegiadoApreciador colegiadoApreciador = parseColegiado(rootElement);
         final Epigrafe epigrafe = parseEpigrafe(rootElement);
         final List<? extends ComponenteEmendado> componentes = parseComponentes(rootElement);
+        final List<? extends Anexo> anexos = parseAnexos(rootElement);
         final ComandoEmendaTextoLivre comandoEmendaTextoLivre = parseComandoEmendaTextoLivre(rootElement);
         final ComandoEmenda comandoEmenda = parseComandoEmenda(rootElement);
         final String justificativa = parseJustificativa(rootElement);
@@ -73,6 +75,7 @@ public class EmendaXmlUnmarshaller {
                 componentes,
                 comandoEmenda,
                 comandoEmendaTextoLivre,
+                anexos,
                 justificativa,
                 atributosEmenda.getLocal(),
                 atributosEmenda.getData(),
@@ -84,6 +87,12 @@ public class EmendaXmlUnmarshaller {
         final List<Node> nodes = rootElement.selectNodes("Componente");
 
         return nodes.stream().map(this::parseComponente).collect(Collectors.toList());
+    }
+    
+    private List<? extends Anexo> parseAnexos(Element rootElement) {
+        final List<Node> nodes = rootElement.selectNodes("Anexo");
+
+        return nodes.stream().map(this::parseAnexo).collect(Collectors.toList());
     }
 
     private AtributosEmenda parseAtributosEmenda(final Element rootElement) {
@@ -187,6 +196,16 @@ public class EmendaXmlUnmarshaller {
                 rotuloAnexo,
                 tituloAnexo,
                 dispositivos);
+    }
+
+    private Anexo parseAnexo(final Node nodeComponente) {
+    	
+    	final Element componente = (Element) nodeComponente;
+
+        final String nomeArquivo = componente.attributeValue("nomeArquivo");
+        final String base64 = componente.attributeValue("base64");
+        
+        return new AnexoRecord(nomeArquivo, base64); 
     }
 
     private DispositivosEmendaRecord parseDispositivos(final Node componente) {

@@ -37,6 +37,8 @@ public interface Emenda {
     String getLocal();
 
     LocalDate getData();
+    
+    List<? extends Anexo> getAnexos();
 
     @SuppressWarnings("unused")
     @JsonIgnore()

@@ -33,7 +33,6 @@ class EmendaXmlMarshallingTest {
                 .isEqualToIgnoringCase("");
     }
 
-//    @Disabled
     @Test
     void testColegiadoApreciador() {
 
@@ -58,7 +57,7 @@ class EmendaXmlMarshallingTest {
             String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            return objectMapper.readValue(text, EmendaPojo.class);
+            return objectMapper.readValue(text, EmendaPojo.class);                     
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
