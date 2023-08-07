@@ -401,7 +401,7 @@ public class EmendaXmlMarshaller {
     		.append(comandoEmendaTextoLivre.getMotivo())
     		.append("\" ");
     		sb.append(">\n");
-    		sb.append(comandoEmendaTextoLivre.getTexto());
+    		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()));
     		sb.append("  </ComandoEmendaTextoLivre>\n");    		
     	}
     }

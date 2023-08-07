@@ -346,7 +346,7 @@ public class EmendaXmlUnmarshaller {
         	return null;
         }
         final String motivo = ((Element)comandoEmendaTextoLivre).attributeValue("motivo");
-        final String texto = nodeContentWithTags(comandoEmendaTextoLivre);
+        final String texto = nodeStringValue(comandoEmendaTextoLivre);
         
 
         return new ComandoEmendaTextoLivreRecord(motivo, texto);
