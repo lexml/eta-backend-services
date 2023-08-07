@@ -190,16 +190,18 @@ public class EmendaXmlMarshaller {
     }
 
     private void geraAnexos(List<? extends Anexo> anexos, StringBuilder sb) {
-        anexos.forEach(anexo -> {
-            sb.append("  <Anexo ")
-                    .append("nomeArquivo=\"")
-                    .append(anexo.getNomeArquivo())
-                    .append("\" ")
-                    .append("base64=\"")
-                    .append(anexo.getBase64())
-                    .append("\" ")
-                    .append(FECHA_TAG_SEM_CONTEUDO);
-        });
+    	if(anexos != null) {    		
+    		anexos.forEach(anexo -> {
+    			sb.append("  <Anexo ")
+    			.append("nomeArquivo=\"")
+    			.append(anexo.getNomeArquivo())
+    			.append("\" ")
+    			.append("base64=\"")
+    			.append(anexo.getBase64())
+    			.append("\" ")
+    			.append(FECHA_TAG_SEM_CONTEUDO);
+    		});
+    	}
     }
 
     private void geraDispositivos(DispositivosEmenda dispositivos, StringBuilder sb) {
