@@ -1,16 +1,15 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -41,14 +40,15 @@ public class FOPProcessor {
 	private static final Logger log = LoggerFactory.getLogger(FOPProcessor.class);
 
 	private static FopFactory fopFactory;
+	
+	private static Map<String, byte[]> fontes = new HashMap<>();
 
 	static {
 		try {
-			new File("pdfa-fonts").mkdir();
-			exportaFonte("GenBasB.ttf");
-			exportaFonte("GenBasBI.ttf");
-			exportaFonte("GenBasI.ttf");
-			exportaFonte("GenBasR.ttf");
+			carregaFonte("GenBasB.ttf");
+			carregaFonte("GenBasBI.ttf");
+			carregaFonte("GenBasI.ttf");
+			carregaFonte("GenBasR.ttf");
 			InputStream xconf = FOPProcessor.class.getResourceAsStream("/fop.xconf");
 			ResourceResolver resolver = new UriResolver();
 			FopConfParser parser = new FopConfParser(xconf, new URI("file://./"), resolver);
@@ -59,9 +59,9 @@ public class FOPProcessor {
 		}
 	}
 	
-	private static void exportaFonte(String fonte) throws FileNotFoundException, IOException {
+	private static void carregaFonte(String fonte) throws FileNotFoundException, IOException {
 		InputStream is = FOPProcessor.class.getResourceAsStream("/pdfa-fonts/" + fonte);
-		IOUtils.copy(is, new FileOutputStream(new File("pdfa-fonts/" + fonte)));
+		fontes.put(fonte, IOUtils.toByteArray(is));
 	}
 
 	static class UriResolver implements ResourceResolver {
@@ -74,24 +74,13 @@ public class FOPProcessor {
 		@Override
 		public Resource getResource(URI uri) {
 
-			String strUri = uri.toString().replaceAll("^file://\\.", "");
+			String strUri = uri.toString().replaceAll("^file://\\./", "");
 
 			try {	
-				return new Resource(MimeConstants.MIME_AFP_TRUETYPE, new FileInputStream(new File("pdfa-fonts/" + strUri)));
-//				ClassPathResource resource = new ClassPathResource("/pdfa-fonts/" + strUri, FOPProcessor.class.getClassLoader());
-//				InputStream inputStream = resource.getInputStream();
-//				if (inputStream != null) {
-//					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
-//				}
-//				log.info("Não consegui carregr a fonte " + strUri + " via ClassPathResource.");
-//				inputStream = FOPProcessor.class.getClassLoader().getResourceAsStream("/pdfa-fonts/" + strUri);
-//				if (inputStream != null) {
-//					return new Resource(MimeConstants.MIME_AFP_TRUETYPE, inputStream);
-//				}
-//				log.info("Não consegui carregr a fonte " + strUri + " via FOPProcessor.class.getClassLoader().");
+				return new Resource(MimeConstants.MIME_AFP_TRUETYPE, new ByteArrayInputStream(fontes.get(strUri)));
 			}
 			catch(Exception e) {
-				log.error("Arquivo de fonte /pdfa-fonts/" + strUri + " não encontrado.");
+				log.error("Fonte " + strUri + " não encontrada.");
 			}
 			return null;
 		}
