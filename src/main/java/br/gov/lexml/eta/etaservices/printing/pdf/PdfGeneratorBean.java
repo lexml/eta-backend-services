@@ -1,10 +1,10 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import br.gov.lexml.eta.etaservices.emenda.Emenda;
-import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
-
 import java.io.IOException;
 import java.io.OutputStream;
+
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
 
 @SuppressWarnings("unused")
 public class PdfGeneratorBean implements PdfGenerator {
@@ -20,7 +20,7 @@ public class PdfGeneratorBean implements PdfGenerator {
     @Override
     public void generate(Emenda emenda, OutputStream outputStream) throws IOException {
         final String xml = emendaXmlMarshaller.toXml(emenda);
-        System.out.println(xml);
+//        System.out.println(xml);
         final String templateResult =
                 templateProcessorFactory.get().getTemplateResult(emenda);
         new FOPProcessor().processFOP(outputStream, templateResult, xml);

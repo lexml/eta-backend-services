@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
-         xmlns:pdf="http://xmlgraphics.apache.org/fop/extensions/pdf"
 	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
 	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -144,10 +143,6 @@
 				</rdf:Description>
 			</rdf:RDF>
 		</x:xmpmeta>
-		## Anexos ----------------------------------------------------------------	
-			#foreach ($anexo in $emenda.anexos)   							
-				<pdf:embedded-file filename="$anexo.nomeArquivo" src="data:application/pdf;base64,$anexo.base64"/>
-			#end
 	</fo:declarations>
 ## Impressão compacta ------------------------------------------------------------				
 #if($emenda.opcoesImpressao.reduzirEspacoEntreLinhas)
