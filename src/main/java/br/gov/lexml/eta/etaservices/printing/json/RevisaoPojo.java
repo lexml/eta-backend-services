@@ -15,7 +15,8 @@ import lombok.Data;
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="type")
 @JsonSubTypes({
 	@JsonSubTypes.Type(value = RevisaoElementoPojo.class, name = "RevisaoElemento"),
-	@JsonSubTypes.Type(value = RevisaoJustificativaPojo.class, name = "RevisaoJustificativa")
+	@JsonSubTypes.Type(value = RevisaoJustificativaPojo.class, name = "RevisaoJustificativa"),
+	@JsonSubTypes.Type(value = RevisaoTextoLivrePojo.class, name = "RevisaoTextoLivre")
 })
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class RevisaoPojo implements Revisao {

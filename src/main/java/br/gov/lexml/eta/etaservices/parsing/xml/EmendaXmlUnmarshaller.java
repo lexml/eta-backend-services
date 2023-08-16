@@ -47,6 +47,7 @@ import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
 
 public class EmendaXmlUnmarshaller {
     public Emenda fromXml(final String xml) throws DocumentException {
@@ -502,6 +503,9 @@ public class EmendaXmlUnmarshaller {
 		}
 		else if(eRevisao.getName().equals("RevisaoJustificativa")) {
 			classePojo = RevisaoJustificativaPojo.class;
+		}
+		else if(eRevisao.getName().equals("RevisaoTextoLivre")) {
+			classePojo = RevisaoTextoLivrePojo.class;
 		}
 		else {
 			throw new RuntimeException("Elemento " + eRevisao.getName() + " desconhecido na lista de revisões.");
