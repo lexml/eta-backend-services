@@ -140,12 +140,18 @@
   </fo:basic-link>
 </xsl:template>
 
-<xsl:template match="img|input[@type='image']">
+<xsl:template match="input[@type='image']">
   <fo:external-graphic content-type="{@type}" src="{concat(//base/@href,@src)}">
     <xsl:call-template name="common-atts"/>
   </fo:external-graphic>
 </xsl:template>
 
+ <xsl:template match="img">
+ 	<fo:block text-align="center" margin-bottom="2pt">
+    	<fo:external-graphic src="url('{@src}')" />
+    </fo:block>    
+  </xsl:template>
+  
 <xsl:template match="object[starts-with(@type,'image/')]">
   <fo:external-graphic content-type="{@type}" src="{concat(//base/@href,@data)}">
     <xsl:call-template name="common-atts"/>
