@@ -31,6 +31,7 @@ import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
 
 public class EmendaXmlMarshaller {
 	
@@ -554,6 +555,11 @@ public class EmendaXmlMarshaller {
     	jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FRAGMENT, true);
     	jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
+    	JAXBContext jcRevisaoTextoLivre = JAXBContext.newInstance(RevisaoTextoLivrePojo.class);    	
+    	Marshaller jmRevisaoTextoLivre = jcRevisaoTextoLivre.createMarshaller();
+    	jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FRAGMENT, true);
+    	jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
     	JAXBContext jcRevisaoElemento = JAXBContext.newInstance(RevisaoElementoPojo.class);    	
     	Marshaller jmRevisaoElemento = jcRevisaoElemento.createMarshaller();
     	jmRevisaoElemento.setProperty(Marshaller.JAXB_FRAGMENT, true);
@@ -566,8 +572,11 @@ public class EmendaXmlMarshaller {
     		if (r instanceof RevisaoElementoPojo) {    			
     			jmRevisaoElemento.marshal(r, sw);
     		}
-    		else {
+    		else if (r instanceof RevisaoJustificativaPojo) {
     			jmRevisaoJustificativa.marshal(r, sw);
+    		}
+    		else if (r instanceof RevisaoTextoLivrePojo) {
+    			jmRevisaoTextoLivre.marshal(r, sw);
     		}
         	sb.append("\n");
     	}

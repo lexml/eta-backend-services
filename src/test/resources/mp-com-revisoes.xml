@@ -47,5 +47,8 @@
 <RevisaoJustificativa id="a71d6b42-461f-457b-8d51-99e64a971db0" dataHora="2023-07-12 15:58:31" descricao="Justificativa Alterada">
     <Usuario nome="Anônimo"/>
 </RevisaoJustificativa>
+<RevisaoTextoLivre type="RevisaoTextoLivre" id="a71d6b42-461f-457b-8d51-99e64a971db2" dataHora="2023-07-12 15:58:31" descricao="Emenda de texto livre alterado">
+    <Usuario nome="Anônimo"/>
+</RevisaoTextoLivre>
 </Revisoes>
 </Emenda>

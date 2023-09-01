@@ -148,6 +148,15 @@
       "usuario": {
         "nome": "Anônimo"
       }
+    },
+    {
+      "dataHora": "2023-07-12 15:58:31",
+      "descricao": "Emenda de texto livre alterado",
+      "id": "a71d6b42-461f-457b-8d51-99e64a971db2",
+      "type": "RevisaoTextoLivre",
+      "usuario": {
+        "nome": "Anônimo"
+      }
     }
   ],
   "versaoAplicacao": ""
