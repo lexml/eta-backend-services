@@ -170,13 +170,15 @@ public class FOPProcessor {
 				pdfa.setVersion(PDFA.PDFVersion.PDF_VERSION_1_7);
 				pdfa.close();
 				
-			     PDFMergerUtility merger = new PDFMergerUtility();
-			     
-			     merger.addSource(new ByteArrayInputStream(data));
-			     anexos.forEach(anexo -> merger.addSource(anexo));
-			     
-			     merger.setDestinationStream(outputStream);
-			     merger.mergeDocuments(MemoryUsageSetting.setupTempFileOnly());
+			    PDFMergerUtility merger = new PDFMergerUtility();
+			    
+			    anexos.forEach(anexo -> merger.addSource(anexo));
+		     
+			    merger.setDestinationStream(outputStream);
+			 
+			    merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+			    
+			    
 			}
 
 		} catch (Exception e) {
