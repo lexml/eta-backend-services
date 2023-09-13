@@ -14,7 +14,7 @@
 <xsl:param name="font.symbol" select="'Gentium Basic'"/>
 
 <xsl:template name="common-atts">
-  <xsl:copy-of select="@id|@color|@height|@width|@text-indent|@font-weight|@xml:lang"/>
+  <xsl:copy-of select="@id|@color|@height|@width|@text-indent|@font-weight|@margin-left|@xml:lang"/>
   <xsl:if test="@align"><xsl:attribute name="text-align"><xsl:value-of select="@align"/></xsl:attribute></xsl:if>
   <xsl:if test="@nowrap"><xsl:attribute name="wrap-option">no-wrap</xsl:attribute></xsl:if>
   <xsl:call-template name="Trata-style"/>
@@ -140,12 +140,18 @@
   </fo:basic-link>
 </xsl:template>
 
-<xsl:template match="img|input[@type='image']">
+<xsl:template match="input[@type='image']">
   <fo:external-graphic content-type="{@type}" src="{concat(//base/@href,@src)}">
     <xsl:call-template name="common-atts"/>
   </fo:external-graphic>
 </xsl:template>
 
+ <xsl:template match="img">
+ 	<fo:block text-align="center" margin-bottom="2pt">
+    	<fo:external-graphic src="url('{@src}')" />
+    </fo:block>    
+  </xsl:template>
+  
 <xsl:template match="object[starts-with(@type,'image/')]">
   <fo:external-graphic content-type="{@type}" src="{concat(//base/@href,@data)}">
     <xsl:call-template name="common-atts"/>

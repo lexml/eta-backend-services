@@ -7,8 +7,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.Result;
@@ -26,6 +28,8 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FopFactoryBuilder;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.fop.pdf.PDFAMode;
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 import org.apache.xmlgraphics.io.Resource;
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.dom4j.io.DocumentSource;
@@ -86,12 +90,19 @@ public class FOPProcessor {
 		}
 
 	}
-
+	
+	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML) {
+		this.processFOP(outputStream, xslFo, emendaXML, new ArrayList<>());
+	}
+	
 	/**
 	 * Transforma XSL-FO em PDF com emenda.xml embutido
+	 * @param anexos 
 	 */
 	@SuppressWarnings("unchecked")
-	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML) {
+	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML, List<ByteArrayInputStream> anexos) {
+		
+//		System.out.println(xslFo);
 
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
@@ -135,9 +146,10 @@ public class FOPProcessor {
 
 			// putting XMP-meta
 			byte[] data = out.toByteArray();
-
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+			
 			//PDF/A:
-			PDFA pdfa = PDFA.getNewInstance(outputStream, new ByteArrayInputStream(data), helper.getPDFAPart(), helper.getPDFAConformance());
+			PDFA pdfa = PDFA.getNewInstance(outputStream, inputStream, helper.getPDFAPart(), helper.getPDFAConformance());
 			if (pdfa == null) {
 				log.error("Could not find a PDF/A part " + helper.getPDFAPart() + ", conformance " + helper.getPDFAConformance() + " constructor on PDFA class.");
 			} else {
@@ -155,11 +167,23 @@ public class FOPProcessor {
 				//setting version
 				pdfa.setVersion(PDFA.PDFVersion.PDF_VERSION_1_7);
 				pdfa.close();
+				
+			    PDFMergerUtility merger = new PDFMergerUtility();
+			    
+			    anexos.forEach(anexo -> merger.addSource(anexo));
+		     
+			    merger.setDestinationStream(outputStream);
+			 
+			    merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+			    
+			    
 			}
 
 		} catch (Exception e) {
 			throw new RuntimeException("Error processing FOP. " + e.getMessage(), e);
 		}
+		
+		
 	}
 
 }

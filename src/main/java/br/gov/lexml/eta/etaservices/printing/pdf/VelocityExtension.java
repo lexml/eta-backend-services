@@ -43,11 +43,13 @@ public class VelocityExtension {
 		}
 	}
 	
-	public String html2foEmendaTextoLivre(String html) {
+	public String html2foTextoLivre(String html) {
+//		System.out.println("---------------------------");
+//		System.out.println(html);
+//		System.out.println("---------------------------");
 		String htmlAttrFo = html
-			.replaceAll("class=\"estilo-artigo-subordinados\"", "align=\"justify\" text-indent=\"0\"")
-			.replaceAll("class=\"estilo-agrupador-artigo\"", "align=\"center\" text-indent=\"0\"")
-			.replaceAll("class=\"estilo-emenda\"", "margin-left=\"40%\" align=\"center\" text-indent=\"0\"");
+			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
+			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"2cm\" $1");
 		return this.html2fo(htmlAttrFo);
 	}
 
