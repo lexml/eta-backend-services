@@ -14,7 +14,7 @@
 <xsl:param name="font.symbol" select="'Gentium Basic'"/>
 
 <xsl:template name="common-atts">
-  <xsl:copy-of select="@id|@color|@height|@width|@text-indent|@font-weight|@xml:lang"/>
+  <xsl:copy-of select="@id|@color|@height|@width|@text-indent|@font-weight|@margin-left|@xml:lang"/>
   <xsl:if test="@align"><xsl:attribute name="text-align"><xsl:value-of select="@align"/></xsl:attribute></xsl:if>
   <xsl:if test="@nowrap"><xsl:attribute name="wrap-option">no-wrap</xsl:attribute></xsl:if>
   <xsl:call-template name="Trata-style"/>
