@@ -147,9 +147,10 @@
 </xsl:template>
 
  <xsl:template match="img">
- 	<fo:block text-align="center" margin-bottom="2pt">
-    	<fo:external-graphic src="url('{@src}')" />
-    </fo:block>    
+ 	<fo:block content-width="400px">
+	   	<fo:external-graphic content-type="image" src="url('{@src}')" content-width="{@width}" content-height="{@height}">
+	   	</fo:external-graphic>
+ 	</fo:block>
   </xsl:template>
   
 <xsl:template match="object[starts-with(@type,'image/')]">
