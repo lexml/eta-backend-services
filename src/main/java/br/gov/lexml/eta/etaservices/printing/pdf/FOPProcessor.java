@@ -2,14 +2,12 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +35,6 @@ import org.apache.xmlgraphics.io.ResourceResolver;
 import org.dom4j.io.DocumentSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.itextpdf.text.pdf.PdfReader;
 
 import br.gov.lexml.pdfa.PDFA;
 import br.gov.lexml.pdfa.PDFAttachmentFile;
@@ -105,6 +101,8 @@ public class FOPProcessor {
 	 */
 	@SuppressWarnings("unchecked")
 	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML, List<ByteArrayInputStream> anexos) {
+		
+//		System.out.println(xslFo);
 
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
