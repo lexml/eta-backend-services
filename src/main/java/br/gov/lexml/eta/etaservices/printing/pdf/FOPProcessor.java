@@ -149,7 +149,9 @@ public class FOPProcessor {
 			ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
 			
 			//PDF/A:
-			PDFA pdfa = PDFA.getNewInstance(outputStream, inputStream, helper.getPDFAPart(), helper.getPDFAConformance());
+			boolean temAnexos = !anexos.isEmpty();
+			OutputStream outPdfa = temAnexos? new ByteArrayOutputStream(): outputStream;
+			PDFA pdfa = PDFA.getNewInstance(outPdfa, inputStream, helper.getPDFAPart(), helper.getPDFAConformance());
 			if (pdfa == null) {
 				log.error("Could not find a PDF/A part " + helper.getPDFAPart() + ", conformance " + helper.getPDFAConformance() + " constructor on PDFA class.");
 			} else {
@@ -168,14 +170,17 @@ public class FOPProcessor {
 				pdfa.setVersion(PDFA.PDFVersion.PDF_VERSION_1_7);
 				pdfa.close();
 				
-			    PDFMergerUtility merger = new PDFMergerUtility();
-			    
-			    anexos.forEach(anexo -> merger.addSource(anexo));
-		     
-			    merger.setDestinationStream(outputStream);
-			 
-			    merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
-			    
+				if(temAnexos) {					
+					PDFMergerUtility merger = new PDFMergerUtility();
+					
+					merger.addSource(new ByteArrayInputStream(((ByteArrayOutputStream)outPdfa).toByteArray()));
+					
+					anexos.forEach(anexo -> merger.addSource(anexo));
+					
+					merger.setDestinationStream(outputStream);
+					
+					merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+				}
 			    
 			}
 
