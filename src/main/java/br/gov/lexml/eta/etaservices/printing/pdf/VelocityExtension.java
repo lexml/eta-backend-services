@@ -44,13 +44,32 @@ public class VelocityExtension {
 	}
 	
 	public String html2foTextoLivre(String html) {
-//		System.out.println("---------------------------");
-//		System.out.println(html);
-//		System.out.println("---------------------------");
+
+		html = trataImagens(html);
+		
+		System.out.println("---------------------------");
+		System.out.println(html.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
+		System.out.println("---------------------------");
+		
 		String htmlAttrFo = html
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
 			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"2cm\" $1");
+		
 		return this.html2fo(htmlAttrFo);
+	}
+
+	private String trataImagens(String html) {
+		StringBuilder sb = new StringBuilder();
+				
+		Matcher m = Pattern.compile("<img .+?>").matcher(html);
+		while(m.find()) {
+			String tag = m.group();
+			System.out.println(tag.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
+			m.appendReplacement(sb, "Imagem<br>" + tag);
+		}
+		m.appendTail(sb);
+		
+		return sb.toString();
 	}
 
 	public String citacao2html(String citacao) {
