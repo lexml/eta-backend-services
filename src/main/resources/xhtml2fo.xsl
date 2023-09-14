@@ -146,12 +146,11 @@
   </fo:external-graphic>
 </xsl:template>
 
- <xsl:template match="img">
- 	<fo:block content-width="400px">
-	   	<fo:external-graphic content-type="image" src="url('{@src}')" content-width="{@width}" content-height="{@height}">
-	   	</fo:external-graphic>
+<xsl:template match="img">
+ 	<fo:block>
+	   	<fo:external-graphic content-type="image" src="url('{@src}')"/>
  	</fo:block>
-  </xsl:template>
+</xsl:template>
   
 <xsl:template match="object[starts-with(@type,'image/')]">
   <fo:external-graphic content-type="{@type}" src="{concat(//base/@href,@data)}">
