@@ -45,11 +45,12 @@ public class VelocityExtension {
 	
 	public String html2foTextoLivre(String html) {
 
-		html = trataImagens(html);
+		// Talvez venha a ser necessário para tratar imagens grandes
+//		html = trataImagens(html);
 		
-		System.out.println("---------------------------");
-		System.out.println(html.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
-		System.out.println("---------------------------");
+//		System.out.println("---------------------------");
+//		System.out.println(html.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
+//		System.out.println("---------------------------");
 		
 		String htmlAttrFo = html
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
@@ -58,19 +59,19 @@ public class VelocityExtension {
 		return this.html2fo(htmlAttrFo);
 	}
 
-	private String trataImagens(String html) {
-		StringBuilder sb = new StringBuilder();
-				
-		Matcher m = Pattern.compile("<img .+?>").matcher(html);
-		while(m.find()) {
-			String tag = m.group();
-			System.out.println(tag.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
-			m.appendReplacement(sb, "Imagem<br>" + tag);
-		}
-		m.appendTail(sb);
-		
-		return sb.toString();
-	}
+//	private String trataImagens(String html) {
+//		StringBuilder sb = new StringBuilder();
+//				
+//		Matcher m = Pattern.compile("<img .+?>").matcher(html);
+//		while(m.find()) {
+//			String tag = m.group();
+//			System.out.println(tag.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
+//			m.appendReplacement(sb, "Imagem<br>" + tag);
+//		}
+//		m.appendTail(sb);
+//		
+//		return sb.toString();
+//	}
 
 	public String citacao2html(String citacao) {
 		return citacao.replace("Rotulo>", "strong>")
