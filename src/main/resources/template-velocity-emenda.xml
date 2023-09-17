@@ -252,7 +252,7 @@
 					
 					#if ($emenda.comandoEmendaTextoLivre.texto)
 						<fo:block margin-bottom="$pMarginBottom">							
-							$ve.html2foTextoLivre($ve.addStyle($emenda.comandoEmendaTextoLivre.texto, '(p|ol|ul)', 'margin-bottom: $pMarginBottom'))
+							$ve.html2foTextoLivre($emenda.comandoEmendaTextoLivre.texto)
 						</fo:block>
 					#end					
 				</fo:block>			
@@ -267,7 +267,7 @@
 					role="Justificativa" space-before="$spacing1" text-align="justify"
 					text-indent="2.5cm" white-space-collapse="false">
 					<fo:block>
-						$ve.html2foTextoLivre($ve.addStyle($emenda.justificativa, '(p|ol|ul)', 'margin-bottom: $pMarginBottom'))
+						$ve.html2foTextoLivre($emenda.justificativa)
 					</fo:block>
 					#*
 					<fo:block margin-bottom="0.6em">Parágrafo justificado (primeira

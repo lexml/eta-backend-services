@@ -3,6 +3,7 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,8 +36,9 @@ public class VelocityExtension {
 	// HTML to XSL-FO
 	public String html2fo(String html) {
 		try {
+//			log.info("HTML\n---------------------------\n" + html);
 			String fo = html2foConverter.html2fo(StringEscapeUtils.unescapeHtml4(html));
-//			log.info("\n---------------------------\n" + fo);
+//			log.info("FO\n---------------------------\n" + fo);
 			return VelocityExtensionUtils.render(fo, ctx, velocityEngine);
 		} catch (Exception e) {
 			log.error("Falha na conversão para FO", e);
@@ -45,13 +47,18 @@ public class VelocityExtension {
 	}
 	
 	public String html2foTextoLivre(String html) {
-
+		
 		// Talvez venha a ser necessário para tratar imagens grandes
 //		html = trataImagens(html);
 		
 //		System.out.println("---------------------------");
 //		System.out.println(html.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
 //		System.out.println("---------------------------");
+		
+		html = addStyle(html, "(p|ol|ul)", "margin-bottom: $pMarginBottom");
+		
+		// Retira margin-bottom padrão dentro de tabelas
+		html = multipleReplaceAll(html, "<table .+?</table>", (m) -> m.group().replace("$pMarginBottom", "0"));
 		
 		String htmlAttrFo = html
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
@@ -61,17 +68,11 @@ public class VelocityExtension {
 	}
 
 //	private String trataImagens(String html) {
-//		StringBuilder sb = new StringBuilder();
-//				
-//		Matcher m = Pattern.compile("<img .+?>").matcher(html);
-//		while(m.find()) {
+//		return multipleReplaceAll(html, "<img .+?>", (m) -> {
 //			String tag = m.group();
 //			System.out.println(tag.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
-//			m.appendReplacement(sb, "Imagem<br>" + tag);
-//		}
-//		m.appendTail(sb);
-//		
-//		return sb.toString();
+//			return "Imagem<br>" + tag;
+//		});
 //	}
 
 	public String citacao2html(String citacao) {
@@ -138,6 +139,18 @@ public class VelocityExtension {
 	
 	public String getDataIso() {
 		return LocalDateTime.now().atOffset(ZoneOffset.ofHours(-3)).toString();
+	}
+
+	private String multipleReplaceAll(String str, String pattern, Function<Matcher, String> replacer) {
+		StringBuilder sb = new StringBuilder();
+
+		Matcher m = Pattern.compile(pattern).matcher(str);
+		while (m.find()) {
+			m.appendReplacement(sb, replacer.apply(m));
+		}
+		m.appendTail(sb);
+
+		return sb.toString();
 	}
 
 }
