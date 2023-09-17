@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class VelocityExtension {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(VelocityExtension.class);
+	private static final Logger log = LoggerFactory.getLogger(VelocityExtension.class);
 
 	private HTML2FOConverter html2foConverter;
 
@@ -36,9 +36,10 @@ public class VelocityExtension {
 	public String html2fo(String html) {
 		try {
 			String fo = html2foConverter.html2fo(StringEscapeUtils.unescapeHtml4(html));
+//			log.info("\n---------------------------\n" + fo);
 			return VelocityExtensionUtils.render(fo, ctx, velocityEngine);
 		} catch (Exception e) {
-			LOGGER.error("Falha na conversão para FO", e);
+			log.error("Falha na conversão para FO", e);
 			return e.getLocalizedMessage();
 		}
 	}
@@ -54,7 +55,7 @@ public class VelocityExtension {
 		
 		String htmlAttrFo = html
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
-			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"2cm\" $1");
+			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"3cm\" text-indent=\"1.5cm\" $1");
 		
 		return this.html2fo(htmlAttrFo);
 	}
@@ -74,11 +75,16 @@ public class VelocityExtension {
 //	}
 
 	public String citacao2html(String citacao) {
-		return citacao.replace("Rotulo>", "strong>")
+//		log.info("\n citacao antes ---------------------------------\n" + citacao);
+		citacao = citacao.replace("Rotulo>", "strong>")
+				.replace("<Alteracao>", "<div margin-left=\"3cm\" text-indent=\"1.5cm\">")
+				.replace("</Alteracao>", "</div>")
 				.replaceAll("(?i)<omissis ?/>", "<span class=\"omissis\"></span>")
 				.replaceAll("(class=\"[^\"]*)agrupador", "align=\"center\" text-indent=\"0\" $1")
 				.replaceAll("(class=\"[^\"]*)(?:sub)?secao", "font-weight=\"bold\" $1")
 				.replace("class=\"ementa", "style=\"margin-left: 40%; text-indent: 0\"");
+//		log.info("\n citacao depois ---------------------------------\n" + citacao);
+		return citacao;
 	}
 	
 	/**
