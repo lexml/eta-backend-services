@@ -248,7 +248,7 @@
 				</fo:block>
 ## Comando de emenda Texto Livre ----------------------------------------------------------------
 				<fo:block role="Comando de emenda Texto Livre" line-height="$lineHeight"
-					text-align="justify" text-indent="2.5cm" white-space-collapse="false">
+					text-indent="2.5cm" white-space-collapse="false">
 					
 					#if ($emenda.comandoEmendaTextoLivre.texto)
 						<fo:block margin-bottom="$pMarginBottom">							
@@ -264,7 +264,7 @@
 					keep-with-next="always" space-before="$spacing3" text-align="center"
 					white-space-collapse="false">JUSTIFICATIVA</fo:block>
 				<fo:block keep-with-previous="always" line-height="$lineHeight"
-					role="Justificativa" space-before="$spacing1" text-align="justify"
+					role="Justificativa" space-before="$spacing1"
 					text-indent="2.5cm" white-space-collapse="false">
 					<fo:block>
 						$ve.html2foTextoLivre($emenda.justificativa)
