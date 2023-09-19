@@ -61,6 +61,7 @@ public class VelocityExtension {
 		html = multipleReplaceAll(html, "<table .+?</table>", (m) -> m.group().replace("$pMarginBottom", "0"));
 		
 		String htmlAttrFo = html
+			.replaceAll("<p(.+?)><img", "<p$1 class=\"align-center\"><img")
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
 			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"3cm\" text-indent=\"1.5cm\" $1");
 		
