@@ -1,10 +1,27 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.tools.ant.filters.StringInputStream;
 import org.dom4j.Document;
@@ -17,20 +34,8 @@ import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.SimpleXmlSerializer;
 import org.htmlcleaner.TagNode;
-
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-import java.io.ByteArrayInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import static java.nio.charset.StandardCharsets.UTF_8;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HTML2FOConverter {
 
@@ -119,7 +124,7 @@ public class HTML2FOConverter {
 
 	private String xhtml2fo(String xhtml) {
 
-		if (StringUtils.isEmpty(xhtml)) {
+		if (xhtml == null || StringUtils.isEmpty(xhtml.trim())) {
 			return "";
 		}
 		
