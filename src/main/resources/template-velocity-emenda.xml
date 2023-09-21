@@ -37,9 +37,10 @@
 		</fo:page-sequence-master>
 	</fo:layout-master-set>
 	<fo:declarations>
-		<x:xmpmeta xmlns:x="adobe:ns:meta/">
+		<x:xmpmeta xmlns:x="adobe:ns:meta/" xmlns:check="http://lexeditweb/check">
 			<rdf:RDF
 				xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+				<check:hash>00000000000000000000000000000000</check:hash>					
 				<rdf:Description
 					xmlns:dc="http://purl.org/dc/elements/1.1/"
 					xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
