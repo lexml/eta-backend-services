@@ -148,7 +148,8 @@
 
 <xsl:template match="img">
  	<fo:block>
-	   	<fo:external-graphic content-type="image" src="url('{@src}')"/>
+	   	<fo:external-graphic content-type="image" src="url('{@src}')" 
+	   		content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform"/>
  	</fo:block>
 </xsl:template>
   

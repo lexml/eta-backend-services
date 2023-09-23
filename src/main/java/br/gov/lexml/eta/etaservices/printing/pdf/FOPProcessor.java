@@ -27,6 +27,7 @@ import org.apache.fop.apps.FopConfParser;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FopFactoryBuilder;
 import org.apache.fop.apps.MimeConstants;
+import org.apache.fop.apps.io.ResourceResolverFactory;
 import org.apache.fop.pdf.PDFAMode;
 import org.apache.pdfbox.io.MemoryUsageSetting;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
@@ -69,24 +70,26 @@ public class FOPProcessor {
 	}
 
 	static class UriResolver implements ResourceResolver {
+		
+		private static ResourceResolver defaultResolver = ResourceResolverFactory.createDefaultResourceResolver(); 
 
 		@Override
-		public OutputStream getOutputStream(URI arg0) {
-			return null;
+		public OutputStream getOutputStream(URI uri) throws IOException {
+			return defaultResolver.getOutputStream(uri);
 		}
 
 		@Override
-		public Resource getResource(URI uri) {
+		public Resource getResource(URI uri) throws IOException {
 
 			String strUri = uri.toString().replaceAll("^file://\\./", "");
+			
+			byte[] fonte = fontes.get(strUri);
+			
+			if(fonte != null) {
+				return new Resource(MimeConstants.MIME_AFP_TRUETYPE, new ByteArrayInputStream(fonte));
+			}
 
-			try {	
-				return new Resource(MimeConstants.MIME_AFP_TRUETYPE, new ByteArrayInputStream(fontes.get(strUri)));
-			}
-			catch(Exception e) {
-				log.error("Fonte " + strUri + " não encontrada.");
-			}
-			return null;
+			return defaultResolver.getResource(uri);
 		}
 
 	}

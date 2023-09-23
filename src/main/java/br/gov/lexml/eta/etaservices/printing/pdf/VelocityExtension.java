@@ -1,5 +1,9 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
@@ -7,13 +11,20 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.itextpdf.text.pdf.codec.Base64;
+
 public class VelocityExtension {
+
+	private static final int MAX_IMAGE_WIDTH = 800;
 
 	private static final Logger log = LoggerFactory.getLogger(VelocityExtension.class);
 
@@ -48,8 +59,7 @@ public class VelocityExtension {
 	
 	public String html2foTextoLivre(String html) {
 		
-		// Talvez venha a ser necessário para tratar imagens grandes
-//		html = trataImagens(html);
+		html = trataImagens(html);
 		
 //		System.out.println("---------------------------");
 //		System.out.println(html.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
@@ -70,13 +80,47 @@ public class VelocityExtension {
 		return this.html2fo(htmlAttrFo);
 	}
 	
-//	private String trataImagens(String html) {
-//		return multipleReplaceAll(html, "<img .+?>", (m) -> {
-//			String tag = m.group();
-//			System.out.println(tag.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
-//			return "Imagem<br>" + tag;
-//		});
-//	}
+	private String trataImagens(String html) {
+		return multipleReplaceAll(html, "<img .+?>", (m) -> {
+			String tag = m.group();
+			Matcher mSrc = Pattern.compile("src=\"data:image/(.+?);base64,(.+?)\"").matcher(tag);
+			if (mSrc.find()) {
+				try {	
+					String imageType = mSrc.group(1);
+					byte[] bytes = Base64.decode(mSrc.group(2));
+					
+					boolean isPng = imageType.equals("png");
+					String extension = isPng? ".png": ".jpeg";  
+					File f = File.createTempFile("imagem-", extension);
+					
+					if(isPng) {
+						// Não altera o PNG
+						FileUtils.writeByteArrayToFile(f, bytes);
+					}
+					else {						
+						// Demais imagens são convertidas em jpeg (inclusive as originalmente em jpeg)
+						// O FOP parece entender melhor imagens jpeg geradas pelo ImageIO.
+						BufferedImage image = ImageIO.read(new ByteArrayInputStream(bytes));
+						ImageIO.write(image, "JPG", f);
+					}
+					
+					return tag.replaceAll("src=\".+?\"", "src=\"file:" + f.getAbsolutePath() + "\"");
+				}
+				catch(Exception e) {
+					log.error("Falha ao tratar imagem para o PDF.", e);
+					return html;
+				}
+			}
+			return html;
+		});
+	}
+	
+	private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) {
+	    Image resultingImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_DEFAULT);
+	    BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+	    outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
+	    return outputImage;
+	}	
 
 	public String citacao2html(String citacao) {
 //		log.info("\n citacao antes ---------------------------------\n" + citacao);
