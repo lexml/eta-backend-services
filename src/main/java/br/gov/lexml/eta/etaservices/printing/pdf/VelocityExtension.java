@@ -62,20 +62,24 @@ public class VelocityExtension {
 		html = trataImagens(html);
 		
 //		System.out.println("---------------------------");
-//		System.out.println(html.replaceAll("src=\".+?\"", "src=\"IMAGEM\""));
+//		System.out.println(html);
 //		System.out.println("---------------------------");
 		
 		html = addStyle(html, "(p|ol|ul)", "margin-bottom: $pMarginBottom");
 		
+		// Retira margin-bottom para classe ql-margin-bottom-0px
+		html = multipleReplaceAll(html, "<[^>]+class=\"[^\"]*ql-margin-bottom-0px.+?>", 
+				m -> m.quoteReplacement(m.group().replace("$pMarginBottom", "0")));
+		
 		// Retira margin-bottom padrão dentro de tabelas
-		html = multipleReplaceAll(html, "<table .+?</table>", (m) -> m.group().replace("$pMarginBottom", "0"));
+		html = multipleReplaceAll(html, "<table .+?</table>", 
+				m -> m.quoteReplacement(m.group().replace("$pMarginBottom", "0")));
 		
 		String htmlAttrFo = html
 			.replaceAll("<p(.+?)><img", "<p$1 class=\"align-center\"><img")
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
 			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"3cm\" text-indent=\"1.5cm\" $1")
-			.replaceAll("(class=\"[^\"]*)ql-text-indent-0px", "margin-left=\"0\" text-indent=\"0\" $1")
-			.replaceAll("(<p[^>]+(?>ql-margin-bottom-0px)[^>]+)( \\$pMarginBottom)([^>]+>)", "$1 0px$3");
+			.replaceAll("(class=\"[^\"]*)ql-text-indent-0px", "text-indent=\"0\" $1");
 		
 		return this.html2fo(htmlAttrFo);
 	}
