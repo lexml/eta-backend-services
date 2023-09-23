@@ -185,7 +185,7 @@ public class HTML2FOConverter {
 		Pattern tagPattern = Pattern.compile("<.+?>", Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 		Matcher mTag = tagPattern.matcher(xhtml);
 		
-		Pattern alignClassPattern = Pattern.compile("class=\"align-(.+?)\"");
+		Pattern alignClassPattern = Pattern.compile("class=\"[^\"]*align-([^\" ]+?)\"");
 		String styleAttr="style=\"";
 		
 		int i; 
