@@ -5,10 +5,12 @@ import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
 public final class ComandoEmendaTextoLivreRecord implements ComandoEmendaTextoLivre {
     private final String motivo;
     private final String texto;
+    private final String textoAntesRevisao;
 
-    public ComandoEmendaTextoLivreRecord(String motivo, String texto) {
+    public ComandoEmendaTextoLivreRecord(String motivo, String texto, String textoAntesRevisao) {
         this.motivo = motivo;
         this.texto = texto;
+        this.textoAntesRevisao = textoAntesRevisao;
     }
 
 	@Override
@@ -20,6 +22,7 @@ public final class ComandoEmendaTextoLivreRecord implements ComandoEmendaTextoLi
 	public String getTexto() {
 		return texto;
 	}
+	
 
 	@Override
 	public int hashCode() {
@@ -52,9 +55,17 @@ public final class ComandoEmendaTextoLivreRecord implements ComandoEmendaTextoLi
 		return true;
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "ComandoEmendaTextoLivreRecord [motivo=" + motivo + ", texto=" + texto + "]";
+		return "ComandoEmendaTextoLivreRecord [motivo=" + motivo + ", texto=" + texto + ", textoAntesRevisao="
+				+ textoAntesRevisao + "]";
+	}
+
+	@Override
+	public String getTextoAntesRevisao() {
+		return this.textoAntesRevisao;
 	}
 
     

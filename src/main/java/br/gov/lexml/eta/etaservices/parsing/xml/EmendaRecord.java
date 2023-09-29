@@ -36,6 +36,7 @@ public final class EmendaRecord implements Emenda {
     private final ComandoEmenda comandoEmenda;
     private final List<? extends Anexo> anexos;
     private final String justificativa;
+    private final String justificativaAntesRevisao;
     private final String local;
     private final LocalDate data;
     private final Autoria autoria;
@@ -57,6 +58,7 @@ public final class EmendaRecord implements Emenda {
             ComandoEmendaTextoLivre comandoEmendaTextoLivre,
             List<? extends Anexo> anexos,
             String justificativa,
+            String justificativaAntesRevisao,
             String local,
             LocalDate data,
             Autoria autoria,
@@ -75,6 +77,7 @@ public final class EmendaRecord implements Emenda {
         this.anexos = anexos;
         this.comandoEmenda = comandoEmenda;
         this.justificativa = justificativa;
+        this.justificativaAntesRevisao = justificativaAntesRevisao;
         this.local = local;
         this.data = data;
         this.autoria = autoria;
@@ -141,7 +144,11 @@ public final class EmendaRecord implements Emenda {
         return justificativa;
     }
 
-    @Override
+    public String getJustificativaAntesRevisao() {
+		return justificativaAntesRevisao;
+	}
+
+	@Override
 	public String getLocal() {
         return local;
     }

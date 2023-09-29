@@ -32,6 +32,7 @@ public class EmendaPojo implements Emenda {
     private ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre;
     private List<? extends AnexoPojo> anexos;
     private String justificativa;
+    private String justificativaAntesRevisao;
     private String local;
     private LocalDate data;
     private AutoriaPojo autoria;
@@ -158,6 +159,15 @@ public class EmendaPojo implements Emenda {
     }
 
     @Override
+    public String getJustificativaAntesRevisao() {
+		return justificativaAntesRevisao;
+	}
+
+	public void setJustificativaAntesRevisao(String justificativaAntesRevisao) {
+		this.justificativaAntesRevisao = justificativaAntesRevisao;
+	}
+
+	@Override
     public String getLocal() {
         return local;
     }

@@ -32,7 +32,10 @@ public interface Emenda {
     
     ComandoEmendaTextoLivre getComandoEmendaTextoLivre();
 
+    
     String getJustificativa();
+    
+    String getJustificativaAntesRevisao();
 
     String getLocal();
 
