@@ -54,6 +54,7 @@ public class PdfGeneratorBean implements PdfGenerator {
     
     private String md5Hex(byte[] bytes) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(bytes);
         byte[] digest = md.digest();
         return DatatypeConverter.printHexBinary(digest).toUpperCase();    	
     }
