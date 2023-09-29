@@ -6,6 +6,7 @@ public class ComandoEmendaTextoLivrePojo implements ComandoEmendaTextoLivre {
 
 	private String motivo;
 	private String texto;
+	private String textoAntesRevisao;
 	
 	@Override
 	public String getMotivo() {
@@ -23,6 +24,15 @@ public class ComandoEmendaTextoLivrePojo implements ComandoEmendaTextoLivre {
 
 	public void setTexto(String texto) {
 		this.texto = texto;
+	}
+
+	@Override
+	public String getTextoAntesRevisao() {
+		return this.textoAntesRevisao;
+	}
+	
+	public void setTextoAntesRevisao(String textoAntesRevisao) {
+		this.textoAntesRevisao = textoAntesRevisao;
 	}
 
 	@Override
@@ -60,7 +70,5 @@ public class ComandoEmendaTextoLivrePojo implements ComandoEmendaTextoLivre {
 	public String toString() {
 		return "ComandoEmendaTextoLivrePojo [motivo=" + motivo + ", texto=" + texto + "]";
 	}
-	
-	
 
 }

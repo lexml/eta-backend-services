@@ -50,6 +50,7 @@ public class EmendaXmlMarshaller {
 	        geraComandoEmenda(emenda.getComandoEmenda(), sb);
 	        geraAnexos(emenda.getAnexos(), sb);
 	        geraJustificativa(emenda.getJustificativa(), sb);
+	        geraJustificativaAntesRevisao(emenda.getJustificativaAntesRevisao(), sb);
 	        geraAutoria(emenda.getAutoria(), sb);
 	        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
 	        geraRevisoes(emenda.getRevisoes(), sb);
@@ -401,9 +402,13 @@ public class EmendaXmlMarshaller {
     		sb.append("motivo=\"")
     		.append(comandoEmendaTextoLivre.getMotivo())
     		.append("\" ");
-    		sb.append(">\n");
+    		sb.append(">");
     		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()));
-    		sb.append("  </ComandoEmendaTextoLivre>\n");    		
+    		sb.append("  </ComandoEmendaTextoLivre>\n");
+    		
+    		sb.append("  <ComandoEmendaTextoLivreAntesRevisao>");
+    		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTextoAntesRevisao()));
+    		sb.append("  </ComandoEmendaTextoLivreAntesRevisao>\n");
     	}
     }
 
@@ -439,6 +444,12 @@ public class EmendaXmlMarshaller {
         sb.append("  <Justificativa>")
                 .append(StringEscapeUtils.escapeXml10(justificativa))
                 .append("</Justificativa>\n");
+    }
+    
+    private void geraJustificativaAntesRevisao(String justificativa, StringBuilder sb) {
+        sb.append("  <JustificativaAntesRevisao>")
+                .append(StringEscapeUtils.escapeXml10(justificativa))
+                .append("</JustificativaAntesRevisao>\n");
     }
 
     private void geraAutoria(Autoria autoria, StringBuilder sb) {

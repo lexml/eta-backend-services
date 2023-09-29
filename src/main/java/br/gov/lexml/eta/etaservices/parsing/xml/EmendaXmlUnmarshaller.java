@@ -70,6 +70,7 @@ public class EmendaXmlUnmarshaller {
         final ComandoEmendaTextoLivre comandoEmendaTextoLivre = parseComandoEmendaTextoLivre(rootElement);
         final ComandoEmenda comandoEmenda = parseComandoEmenda(rootElement);
         final String justificativa = parseJustificativa(rootElement);
+        final String JustificativaAntesRevisao = parseJustificativaAntesRevisao(rootElement);
         final Autoria autoria = parseAutoria(rootElement);
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
@@ -88,6 +89,7 @@ public class EmendaXmlUnmarshaller {
                 comandoEmendaTextoLivre,
                 anexos,
                 justificativa,
+                JustificativaAntesRevisao,
                 atributosEmenda.getLocal(),
                 atributosEmenda.getData(),
                 autoria,
@@ -343,14 +345,17 @@ public class EmendaXmlUnmarshaller {
 	
 	private ComandoEmendaTextoLivre parseComandoEmendaTextoLivre(final Element rootElement) {
         final Node comandoEmendaTextoLivre = rootElement.selectSingleNode("ComandoEmendaTextoLivre");
+        final Node comandoEmendaTextoLivreAntesRevisao = rootElement.selectSingleNode("ComandoEmendaTextoLivreAntesRevisao");
+        
         if(comandoEmendaTextoLivre == null ) {
         	return null;
         }
         final String motivo = ((Element)comandoEmendaTextoLivre).attributeValue("motivo");
         final String texto = nodeStringValue(comandoEmendaTextoLivre);
+        final String textoLivreAntesRevisao = nodeStringValue(comandoEmendaTextoLivreAntesRevisao);
         
 
-        return new ComandoEmendaTextoLivreRecord(motivo, texto);
+        return new ComandoEmendaTextoLivreRecord(motivo, texto, textoLivreAntesRevisao);
     }
 
     private List<ItemComandoEmenda> parseItensComandoEmenda(Node comandoEmenda) {
@@ -381,6 +386,9 @@ public class EmendaXmlUnmarshaller {
 
     private String parseJustificativa(final Element rootElement) {
         return nodeStringValue(rootElement.selectSingleNode("Justificativa"));
+    }
+    private String parseJustificativaAntesRevisao(final Element rootElement) {
+        return nodeStringValue(rootElement.selectSingleNode("JustificativaAntesRevisao"));
     }
 
     private Autoria parseAutoria(final Element rootElement) {
