@@ -263,7 +263,7 @@
 				#if ($emenda.justificativa)
 				<fo:block font-size="$maxTamanhoFonte" font-weight="bold"
 					keep-with-next="always" space-before="$spacing3" text-align="center"
-					white-space-collapse="false">JUSTIFICATIVA</fo:block>
+					white-space-collapse="false">JUSTIFICAÇÃO</fo:block>
 				<fo:block keep-with-previous="always" line-height="$lineHeight"
 					role="Justificativa" space-before="$spacing1"
 					text-indent="2.5cm" white-space-collapse="false">
