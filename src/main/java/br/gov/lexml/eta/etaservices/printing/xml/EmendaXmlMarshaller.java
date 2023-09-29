@@ -398,17 +398,24 @@ public class EmendaXmlMarshaller {
 
     private void geraComandoEmendaTextoLivre(ComandoEmendaTextoLivre comandoEmendaTextoLivre, StringBuilder sb) {
     	if(comandoEmendaTextoLivre != null) {
-    		sb.append("  <ComandoEmendaTextoLivre ");
-    		sb.append("motivo=\"")
-    		.append(comandoEmendaTextoLivre.getMotivo())
-    		.append("\" ");
+    		sb.append("  <ComandoEmendaTextoLivre");
+    		
+    		if(comandoEmendaTextoLivre.getMotivo() != null) {
+    			sb.append(" motivo=\"")
+	    			.append(comandoEmendaTextoLivre.getMotivo())
+	    			.append("\" ");    			
+    		}
+    		
     		sb.append(">");
-    		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()));
+    		sb.append(comandoEmendaTextoLivre.getTexto() != null ? StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()) : "");
     		sb.append("  </ComandoEmendaTextoLivre>\n");
     		
-    		sb.append("  <ComandoEmendaTextoLivreAntesRevisao>");
-    		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTextoAntesRevisao()));
-    		sb.append("  </ComandoEmendaTextoLivreAntesRevisao>\n");
+    		if(comandoEmendaTextoLivre.getTextoAntesRevisao() != null) {
+    			sb.append("  <ComandoEmendaTextoLivreAntesRevisao>");
+        		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTextoAntesRevisao()));
+        		sb.append("  </ComandoEmendaTextoLivreAntesRevisao>\n");	
+    		}
+    		
     	}
     }
 
@@ -441,15 +448,19 @@ public class EmendaXmlMarshaller {
     }
 
     private void geraJustificativa(String justificativa, StringBuilder sb) {
-        sb.append("  <Justificativa>")
-                .append(StringEscapeUtils.escapeXml10(justificativa))
-                .append("</Justificativa>\n");
+    	if(justificativa != null) {
+			sb.append("  <Justificativa>")
+	    		.append(StringEscapeUtils.escapeXml10(justificativa))
+	    		.append("</Justificativa>\n");    		
+    	}
     }
     
     private void geraJustificativaAntesRevisao(String justificativa, StringBuilder sb) {
-        sb.append("  <JustificativaAntesRevisao>")
-                .append(StringEscapeUtils.escapeXml10(justificativa))
-                .append("</JustificativaAntesRevisao>\n");
+    	if(justificativa != null) {
+    		sb.append("  <JustificativaAntesRevisao>")
+	    		.append(StringEscapeUtils.escapeXml10(justificativa))
+	    		.append("</JustificativaAntesRevisao>\n");    		
+    	}
     }
 
     private void geraAutoria(Autoria autoria, StringBuilder sb) {
