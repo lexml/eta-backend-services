@@ -67,6 +67,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
         <sonar.host.url>https://sonar.senado.leg.br</sonar.host.url>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
         <dependency>
