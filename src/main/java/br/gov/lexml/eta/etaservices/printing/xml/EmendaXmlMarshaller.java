@@ -29,6 +29,7 @@ import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
@@ -48,6 +49,7 @@ public class EmendaXmlMarshaller {
 	        geraComponentes(emenda.getComponentes(), sb);
 	        geraComandoEmendaTextoLivre(emenda.getComandoEmendaTextoLivre(), sb);
 	        geraComandoEmenda(emenda.getComandoEmenda(), sb);
+            geraSubstituicaoTermo(emenda.getSubstituicaoTermo(), sb);
 	        geraAnexos(emenda.getAnexos(), sb);
 	        geraJustificativa(emenda.getJustificativa(), sb);
 	        geraJustificativaAntesRevisao(emenda.getJustificativaAntesRevisao(), sb);
@@ -146,6 +148,28 @@ public class EmendaXmlMarshaller {
         }
 
         sb.append(" />\n");
+    }
+
+    private void geraSubstituicaoTermo(SubstituicaoTermo substituicaoTermo, StringBuilder sb) {
+        if (substituicaoTermo != null) {
+            sb.append("  <SubstituicaoTermo ")
+                    .append("tipo=\"")
+                    .append(substituicaoTermo.getTipo().getDescricao())
+                    .append("\" ")
+                    .append("termo=\"")
+                    .append(StringEscapeUtils.escapeXml10(substituicaoTermo.getTermo()))
+                    .append("\" ")
+                    .append("novoTermo=\"")
+                    .append(StringEscapeUtils.escapeXml10(substituicaoTermo.getNovoTermo()))
+                    .append("\" ")
+                    .append("flexaoGenero=\"")
+                    .append(substituicaoTermo.isFlexaoGenero())
+                    .append("\" ")
+                    .append("flexaoNumero=\"")
+                    .append(substituicaoTermo.isFlexaoNumero())
+                    .append("\" ")
+                    .append(FECHA_TAG_SEM_CONTEUDO);
+        }
     }
 
     private void geraEpigrafe(Epigrafe epigrafe, StringBuilder sb) {

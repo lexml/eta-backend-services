@@ -42,8 +42,10 @@ import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.emenda.Sexo;
 import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
+import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
 import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
 import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
+import br.gov.lexml.eta.etaservices.emenda.TipoSubstituicaoTermo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
@@ -69,6 +71,7 @@ public class EmendaXmlUnmarshaller {
         final List<? extends Anexo> anexos = parseAnexos(rootElement);
         final ComandoEmendaTextoLivre comandoEmendaTextoLivre = parseComandoEmendaTextoLivre(rootElement);
         final ComandoEmenda comandoEmenda = parseComandoEmenda(rootElement);
+        final SubstituicaoTermo substituicaoTermo = parseSubstituicaoTermo(rootElement);
         final String justificativa = parseJustificativa(rootElement);
         final String JustificativaAntesRevisao = parseJustificativaAntesRevisao(rootElement);
         final Autoria autoria = parseAutoria(rootElement);
@@ -87,6 +90,7 @@ public class EmendaXmlUnmarshaller {
                 componentes,
                 comandoEmenda,
                 comandoEmendaTextoLivre,
+                substituicaoTermo,
                 anexos,
                 justificativa,
                 JustificativaAntesRevisao,
@@ -332,6 +336,18 @@ public class EmendaXmlUnmarshaller {
 
     private DispositivoEmendaAdicionadoRecord parseAdicionadoLexml(final Node nodeAdicionado) {
     	return parseAdicionadoLexml(nodeAdicionado, false, null, null, null);
+    }
+    
+    private SubstituicaoTermo parseSubstituicaoTermo(final Element rootElement) {
+    	final Element substituicaoTermo = (Element) rootElement.selectSingleNode("SubstituicaoTermo");
+    	
+    	TipoSubstituicaoTermo tipo = TipoSubstituicaoTermo.parse(substituicaoTermo.attributeValue("tipo"));    	
+        String termo = substituicaoTermo.attributeValue("termo");
+        String novoTermo = substituicaoTermo.attributeValue("novoTermo");
+        boolean flexaoGenero = booleanAttributeValue(substituicaoTermo.attributeValue("flexaoGenero"));
+        boolean flexaoNumero = booleanAttributeValue(substituicaoTermo.attributeValue("flexaoNumero"));
+        
+    	return new SubstituicaoTermoRecord(tipo, termo, novoTermo, flexaoGenero, flexaoNumero);
     }
     
 	private ComandoEmenda parseComandoEmenda(final Element rootElement) {

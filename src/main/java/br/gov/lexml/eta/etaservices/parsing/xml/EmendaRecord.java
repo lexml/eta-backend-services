@@ -21,6 +21,7 @@ import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
 
 public final class EmendaRecord implements Emenda {
     private final Instant dataUltimaModificacao;
@@ -34,6 +35,7 @@ public final class EmendaRecord implements Emenda {
     private final List<? extends ComponenteEmendado> componentes;
     private final ComandoEmendaTextoLivre comandoEmendaTextoLivre;
     private final ComandoEmenda comandoEmenda;
+    private final SubstituicaoTermo substituicaoTermo;
     private final List<? extends Anexo> anexos;
     private final String justificativa;
     private final String justificativaAntesRevisao;
@@ -56,6 +58,7 @@ public final class EmendaRecord implements Emenda {
             List<? extends ComponenteEmendado> componentes,
             ComandoEmenda comandoEmenda,
             ComandoEmendaTextoLivre comandoEmendaTextoLivre,
+            SubstituicaoTermo substituicaoTermo,
             List<? extends Anexo> anexos,
             String justificativa,
             String justificativaAntesRevisao,
@@ -74,6 +77,7 @@ public final class EmendaRecord implements Emenda {
         this.epigrafe = epigrafe;
         this.componentes = componentes;
         this.comandoEmendaTextoLivre = comandoEmendaTextoLivre;
+        this.substituicaoTermo = substituicaoTermo;
         this.anexos = anexos;
         this.comandoEmenda = comandoEmenda;
         this.justificativa = justificativa;
@@ -138,6 +142,11 @@ public final class EmendaRecord implements Emenda {
 	public ComandoEmenda getComandoEmenda() {
         return comandoEmenda;
     }
+	
+	@Override
+	public SubstituicaoTermo getSubstituicaoTermo() {
+		return substituicaoTermo;
+	}
 
     @Override
 	public String getJustificativa() {
@@ -194,12 +203,13 @@ public final class EmendaRecord implements Emenda {
                 Objects.equals(this.local, that.local) &&
                 Objects.equals(this.data, that.data) &&
                 Objects.equals(this.autoria, that.autoria) &&
-                Objects.equals(this.opcoesImpressao, that.opcoesImpressao);
+                Objects.equals(this.opcoesImpressao, that.opcoesImpressao) &&
+                Objects.equals(this.substituicaoTermo, that.substituicaoTermo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmendaTextoLivre, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao);
+        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmendaTextoLivre, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao, substituicaoTermo);
     }
     
     @Override
@@ -221,6 +231,7 @@ public final class EmendaRecord implements Emenda {
                 "componentes=" + componentes + ", " +
                 "comandoEmendaTextoLivre=" + comandoEmendaTextoLivre + ", " +
                 "comandoEmenda=" + comandoEmenda + ", " +
+                "substituicaoTermo=" + substituicaoTermo + ", " +
                 "justificativa=" + justificativa + ", " +
                 "local=" + local + ", " +
                 "data=" + data + ", " +

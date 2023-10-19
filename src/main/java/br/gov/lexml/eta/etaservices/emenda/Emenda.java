@@ -32,6 +32,7 @@ public interface Emenda {
     
     ComandoEmendaTextoLivre getComandoEmendaTextoLivre();
 
+    SubstituicaoTermo getSubstituicaoTermo();
     
     String getJustificativa();
     

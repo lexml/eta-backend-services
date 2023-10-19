@@ -17,6 +17,7 @@ import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
+import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
 
 public class EmendaPojo implements Emenda {
     private Instant dataUltimaModificacao;
@@ -30,6 +31,7 @@ public class EmendaPojo implements Emenda {
     private List<? extends ComponenteEmendadoPojo> componentes;
     private ComandoEmendaPojo comandoEmenda;
     private ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre;
+    private SubstituicaoTermoPojo substituicaoTermo;
     private List<? extends AnexoPojo> anexos;
     private String justificativa;
     private String justificativaAntesRevisao;
@@ -147,6 +149,14 @@ public class EmendaPojo implements Emenda {
     public void setComandoEmendaTextoLivre(ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre) {
         this.comandoEmendaTextoLivre = comandoEmendaTextoLivre;
     }
+    
+    public SubstituicaoTermo getSubstituicaoTermo() {
+    	return substituicaoTermo;
+    }
+    
+    public void setSubstituicaoTermo(SubstituicaoTermoPojo substituicaoTermo) {
+    	this.substituicaoTermo = substituicaoTermo;
+    }
 
     @Override
     public String getJustificativa() {
@@ -242,6 +252,7 @@ public class EmendaPojo implements Emenda {
 		result = prime * result + ((proposicao == null) ? 0 : proposicao.hashCode());
 		result = prime * result + ((revisoes == null) ? 0 : revisoes.hashCode());
 		result = prime * result + ((versaoAplicacao == null) ? 0 : versaoAplicacao.hashCode());
+		result = prime * result + ((substituicaoTermo == null) ? 0 : substituicaoTermo.hashCode());
 		return result;
 	}
 
@@ -283,6 +294,11 @@ public class EmendaPojo implements Emenda {
 			if (other.comandoEmendaTextoLivre != null)
 				return false;
 		} else if (!comandoEmendaTextoLivre.equals(other.comandoEmendaTextoLivre))
+			return false;
+		if (substituicaoTermo == null) {
+			if (other.substituicaoTermo !=null)
+				return false;
+		} else if (!substituicaoTermo.equals(other.substituicaoTermo))
 			return false;
 		if (componentes == null) {
 			if (other.componentes != null)
@@ -349,9 +365,9 @@ public class EmendaPojo implements Emenda {
 		return "EmendaPojo [dataUltimaModificacao=" + dataUltimaModificacao + ", aplicacao=" + aplicacao
 				+ ", versaoAplicacao=" + versaoAplicacao + ", modoEdicao=" + modoEdicao + ", metadados=" + metadados
 				+ ", proposicao=" + proposicao + ", colegiado=" + colegiado + ", epigrafe=" + epigrafe
-				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre="
-				+ comandoEmendaTextoLivre + ", anexos=" + anexos + ", justificativa=" + justificativa + ", local="
-				+ local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao
+				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre=" + comandoEmendaTextoLivre 
+                + ", substituicaoTermo" + substituicaoTermo + ", anexos=" + anexos + ", justificativa=" + justificativa 
+                + ", local=" + local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao
 				+ ", revisoes=" + revisoes + "]";
 	}
 
