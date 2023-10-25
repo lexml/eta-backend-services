@@ -207,28 +207,25 @@
 
 <!-- A primeira tabela serve apenas para centralizar a segunda -->
 <fo:table table-layout="fixed" width="100%">
-  <fo:table-column column-width="proportional-column-width(0)"/>
+  <fo:table-column column-width="proportional-column-width(1)"/>
   <fo:table-column>
 	<xsl:call-template name="table-width"/>
   </fo:table-column>
-  <fo:table-column column-width="proportional-column-width(0)"/>
+  <fo:table-column column-width="proportional-column-width(1)"/>
   <fo:table-body>
     <fo:table-row>
-      <fo:table-cell column-number="2">
-        <fo:block>
-        
+      <fo:table-cell column-number="2">        
           <!-- Conversão da tabela -->
-		  <fo:block text-align="left" text-indent="0">
+		  <fo:block>
 			  <xsl:apply-templates select="caption"/>
 			  <fo:table>
 			  	<xsl:call-template name="table-common-atts"/>
 			    <xsl:apply-templates select="colgroup|col"/>
 			    <!-- Número de colunas -->
 			    <xsl:variable name="tr1" select="(tr|thead/tr|tbody/tr|tfoot/tr)[1]"/>
-				<xsl:variable name="colsCount" select="(count($tr1/*[not(@colspan)])+sum($tr1/*/@colspan))"/>
-			    <xsl:call-template name="mock-col">
-			      <xsl:with-param name="cols" select="$colsCount"/>
-			    </xsl:call-template>
+			    <xsl:call-template name="width-percent-col">
+			      <xsl:with-param name="tr" select="$tr1"/>
+			    </xsl:call-template>				
 			    <xsl:apply-templates select="thead|tfoot|tbody"/>
 			    <xsl:if test="tr">
 			      <fo:table-body><xsl:call-template name="common-atts"/>
@@ -237,8 +234,6 @@
 			    </xsl:if>
 			  </fo:table>
 		  </fo:block>
-  
-        </fo:block>
       </fo:table-cell>
     </fo:table-row>
   </fo:table-body>
@@ -248,6 +243,27 @@
 
 <xsl:template match="colgroup">
   <xsl:apply-templates/>
+</xsl:template>
+
+<xsl:template name="width-percent-col">
+  <xsl:param name="tr" select="1"/>
+  
+  <xsl:if test="$tr">
+    <xsl:for-each select="$tr/td">
+    	<xsl:variable name="width" select="@width"/>
+   		<fo:table-column>
+   			<xsl:choose>
+  				<xsl:when test="$width">
+					<xsl:attribute name="column-width">proportional-column-width(<xsl:value-of select="$width"/>)</xsl:attribute>
+  				</xsl:when>
+  				<xsl:otherwise>
+  					<xsl:attribute name="column-width">proportional-column-width(1)</xsl:attribute>    				
+  				</xsl:otherwise>
+			</xsl:choose>   			
+   		</fo:table-column>
+    </xsl:for-each>  
+  </xsl:if>
+ 
 </xsl:template>
 
 <xsl:template name="mock-col">
@@ -340,7 +356,6 @@
 
 <xsl:template match="td">
   <fo:table-cell padding=".2em">
-  	<xsl:call-template name="common-atts"/>
   	<xsl:if test="ancestor::table[1][@border!=0]">
   		<xsl:attribute name="border">1pt solid</xsl:attribute>
   	</xsl:if>

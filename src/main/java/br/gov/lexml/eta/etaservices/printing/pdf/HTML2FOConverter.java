@@ -68,7 +68,9 @@ public class HTML2FOConverter {
 //		 <li class="align-left">C</li>
 //		</ul>
 		
-		String html = IOUtils.toString(new FileReader("src/test/resources/table.html"));
+		//String html = IOUtils.toString(new FileReader("src/test/resources/tablej.html"));
+		
+		String html = "<table table_id=\"blxo9sgc3vs\" border=\"1\" style=\"width:10\"><tbody><tr row_id=\"4j93afnxz3d\"><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"d42la0hzavh\" ><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"rn637mq1g1\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"9r7vrbxou2g\" width=\"70\"><p>asd</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"0gttwfm47k3i\" width=\"10\"><p>1</p></td></tr><tr row_id=\"9mkbzh2lxuj\"><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"rdvbktvyuva\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"t6fbhsrmgea\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"h7jfhpzmize\" width=\"70\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"ufr2ks5r2u\" width=\"10\"><p>1</p></td></tr><tr row_id=\"irujxrvemal\"><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"axpw4fpst76\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"at9mi8se1qa\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"w8l6fyiq5vl\" width=\"70\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"ajua79g7sjh\" width=\"10\"><p>1</p></td></tr></tbody></table><p><br></p>";
 		
 		System.out.println(html);
 		System.out.println("-----------------");
