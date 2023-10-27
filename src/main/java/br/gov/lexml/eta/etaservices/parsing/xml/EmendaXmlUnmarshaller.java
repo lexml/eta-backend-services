@@ -341,6 +341,10 @@ public class EmendaXmlUnmarshaller {
     private SubstituicaoTermo parseSubstituicaoTermo(final Element rootElement) {
     	final Element substituicaoTermo = (Element) rootElement.selectSingleNode("SubstituicaoTermo");
     	
+    	if (substituicaoTermo==null) {
+    		return null;
+    	}
+    	
     	TipoSubstituicaoTermo tipo = TipoSubstituicaoTermo.parse(substituicaoTermo.attributeValue("tipo"));    	
         String termo = substituicaoTermo.attributeValue("termo");
         String novoTermo = substituicaoTermo.attributeValue("novoTermo");
