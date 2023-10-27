@@ -207,11 +207,11 @@
 
 <!-- A primeira tabela serve apenas para centralizar a segunda -->
 <fo:table table-layout="fixed" width="100%">
-  <fo:table-column column-width="proportional-column-width(1)"/>
+  <fo:table-column column-width="proportional-column-width(0)"/>
   <fo:table-column>
 	<xsl:call-template name="table-width"/>
   </fo:table-column>
-  <fo:table-column column-width="proportional-column-width(1)"/>
+  <fo:table-column column-width="proportional-column-width(0)"/>
   <fo:table-body>
     <fo:table-row>
       <fo:table-cell column-number="2">        
