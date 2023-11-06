@@ -176,16 +176,29 @@
 </xsl:template>
 
 <xsl:template name="table-width">
-    <xsl:for-each select="str:tokenize(@style, ';')">
+  <xsl:choose>
+	<!-- Verifica se a largura da tabela está definida no atributo style -->
+    <xsl:when test="contains(@style, 'width')">
+      <xsl:for-each select="str:tokenize(@style, ';')">
         <xsl:variable name="atributo" select="."/>
         <xsl:if test="contains($atributo, ':')">
-            <xsl:variable name="nome" select="normalize-space(substring-before($atributo, ':'))"/>
-            <xsl:variable name="valor" select="normalize-space(substring-after($atributo, ':'))"/>
-            <xsl:if test="$nome = 'width'">
-                <xsl:attribute name="column-width"><xsl:value-of select="$valor"/></xsl:attribute>
-            </xsl:if>
+          <xsl:variable name="nome" select="normalize-space(substring-before($atributo, ':'))"/>
+          <xsl:variable name="valor" select="normalize-space(substring-after($atributo, ':'))"/>
+          <xsl:if test="$nome = 'width'">
+            <xsl:attribute name="column-width"><xsl:value-of select="$valor"/></xsl:attribute>
+          </xsl:if>
         </xsl:if>
-    </xsl:for-each>
+      </xsl:for-each>
+    </xsl:when>
+    <!-- Caso a largura não esteja definida no atributo style, verifica se existe valor no atributo width -->
+    <xsl:when test="string-length(@width) > 0">
+      <xsl:attribute name="column-width"><xsl:value-of select="@width"/></xsl:attribute>
+    </xsl:when>
+    <xsl:otherwise>
+      <!-- Valor padrão se nenhum atributo estiver definido -->
+      <xsl:attribute name="column-width">100%</xsl:attribute>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template name="table-common-atts">
@@ -207,33 +220,37 @@
 
 <!-- A primeira tabela serve apenas para centralizar a segunda -->
 <fo:table table-layout="fixed" width="100%">
-  <fo:table-column column-width="proportional-column-width(0)"/>
+  <fo:table-column column-width="proportional-column-width(1)"/>
   <fo:table-column>
 	<xsl:call-template name="table-width"/>
   </fo:table-column>
-  <fo:table-column column-width="proportional-column-width(0)"/>
+  <fo:table-column column-width="proportional-column-width(1)"/>
   <fo:table-body>
     <fo:table-row>
-      <fo:table-cell column-number="2">        
-          <!-- Conversão da tabela -->
-		  <fo:block>
-			  <xsl:apply-templates select="caption"/>
-			  <fo:table>
-			  	<xsl:call-template name="table-common-atts"/>
-			    <xsl:apply-templates select="colgroup|col"/>
-			    <!-- Número de colunas -->
-			    <xsl:variable name="tr1" select="(tr|thead/tr|tbody/tr|tfoot/tr)[1]"/>
-			    <xsl:call-template name="width-percent-col">
-			      <xsl:with-param name="tr" select="$tr1"/>
-			    </xsl:call-template>				
-			    <xsl:apply-templates select="thead|tfoot|tbody"/>
-			    <xsl:if test="tr">
-			      <fo:table-body><xsl:call-template name="common-atts"/>
-			        <xsl:apply-templates select="tr"/>
-			      </fo:table-body>
-			    </xsl:if>
-			  </fo:table>
-		  </fo:block>
+      <fo:table-cell column-number="2">
+        <!-- Conversão da tabela -->
+        <fo:block text-indent="0">
+          <xsl:apply-templates select="caption"/>
+          <fo:table>
+            <xsl:call-template name="table-common-atts"/>
+            
+            <!-- a tabela interna ocupará toda a extensão da coluna 2 da tabela externa -->
+            <xsl:attribute name="width">100%</xsl:attribute>
+                    
+            <xsl:apply-templates select="colgroup|col"/>
+          
+            <!-- Largura das colunas -->
+            <xsl:call-template name="column-width" />
+          
+            <xsl:apply-templates select="thead|tfoot|tbody"/>
+            
+            <xsl:if test="tr">
+              <fo:table-body><xsl:call-template name="common-atts"/>
+                <xsl:apply-templates select="tr"/>
+              </fo:table-body>
+            </xsl:if>
+          </fo:table>
+        </fo:block>  
       </fo:table-cell>
     </fo:table-row>
   </fo:table-body>
@@ -245,32 +262,39 @@
   <xsl:apply-templates/>
 </xsl:template>
 
-<xsl:template name="width-percent-col">
-  <xsl:param name="tr" select="1"/>
-  
-  <xsl:if test="$tr">
-    <xsl:for-each select="$tr/td">
-    	<xsl:variable name="width" select="@width"/>
-   		<fo:table-column>
-   			<xsl:choose>
-  				<xsl:when test="$width">
-					<xsl:attribute name="column-width">proportional-column-width(<xsl:value-of select="$width"/>)</xsl:attribute>
-  				</xsl:when>
-  				<xsl:otherwise>
-  					<xsl:attribute name="column-width">proportional-column-width(1)</xsl:attribute>    				
-  				</xsl:otherwise>
-			</xsl:choose>   			
-   		</fo:table-column>
-    </xsl:for-each>  
-  </xsl:if>
- 
+<xsl:template name="column-width">
+  <xsl:variable name="maxColumns">
+    <!-- Encontra a linha com o maior número de colunas -->
+    <xsl:for-each select="(tr|thead/tr|tbody/tr|tfoot/tr)">
+      <xsl:sort select="count(td)" data-type="number" order="descending"/>
+      <xsl:if test="position() = 1">
+        <xsl:value-of select="count(td)"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:variable>
+
+  <!-- Seleciona a linha que possui a maior quantidade de colunas -->
+  <xsl:for-each select="((tr|thead/tr|tbody/tr|tfoot/tr)[count(td) = $maxColumns])[1]/td">
+    <fo:table-column>
+      <xsl:choose>
+        <xsl:when test="@width">
+          <xsl:attribute name="column-width">
+            <xsl:value-of select="@width"/>
+          </xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="column-width">proportional-column-width(1)</xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+    </fo:table-column>
+  </xsl:for-each>	
 </xsl:template>
 
 <xsl:template name="mock-col">
   <xsl:param name="cols" select="1"/>
-  
-  <xsl:variable name="colwidths" select="@colwidths"/>
-  
+
+  <xsl:variable name="colwidths" select="@colwidths"/> 
+
   <xsl:if test="$colwidths">
     <xsl:for-each select="str:tokenize($colwidths, ',')">
     	<xsl:variable name="width" select="."/>
@@ -356,6 +380,9 @@
 
 <xsl:template match="td">
   <fo:table-cell padding=".2em">
+  	<xsl:call-template name="common-atts"/>
+    <xsl:attribute name="width">auto</xsl:attribute>
+    
   	<xsl:if test="ancestor::table[1][@border!=0]">
   		<xsl:attribute name="border">1pt solid</xsl:attribute>
   	</xsl:if>
