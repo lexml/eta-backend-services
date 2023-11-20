@@ -148,8 +148,17 @@
 
 <xsl:template match="img">
  	<fo:block>
-	   	<fo:external-graphic content-type="image" src="url('{@src}')" 
-	   		content-width="scale-to-fit" content-height="100%" width="100%" scaling="uniform"/>
+ 	   	<fo:external-graphic content-type="image" src="url('{@src}')" 
+	   		content-width="scale-to-fit" scaling="uniform">
+	   		<xsl:choose>
+		      <xsl:when test="@width">
+		        <xsl:attribute name="width"><xsl:value-of select="@width"/></xsl:attribute>
+		      </xsl:when>
+		      <xsl:otherwise>
+		        <xsl:attribute name="width">100%</xsl:attribute>          
+		      </xsl:otherwise>
+		    </xsl:choose>
+	   	</fo:external-graphic>
  	</fo:block>
 </xsl:template>
   
