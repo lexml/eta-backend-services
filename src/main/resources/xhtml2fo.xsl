@@ -717,4 +717,22 @@
   <fo:inline baseline-shift="super" font-size="0.7em"><xsl:call-template name="common-atts"/><xsl:apply-templates/></fo:inline>
 </xsl:template>
 
+<xsl:template match="nota-rodape">
+  <xsl:variable name="numero" select="@numero"/>
+  <xsl:variable name="texto" select="@title|@texto"/>
+  <fo:footnote>
+	  <fo:inline baseline-shift="super" font-size="0.7em">
+		  <xsl:value-of select="$numero"/>
+	  </fo:inline>
+	  <fo:footnote-body>
+		  <fo:block text-indent="0" font-size="12pt">
+			  <fo:inline baseline-shift="super" font-size="0.7em">
+				  <xsl:value-of select="concat($numero, ' ')"/>
+			  </fo:inline>
+			  <xsl:value-of select="$texto"/>
+		  </fo:block>
+	  </fo:footnote-body>
+  </fo:footnote>  
+</xsl:template>
+
 </xsl:stylesheet>
