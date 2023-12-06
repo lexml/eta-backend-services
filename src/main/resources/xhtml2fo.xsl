@@ -719,7 +719,7 @@
 
 <xsl:template match="nota-rodape">
   <xsl:variable name="numero" select="@numero"/>
-  <xsl:variable name="texto" select="@title|@texto"/>
+  <xsl:variable name="idNotaRodape" select="concat('$', @id-nota-rodape)"/>
   <fo:footnote>
 	  <fo:inline baseline-shift="super" font-size="0.7em">
 		  <xsl:value-of select="$numero"/>
@@ -729,7 +729,7 @@
 			  <fo:inline baseline-shift="super" font-size="0.7em">
 				  <xsl:value-of select="concat($numero, ' ')"/>
 			  </fo:inline>
-			  <xsl:value-of select="$texto"/>
+			  <xsl:value-of select="$idNotaRodape"/>
 		  </fo:block>
 	  </fo:footnote-body>
   </fo:footnote>  

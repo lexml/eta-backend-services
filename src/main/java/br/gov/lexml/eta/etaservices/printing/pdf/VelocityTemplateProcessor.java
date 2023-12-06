@@ -65,8 +65,14 @@ public class VelocityTemplateProcessor {
 
         VelocityContext ctx = new VelocityContext();
 
+        VelocityExtension vex = new VelocityExtension(ctx, ve);
+        
         ctx.put("emenda", emenda);
-        ctx.put("ve", new VelocityExtension(ctx, ve));
+        ctx.put("ve", vex);
+        
+        if (emenda.getNotasRodape() != null && !emenda.getNotasRodape().isEmpty()) {
+        	emenda.getNotasRodape().forEach(nr -> ctx.put(nr.getId(), vex.html2fo(nr.getTexto())));
+        }
 
         StringWriter w = new StringWriter();
         ve.evaluate(ctx, w, "defaultTemplate", template);
