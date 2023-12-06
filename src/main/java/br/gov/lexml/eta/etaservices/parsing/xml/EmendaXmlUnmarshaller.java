@@ -36,6 +36,7 @@ import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
+import br.gov.lexml.eta.etaservices.emenda.NotaRodape;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
@@ -77,6 +78,7 @@ public class EmendaXmlUnmarshaller {
         final Autoria autoria = parseAutoria(rootElement);
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
+        final List<? extends NotaRodape> notasRodape = parseNotasRodape(rootElement);
 
         return new EmendaRecord(
                 metadados.getDataUltimaModificacao(),
@@ -98,7 +100,8 @@ public class EmendaXmlUnmarshaller {
                 atributosEmenda.getData(),
                 autoria,
                 opcoesImpressao,
-                revisoes);
+                revisoes,
+                notasRodape);
     }
 
 	private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
@@ -551,5 +554,31 @@ public class EmendaXmlUnmarshaller {
 			throw new RuntimeException("Falha ao fazer unmarshalling de revisao.", e);
 		}
     }
+    
+    private List<? extends NotaRodape> parseNotasRodape(Element rootElement) {
+    	List<NotaRodape> ret = new ArrayList<>();
+    	
+    	Element notasRodapeElement = (Element) rootElement.selectSingleNode("NotasRodape");
+    	if (notasRodapeElement != null) {
+    		List<Element> notasRodape = notasRodapeElement.elements();
+    		
+    		for(Element eNotaRodape: notasRodape) {
+    			ret.add(parseNotaRodape(eNotaRodape));
+    		}
+    		
+    	}
+    	
+		return ret;    	    	
+    }
+    
+    private NotaRodape parseNotaRodape(final Node nodeComponente) {
+    	final Element componente = (Element) nodeComponente;
+
+        final String id = componente.attributeValue("id");
+        final Integer numero = integerAttributeValue(componente.attributeValue("numero"));
+        final String texto = componente.attributeValue("texto");
+        
+        return new NotaRodapeRecord(id, numero, texto); 
+    }    
 
 }

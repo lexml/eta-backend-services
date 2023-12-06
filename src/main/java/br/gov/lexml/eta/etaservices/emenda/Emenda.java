@@ -55,6 +55,8 @@ public interface Emenda {
     
     List<? extends Revisao> getRevisoes();
     
+    List<? extends NotaRodape> getNotasRodape();
+    
     @JsonIgnore()
     default boolean isPossuiMarcasRevisao() {
     	return getRevisoes() != null && !getRevisoes().isEmpty();

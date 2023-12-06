@@ -25,11 +25,13 @@ import br.gov.lexml.eta.etaservices.emenda.DispositivosEmenda;
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 import br.gov.lexml.eta.etaservices.emenda.ItemComandoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.NotaRodape;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
+import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
@@ -56,6 +58,7 @@ public class EmendaXmlMarshaller {
 	        geraAutoria(emenda.getAutoria(), sb);
 	        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
 	        geraRevisoes(emenda.getRevisoes(), sb);
+	        geraNotasRodape(emenda.getNotasRodape(), sb);
 	        		
 			sb.append("</Emenda>");
 			return sb.toString();
@@ -629,6 +632,27 @@ public class EmendaXmlMarshaller {
     	
     	sb.append("</Revisoes>\n");
 	}
+    
+    private void geraNotasRodape(List<? extends NotaRodape> notasRodape, StringBuilder sb) throws Exception {
+    	if(notasRodape == null || notasRodape.isEmpty()) {
+    		return;
+    	}
+    	
+    	JAXBContext jcNotaRodape = JAXBContext.newInstance(NotaRodapePojo.class);    	
+    	Marshaller jmNotaRodape = jcNotaRodape.createMarshaller();
+    	jmNotaRodape.setProperty(Marshaller.JAXB_FRAGMENT, true);
+    	jmNotaRodape.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+    	sb.append("<NotasRodape>\n");
+
+    	StringBuilderWriter sw = new StringBuilderWriter(sb);
+    	for(NotaRodape nr: notasRodape) {
+    		jmNotaRodape.marshal(nr, sw);
+        	sb.append("\n");
+    	}
+    	
+    	sb.append("</NotasRodape>\n");    	
+    }
 
 //    public static void main(String[] args) {
 //		System.out.println(html2txt("teste  <a href=\"...\">link</a> <br>Nova linha."));

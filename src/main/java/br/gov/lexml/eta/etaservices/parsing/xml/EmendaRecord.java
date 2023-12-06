@@ -18,6 +18,7 @@ import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.emenda.Epigrafe;
 import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.NotaRodape;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
@@ -45,6 +46,7 @@ public final class EmendaRecord implements Emenda {
     private final OpcoesImpressao opcoesImpressao;
     // Utilizando RevisaoPojo para permitir marshaling jaxb entre jsone xml e vice versa.
     private final List<? extends Revisao> revisoes;
+    private final List<? extends NotaRodape> notasRodape;
 
     public EmendaRecord(
             Instant dataUltimaModificacao,
@@ -66,7 +68,8 @@ public final class EmendaRecord implements Emenda {
             LocalDate data,
             Autoria autoria,
             OpcoesImpressao opcoesImpressao,
-            List<? extends Revisao> revisoes) {
+            List<? extends Revisao> revisoes,
+            List<? extends NotaRodape> notasRodape) {
         this.dataUltimaModificacao = dataUltimaModificacao;
         this.aplicacao = aplicacao;
         this.versaoAplicacao = versaoAplicacao;
@@ -87,6 +90,7 @@ public final class EmendaRecord implements Emenda {
         this.autoria = autoria;
         this.opcoesImpressao = opcoesImpressao;
         this.revisoes = revisoes;
+        this.notasRodape = notasRodape;
     }
 
     @Override
@@ -215,6 +219,11 @@ public final class EmendaRecord implements Emenda {
     @Override
     public List<? extends Revisao> getRevisoes() {
     	return revisoes;
+    }
+    
+    @Override
+    public List<? extends NotaRodape> getNotasRodape() {
+    	return notasRodape;
     }
 
     @Override

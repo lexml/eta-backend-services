@@ -40,6 +40,7 @@ public class EmendaPojo implements Emenda {
     private AutoriaPojo autoria;
     private OpcoesImpressaoPojo opcoesImpressao;
     private List<? extends RevisaoPojo> revisoes;
+    private List<? extends NotaRodapePojo> notasRodape;
 
     @Override
     public Instant getDataUltimaModificacao() {
@@ -229,6 +230,14 @@ public class EmendaPojo implements Emenda {
     public void setRevisoes(List<? extends RevisaoPojo> revisoes) {
 		this.revisoes = revisoes;
 	}
+    
+    public List<? extends NotaRodapePojo> getNotasRodape() {
+    	return notasRodape;
+    }
+    
+    public void setNotasRodape(List<? extends NotaRodapePojo> notasRodape) {
+    	this.notasRodape = notasRodape;
+    }
 
 	@Override
 	public int hashCode() {
