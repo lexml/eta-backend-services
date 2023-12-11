@@ -725,11 +725,13 @@
 		  <xsl:value-of select="$numero"/>
 	  </fo:inline>
 	  <fo:footnote-body>
-		  <fo:block text-indent="0" font-size="12pt">
-			  <fo:inline baseline-shift="super" font-size="0.7em">
-				  <xsl:value-of select="concat($numero, ' ')"/>
-			  </fo:inline>
-			  <xsl:value-of select="$idNotaRodape"/>
+		  <fo:block text-indent="0" font-size="$tamanhoFonte"> <!-- tamanho da fonte do texto principal da emenda -->
+			  <fo:block font-size="0.8em">
+				  <fo:inline baseline-shift="super" font-size="0.7em">
+					  <xsl:value-of select="concat($numero, ' ')"/>
+				  </fo:inline>
+			  	  <xsl:value-of select="$idNotaRodape"/>
+		  	  </fo:block>
 		  </fo:block>
 	  </fo:footnote-body>
   </fo:footnote>  

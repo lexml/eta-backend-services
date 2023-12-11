@@ -200,6 +200,7 @@
 		</fo:static-content>      
 	
 		<fo:flow flow-name="xsl-region-body" font-size="${emenda.opcoesImpressao.tamanhoFonte}pt">
+			#set($tamanhoFonte = $emenda.opcoesImpressao.tamanhoFonte)
 			<fo:block-container>
 				<fo:marker marker-class-name="marker.texto" />
 ## Alertas -------------------------------------------------------------------------
