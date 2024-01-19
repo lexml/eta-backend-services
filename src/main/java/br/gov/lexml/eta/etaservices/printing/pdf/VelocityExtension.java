@@ -43,7 +43,7 @@ public class VelocityExtension {
 			e.printStackTrace();
 		}
 	}
-
+	
 	// HTML to XSL-FO
 	public String html2fo(String html) {
 		try {
@@ -79,7 +79,8 @@ public class VelocityExtension {
 			.replaceAll("<p(.+?)><img", "<p$1 class=\"align-center\"><img")
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
 			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"3cm\" text-indent=\"1.5cm\" $1")
-			.replaceAll("(class=\"[^\"]*)ql-text-indent-0px", "text-indent=\"0\" $1");
+			.replaceAll("(class=\"[^\"]*)ql-text-indent-0px", "text-indent=\"0\" $1")
+			.replaceAll("texto=\"(.*?)\" ", "");
 		
 		return this.html2fo(htmlAttrFo);
 	}

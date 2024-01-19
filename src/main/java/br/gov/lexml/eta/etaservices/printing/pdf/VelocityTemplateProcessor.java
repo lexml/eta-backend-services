@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.parsing.xml.NotaRodapeRecord;
 
 public class VelocityTemplateProcessor {
 
@@ -70,8 +71,11 @@ public class VelocityTemplateProcessor {
         ctx.put("emenda", emenda);
         ctx.put("ve", vex);
         
-        if (emenda.getNotasRodape() != null && !emenda.getNotasRodape().isEmpty()) {
-        	emenda.getNotasRodape().forEach(nr -> ctx.put(nr.getId(), vex.html2fo(nr.getTexto())));
+        if (emenda.getNotasRodape() != null && !emenda.getNotasRodape().isEmpty()) {        	
+        	emenda.getNotasRodape().forEach(nr -> {
+        		String notaRodape  = nr.getTexto().replaceFirst("<p>", "<p>" + nr.getNumero() + " ");
+        		ctx.put(nr.getId(), vex.html2fo(notaRodape));	
+        	});
         }
 
         StringWriter w = new StringWriter();
