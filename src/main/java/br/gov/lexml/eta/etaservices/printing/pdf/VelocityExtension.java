@@ -80,7 +80,7 @@ public class VelocityExtension {
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
 			.replaceAll("(class=\"[^\"]*)estilo-norma-alterada", "margin-left=\"3cm\" text-indent=\"1.5cm\" $1")
 			.replaceAll("(class=\"[^\"]*)ql-text-indent-0px", "text-indent=\"0\" $1")
-			.replaceAll("texto=\"(.*?)\" ", "");
+			.replaceAll("texto=\".*?\"", "");
 		
 		return this.html2fo(htmlAttrFo);
 	}
