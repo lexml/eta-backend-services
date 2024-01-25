@@ -75,6 +75,9 @@ public class VelocityExtension {
 		html = multipleReplaceAll(html, "<table .+?</table>", 
 				m -> m.quoteReplacement(m.group().replace("$pMarginBottom", "0")));
 		
+		// Retira marcas de revisão para apresentar apenas a versão revisada
+		html = html.replaceAll("<del .+?</del>", "").replaceAll("<ins .*?>", "").replace("</ins>", "");
+		
 		String htmlAttrFo = html
 			.replaceAll("<p(.+?)><img", "<p$1 class=\"align-center\"><img")
 			.replaceAll("(class=\"[^\"]*)estilo-ementa", "margin-left=\"6.5cm\" text-indent=\"0\" $1")
