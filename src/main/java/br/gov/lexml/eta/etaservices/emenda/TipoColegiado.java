@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum TipoColegiado {
     COMISSAO("Comissão"),
-    PLENARIO("Plenário");
-
+    PLENARIO("Plenário"),
+	PLENARIO_VIA_COMISSAO("Plenário via Comissão");
+	
     private final String descricao;
 
     TipoColegiado(final String descricao) {
