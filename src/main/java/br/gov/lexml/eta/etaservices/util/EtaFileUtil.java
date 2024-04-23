@@ -1,11 +1,14 @@
 package br.gov.lexml.eta.etaservices.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
 
 public class EtaFileUtil {
@@ -26,6 +29,17 @@ public class EtaFileUtil {
 		} catch (Exception e) {
 			throw new RuntimeException("Arquivo " + resourceName + " não encontrado.", e);
 		} 		
+	}
+
+	public static String readFromImageAsBase64String(InputStream is) {
+		String base64Image = "";
+		try {
+			byte imageData[] = IOUtils.toByteArray(is);
+			base64Image = Base64.getEncoder().encodeToString(imageData);
+		} catch (IOException ioe) {
+			System.out.println("Exception while reading the Image " + ioe);
+		}
+		return base64Image;	
 	}
 
 }

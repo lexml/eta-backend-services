@@ -1,6 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringWriter;
 
 import org.apache.commons.lang3.StringUtils;
@@ -10,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
-import br.gov.lexml.eta.etaservices.parsing.xml.NotaRodapeRecord;
+import br.gov.lexml.eta.etaservices.util.EtaFileUtil;
 
 public class VelocityTemplateProcessor {
 
@@ -70,6 +71,18 @@ public class VelocityTemplateProcessor {
         
         ctx.put("emenda", emenda);
         ctx.put("ve", vex);
+                
+        if (emenda.getOpcoesImpressao().isImprimirBrasao()) {
+        	InputStream brasaoStream ;
+        	if (emenda.isMateriaCongressoNacional()) {
+        		brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/assets/img/brasao_cn.jpg");
+        	} else {
+        		brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/assets/img/brasao.jpg");
+        	}
+        	
+        	String brasaoBase64 = EtaFileUtil.readFromImageAsBase64String(brasaoStream);
+        	ctx.put("brasao", brasaoBase64);
+        }
         
         if (emenda.getNotasRodape() != null && !emenda.getNotasRodape().isEmpty()) {        	
         	emenda.getNotasRodape().forEach(nr -> {

@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.vavr.collection.Stream;
+
 public interface Emenda {
     Instant getDataUltimaModificacao();
 
@@ -62,4 +64,9 @@ public interface Emenda {
     	return getRevisoes() != null && !getRevisoes().isEmpty();
     }
     
+    @JsonIgnore()
+    default boolean isMateriaCongressoNacional() {
+    	return getColegiadoApreciador().getSiglaComissao() != null
+    			&& Stream.of(TipoEmenda.values()).exists(t -> getColegiadoApreciador().getSiglaComissao().contains(t.getDescricao()));
+    }
 }
