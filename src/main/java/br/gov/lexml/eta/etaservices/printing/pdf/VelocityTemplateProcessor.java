@@ -73,7 +73,7 @@ public class VelocityTemplateProcessor {
         ctx.put("ve", vex);
                 
         if (emenda.getOpcoesImpressao().isImprimirBrasao()) {
-        	InputStream brasaoStream ;
+        	InputStream brasaoStream;
         	if (emenda.isMateriaCongressoNacional()) {
         		brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/assets/img/brasao_cn.jpg");
         	} else {

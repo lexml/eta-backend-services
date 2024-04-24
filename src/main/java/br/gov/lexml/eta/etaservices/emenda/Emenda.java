@@ -66,7 +66,7 @@ public interface Emenda {
     
     @JsonIgnore()
     default boolean isMateriaCongressoNacional() {
-    	return getColegiadoApreciador().getSiglaComissao() != null
-    			&& Stream.of(TipoEmenda.values()).exists(t -> getColegiadoApreciador().getSiglaComissao().contains(t.getDescricao()));
+    	return Stream.of(TipoMateria.values())
+                    .exists(t -> t.name().equals(getProposicao().getSigla()));
     }
 }
