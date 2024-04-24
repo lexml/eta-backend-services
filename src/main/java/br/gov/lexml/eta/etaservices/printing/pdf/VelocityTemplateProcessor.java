@@ -75,9 +75,9 @@ public class VelocityTemplateProcessor {
         if (emenda.getOpcoesImpressao().isImprimirBrasao()) {
         	InputStream brasaoStream;
         	if (emenda.isMateriaCongressoNacional()) {
-        		brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/assets/img/brasao_cn.jpg");
+        		brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao_cn.jpg");
         	} else {
-        		brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/assets/img/brasao.jpg");
+        		brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao.jpg");
         	}
         	
         	String brasaoBase64 = EtaFileUtil.readFromImageAsBase64String(brasaoStream);
