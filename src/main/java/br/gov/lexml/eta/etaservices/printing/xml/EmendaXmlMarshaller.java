@@ -131,6 +131,9 @@ public class EmendaXmlMarshaller {
                 .append("identificacaoTexto=\"")
                 .append(StringEscapeUtils.escapeXml10(proposicao.getIdentificacaoTexto()))
                 .append("\" ")
+                .append("emendarTextoSubstitutivo=\"")
+                .append(proposicao.getEmendarTextoSubstitutivo())
+                .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 

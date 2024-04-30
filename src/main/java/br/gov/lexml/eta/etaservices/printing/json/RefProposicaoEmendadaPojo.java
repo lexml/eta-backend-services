@@ -11,6 +11,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
     private String ano;
     private String ementa;
     private String identificacaoTexto;
+    private String emendarTextoSubstitutivo;
 
     @Override
     public String getUrn() {
@@ -70,6 +71,16 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
     @SuppressWarnings("unused")
     public void setIdentificacaoTexto(String identificacaoTexto) {
         this.identificacaoTexto = identificacaoTexto;
+    }
+
+    @Override
+    public String getEmendarTextoSubstitutivo() {
+        return this.emendarTextoSubstitutivo;
+    }
+
+    @SuppressWarnings("unused")
+    public void setEmendarTextoSubstitutivo(String emendarTextoSubstitutivo) {
+        this.emendarTextoSubstitutivo = emendarTextoSubstitutivo;
     }
 
     @Override
