@@ -11,6 +11,7 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
     private final String ano;
     private final String ementa;
     private final String identificacaoTexto;
+    private final String emendarTextoSubstitutivo;
 
     public RefProposicaoEmendadaRecord(
             String urn,
@@ -18,13 +19,15 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
             String numero,
             String ano,
             String ementa,
-            String identificacaoTexto) {
+            String identificacaoTexto,
+            String emendarTextoSubstitutivo) {
         this.urn = urn;
         this.sigla = sigla;
         this.numero = numero;
         this.ano = ano;
         this.ementa = ementa;
         this.identificacaoTexto = identificacaoTexto;
+        this.emendarTextoSubstitutivo = emendarTextoSubstitutivo;
     }
 
     public String getUrn() {
@@ -49,6 +52,10 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
 
     public String getIdentificacaoTexto() {
         return identificacaoTexto;
+    }
+
+    public String getEmendarTextoSubstitutivo() {
+        return this.emendarTextoSubstitutivo;
     }
 
     @Override
