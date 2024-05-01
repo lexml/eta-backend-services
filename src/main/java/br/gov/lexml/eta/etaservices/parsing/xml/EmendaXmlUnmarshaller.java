@@ -79,6 +79,7 @@ public class EmendaXmlUnmarshaller {
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
         final List<? extends NotaRodape> notasRodape = parseNotasRodape(rootElement);
+        final Boolean emendarTextoSubstitutivo = parseEmendarTextoSubstitutivo(rootElement);
 
         return new EmendaRecord(
                 metadados.getDataUltimaModificacao(),
@@ -101,10 +102,19 @@ public class EmendaXmlUnmarshaller {
                 autoria,
                 opcoesImpressao,
                 revisoes,
-                notasRodape);
+                notasRodape,
+                emendarTextoSubstitutivo);
     }
 
-	private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
+    private Boolean parseEmendarTextoSubstitutivo(final Element rootElement) {
+        final Element emendarTextoSubstitutivoEl = (Element) rootElement.selectSingleNode("EmendarTextoSubstitutivo");
+        final String emendarTextoSubstitutivoString = emendarTextoSubstitutivoEl != null
+                ? emendarTextoSubstitutivoEl.attributeValue("valor") : null;
+
+        return booleanAttributeValue(emendarTextoSubstitutivoString);
+    }
+
+    private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
         final List<Node> nodes = rootElement.selectNodes("Componente");
 
         return nodes.stream().map(this::parseComponente).collect(Collectors.toList());
@@ -163,7 +173,6 @@ public class EmendaXmlUnmarshaller {
         final String ano = proposicao.attributeValue("ano");
         final String ementa = proposicao.attributeValue("ementa");
         final String identificacaoTexto = proposicao.attributeValue("identificacaoTexto");
-        final String emendarTextoSubstitutivo = proposicao.attributeValue("emendarTextoSubstitutivo");
 
         return new RefProposicaoEmendadaRecord(
                 urn,
@@ -171,8 +180,7 @@ public class EmendaXmlUnmarshaller {
                 numero,
                 ano,
                 ementa,
-                identificacaoTexto,
-                emendarTextoSubstitutivo);
+                identificacaoTexto);
     }
 
     private ColegiadoApreciador parseColegiado(final Element rootElement) {
