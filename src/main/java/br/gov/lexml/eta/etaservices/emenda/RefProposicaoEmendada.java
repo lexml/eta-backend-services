@@ -12,4 +12,6 @@ public interface RefProposicaoEmendada {
     String getEmenta();
 
     String getIdentificacaoTexto();
+
+    String getEmendarTextoSubstitutivo();
 }

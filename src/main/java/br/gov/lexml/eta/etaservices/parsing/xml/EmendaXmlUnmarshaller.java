@@ -79,7 +79,6 @@ public class EmendaXmlUnmarshaller {
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
         final List<? extends NotaRodape> notasRodape = parseNotasRodape(rootElement);
-        final Boolean emendarTextoSubstitutivo = parseEmendarTextoSubstitutivo(rootElement);
 
         return new EmendaRecord(
                 metadados.getDataUltimaModificacao(),
@@ -102,16 +101,7 @@ public class EmendaXmlUnmarshaller {
                 autoria,
                 opcoesImpressao,
                 revisoes,
-                notasRodape,
-                emendarTextoSubstitutivo);
-    }
-
-    private Boolean parseEmendarTextoSubstitutivo(final Element rootElement) {
-        final Element emendarTextoSubstitutivoEl = (Element) rootElement.selectSingleNode("EmendarTextoSubstitutivo");
-        final String emendarTextoSubstitutivoString = emendarTextoSubstitutivoEl != null
-                ? emendarTextoSubstitutivoEl.attributeValue("valor") : null;
-
-        return booleanAttributeValue(emendarTextoSubstitutivoString);
+                notasRodape);
     }
 
     private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
@@ -173,6 +163,7 @@ public class EmendaXmlUnmarshaller {
         final String ano = proposicao.attributeValue("ano");
         final String ementa = proposicao.attributeValue("ementa");
         final String identificacaoTexto = proposicao.attributeValue("identificacaoTexto");
+        final String emendarTextoSubstitutivo = proposicao.attributeValue("emendarTextoSubstitutivo");
 
         return new RefProposicaoEmendadaRecord(
                 urn,
@@ -180,7 +171,8 @@ public class EmendaXmlUnmarshaller {
                 numero,
                 ano,
                 ementa,
-                identificacaoTexto);
+                identificacaoTexto,
+                emendarTextoSubstitutivo);
     }
 
     private ColegiadoApreciador parseColegiado(final Element rootElement) {

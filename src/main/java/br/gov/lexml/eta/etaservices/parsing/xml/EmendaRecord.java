@@ -47,7 +47,6 @@ public final class EmendaRecord implements Emenda {
     // Utilizando RevisaoPojo para permitir marshaling jaxb entre jsone xml e vice versa.
     private final List<? extends Revisao> revisoes;
     private final List<? extends NotaRodape> notasRodape;
-    private final Boolean emendarTextoSubstitutivo;
 
     public EmendaRecord(
             Instant dataUltimaModificacao,
@@ -70,8 +69,7 @@ public final class EmendaRecord implements Emenda {
             Autoria autoria,
             OpcoesImpressao opcoesImpressao,
             List<? extends Revisao> revisoes,
-            List<? extends NotaRodape> notasRodape,
-            Boolean emendarTextoSubstitutivo) {
+            List<? extends NotaRodape> notasRodape) {
         this.dataUltimaModificacao = dataUltimaModificacao;
         this.aplicacao = aplicacao;
         this.versaoAplicacao = versaoAplicacao;
@@ -93,7 +91,6 @@ public final class EmendaRecord implements Emenda {
         this.opcoesImpressao = opcoesImpressao;
         this.revisoes = revisoes;
         this.notasRodape = notasRodape;
-        this.emendarTextoSubstitutivo = emendarTextoSubstitutivo;
     }
 
     @Override
@@ -227,11 +224,6 @@ public final class EmendaRecord implements Emenda {
     @Override
     public List<? extends NotaRodape> getNotasRodape() {
     	return notasRodape;
-    }
-
-    @Override
-    public Boolean getEmendarTextoSubstitutivo() {
-        return emendarTextoSubstitutivo;
     }
 
     @Override

@@ -59,7 +59,6 @@ public class EmendaXmlMarshaller {
 	        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
 	        geraRevisoes(emenda.getRevisoes(), sb);
 	        geraNotasRodape(emenda.getNotasRodape(), sb);
-            geraEmendarTextoSubstitutivo(emenda.getEmendarTextoSubstitutivo(), sb);
 
 			sb.append("</Emenda>");
 			return sb.toString();
@@ -131,6 +130,9 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("identificacaoTexto=\"")
                 .append(StringEscapeUtils.escapeXml10(proposicao.getIdentificacaoTexto()))
+                .append("\" ")
+                .append("emendarTextoSubstitutivo=\"")
+                .append(proposicao.getEmendarTextoSubstitutivo())
                 .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
@@ -653,14 +655,6 @@ public class EmendaXmlMarshaller {
     	}
     	
     	sb.append("</NotasRodape>\n");    	
-    }
-
-    private void geraEmendarTextoSubstitutivo(Boolean emendarTextoSubstitutivo, StringBuilder sb) {
-        if(emendarTextoSubstitutivo != null) {
-            sb.append("  <EmendarTextoSubstitutivo valor=\"")
-                    .append(emendarTextoSubstitutivo ? 's' : 'n')
-                    .append("\"></EmendarTextoSubstitutivo>\n");
-        }
     }
 
 //    public static void main(String[] args) {

@@ -41,7 +41,6 @@ public class EmendaPojo implements Emenda {
     private OpcoesImpressaoPojo opcoesImpressao;
     private List<? extends RevisaoPojo> revisoes;
     private List<? extends NotaRodapePojo> notasRodape;
-    private Boolean emendarTextoSubstitutivo;
 
     @Override
     public Instant getDataUltimaModificacao() {
@@ -240,15 +239,6 @@ public class EmendaPojo implements Emenda {
     	this.notasRodape = notasRodape;
     }
 
-    @Override
-    public Boolean getEmendarTextoSubstitutivo() {
-        return emendarTextoSubstitutivo;
-    }
-
-    public void setEmendarTextoSubstitutivo(Boolean emendarTextoSubstitutivo) {
-        this.emendarTextoSubstitutivo = emendarTextoSubstitutivo;
-    }
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -272,7 +262,6 @@ public class EmendaPojo implements Emenda {
 		result = prime * result + ((revisoes == null) ? 0 : revisoes.hashCode());
 		result = prime * result + ((versaoAplicacao == null) ? 0 : versaoAplicacao.hashCode());
 		result = prime * result + ((substituicaoTermo == null) ? 0 : substituicaoTermo.hashCode());
-		result = prime * result + ((emendarTextoSubstitutivo == null) ? 0 : emendarTextoSubstitutivo.hashCode());
 		return result;
 	}
 
@@ -377,11 +366,6 @@ public class EmendaPojo implements Emenda {
 				return false;
 		} else if (!versaoAplicacao.equals(other.versaoAplicacao))
 			return false;
-        if (emendarTextoSubstitutivo == null) {
-            if (other.emendarTextoSubstitutivo != null)
-                return false;
-        } else if (!emendarTextoSubstitutivo.equals(other.emendarTextoSubstitutivo))
-            return false;
 		return true;
 	}
 
@@ -393,6 +377,6 @@ public class EmendaPojo implements Emenda {
 				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre=" + comandoEmendaTextoLivre 
                 + ", substituicaoTermo" + substituicaoTermo + ", anexos=" + anexos + ", justificativa=" + justificativa 
                 + ", local=" + local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao
-				+ ", revisoes=" + revisoes + ", emendarTextoSubstitutivo= " + emendarTextoSubstitutivo + "]";
+				+ ", revisoes=" + revisoes + "]";
 	}
 }

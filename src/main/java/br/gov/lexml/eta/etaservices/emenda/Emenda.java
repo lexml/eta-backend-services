@@ -57,8 +57,6 @@ public interface Emenda {
     
     List<? extends NotaRodape> getNotasRodape();
 
-    Boolean getEmendarTextoSubstitutivo();
-    
     @JsonIgnore()
     default boolean isPossuiMarcasRevisao() {
     	return getRevisoes() != null && !getRevisoes().isEmpty();
