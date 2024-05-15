@@ -1,7 +1,5 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
-import static br.gov.lexml.eta.etaservices.emenda.TipoColegiado.COMISSAO;
-
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -31,6 +29,7 @@ import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
+import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
 import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
@@ -144,7 +143,7 @@ public class EmendaXmlMarshaller {
                 .append(colegiado.getTipoColegiado().getDescricao())
                 .append("\"");
 
-        if (colegiado.getTipoColegiado() == COMISSAO) {
+        if (colegiado.getTipoColegiado() == TipoColegiado.COMISSAO || colegiado.getTipoColegiado() == TipoColegiado.PLENARIO_VIA_COMISSAO) {
             sb.append(" siglaComissao=\"")
                     .append(colegiado.getSiglaComissao())
                     .append("\"");

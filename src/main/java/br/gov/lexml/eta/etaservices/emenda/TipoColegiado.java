@@ -17,14 +17,12 @@ public enum TipoColegiado {
     	if (valueOf == null) {
     		return null;
     	}
-        switch (valueOf) {
-            case "Comissão":
-                return COMISSAO;
-            case "Plenário":
-                return PLENARIO;
-            default:
-                return null;
-        }
+    	for(TipoColegiado tc: TipoColegiado.values()) {
+    		if(tc.descricao.equals(valueOf)) {
+    			return tc;
+    		}
+    	}
+    	return null;
     }
 
     @JsonValue
