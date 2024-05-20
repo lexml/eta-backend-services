@@ -6,6 +6,7 @@ public enum SiglaCasaLegislativa {
     SF;
 
     public static SiglaCasaLegislativa parse(String valueOf) {
+        if (valueOf == null) {return null;}
         switch (valueOf) {
             case "CN":
                 return CN;
