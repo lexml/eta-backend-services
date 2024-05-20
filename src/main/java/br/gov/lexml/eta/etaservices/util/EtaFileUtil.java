@@ -32,6 +32,10 @@ public class EtaFileUtil {
 	}
 
 	public static String readFromImageAsBase64String(InputStream is) {
+		if (is == null) {
+			return null;
+		}
+
 		String base64Image = "";
 		try {
 			byte imageData[] = IOUtils.toByteArray(is);
