@@ -104,7 +104,7 @@ public class EmendaXmlUnmarshaller {
                 notasRodape);
     }
 
-	private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
+    private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
         final List<Node> nodes = rootElement.selectNodes("Componente");
 
         return nodes.stream().map(this::parseComponente).collect(Collectors.toList());
@@ -163,7 +163,7 @@ public class EmendaXmlUnmarshaller {
         final String ano = proposicao.attributeValue("ano");
         final String ementa = proposicao.attributeValue("ementa");
         final String identificacaoTexto = proposicao.attributeValue("identificacaoTexto");
-
+        final String emendarTextoSubstitutivo = proposicao.attributeValue("emendarTextoSubstitutivo");
 
         return new RefProposicaoEmendadaRecord(
                 urn,
@@ -171,7 +171,8 @@ public class EmendaXmlUnmarshaller {
                 numero,
                 ano,
                 ementa,
-                identificacaoTexto);
+                identificacaoTexto,
+                emendarTextoSubstitutivo);
     }
 
     private ColegiadoApreciador parseColegiado(final Element rootElement) {

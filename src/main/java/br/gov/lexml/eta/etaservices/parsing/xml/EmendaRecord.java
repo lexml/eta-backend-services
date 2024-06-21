@@ -247,5 +247,4 @@ public final class EmendaRecord implements Emenda {
                 "autoria=" + autoria + ", " +
                 "opcoesImpressao=" + opcoesImpressao + ']';
     }
-
 }

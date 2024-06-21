@@ -11,6 +11,7 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
     private final String ano;
     private final String ementa;
     private final String identificacaoTexto;
+    private final String emendarTextoSubstitutivo;
 
     public RefProposicaoEmendadaRecord(
             String urn,
@@ -18,13 +19,15 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
             String numero,
             String ano,
             String ementa,
-            String identificacaoTexto) {
+            String identificacaoTexto,
+            String emendarTextoSubstitutivo) {
         this.urn = urn;
         this.sigla = sigla;
         this.numero = numero;
         this.ano = ano;
         this.ementa = ementa;
         this.identificacaoTexto = identificacaoTexto;
+        this.emendarTextoSubstitutivo = emendarTextoSubstitutivo;
     }
 
     public String getUrn() {
@@ -51,6 +54,10 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
         return identificacaoTexto;
     }
 
+    public String getEmendarTextoSubstitutivo() {
+        return emendarTextoSubstitutivo;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -61,12 +68,13 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
                 Objects.equals(this.numero, that.numero) &&
                 Objects.equals(this.ano, that.ano) &&
                 Objects.equals(this.ementa, that.ementa) &&
-                Objects.equals(this.identificacaoTexto, that.identificacaoTexto);
+                Objects.equals(this.identificacaoTexto, that.identificacaoTexto) &&
+                Objects.equals(this.emendarTextoSubstitutivo, that.emendarTextoSubstitutivo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(urn, sigla, numero, ano, ementa, identificacaoTexto);
+        return Objects.hash(urn, sigla, numero, ano, ementa, identificacaoTexto, emendarTextoSubstitutivo);
     }
 
     @Override
@@ -77,8 +85,7 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
                 "numero=" + numero + ", " +
                 "ano=" + ano + ", " +
                 "ementa=" + ementa + ", " +
-                "identificacaoTexto=" + identificacaoTexto + ']';
+                "identificacaoTexto=" + identificacaoTexto + ", " +
+                "emendarTextoSubstitutivo=" + emendarTextoSubstitutivo + ']';
     }
-
-
 }

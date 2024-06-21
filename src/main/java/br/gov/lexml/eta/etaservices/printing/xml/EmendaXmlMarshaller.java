@@ -58,7 +58,7 @@ public class EmendaXmlMarshaller {
 	        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
 	        geraRevisoes(emenda.getRevisoes(), sb);
 	        geraNotasRodape(emenda.getNotasRodape(), sb);
-	        		
+
 			sb.append("</Emenda>");
 			return sb.toString();
 		}
@@ -129,6 +129,9 @@ public class EmendaXmlMarshaller {
                 .append("\" ")
                 .append("identificacaoTexto=\"")
                 .append(StringEscapeUtils.escapeXml10(proposicao.getIdentificacaoTexto()))
+                .append("\" ")
+                .append("emendarTextoSubstitutivo=\"")
+                .append(proposicao.getEmendarTextoSubstitutivo())
                 .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }

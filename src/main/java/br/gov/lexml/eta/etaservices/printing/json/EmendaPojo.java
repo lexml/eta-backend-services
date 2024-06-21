@@ -379,8 +379,4 @@ public class EmendaPojo implements Emenda {
                 + ", local=" + local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao
 				+ ", revisoes=" + revisoes + "]";
 	}
-
-     
-    
-    
 }

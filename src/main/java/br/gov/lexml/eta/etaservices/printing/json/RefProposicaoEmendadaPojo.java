@@ -11,6 +11,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
     private String ano;
     private String ementa;
     private String identificacaoTexto;
+    private String emendarTextoSubstitutivo;
 
     @Override
     public String getUrn() {
@@ -73,16 +74,26 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
     }
 
     @Override
+    public String getEmendarTextoSubstitutivo() {
+        return emendarTextoSubstitutivo;
+    }
+
+    @SuppressWarnings("unused")
+    public void setEmendarTextoSubstitutivo(String emendarTextoSubstitutivo) {
+        this.emendarTextoSubstitutivo = emendarTextoSubstitutivo;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RefProposicaoEmendadaPojo that = (RefProposicaoEmendadaPojo) o;
-        return Objects.equals(urn, that.urn) && Objects.equals(sigla, that.sigla) && Objects.equals(numero, that.numero) && Objects.equals(ano, that.ano) && Objects.equals(ementa, that.ementa) && Objects.equals(identificacaoTexto, that.identificacaoTexto);
+        return Objects.equals(urn, that.urn) && Objects.equals(sigla, that.sigla) && Objects.equals(numero, that.numero) && Objects.equals(ano, that.ano) && Objects.equals(ementa, that.ementa) && Objects.equals(identificacaoTexto, that.identificacaoTexto) && Objects.equals(emendarTextoSubstitutivo, that.emendarTextoSubstitutivo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(urn, sigla, numero, ano, ementa, identificacaoTexto);
+        return Objects.hash(urn, sigla, numero, ano, ementa, identificacaoTexto, emendarTextoSubstitutivo);
     }
 
     @Override
@@ -94,6 +105,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
                 ", ano='" + ano + '\'' +
                 ", ementa='" + ementa + '\'' +
                 ", identificacaoTexto='" + identificacaoTexto + '\'' +
+                ", emendarTextoSubstitutivo='" + emendarTextoSubstitutivo + '\'' +
                 '}';
     }
 }
