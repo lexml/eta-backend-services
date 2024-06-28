@@ -163,7 +163,7 @@ public class EmendaXmlUnmarshaller {
         final String ano = proposicao.attributeValue("ano");
         final String ementa = proposicao.attributeValue("ementa");
         final String identificacaoTexto = proposicao.attributeValue("identificacaoTexto");
-        final String emendarTextoSubstitutivo = proposicao.attributeValue("emendarTextoSubstitutivo");
+        final boolean emendarTextoSubstitutivo = booleanAttributeValue(proposicao.attributeValue("emendarTextoSubstitutivo"));
 
         return new RefProposicaoEmendadaRecord(
                 urn,

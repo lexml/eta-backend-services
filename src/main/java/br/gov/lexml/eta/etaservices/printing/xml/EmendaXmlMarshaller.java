@@ -131,7 +131,7 @@ public class EmendaXmlMarshaller {
                 .append(StringEscapeUtils.escapeXml10(proposicao.getIdentificacaoTexto()))
                 .append("\" ")
                 .append("emendarTextoSubstitutivo=\"")
-                .append(proposicao.getEmendarTextoSubstitutivo())
+                .append(proposicao.isEmendarTextoSubstitutivo())
                 .append("\" ")
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }

@@ -1,8 +1,8 @@
 package br.gov.lexml.eta.etaservices.parsing.xml;
 
-import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
-
 import java.util.Objects;
+
+import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 
 public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada {
     private final String urn;
@@ -11,7 +11,7 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
     private final String ano;
     private final String ementa;
     private final String identificacaoTexto;
-    private final String emendarTextoSubstitutivo;
+    private final boolean emendarTextoSubstitutivo;
 
     public RefProposicaoEmendadaRecord(
             String urn,
@@ -20,7 +20,7 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
             String ano,
             String ementa,
             String identificacaoTexto,
-            String emendarTextoSubstitutivo) {
+            boolean emendarTextoSubstitutivo) {
         this.urn = urn;
         this.sigla = sigla;
         this.numero = numero;
@@ -54,10 +54,10 @@ public final class RefProposicaoEmendadaRecord implements RefProposicaoEmendada 
         return identificacaoTexto;
     }
 
-    public String getEmendarTextoSubstitutivo() {
-        return emendarTextoSubstitutivo;
-    }
-
+    public boolean isEmendarTextoSubstitutivo() {
+		return emendarTextoSubstitutivo;
+	}
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

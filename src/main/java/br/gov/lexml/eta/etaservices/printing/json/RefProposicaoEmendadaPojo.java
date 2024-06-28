@@ -1,8 +1,8 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
-
 import java.util.Objects;
+
+import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 
 public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
     private String urn;
@@ -11,7 +11,7 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
     private String ano;
     private String ementa;
     private String identificacaoTexto;
-    private String emendarTextoSubstitutivo;
+    private boolean emendarTextoSubstitutivo;
 
     @Override
     public String getUrn() {
@@ -74,12 +74,12 @@ public class RefProposicaoEmendadaPojo implements RefProposicaoEmendada {
     }
 
     @Override
-    public String getEmendarTextoSubstitutivo() {
+    public boolean isEmendarTextoSubstitutivo() {
         return emendarTextoSubstitutivo;
     }
 
     @SuppressWarnings("unused")
-    public void setEmendarTextoSubstitutivo(String emendarTextoSubstitutivo) {
+    public void setEmendarTextoSubstitutivo(boolean emendarTextoSubstitutivo) {
         this.emendarTextoSubstitutivo = emendarTextoSubstitutivo;
     }
 
