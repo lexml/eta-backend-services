@@ -662,18 +662,13 @@ public class EmendaXmlMarshaller {
             return;
         }
 
-        JAXBContext jcNotaRodape = JAXBContext.newInstance(NotaRodapePojo.class);
-        Marshaller jmNotaRodape = jcNotaRodape.createMarshaller();
-        jmNotaRodape.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        jmNotaRodape.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-        sb.append("<PendenciasPreenchimento>\n");
+        sb.append("  <PendenciasPreenchimento>\n");
         for(String pendencia: pendenciasPreenchimento) {
-            sb.append("<PendenciaPreenchimento>");
+            sb.append("    <PendenciaPreenchimento>");
             sb.append(pendencia);
             sb.append("</PendenciaPreenchimento>\n");
         }
-        sb.append("</PendenciasPreenchimento>\n");
+        sb.append("  </PendenciasPreenchimento>\n");
     }
 
 //    public static void main(String[] args) {
