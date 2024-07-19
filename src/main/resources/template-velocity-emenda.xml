@@ -204,11 +204,21 @@
 				<fo:marker marker-class-name="marker.texto" />
 ## Alertas -------------------------------------------------------------------------
 				#if($emenda.revisoes.size() > 0)
-				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold" 
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
 					text-align="center" padding=".1cm" space-after=".3cm">
 					Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.
 				</fo:block>
-				#end				
+				#end
+## Pendências de Preenchimento -----------------------------------------------------
+				#if($emenda.pendenciasPreenchimento.size() > 0)
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+						  text-align="center" padding=".1cm" space-after=".3cm">
+					Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:
+					#foreach ($pendencia in $emenda.pendenciasPreenchimento)
+						<fo:block font-weight="bold">$pendencia</fo:block>
+					#end
+				</fo:block>
+				#end
 ## Epígrafe -------------------------------------------------------------------------
 				<fo:block text-align="center"
 					white-space-collapse="false">

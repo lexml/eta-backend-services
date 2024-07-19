@@ -58,6 +58,7 @@ public class EmendaXmlMarshaller {
 	        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
 	        geraRevisoes(emenda.getRevisoes(), sb);
 	        geraNotasRodape(emenda.getNotasRodape(), sb);
+            geraPendenciasPreenchimento(emenda.getPendenciasPreenchimento(), sb);
 
 			sb.append("</Emenda>");
 			return sb.toString();
@@ -654,6 +655,25 @@ public class EmendaXmlMarshaller {
     	}
     	
     	sb.append("</NotasRodape>\n");    	
+    }
+
+    private void geraPendenciasPreenchimento(List<String> pendenciasPreenchimento, StringBuilder sb) throws Exception {
+        if (pendenciasPreenchimento == null || pendenciasPreenchimento.isEmpty()) {
+            return;
+        }
+
+        JAXBContext jcNotaRodape = JAXBContext.newInstance(NotaRodapePojo.class);
+        Marshaller jmNotaRodape = jcNotaRodape.createMarshaller();
+        jmNotaRodape.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        jmNotaRodape.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        sb.append("<PendenciasPreenchimento>\n");
+        for(String pendencia: pendenciasPreenchimento) {
+            sb.append("<PendenciaPreenchimento>");
+            sb.append(pendencia);
+            sb.append("</PendenciaPreenchimento>\n");
+        }
+        sb.append("</PendenciasPreenchimento>\n");
     }
 
 //    public static void main(String[] args) {

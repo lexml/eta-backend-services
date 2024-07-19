@@ -79,6 +79,7 @@ public class EmendaXmlUnmarshaller {
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
         final List<? extends NotaRodape> notasRodape = parseNotasRodape(rootElement);
+        final List<String> pendenciasPreenchimento = parsePendenciasPreenchimento(rootElement);
 
         return new EmendaRecord(
                 metadados.getDataUltimaModificacao(),
@@ -101,7 +102,8 @@ public class EmendaXmlUnmarshaller {
                 autoria,
                 opcoesImpressao,
                 revisoes,
-                notasRodape);
+                notasRodape,
+                pendenciasPreenchimento);
     }
 
     private List<? extends ComponenteEmendado> parseComponentes(Element rootElement) {
@@ -580,6 +582,21 @@ public class EmendaXmlUnmarshaller {
         final String texto = componente.attributeValue("texto");
         
         return new NotaRodapeRecord(id, numero, texto); 
-    }    
+    }
+
+    private List<String> parsePendenciasPreenchimento(Element rootElement) {
+        List<String> ret = new ArrayList<>();
+
+        Element pendenciasPreenchimentoElement = (Element) rootElement.selectSingleNode("PendenciasPreenchimento");
+        if (pendenciasPreenchimentoElement != null) {
+            List<Element> pendenciasPreenchimento = pendenciasPreenchimentoElement.elements();
+
+            for(Element pendencia: pendenciasPreenchimento) {
+                ret.add(pendencia.getText());
+            }
+
+        }
+        return ret;
+    }
 
 }

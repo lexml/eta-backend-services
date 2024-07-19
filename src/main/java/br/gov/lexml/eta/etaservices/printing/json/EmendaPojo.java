@@ -41,6 +41,7 @@ public class EmendaPojo implements Emenda {
     private OpcoesImpressaoPojo opcoesImpressao;
     private List<? extends RevisaoPojo> revisoes;
     private List<? extends NotaRodapePojo> notasRodape;
+    private List<String> pendenciasPreenchimento;
 
     @Override
     public Instant getDataUltimaModificacao() {
@@ -239,6 +240,15 @@ public class EmendaPojo implements Emenda {
     	this.notasRodape = notasRodape;
     }
 
+    @Override
+    public List<String> getPendenciasPreenchimento() {
+        return pendenciasPreenchimento;
+    }
+
+    public void setPendenciasPreenchimento(List<String> pendenciasPreenchimento) {
+        this.pendenciasPreenchimento = pendenciasPreenchimento;
+    }
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -366,6 +376,11 @@ public class EmendaPojo implements Emenda {
 				return false;
 		} else if (!versaoAplicacao.equals(other.versaoAplicacao))
 			return false;
+        if (pendenciasPreenchimento == null) {
+            if (other.pendenciasPreenchimento != null)
+                return false;
+        } else if (!pendenciasPreenchimento.equals(other.pendenciasPreenchimento))
+            return false;
 		return true;
 	}
 
@@ -377,6 +392,6 @@ public class EmendaPojo implements Emenda {
 				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre=" + comandoEmendaTextoLivre 
                 + ", substituicaoTermo" + substituicaoTermo + ", anexos=" + anexos + ", justificativa=" + justificativa 
                 + ", local=" + local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao
-				+ ", revisoes=" + revisoes + "]";
+				+ ", revisoes=" + revisoes + ", pendenciasPreenchimento=" + pendenciasPreenchimento + "]";
 	}
 }
