@@ -212,11 +212,22 @@
 ## Pendências de Preenchimento -----------------------------------------------------
 				#if($emenda.pendenciasPreenchimento.size() > 0)
 				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
-						  text-align="center" padding=".1cm" space-after=".3cm">
+						  text-align="left" padding=".1cm" space-after=".3cm" padding-left=".25cm" padding-right=".25cm">
 					Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:
-					#foreach ($pendencia in $emenda.pendenciasPreenchimento)
-						<fo:block font-weight="bold">$pendencia</fo:block>
-					#end
+					<fo:list-block font-weight="normal" 
+						provisional-label-separation="1em" provisional-distance-between-starts="1em" 
+						margin-left=".5cm">
+						#foreach ($pendencia in $emenda.pendenciasPreenchimento)
+						<fo:list-item space-before=".3em">
+						  <fo:list-item-label end-indent="label-end()">
+						    <fo:block>&#8226;</fo:block>
+						  </fo:list-item-label>
+						  <fo:list-item-body start-indent="body-start()">
+						    <fo:block>$pendencia</fo:block>
+						  </fo:list-item-body>
+						</fo:list-item>
+						#end
+					</fo:list-block>
 				</fo:block>
 				#end
 ## Epígrafe -------------------------------------------------------------------------

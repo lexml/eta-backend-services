@@ -665,7 +665,7 @@ public class EmendaXmlMarshaller {
         sb.append("  <PendenciasPreenchimento>\n");
         for(String pendencia: pendenciasPreenchimento) {
             sb.append("    <PendenciaPreenchimento>");
-            sb.append(pendencia);
+            sb.append(StringEscapeUtils.escapeXml10(pendencia));
             sb.append("</PendenciaPreenchimento>\n");
         }
         sb.append("  </PendenciasPreenchimento>\n");
