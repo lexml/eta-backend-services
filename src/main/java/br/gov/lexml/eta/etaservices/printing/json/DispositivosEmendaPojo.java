@@ -13,6 +13,17 @@ public class DispositivosEmendaPojo implements DispositivosEmenda {
     private List<? extends DispositivoEmendaModificadoPojo> dispositivosModificados;
     private List<? extends DispositivoEmendaAdicionadoPojo> dispositivosAdicionados;
 
+    public DispositivosEmendaPojo() {
+    }
+
+    public DispositivosEmendaPojo(List<? extends DispositivoEmendaSuprimidoPojo> dispositivosSuprimidos,
+                                  List<? extends DispositivoEmendaModificadoPojo> dispositivosModificados,
+                                  List<? extends DispositivoEmendaAdicionadoPojo> dispositivosAdicionados) {
+        this.dispositivosSuprimidos = dispositivosSuprimidos;
+        this.dispositivosModificados = dispositivosModificados;
+        this.dispositivosAdicionados = dispositivosAdicionados;
+    }
+
     @Override
     public List<? extends DispositivoEmendaSuprimido> getDispositivosSuprimidos() {
         return dispositivosSuprimidos;

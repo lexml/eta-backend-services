@@ -9,7 +9,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="type")
@@ -19,6 +21,8 @@ import lombok.Data;
 	@JsonSubTypes.Type(value = RevisaoTextoLivrePojo.class, name = "RevisaoTextoLivre")
 })
 @XmlAccessorType(XmlAccessType.FIELD)
+@AllArgsConstructor
+@NoArgsConstructor
 public abstract class RevisaoPojo implements Revisao {
 	@XmlAttribute
     String type = getClass().getSimpleName().replace("Pojo", "");

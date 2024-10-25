@@ -6,9 +6,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.gov.lexml.eta.etaservices.emenda.NotaRodape;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @XmlRootElement(name = "NotaRodape")
 @XmlAccessorType(XmlAccessType.FIELD)
+@NoArgsConstructor
+@AllArgsConstructor
 public class NotaRodapePojo implements NotaRodape {
 
 	@XmlAttribute
