@@ -68,7 +68,7 @@ public class EmendaXmlMarshaller {
     	}
     }
 
-	private void geraCabecalhoEmenda(Emenda emenda, StringBuilder sb) {
+	protected void geraCabecalhoEmenda(Emenda emenda, StringBuilder sb) {
         sb.append("<Emenda versaoFormatoArquivo=\"1.0\" local=\"").append(emenda.getLocal()).append("\"");
 
         if (emenda.getData() != null) {
@@ -84,7 +84,7 @@ public class EmendaXmlMarshaller {
      * @param emenda the emenda object
      * @param sb     StringBuilder
      */
-    private void geraMetadados(Emenda emenda, StringBuilder sb) {
+    protected void geraMetadados(Emenda emenda, StringBuilder sb) {
         sb.append("  <Metadados>\n")
                 .append("    <DataUltimaModificacao>")
                 .append(emenda.getDataUltimaModificacao())
@@ -111,7 +111,7 @@ public class EmendaXmlMarshaller {
         sb.append("  </Metadados>\n");
     }
 
-    private void geraProposicao(RefProposicaoEmendada proposicao, StringBuilder sb) {
+    protected void geraProposicao(RefProposicaoEmendada proposicao, StringBuilder sb) {
         sb.append("  <Proposicao ")
                 .append("urn=\"")
                 .append(proposicao.getUrn())
@@ -137,7 +137,7 @@ public class EmendaXmlMarshaller {
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
-	private void geraColegiado(ColegiadoApreciador colegiado, StringBuilder sb) {
+	protected void geraColegiado(ColegiadoApreciador colegiado, StringBuilder sb) {
         sb.append("  <ColegiadoApreciador ")
                 .append("siglaCasaLegislativa=\"")
                 .append(colegiado
@@ -156,7 +156,7 @@ public class EmendaXmlMarshaller {
         sb.append(" />\n");
     }
 
-    private void geraSubstituicaoTermo(SubstituicaoTermo substituicaoTermo, StringBuilder sb) {
+    protected void geraSubstituicaoTermo(SubstituicaoTermo substituicaoTermo, StringBuilder sb) {
         if (substituicaoTermo != null) {
             sb.append("  <SubstituicaoTermo ")
                     .append("tipo=\"")
@@ -178,7 +178,7 @@ public class EmendaXmlMarshaller {
         }
     }
 
-    private void geraEpigrafe(Epigrafe epigrafe, StringBuilder sb) {
+    protected void geraEpigrafe(Epigrafe epigrafe, StringBuilder sb) {
         sb.append("  <Epigrafe ")
                 .append("texto=\"")
                 .append(StringEscapeUtils.escapeXml10(epigrafe.getTexto()).trim())
@@ -193,7 +193,7 @@ public class EmendaXmlMarshaller {
         sb.append("/>\n");
     }
 
-    private void geraComponentes(List<? extends ComponenteEmendado> componentes, StringBuilder sb) {
+    protected void geraComponentes(List<? extends ComponenteEmendado> componentes, StringBuilder sb) {
         componentes.forEach(componente -> {
             sb.append("  <Componente ")
                     .append("urn=\"")
@@ -221,7 +221,7 @@ public class EmendaXmlMarshaller {
         });
     }
 
-    private void geraAnexos(List<? extends Anexo> anexos, StringBuilder sb) {
+    protected void geraAnexos(List<? extends Anexo> anexos, StringBuilder sb) {
     	if(anexos != null) {    		
     		anexos.forEach(anexo -> {
     			sb.append("  <Anexo ")
@@ -236,7 +236,7 @@ public class EmendaXmlMarshaller {
     	}
     }
 
-    private void geraDispositivos(DispositivosEmenda dispositivos, StringBuilder sb) {
+    protected void geraDispositivos(DispositivosEmenda dispositivos, StringBuilder sb) {
         sb.append("    <Dispositivos>\n");
         dispositivos.getDispositivosSuprimidos().forEach(suprimido -> geraDispositivosSuprimidos(suprimido, sb));
         dispositivos.getDispositivosModificados().forEach(modificado -> geraDispositivosModificados(modificado, sb));
@@ -413,7 +413,7 @@ public class EmendaXmlMarshaller {
     }
 
 
-    private void geraComandoEmenda(ComandoEmenda comandoEmenda, StringBuilder sb) {
+    protected void geraComandoEmenda(ComandoEmenda comandoEmenda, StringBuilder sb) {
         sb.append("  <ComandoEmenda>\n");
 
         if (comandoEmenda.getCabecalhoComum() != null) {
@@ -424,29 +424,6 @@ public class EmendaXmlMarshaller {
 
         comandoEmenda.getComandos().forEach(comando -> geraComando(comando, sb));
         sb.append("  </ComandoEmenda>\n");
-    }
-
-    private void geraComandoEmendaTextoLivre(ComandoEmendaTextoLivre comandoEmendaTextoLivre, StringBuilder sb) {
-    	if(comandoEmendaTextoLivre != null) {
-    		sb.append("  <ComandoEmendaTextoLivre");
-    		
-    		if(comandoEmendaTextoLivre.getMotivo() != null) {
-    			sb.append(" motivo=\"")
-	    			.append(comandoEmendaTextoLivre.getMotivo())
-	    			.append("\" ");    			
-    		}
-    		
-    		sb.append(">");
-    		sb.append(comandoEmendaTextoLivre.getTexto() != null ? StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()) : "");
-    		sb.append("  </ComandoEmendaTextoLivre>\n");
-    		
-    		if(comandoEmendaTextoLivre.getTextoAntesRevisao() != null) {
-    			sb.append("  <ComandoEmendaTextoLivreAntesRevisao>");
-        		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTextoAntesRevisao()));
-        		sb.append("  </ComandoEmendaTextoLivreAntesRevisao>\n");	
-    		}
-    		
-    	}
     }
 
     private void geraComando(ItemComandoEmenda comando, StringBuilder sb) {
@@ -477,7 +454,30 @@ public class EmendaXmlMarshaller {
         sb.append("    </ItemComandoEmenda>\n");
     }
 
-    private void geraJustificativa(String justificativa, StringBuilder sb) {
+    protected void geraComandoEmendaTextoLivre(ComandoEmendaTextoLivre comandoEmendaTextoLivre, StringBuilder sb) {
+    	if(comandoEmendaTextoLivre != null) {
+    		sb.append("  <ComandoEmendaTextoLivre");
+    		
+    		if(comandoEmendaTextoLivre.getMotivo() != null) {
+    			sb.append(" motivo=\"")
+	    			.append(comandoEmendaTextoLivre.getMotivo())
+	    			.append("\" ");    			
+    		}
+    		
+    		sb.append(">");
+    		sb.append(comandoEmendaTextoLivre.getTexto() != null ? StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()) : "");
+    		sb.append("  </ComandoEmendaTextoLivre>\n");
+    		
+    		if(comandoEmendaTextoLivre.getTextoAntesRevisao() != null) {
+    			sb.append("  <ComandoEmendaTextoLivreAntesRevisao>");
+        		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTextoAntesRevisao()));
+        		sb.append("  </ComandoEmendaTextoLivreAntesRevisao>\n");	
+    		}
+    		
+    	}
+    }
+
+    protected void geraJustificativa(String justificativa, StringBuilder sb) {
     	if(justificativa != null) {
 			sb.append("  <Justificativa>")
 	    		.append(StringEscapeUtils.escapeXml10(justificativa))
@@ -486,6 +486,8 @@ public class EmendaXmlMarshaller {
     }
     
     private void geraJustificativaAntesRevisao(String justificativa, StringBuilder sb) {
+
+    protected void geraJustificativaAntesRevisao(String justificativa, StringBuilder sb) {
     	if(justificativa != null) {
     		sb.append("  <JustificativaAntesRevisao>")
 	    		.append(StringEscapeUtils.escapeXml10(justificativa))
@@ -493,7 +495,7 @@ public class EmendaXmlMarshaller {
     	}
     }
 
-    private void geraAutoria(Autoria autoria, StringBuilder sb) {
+    protected void geraAutoria(Autoria autoria, StringBuilder sb) {
         sb.append("  <Autoria ")
                 .append(" tipo=\"")
                 .append(autoria.getTipo().getDescricao())
@@ -562,7 +564,7 @@ public class EmendaXmlMarshaller {
                 .append(FECHA_TAG_SEM_CONTEUDO);
     }
 
-    private void geraOpcoesImpressao(OpcoesImpressao opcoesImpressao, StringBuilder sb) {
+    protected void geraOpcoesImpressao(OpcoesImpressao opcoesImpressao, StringBuilder sb) {
         sb.append("  <OpcoesImpressao ")
                 .append(" imprimirBrasao=\"")
                 .append(opcoesImpressao.isImprimirBrasao())
@@ -596,7 +598,7 @@ public class EmendaXmlMarshaller {
 				.trim();
 	}
 
-    private void geraRevisoes(List<? extends Revisao> revisoes, StringBuilder sb) throws Exception {
+    protected void geraRevisoes(List<? extends Revisao> revisoes, StringBuilder sb) throws Exception {
     	
     	if(revisoes == null || revisoes.isEmpty()) {
     		return;
@@ -636,7 +638,7 @@ public class EmendaXmlMarshaller {
     	sb.append("</Revisoes>\n");
 	}
     
-    private void geraNotasRodape(List<? extends NotaRodape> notasRodape, StringBuilder sb) throws Exception {
+    protected void geraNotasRodape(List<? extends NotaRodape> notasRodape, StringBuilder sb) throws Exception {
     	if(notasRodape == null || notasRodape.isEmpty()) {
     		return;
     	}
@@ -657,7 +659,7 @@ public class EmendaXmlMarshaller {
     	sb.append("</NotasRodape>\n");    	
     }
 
-    private void geraPendenciasPreenchimento(List<String> pendenciasPreenchimento, StringBuilder sb) throws Exception {
+    protected void geraPendenciasPreenchimento(List<String> pendenciasPreenchimento, StringBuilder sb) throws Exception {
         if (pendenciasPreenchimento == null || pendenciasPreenchimento.isEmpty()) {
             return;
         }
