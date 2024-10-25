@@ -388,8 +388,9 @@ public class EmendaXmlMarshaller {
                     .append("\" ");
         }
         
-        if (filho.getRotulo() == null && (filho.getTexto() == null || filho.getTipo().equals("Omissis")) &&
-                (filho.getFilhos() == null || filho.getFilhos().isEmpty())) {
+        if (filho.getRotulo() == null
+                && (filho.getTexto() == null || filho.getTipo().equals("Omissis"))
+                && (filho.getFilhos() == null || filho.getFilhos().isEmpty())) {
             sb.append(FECHA_TAG_SEM_CONTEUDO);
         } else {
             sb.append(">\n");
@@ -484,8 +485,6 @@ public class EmendaXmlMarshaller {
 	    		.append("</Justificativa>\n");    		
     	}
     }
-    
-    private void geraJustificativaAntesRevisao(String justificativa, StringBuilder sb) {
 
     protected void geraJustificativaAntesRevisao(String justificativa, StringBuilder sb) {
     	if(justificativa != null) {
