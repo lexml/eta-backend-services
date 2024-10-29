@@ -4,7 +4,6 @@ package br.gov.lexml.eta.etaservices.printing.xml;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -13,10 +12,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 
@@ -26,7 +22,7 @@ import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
+import org.dom4j.Node;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -37,7 +33,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 class EmendaXmlMarshallingTest {
     private Source xmlSource;
-    private DocumentBuilder builder;
     private final EmendaXmlMarshaller marshaller = new EmendaXmlMarshaller();
 
     @Disabled
@@ -52,9 +47,6 @@ class EmendaXmlMarshallingTest {
     void setUp() throws ParserConfigurationException {
         final Emenda emenda = setupEmenda();
         xmlSource = getXmlSource(emenda);
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        builder = factory.newDocumentBuilder();
     }
 
     @Test
@@ -108,10 +100,10 @@ class EmendaXmlMarshallingTest {
         emenda.setModoEdicao(ModoEdicaoEmenda.EMENDA);
         emenda.setMetadados(new HashMap<>()); // Sem metadados
 
-        Document document = DocumentHelper.createDocument();
-        marshaller.geraMetadados(emenda, document);
+        Element emendaElement = createRootElement();
+        marshaller.geraMetadados(emenda, emendaElement);
 
-        Element metadadosElement = document.getRootElement();
+        Element metadadosElement = (Element) emendaElement.selectNodes("//Metadados").get(0);
         assertEquals("Metadados", metadadosElement.getName());
         assertEquals("2023-10-23T10:00:00Z", metadadosElement.selectNodes("//DataUltimaModificacao").get(0).getText());
         assertEquals("Aplicação Teste", metadadosElement.selectNodes("//Aplicacao").get(0).getText());
@@ -134,18 +126,17 @@ class EmendaXmlMarshallingTest {
         metadados.put("Revisao", "1");
         emenda.setMetadados(metadados);
 
-        Document document = DocumentHelper.createDocument();
-        marshaller.geraMetadados(emenda, document);
+        Element emendaElement = createRootElement();
+        marshaller.geraMetadados(emenda, emendaElement);
 
-        assertNotNull(document);
-        Element metadadosElement = document.getRootElement();
+        Element metadadosElement = (Element) emendaElement.selectNodes("//Metadados").get(0);
         assertEquals("Metadados", metadadosElement.getName());
-        assertEquals("2023-10-23T10:00:00Z", document.selectNodes("//DataUltimaModificacao").get(0).getText());
-        assertEquals("Aplicação Teste", document.selectNodes("//Aplicacao").get(0).getText());
-        assertEquals("1.0.0", document.selectNodes("//VersaoAplicacao").get(0).getText());
-        assertEquals(ModoEdicaoEmenda.EMENDA.getNome(), document.selectNodes("//ModoEdicao").get(0).getText());
-        assertEquals("João", document.selectNodes("//Autor").get(0).getText());
-        assertEquals("1", document.selectNodes("//Revisao").get(0).getText());
+        assertEquals("2023-10-23T10:00:00Z", emendaElement.selectNodes("//DataUltimaModificacao").get(0).getText());
+        assertEquals("Aplicação Teste", emendaElement.selectNodes("//Aplicacao").get(0).getText());
+        assertEquals("1.0.0", emendaElement.selectNodes("//VersaoAplicacao").get(0).getText());
+        assertEquals(ModoEdicaoEmenda.EMENDA.getNome(), emendaElement.selectNodes("//ModoEdicao").get(0).getText());
+        assertEquals("João", emendaElement.selectNodes("//Autor").get(0).getText());
+        assertEquals("1", emendaElement.selectNodes("//Revisao").get(0).getText());
     }
     @Test
     void deveGerarProposicaoTest() {
@@ -158,13 +149,10 @@ class EmendaXmlMarshallingTest {
         proposicao.setIdentificacaoTexto("Identificação teste");
         proposicao.setEmendarTextoSubstitutivo(true);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraProposicao(proposicao, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraProposicao(proposicao, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element proposicaoElement = document.getRootElement();
+        Element proposicaoElement = (Element) emendaElement.selectNodes("//Proposicao").get(0);
         assertEquals("Proposicao", proposicaoElement.getName());
         assertEquals("urn:1234", proposicaoElement.attributeValue("urn"));
         assertEquals("SIG", proposicaoElement.attributeValue("sigla"));
@@ -186,14 +174,11 @@ class EmendaXmlMarshallingTest {
         proposicao.setIdentificacaoTexto("Identificação teste");
         proposicao.setEmendarTextoSubstitutivo(true);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraProposicao(proposicao, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraProposicao(proposicao, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element proposicaoElement = document.getRootElement();
-        assertEquals("Ementa com & e", proposicaoElement.attributeValue("ementa"));
+        Element proposicaoElement = (Element) emendaElement.selectNodes("//Proposicao").get(0);
+        assertEquals("Ementa com &amp; e", proposicaoElement.attributeValue("ementa"));
     }
 
     @Test
@@ -203,13 +188,10 @@ class EmendaXmlMarshallingTest {
         colegiado.setTipoColegiado(TipoColegiado.COMISSAO);
         colegiado.setSiglaComissao("COMISSÃO 1");
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraColegiado(colegiado, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraColegiado(colegiado, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element colegiadoElement = document.getRootElement();
+        Element colegiadoElement = (Element) emendaElement.selectNodes("//ColegiadoApreciador").get(0);
         assertEquals("ColegiadoApreciador", colegiadoElement.getName());
         assertEquals(SiglaCasaLegislativa.CN.name(), colegiadoElement.attributeValue("siglaCasaLegislativa"));
         assertEquals("COMISSÃO 1", colegiadoElement.attributeValue("siglaComissao"));
@@ -223,13 +205,10 @@ class EmendaXmlMarshallingTest {
         colegiado.setTipoColegiado(TipoColegiado.PLENARIO_VIA_COMISSAO);
         colegiado.setSiglaComissao("COMISSÃO 2");
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraColegiado(colegiado, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraColegiado(colegiado, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element colegiadoElement = document.getRootElement();
+        Element colegiadoElement = (Element) emendaElement.selectNodes("//ColegiadoApreciador").get(0);
         assertEquals("ColegiadoApreciador", colegiadoElement.getName());
         assertEquals(SiglaCasaLegislativa.SF.name(), colegiadoElement.attributeValue("siglaCasaLegislativa"));
         assertEquals("COMISSÃO 2", colegiadoElement.attributeValue("siglaComissao"));
@@ -242,13 +221,10 @@ class EmendaXmlMarshallingTest {
         colegiado.setSiglaCasaLegislativa(SiglaCasaLegislativa.CD);
         colegiado.setTipoColegiado(TipoColegiado.PLENARIO);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraColegiado(colegiado, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraColegiado(colegiado, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element colegiadoElement = document.getRootElement();
+        Element colegiadoElement = (Element) emendaElement.selectNodes("//ColegiadoApreciador").get(0);
         assertEquals("ColegiadoApreciador", colegiadoElement.getName());
         assertEquals(SiglaCasaLegislativa.CD.name(), colegiadoElement.attributeValue("siglaCasaLegislativa"));
         assertEquals(TipoColegiado.PLENARIO.getDescricao(), colegiadoElement.attributeValue("tipoColegiado"));
@@ -265,14 +241,10 @@ class EmendaXmlMarshallingTest {
         substituicaoTermo.setFlexaoGenero(true);
         substituicaoTermo.setFlexaoNumero(false);
 
+        Element emendaElement = createRootElement();
+        marshaller.geraSubstituicaoTermo(substituicaoTermo, emendaElement);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraSubstituicaoTermo(substituicaoTermo, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element substituicaoTermoElement = document.getRootElement();
+        Element substituicaoTermoElement = (Element) emendaElement.selectNodes("//SubstituicaoTermo").get(0);
         assertEquals("SubstituicaoTermo", substituicaoTermoElement.getName());
         assertEquals(TipoSubstituicaoTermo.PALAVRA.getDescricao(), substituicaoTermoElement.attributeValue("tipo"));
         assertEquals("termo original", substituicaoTermoElement.attributeValue("termo"));
@@ -290,23 +262,20 @@ class EmendaXmlMarshallingTest {
         substituicaoTermo.setFlexaoGenero(true);
         substituicaoTermo.setFlexaoNumero(false);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraSubstituicaoTermo(substituicaoTermo, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraSubstituicaoTermo(substituicaoTermo, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element substituicaoTermoElement = document.getRootElement();
-        assertEquals("termo & especial < >", substituicaoTermoElement.attributeValue("termo"));
-        assertEquals("novo termo & especial < >", substituicaoTermoElement.attributeValue("novoTermo"));
+        Element substituicaoTermoElement = (Element) emendaElement.selectNodes("//SubstituicaoTermo").get(0);
+        assertEquals("termo &amp; especial &lt; &gt;", substituicaoTermoElement.attributeValue("termo"));
+        assertEquals("novo termo &amp; especial &lt; &gt;", substituicaoTermoElement.attributeValue("novoTermo"));
     }
 
     @Test
     void deveGerarSubstituicaoTermoNuloTest() {
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraSubstituicaoTermo(null, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraSubstituicaoTermo(null, emendaElement);
 
-        assertEquals(0, sb.length());
+        assertEquals(0, emendaElement.selectNodes("//SubstituicaoTermo").size());
     }
 
     @Test
@@ -315,13 +284,10 @@ class EmendaXmlMarshallingTest {
         epigrafe.setTexto("Texto de epígrafe");
         epigrafe.setComplemento("Complemento de epígrafe");
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraEpigrafe(epigrafe, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraEpigrafe(epigrafe, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element epigrafeElement = document.getRootElement();
+        Element epigrafeElement = (Element) emendaElement.selectNodes("//Epigrafe").get(0);
         assertEquals("Epigrafe", epigrafeElement.getName());
         assertEquals("Texto de epígrafe", epigrafeElement.attributeValue("texto"));
         assertEquals("Complemento de epígrafe", epigrafeElement.attributeValue("complemento"));
@@ -332,13 +298,10 @@ class EmendaXmlMarshallingTest {
         EpigrafePojo epigrafe = new EpigrafePojo();
         epigrafe.setTexto("Texto sem complemento");
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraEpigrafe(epigrafe, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraEpigrafe(epigrafe, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element epigrafeElement = document.getRootElement();
+        Element epigrafeElement = (Element) emendaElement.selectNodes("//Epigrafe").get(0);
         assertEquals("Epigrafe", epigrafeElement.getName());
         assertEquals("Texto sem complemento", epigrafeElement.attributeValue("texto"));
         assertEquals(null, epigrafeElement.attributeValue("complemento")); // Atributo não deve existir
@@ -350,15 +313,12 @@ class EmendaXmlMarshallingTest {
         epigrafe.setTexto("Texto com & e < e >");
         epigrafe.setComplemento("Complemento com & e < e >");
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraEpigrafe(epigrafe, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraEpigrafe(epigrafe, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element epigrafeElement = document.getRootElement();
-        assertEquals("Texto com & e < e >", epigrafeElement.attributeValue("texto"));
-        assertEquals("Complemento com & e < e >", epigrafeElement.attributeValue("complemento"));
+        Element epigrafeElement = (Element) emendaElement.selectNodes("//Epigrafe").get(0);
+        assertEquals("Texto com &amp; e &lt; e &gt;", epigrafeElement.attributeValue("texto"));
+        assertEquals("Complemento com &amp; e &lt; e &gt;", epigrafeElement.attributeValue("complemento"));
     }
 
     @Test
@@ -370,18 +330,15 @@ class EmendaXmlMarshallingTest {
         componente.setDispositivos(new DispositivosEmendaPojo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
         componentes.add(componente);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraComponentes(componentes, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraComponentes(componentes, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element componenteElement = document.getRootElement();
+        Element componenteElement = (Element) emendaElement.selectNodes("//Componente").get(0);
         assertEquals("Componente", componenteElement.getName());
         assertEquals("urn:componente1", componenteElement.attributeValue("urn"));
         assertEquals("true", componenteElement.attributeValue("articulado"));
-        assertEquals(null, componenteElement.attributeValue("tituloAnexo")); // Atributo não deve existir
-        assertEquals(null, componenteElement.attributeValue("rotuloAnexo")); // Atributo não deve existir
+        assertNull(componenteElement.attributeValue("tituloAnexo"));
+        assertNull(componenteElement.attributeValue("rotuloAnexo"));
     }
 
     @Test
@@ -395,13 +352,10 @@ class EmendaXmlMarshallingTest {
         componente.setDispositivos(new DispositivosEmendaPojo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
         componentes.add(componente);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraComponentes(componentes, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraComponentes(componentes, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-
-        assertNotNull(document);
-        Element componenteElement = document.getRootElement();
+        Element componenteElement = (Element) emendaElement.selectNodes("//Componente").get(0);
         assertEquals("Componente", componenteElement.getName());
         assertEquals("urn:componente2", componenteElement.attributeValue("urn"));
         assertEquals("false", componenteElement.attributeValue("articulado"));
@@ -433,25 +387,22 @@ class EmendaXmlMarshallingTest {
         componente3.setDispositivos(new DispositivosEmendaPojo(new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
         componentes.add(componente3);
 
-        StringBuilder sb = new StringBuilder("<Emenda>"); // Para fins de teste unitário
-        marshaller.geraComponentes(componentes, sb);
-        sb.append("</Emenda>");
+        Element emendaElement = createRootElement();
+        marshaller.geraComponentes(componentes, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
+        Element componenteElement = (Element) emendaElement.selectNodes("//Componente").get(0);
+        assertEquals(3, componenteElement.selectNodes("//Componente").size());
 
-        assertNotNull(document);
-        assertEquals(3, document.selectNodes("//Componente").size());
-
-        Element componenteElement1 = (Element) document.selectNodes("//Componente").get(0);
+        Element componenteElement1 = (Element) componenteElement.selectNodes("//Componente").get(0);
         assertEquals("urn:componente3", componenteElement1.attributeValue("urn"));
         assertEquals("true", componenteElement1.attributeValue("articulado"));
 
-        Element componenteElement2 = (Element) document.selectNodes("//Componente").get(1);
+        Element componenteElement2 = (Element) componenteElement.selectNodes("//Componente").get(1);
         assertEquals("urn:componente4", componenteElement2.attributeValue("urn"));
         assertEquals("false", componenteElement2.attributeValue("articulado"));
         assertEquals("Título 1", componenteElement2.attributeValue("tituloAnexo"));
 
-        Element componenteElement3 = (Element) document.selectNodes("//Componente").get(2);
+        Element componenteElement3 = (Element) componenteElement.selectNodes("//Componente").get(2);
         assertEquals("urn:componente5", componenteElement3.attributeValue("urn"));
         assertEquals("true", componenteElement3.attributeValue("articulado"));
         assertEquals("Rótulo 1", componenteElement3.attributeValue("rotuloAnexo"));
@@ -461,16 +412,10 @@ class EmendaXmlMarshallingTest {
     void deveGerarAnexosComListaVaziaTest() {
         List<Anexo> anexos = new ArrayList<>();
 
-        StringBuilder sb = new StringBuilder("<Emenda>"); // Para fins de teste unitário
-        marshaller.geraAnexos(anexos, sb);
-        sb.append("</Emenda>");
+        Element emendaElement = createRootElement();
+        marshaller.geraAnexos(anexos, emendaElement);
 
-        // Convert StringBuilder to Document
-        Document document = createDocumentFromString(sb.toString());
-
-        // Assert
-        assertNotNull(document);
-        assertEquals(0, document.selectNodes("//Anexo").size());
+        assertEquals(0, emendaElement.selectNodes("//Anexos/*").size());
     }
 
     private static class AnexoPojoTest extends AnexoPojo {
@@ -498,14 +443,12 @@ class EmendaXmlMarshallingTest {
         AnexoPojo anexo = new AnexoPojoTest("arquivo1.txt", "base64string1");
         anexos.add(anexo);
 
-        StringBuilder sb = new StringBuilder("<Emenda>"); // Para fins de teste unitário
-        marshaller.geraAnexos(anexos, sb);
-        sb.append("</Emenda>");
+        Element emendaElement = createRootElement();
+        marshaller.geraAnexos(anexos, emendaElement);
+        assertEquals(1, emendaElement.selectNodes("//Anexo").size());
+        List<Node> anexosElement = emendaElement.selectNodes("//Anexo");
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element anexoElement = (Element) document.selectNodes("//Anexo").get(0);
+        Element anexoElement = (Element) anexosElement.get(0);
         assertEquals("arquivo1.txt", anexoElement.attributeValue("nomeArquivo"));
         assertEquals("base64string1", anexoElement.attributeValue("base64"));
     }
@@ -523,24 +466,20 @@ class EmendaXmlMarshallingTest {
         Anexo anexo3 = new AnexoPojoTest("arquivo3.pdf", "base64string3");
         anexos.add(anexo3);
 
-        StringBuilder sb = new StringBuilder("<Emenda>"); // Para fins de teste unitário
-        marshaller.geraAnexos(anexos, sb);
-        sb.append("</Emenda>");
+        Element emendaElement = createRootElement();
+        marshaller.geraAnexos(anexos, emendaElement);
+        assertEquals(3, emendaElement.selectNodes("//Anexo").size());
+        List<Node> anexosElement = emendaElement.selectNodes("//Anexo");
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        assertEquals(3, document.selectNodes("//Anexo").size());
-
-        Element anexoElement1 = (Element) document.selectNodes("//Anexo").get(0);
+        Element anexoElement1 = (Element) anexosElement.get(0);
         assertEquals("arquivo1.txt", anexoElement1.attributeValue("nomeArquivo"));
         assertEquals("base64string1", anexoElement1.attributeValue("base64"));
 
-        Element anexoElement2 = (Element) document.selectNodes("//Anexo").get(1);
+        Element anexoElement2 = (Element) anexosElement.get(1);
         assertEquals("arquivo2.jpg", anexoElement2.attributeValue("nomeArquivo"));
         assertEquals("base64string2", anexoElement2.attributeValue("base64"));
 
-        Element anexoElement3 = (Element) document.selectNodes("//Anexo").get(2);
+        Element anexoElement3 = (Element) anexosElement.get(2);
         assertEquals("arquivo3.pdf", anexoElement3.attributeValue("nomeArquivo"));
         assertEquals("base64string3", anexoElement3.attributeValue("base64"));
     }
@@ -552,22 +491,20 @@ class EmendaXmlMarshallingTest {
         suprimido.setRotulo("Rotulo1");
         suprimido.setTipo("Tipo1");
         suprimido.setUrnNormaAlterada("urn:norma:alterada");
-        StringBuilder sb = new StringBuilder();
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(List.of(suprimido), new ArrayList<>(), new ArrayList<>());
 
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
+        assertEquals("Dispositivos", dispositivosElement.getName());
 
-        assertEquals("Dispositivos", document.getRootElement().getName());
-
-        Element dispositivo = (Element) document.selectNodes("//DispositivoSuprimido").get(0);
+        Element dispositivo = (Element) dispositivosElement.selectNodes("//DispositivoSuprimido").get(0);
         assertEquals("Tipo1", dispositivo.attributeValue("tipo"));
         assertEquals("123", dispositivo.attributeValue("id"));
         assertEquals("Rotulo1", dispositivo.attributeValue("rotulo"));
-//        assertEquals("urn:norma:alterada", dispositivo.attributeValue("xml:base")); //TODO Verificar namespace
+        assertEquals("urn:norma:alterada", dispositivo.attributeValue("xml:base"));
     }
 
     @Test
@@ -576,18 +513,16 @@ class EmendaXmlMarshallingTest {
         suprimido.setId("123");
         suprimido.setRotulo("Rotulo1");
         suprimido.setTipo("Tipo1");
-        StringBuilder sb = new StringBuilder();
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(List.of(suprimido), new ArrayList<>(), new ArrayList<>());
 
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
+        assertEquals("Dispositivos", dispositivosElement.getName());
 
-        assertEquals("Dispositivos", document.getRootElement().getName());
-
-        Element dispositivo = (Element) document.selectNodes("//DispositivoSuprimido").get(0);
+        Element dispositivo = (Element) dispositivosElement.selectNodes("//DispositivoSuprimido").get(0);
         assertEquals("Tipo1", dispositivo.attributeValue("tipo"));
         assertEquals("123", dispositivo.attributeValue("id"));
         assertEquals("Rotulo1", dispositivo.attributeValue("rotulo"));
@@ -609,24 +544,24 @@ class EmendaXmlMarshallingTest {
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(Arrays.asList(suprimido1, suprimido2), new ArrayList<>(), new ArrayList<>());
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        assertEquals("Dispositivos", document.getRootElement().getName());
-        assertEquals(2, document.selectNodes("//DispositivoSuprimido").size());
-        assertEquals(0, document.selectNodes("//DispositivoModificado").size());
-        assertEquals(0, document.selectNodes("//DispositivoAdicionado").size());
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
+        assertEquals("Dispositivos", dispositivosElement.getName());
 
-        Element dispositivoElement1 = (Element) document.selectNodes("//DispositivoSuprimido").get(0);
+        assertEquals(2, dispositivosElement.selectNodes("//DispositivoSuprimido").size());
+        assertEquals(0, dispositivosElement.selectNodes("//DispositivoModificado").size());
+        assertEquals(0, dispositivosElement.selectNodes("//DispositivoAdicionado").size());
+
+        Element dispositivoElement1 = (Element) dispositivosElement.selectNodes("//DispositivoSuprimido").get(0);
         assertNotNull(dispositivoElement1);
         assertEquals("Tipo1", dispositivoElement1.attributeValue("tipo"));
         assertEquals("123", dispositivoElement1.attributeValue("id"));
         assertEquals("Rotulo1", dispositivoElement1.attributeValue("rotulo"));
-//        assertEquals("urn:norma:alterada", dispositivoElement1.attributeValue("xml:base")); //TODO Verificar namespace
+        assertEquals("urn:norma:alterada", dispositivoElement1.attributeValue("xml:base"));
 
-        Element dispositivoElement2 = (Element) document.selectNodes("//DispositivoSuprimido").get(1);
+        Element dispositivoElement2 = (Element) dispositivosElement.selectNodes("//DispositivoSuprimido").get(1);
         assertNotNull(dispositivoElement2);
         assertEquals("Tipo2", dispositivoElement2.attributeValue("tipo"));
         assertEquals("456", dispositivoElement2.attributeValue("id"));
@@ -646,22 +581,20 @@ class EmendaXmlMarshallingTest {
         modificado.setAbreAspas(true);
         modificado.setFechaAspas(true);
         modificado.setNotaAlteracao(NotaAlteracao.AC);
-        StringBuilder sb = new StringBuilder();
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(new ArrayList<>(), List.of(modificado), new ArrayList<>());
 
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
+        assertEquals("Dispositivos", dispositivosElement.getName());
 
-        assertEquals("Dispositivos", document.getRootElement().getName());
-
-        Element dispositivo = (Element) document.selectNodes("//DispositivoModificado").get(0);
+        Element dispositivo = (Element) dispositivosElement.selectNodes("//DispositivoModificado").get(0);
         assertEquals("Tipo1", dispositivo.attributeValue("tipo"));
         assertEquals("123", dispositivo.attributeValue("id"));
         assertEquals("Rotulo1", dispositivo.attributeValue("rotulo"));
-//        assertEquals("urn:norma:alterada", dispositivo.attributeValue("xml:base")); //TODO Verificar namespace
+        assertEquals("urn:norma:alterada", dispositivo.attributeValue("xml:base"));
         assertEquals("true", dispositivo.attributeValue("textoOmitido"));
         assertEquals("Texto sem Alteração", dispositivo.selectNodes("//Texto").get(0).getText());
         assertEquals("true", dispositivo.attributeValue("abreAspas"));
@@ -676,27 +609,26 @@ class EmendaXmlMarshallingTest {
         modificado.setRotulo("Rotulo1");
         modificado.setTipo("Tipo1");
         modificado.setTexto("Texto sem Alteração");
-        StringBuilder sb = new StringBuilder();
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(new ArrayList<>(), List.of(modificado), new ArrayList<>());
 
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
+        assertEquals("Dispositivos", dispositivosElement.getName());
 
-        assertEquals("Dispositivos", document.getRootElement().getName());
 
-        Element dispositivo = (Element) document.selectNodes("//DispositivoModificado").get(0);
+        Element dispositivo = (Element) dispositivosElement.selectNodes("//DispositivoModificado").get(0);
         assertEquals("Tipo1", dispositivo.attributeValue("tipo"));
         assertEquals("123", dispositivo.attributeValue("id"));
         assertEquals("Rotulo1", dispositivo.attributeValue("rotulo"));
         assertEquals("Texto sem Alteração", dispositivo.selectNodes("//Texto").get(0).getText());
-        assertEquals(null, dispositivo.attributeValue("xml:base"));
-        assertEquals(null, dispositivo.attributeValue("textoOmitido"));
-        assertEquals(null, dispositivo.attributeValue("abreAspas"));
-        assertEquals(null, dispositivo.attributeValue("fechaAspas"));
-        assertEquals(null, dispositivo.attributeValue("notaAlteracao"));
+        assertNull(dispositivo.attributeValue("xml:base"));
+        assertNull(dispositivo.attributeValue("textoOmitido"));
+        assertNull(dispositivo.attributeValue("abreAspas"));
+        assertNull(dispositivo.attributeValue("fechaAspas"));
+        assertNull(dispositivo.attributeValue("notaAlteracao"));
     }
 
     @Test
@@ -715,24 +647,23 @@ class EmendaXmlMarshallingTest {
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(new ArrayList<>(), Arrays.asList(modificado1, modificado2), new ArrayList<>());
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        assertEquals("Dispositivos", document.getRootElement().getName());
-        assertEquals(0, document.selectNodes("//DispositivoSuprimido").size());
-        assertEquals(2, document.selectNodes("//DispositivoModificado").size());
-        assertEquals(0, document.selectNodes("//DispositivoAdicionado").size());
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
+        assertEquals("Dispositivos", dispositivosElement.getName());
+        assertEquals(0, dispositivosElement.selectNodes("//DispositivoSuprimido").size());
+        assertEquals(2, dispositivosElement.selectNodes("//DispositivoModificado").size());
+        assertEquals(0, dispositivosElement.selectNodes("//DispositivoAdicionado").size());
 
-        Element dispositivoElement1 = (Element) document.selectNodes("//DispositivoModificado").get(0);
+        Element dispositivoElement1 = (Element) dispositivosElement.selectNodes("//DispositivoModificado").get(0);
         assertNotNull(dispositivoElement1);
         assertEquals("Tipo1", dispositivoElement1.attributeValue("tipo"));
         assertEquals("123", dispositivoElement1.attributeValue("id"));
         assertEquals("Rotulo1", dispositivoElement1.attributeValue("rotulo"));
         assertEquals("Texto sem Alteração 1", dispositivoElement1.selectNodes("//Texto").get(0).getText());
 
-        Element dispositivoElement2 = (Element) document.selectNodes("//DispositivoModificado").get(1);
+        Element dispositivoElement2 = (Element) dispositivosElement.selectNodes("//DispositivoModificado").get(1);
         assertNotNull(dispositivoElement2);
         assertEquals("Tipo2", dispositivoElement2.attributeValue("tipo"));
         assertEquals("456", dispositivoElement2.attributeValue("id"));
@@ -758,18 +689,16 @@ class EmendaXmlMarshallingTest {
         adicionado.setAbreAspas(true);
         adicionado.setFechaAspas(true);
         adicionado.setNotaAlteracao(NotaAlteracao.AC);
-        StringBuilder sb = new StringBuilder();
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(new ArrayList<>(), new ArrayList<>(), List.of(adicionado));
 
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
+        assertEquals("Dispositivos", dispositivosElement.getName());
 
-        assertEquals("Dispositivos", document.getRootElement().getName());
-
-        Element dispositivo = (Element) document.selectNodes("//DispositivoAdicionado").get(0);
+        Element dispositivo = (Element) emendaElement.selectNodes("//DispositivoAdicionado").get(0);
         assertEquals("true", dispositivo.attributeValue("ondeCouber"));
         assertEquals("idPai", dispositivo.attributeValue("idPai"));
         assertEquals("idIrmaoAnterior", dispositivo.attributeValue("idIrmaoAnterior"));
@@ -779,7 +708,7 @@ class EmendaXmlMarshallingTest {
         assertNotNull(dispositivoFilho);
         assertEquals("1", dispositivoFilho.attributeValue("id"));
         assertEquals("uuid2", dispositivoFilho.attributeValue("uuid2"));
-//        assertEquals("urn:norma:alterada", dispositivoFilho.attributeValue("xml:base")); //TODO Verificar namespace
+        assertEquals("urn:norma:alterada", dispositivoFilho.attributeValue("xml:base"));
         assertEquals("true", dispositivoFilho.attributeValue("existeNaNormaAlterada"));
         assertEquals("s", dispositivoFilho.attributeValue("textoOmitido"));
         assertEquals("s", dispositivoFilho.attributeValue("abreAspas"));
@@ -808,18 +737,16 @@ class EmendaXmlMarshallingTest {
         adicionado.setRotulo("Rotulo");
         adicionado.setTexto("Texto");
         adicionado.setNotaAlteracao(NotaAlteracao.AC);
-        StringBuilder sb = new StringBuilder();
 
         DispositivosEmenda dispositivos = new DispositivosEmendaPojo(new ArrayList<>(), new ArrayList<>(), List.of(adicionado));
 
-        marshaller.geraDispositivos(dispositivos, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraDispositivos(dispositivos, emendaElement);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
+        Element dispositivosElement = (Element) emendaElement.selectNodes("//Dispositivos").get(0);
+        assertEquals("Dispositivos", dispositivosElement.getName());
 
-        assertEquals("Dispositivos", document.getRootElement().getName());
-
-        Element dispositivo = (Element) document.selectNodes("//DispositivoAdicionado").get(0);
+        Element dispositivo = (Element) dispositivosElement.selectNodes("//DispositivoAdicionado").get(0);
         assertEquals("true", dispositivo.attributeValue("ondeCouber"));
         assertEquals("idPai", dispositivo.attributeValue("idPai"));
         assertEquals("idIrmaoAnterior", dispositivo.attributeValue("idIrmaoAnterior"));
@@ -829,13 +756,12 @@ class EmendaXmlMarshallingTest {
         assertNotNull(dispositivoFilho);
         assertEquals("1", dispositivoFilho.attributeValue("id"));
         assertEquals("uuid2", dispositivoFilho.attributeValue("uuid2"));
-//        assertEquals("urn:norma:alterada", dispositivoFilho.attributeValue("xml:base")); //TODO Verificar namespace
+        assertEquals("urn:norma:alterada", dispositivoFilho.attributeValue("xml:base"));
         assertEquals("true", dispositivoFilho.attributeValue("existeNaNormaAlterada"));
         assertEquals("s", dispositivoFilho.attributeValue("textoOmitido"));
         assertEquals("s", dispositivoFilho.attributeValue("abreAspas"));
         assertEquals("s", dispositivoFilho.attributeValue("fechaAspas"));
         assertEquals(NotaAlteracao.AC.name(), dispositivoFilho.attributeValue("notaAlteracao"));
-
 
         Element dispositivoRotulo = (Element) dispositivoFilho.selectNodes("//Rotulo").get(0);
         Element dispositivoParagrafo = (Element) dispositivoFilho.selectNodes("//p").get(0);
@@ -850,14 +776,10 @@ class EmendaXmlMarshallingTest {
     public void deveGerarComandoEmendaSemCabecalhoComumSemItensTest() {
         ComandoEmendaPojo comandoEmenda = new ComandoEmendaPojo();
         comandoEmenda.setComandos(new ArrayList<>());
-        StringBuilder sb = new StringBuilder();
 
-        marshaller.geraComandoEmenda(comandoEmenda, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraComandoEmenda(comandoEmenda, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//ComandoEmenda").get(0);
 
         assertEquals("ComandoEmenda", element.getName());
         assertEquals(0, element.selectNodes("//ItemComandoEmenda").size());
@@ -868,14 +790,10 @@ class EmendaXmlMarshallingTest {
         ComandoEmendaPojo comandoEmenda = new ComandoEmendaPojo();
         comandoEmenda.setComandos(new ArrayList<>());
         comandoEmenda.setCabecalhoComum("Cabeçalho Comum");
-        StringBuilder sb = new StringBuilder();
 
-        marshaller.geraComandoEmenda(comandoEmenda, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraComandoEmenda(comandoEmenda, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//ComandoEmenda").get(0);
 
         assertEquals("ComandoEmenda", element.getName());
         assertEquals("Cabeçalho Comum", element.selectNodes("//CabecalhoComum").get(0).getText());
@@ -890,14 +808,10 @@ class EmendaXmlMarshallingTest {
         ComandoEmendaPojo comandoEmenda = new ComandoEmendaPojo();
         comandoEmenda.setComandos(List.of(item));
         comandoEmenda.setCabecalhoComum("Cabeçalho Comum");
-        StringBuilder sb = new StringBuilder();
 
-        marshaller.geraComandoEmenda(comandoEmenda, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraComandoEmenda(comandoEmenda, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//ComandoEmenda").get(0);
 
         assertEquals("ComandoEmenda", element.getName());
         assertEquals("Cabeçalho Comum", element.selectNodes("//CabecalhoComum").get(0).getText());
@@ -916,14 +830,10 @@ class EmendaXmlMarshallingTest {
         ComandoEmendaPojo comandoEmenda = new ComandoEmendaPojo();
         comandoEmenda.setComandos(Arrays.asList(item1, item2));
         comandoEmenda.setCabecalhoComum("Cabeçalho Comum");
-        StringBuilder sb = new StringBuilder();
 
-        marshaller.geraComandoEmenda(comandoEmenda, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraComandoEmenda(comandoEmenda, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//ComandoEmenda").get(0);
 
         assertEquals("ComandoEmenda", element.getName());
         assertEquals("Cabeçalho Comum", element.selectNodes("//CabecalhoComum").get(0).getText());
@@ -942,14 +852,10 @@ class EmendaXmlMarshallingTest {
         ComandoEmendaPojo comandoEmenda = new ComandoEmendaPojo();
         comandoEmenda.setComandos(List.of(item));
         comandoEmenda.setCabecalhoComum("Cabeçalho Comum");
-        StringBuilder sb = new StringBuilder();
 
-        marshaller.geraComandoEmenda(comandoEmenda, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraComandoEmenda(comandoEmenda, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//ComandoEmenda").get(0);
 
         assertEquals("ComandoEmenda", element.getName());
         assertEquals("Cabeçalho Comum", element.selectNodes("//CabecalhoComum").get(0).getText());
@@ -973,19 +879,14 @@ class EmendaXmlMarshallingTest {
         comando.setMotivo("Motivo de Teste");
         comando.setTextoAntesRevisao("Texto Antes de Revisao");
 
-        StringBuilder sb = new StringBuilder("<Emenda>");
-        marshaller.geraComandoEmendaTextoLivre(comando, sb);
-        sb.append("</Emenda>");
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element elementComandoEmendaTextoLivre = (Element) document.selectNodes("//ComandoEmendaTextoLivre").get(0);
+        Element emendaElement = createRootElement();
+        marshaller.geraComandoEmendaTextoLivre(comando, emendaElement);
+        Element elementComandoEmendaTextoLivre = (Element) emendaElement.selectNodes("//ComandoEmendaTextoLivre").get(0);
 
         assertEquals("Motivo de Teste", elementComandoEmendaTextoLivre.attributeValue("motivo"));
         assertEquals("Texto de teste", elementComandoEmendaTextoLivre.getText().trim());
 
-        Element elementComandoEmendaTextoLivreAntesRevisao = (Element) document.selectNodes("//ComandoEmendaTextoLivreAntesRevisao").get(0);
+        Element elementComandoEmendaTextoLivreAntesRevisao = (Element) elementComandoEmendaTextoLivre.selectNodes("//ComandoEmendaTextoLivreAntesRevisao").get(0);
         assertNotNull(elementComandoEmendaTextoLivreAntesRevisao);
         assertEquals("Texto Antes de Revisao", elementComandoEmendaTextoLivreAntesRevisao.getText().trim());
     }
@@ -995,16 +896,13 @@ class EmendaXmlMarshallingTest {
         ComandoEmendaTextoLivrePojo comando = new ComandoEmendaTextoLivrePojo();
         comando.setTexto("Texto Antes de Revisao");
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraComandoEmendaTextoLivre(comando, sb);
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraComandoEmendaTextoLivre(comando, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//ComandoEmendaTextoLivre").get(0);
 
         assertEquals("ComandoEmendaTextoLivre", element.getName());
-        assertEquals(null, element.attributeValue("motivo"));
+        assertNull(element.attributeValue("motivo"));
         assertEquals("Texto Antes de Revisao", element.getText().trim());
     }
 
@@ -1012,38 +910,31 @@ class EmendaXmlMarshallingTest {
     public void testGeraJustificativaComTextoEscapado() throws Exception {
         String justificativa = "Justificativa com caracteres especiais: <, >, &";
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraJustificativa(justificativa, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraJustificativa(justificativa, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//Justificativa").get(0);
 
         assertEquals("Justificativa", element.getName());
-        assertEquals("Justificativa com caracteres especiais: <, >, &", element.getText().trim());
+        assertEquals("Justificativa com caracteres especiais: &lt;, &gt;, &amp;", element.getText().trim());
     }
 
     @Test
     public void testGeraJustificativaSemTexto() throws Exception {
         String justificativa = null;
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraJustificativa(justificativa, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraJustificativa(justificativa, emendaElement);
 
-        assertEquals(0, sb.length());
+        assertEquals(0, emendaElement.selectNodes("//Justificativa").size());
     }
 
     @Test
     public void testGeraJustificativaAntesRevisaoComTexto() throws Exception {
         String justificativa = "Esta é uma justificativa antes da revisão.";
-        StringBuilder sb = new StringBuilder();
 
-        marshaller.geraJustificativaAntesRevisao(justificativa, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraJustificativaAntesRevisao(justificativa, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//JustificativaAntesRevisao").get(0);
 
         assertEquals("JustificativaAntesRevisao", element.getName());
         assertEquals("Esta é uma justificativa antes da revisão.", element.getText().trim());
@@ -1052,16 +943,13 @@ class EmendaXmlMarshallingTest {
     @Test
     public void testGeraJustificativaAntesRevisaoComTextoEscapado() throws Exception {
         String justificativa = "Justificativa com caracteres especiais: <, >, &";
-        StringBuilder sb = new StringBuilder();
 
-        marshaller.geraJustificativaAntesRevisao(justificativa, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraJustificativaAntesRevisao(justificativa, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//JustificativaAntesRevisao").get(0);
 
         assertEquals("JustificativaAntesRevisao", element.getName());
-        assertEquals(justificativa, element.getText().trim());
+        assertEquals("Justificativa com caracteres especiais: &lt;, &gt;, &amp;", element.getText().trim());
     }
 
     @Test
@@ -1087,12 +975,9 @@ class EmendaXmlMarshallingTest {
         colegiado.setIdentificacao("Identificação");
         autoria.setColegiado(colegiado);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraAutoria(autoria, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraAutoria(autoria, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//Autoria").get(0);
 
         assertEquals("Autoria", element.getName());
         assertEquals(TipoAutoria.NAO_IDENTIFICADO.getDescricao(), element.attributeValue("tipo"));
@@ -1111,12 +996,9 @@ class EmendaXmlMarshallingTest {
         opcoesImpressao.setTamanhoFonte(12);
         opcoesImpressao.setReduzirEspacoEntreLinhas(false);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraOpcoesImpressao(opcoesImpressao, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraOpcoesImpressao(opcoesImpressao, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//OpcoesImpressao").get(0);
 
         assertEquals("OpcoesImpressao", element.getName());
         assertEquals("true", element.attributeValue("imprimirBrasao"));
@@ -1132,12 +1014,9 @@ class EmendaXmlMarshallingTest {
         opcoesImpressao.setTamanhoFonte(10);
         opcoesImpressao.setReduzirEspacoEntreLinhas(true);
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraOpcoesImpressao(opcoesImpressao, sb);
-
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element element = document.getRootElement();
+        Element emendaElement = createRootElement();
+        marshaller.geraOpcoesImpressao(opcoesImpressao, emendaElement);
+        Element element = (Element) emendaElement.selectNodes("//OpcoesImpressao").get(0);
 
         assertEquals("OpcoesImpressao", element.getName());
         assertEquals("false", element.attributeValue("imprimirBrasao"));
@@ -1153,34 +1032,27 @@ class EmendaXmlMarshallingTest {
         revisoes.add(new RevisaoJustificativaPojo("Type 2", "2", null, "2024-10-24T11:00:00",  "Descricao 2"));
         revisoes.add(new RevisaoTextoLivrePojo("Type 3", "3", null, "2024-10-24T11:00:00",  "Descricao 3"));
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraRevisoes(revisoes, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraRevisoes(revisoes, emendaElement);
+        List<Node> elements = emendaElement.selectNodes("//Revisoes/*");
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element root = document.getRootElement();
-        assertNotNull(root);
-
-        List<Element> elements = getOnlyElements(root);
-
-        assertEquals("Revisoes", root.getName());
         assertEquals(3, elements.size());
 
-        Element primeiroElemento = elements.get(0);
+        Element primeiroElemento = (Element) elements.get(0);
         assertEquals("RevisaoElemento", primeiroElemento.getName());
         assertEquals("1", primeiroElemento.attributeValue("actionType"));
         assertEquals("State 1", primeiroElemento.attributeValue("stateType"));
         assertEquals("1", primeiroElemento.attributeValue("idRevisaoElementoPai"));
         assertEquals("1", primeiroElemento.attributeValue("idRevisaoElementoPrincipal"));
 
-        Element segundoElemento = elements.get(1);
+        Element segundoElemento = (Element) elements.get(1);
         assertEquals("RevisaoJustificativa", segundoElemento.getName());
         assertEquals("2", segundoElemento.attributeValue("id"));
         assertEquals("Type 2", segundoElemento.attributeValue("type"));
         assertEquals("2024-10-24T11:00:00", segundoElemento.attributeValue("dataHora"));
         assertEquals("Descricao 2", segundoElemento.attributeValue("descricao"));
 
-        Element terceiroElemento = elements.get(2);
+        Element terceiroElemento = (Element) elements.get(2);
         assertEquals("RevisaoTextoLivre", terceiroElemento.getName());
         assertEquals("3", terceiroElemento.attributeValue("id"));
         assertEquals("Type 3", terceiroElemento.attributeValue("type"));
@@ -1201,25 +1073,16 @@ class EmendaXmlMarshallingTest {
         notasRodape.add(new NotaRodapePojo("1", 1, "Nota de Rodapé 1"));
         notasRodape.add(new NotaRodapePojo("2", 2, "Nota de Rodapé 2"));
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraNotasRodape(notasRodape, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraNotasRodape(notasRodape, emendaElement);
+        List<Node> elements = emendaElement.selectNodes("//NotasRodape/*");
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element root = document.getRootElement();
-        assertNotNull(root);
-
-        List<Element> elements = getOnlyElements(root);
-
-        assertEquals("NotasRodape", root.getName());
-        assertEquals(2, elements.size());
-
-        Element nota1 = elements.get(0);
+        Element nota1 = (Element) elements.get(0);
         assertEquals("1", nota1.attributeValue("id"));
         assertEquals("1", nota1.attributeValue("numero"));
         assertEquals("Nota de Rodapé 1", nota1.attributeValue("texto").trim());
 
-        Element nota2 = elements.get(1);
+        Element nota2 = (Element) elements.get(1);
         assertEquals("2", nota2.attributeValue("id"));
         assertEquals("2", nota2.attributeValue("numero"));
         assertEquals("Nota de Rodapé 2", nota2.attributeValue("texto").trim());
@@ -1229,34 +1092,27 @@ class EmendaXmlMarshallingTest {
     public void testGeraNotasRodapeSemElementos() throws Exception {
         List<NotaRodape> notasRodape = new ArrayList<>();
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraNotasRodape(notasRodape, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraNotasRodape(notasRodape, emendaElement);
 
-        assertEquals(0, sb.length());
+        assertEquals(0, emendaElement.selectNodes("//NotasRodape/*").size());
     }
 
     @Test
     public void testGeraPendenciasPreenchimentoComElementos() throws Exception {
         List<String> pendenciasPreenchimento = Arrays.asList("Pendência 1", "Pendência 2");
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraPendenciasPreenchimento(pendenciasPreenchimento, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraPendenciasPreenchimento(pendenciasPreenchimento, emendaElement);
+        List<Node> elements = emendaElement.selectNodes("//PendenciasPreenchimento/*");
 
-        Document document = createDocumentFromString(sb.toString());
-        assertNotNull(document);
-        Element root = document.getRootElement();
-        assertNotNull(root);
-
-        List<Element> elements = getOnlyElements(root);
-
-        assertEquals("PendenciasPreenchimento", root.getName());
         assertEquals(2, elements.size());
 
-        Element pendencia1 = elements.get(0);
+        Element pendencia1 = (Element) elements.get(0);
         assertEquals("PendenciaPreenchimento", pendencia1.getName());
         assertEquals("Pendência 1", pendencia1.getText().trim());
 
-        Element pendencia2 = elements.get(1);
+        Element pendencia2 = (Element) elements.get(1);
         assertEquals("PendenciaPreenchimento", pendencia2.getName());
         assertEquals("Pendência 2", pendencia2.getText().trim());
     }
@@ -1265,20 +1121,15 @@ class EmendaXmlMarshallingTest {
     public void testGeraPendenciasPreenchimentoSemElementos() throws Exception {
         List<String> pendenciasPreenchimento = List.of();
 
-        StringBuilder sb = new StringBuilder();
-        marshaller.geraPendenciasPreenchimento(pendenciasPreenchimento, sb);
+        Element emendaElement = createRootElement();
+        marshaller.geraPendenciasPreenchimento(pendenciasPreenchimento, emendaElement);
 
-        assertEquals(0, sb.length());
+        assertEquals(0, emendaElement.selectNodes("//NotasRodape/*").size());
     }
 
-    private Document createDocumentFromString(String xml) {
-        try {
-            SAXReader reader = new SAXReader();
-            return reader.read(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    private static Element createRootElement() {
+        Document document = DocumentHelper.createDocument();
+        return document.addElement("Emenda");
     }
     
     private Source getXmlSource(Emenda emenda) {
@@ -1307,5 +1158,4 @@ class EmendaXmlMarshallingTest {
             throw new RuntimeException(e);
         }
     }
-
 }

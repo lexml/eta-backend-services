@@ -1,5 +1,7 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -34,557 +36,394 @@ import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
+import org.dom4j.io.XMLWriter;
 
 public class EmendaXmlMarshaller {
-	
-    public static final String FECHA_TAG_SEM_CONTEUDO = "/>\n";
 
     public String toXml(Emenda emenda) {
-    	try {    		
-	        final StringBuilder sb = new StringBuilder();
-	        geraCabecalhoEmenda(emenda, sb);
-	        geraMetadados(emenda, sb);
-	        geraProposicao(emenda.getProposicao(), sb);
-	        geraColegiado(emenda.getColegiadoApreciador(), sb);
-	        geraEpigrafe(emenda.getEpigrafe(), sb);
-	        geraComponentes(emenda.getComponentes(), sb);
-	        geraComandoEmendaTextoLivre(emenda.getComandoEmendaTextoLivre(), sb);
-	        geraComandoEmenda(emenda.getComandoEmenda(), sb);
-            geraSubstituicaoTermo(emenda.getSubstituicaoTermo(), sb);
-	        geraAnexos(emenda.getAnexos(), sb);
-	        geraJustificativa(emenda.getJustificativa(), sb);
-	        geraJustificativaAntesRevisao(emenda.getJustificativaAntesRevisao(), sb);
-	        geraAutoria(emenda.getAutoria(), sb);
-	        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
-	        geraRevisoes(emenda.getRevisoes(), sb);
-	        geraNotasRodape(emenda.getNotasRodape(), sb);
-            geraPendenciasPreenchimento(emenda.getPendenciasPreenchimento(), sb);
+        try {
+            Document document = DocumentHelper.createDocument();
+            Element element = geraCabecalhoEmenda(emenda, document);
+            geraMetadados(emenda, element);
+            geraProposicao(emenda.getProposicao(), element);
+            geraColegiado(emenda.getColegiadoApreciador(), element);
+            geraEpigrafe(emenda.getEpigrafe(), element);
+            geraComponentes(emenda.getComponentes(), element);
+            geraComandoEmendaTextoLivre(emenda.getComandoEmendaTextoLivre(), element);
+            geraComandoEmenda(emenda.getComandoEmenda(), element);
+            geraSubstituicaoTermo(emenda.getSubstituicaoTermo(), element);
+            geraAnexos(emenda.getAnexos(), element);
+            geraJustificativa(emenda.getJustificativa(), element);
+            geraJustificativaAntesRevisao(emenda.getJustificativaAntesRevisao(), element);
+            geraAutoria(emenda.getAutoria(), element);
+            geraOpcoesImpressao(emenda.getOpcoesImpressao(), element);
+            geraRevisoes(emenda.getRevisoes(), element);
+            geraNotasRodape(emenda.getNotasRodape(), element);
+            geraPendenciasPreenchimento(emenda.getPendenciasPreenchimento(), element);
 
-			sb.append("</Emenda>");
-			return sb.toString();
-		}
-    	catch(Exception e) {
-    		throw new RuntimeException("Falha ao gerar XML", e);
-    	}
+            return toString(element);
+        } catch(Exception e) {
+            throw new RuntimeException("Falha ao gerar XML", e);
+        }
     }
 
-	protected void geraCabecalhoEmenda(Emenda emenda, StringBuilder sb) {
-        sb.append("<Emenda versaoFormatoArquivo=\"1.0\" local=\"").append(emenda.getLocal()).append("\"");
+    protected Element geraCabecalhoEmenda(Emenda emenda, Document document) {
+        Element element = document.addElement("Emenda");
+
+        element.addAttribute("versaoFormatoArquivo", "1.0");
+        element.addAttribute("local", emenda.getLocal());
 
         if (emenda.getData() != null) {
-            sb.append(" data=\"").append(DateTimeFormatter.ISO_DATE.format(emenda.getData()))
-                    .append("\"");
+            element.addAttribute("data", DateTimeFormatter.ISO_DATE.format(emenda.getData()));
         }
-        sb.append(">\n");
+
+        return element;
     }
 
-    /**
-     * Generates the metadata section of the emenda XML file
-     *
-     * @param emenda the emenda object
-     * @param sb     StringBuilder
-     */
-    protected void geraMetadados(Emenda emenda, StringBuilder sb) {
-        sb.append("  <Metadados>\n")
-                .append("    <DataUltimaModificacao>")
-                .append(emenda.getDataUltimaModificacao())
-                .append("</DataUltimaModificacao>\n")
-                .append("    <Aplicacao>")
-                .append(emenda.getAplicacao())
-                .append("</Aplicacao>\n")
-                .append("    <VersaoAplicacao>")
-                .append(emenda.getVersaoAplicacao())
-                .append("</VersaoAplicacao>\n")
-                .append("    <ModoEdicao>")
-                .append(emenda.getModoEdicao())
-                .append("</ModoEdicao>\n");
+    protected void geraMetadados(Emenda emenda, Element emendaElement) {
+        Element element = emendaElement.addElement("Metadados");
+
+        element.addElement("DataUltimaModificacao").setText(emenda.getDataUltimaModificacao().toString());
+        element.addElement("Aplicacao").setText(emenda.getAplicacao());
+        element.addElement("VersaoAplicacao").setText(emenda.getVersaoAplicacao());
+        element.addElement("ModoEdicao").setText(emenda.getModoEdicao().toString());
 
         emenda.getMetadados().forEach((k, v) ->
-                sb.append("    <")
-                        .append(k)
-                        .append(">")
-                        .append(v)
-                        .append("</")
-                        .append(k)
-                        .append(">\n"));
-
-        sb.append("  </Metadados>\n");
+                element.addElement(k).setText(v.toString())
+        );
     }
 
-    protected void geraProposicao(RefProposicaoEmendada proposicao, StringBuilder sb) {
-        sb.append("  <Proposicao ")
-                .append("urn=\"")
-                .append(proposicao.getUrn())
-                .append("\" ")
-                .append("sigla=\"")
-                .append(proposicao.getSigla())
-                .append("\" ")
-                .append("numero=\"")
-                .append(proposicao.getNumero())
-                .append("\" ")
-                .append("ano=\"")
-                .append(proposicao.getAno())
-                .append("\" ")
-                .append("ementa=\"")
-                .append(StringEscapeUtils.escapeXml10(htmlAttribute2txt(proposicao.getEmenta())))
-                .append("\" ")
-                .append("identificacaoTexto=\"")
-                .append(StringEscapeUtils.escapeXml10(proposicao.getIdentificacaoTexto()))
-                .append("\" ")
-                .append("emendarTextoSubstitutivo=\"")
-                .append(proposicao.isEmendarTextoSubstitutivo())
-                .append("\" ")
-                .append(FECHA_TAG_SEM_CONTEUDO);
+    protected void geraProposicao(RefProposicaoEmendada proposicao, Element emendaElement) {
+        Element element = emendaElement.addElement("Proposicao");
+
+        element.addAttribute("urn", proposicao.getUrn());
+        element.addAttribute("sigla", proposicao.getSigla());
+        element.addAttribute("numero", proposicao.getNumero());
+        element.addAttribute("ano", String.valueOf(proposicao.getAno()));
+        element.addAttribute("ementa", StringEscapeUtils.escapeXml10(htmlAttribute2txt(proposicao.getEmenta())));
+        element.addAttribute("identificacaoTexto", StringEscapeUtils.escapeXml10(proposicao.getIdentificacaoTexto()));
+        element.addAttribute("emendarTextoSubstitutivo", String.valueOf(proposicao.isEmendarTextoSubstitutivo()));
     }
 
-	protected void geraColegiado(ColegiadoApreciador colegiado, StringBuilder sb) {
-        sb.append("  <ColegiadoApreciador ")
-                .append("siglaCasaLegislativa=\"")
-                .append(colegiado
-                        .getSiglaCasaLegislativa())
-                .append("\" ")
-                .append("tipoColegiado=\"")
-                .append(colegiado.getTipoColegiado().getDescricao())
-                .append("\"");
+    protected void geraColegiado(ColegiadoApreciador colegiado, Element emendaElement) {
+        Element element = emendaElement.addElement("ColegiadoApreciador");
 
-        if (colegiado.getTipoColegiado() == TipoColegiado.COMISSAO || colegiado.getTipoColegiado() == TipoColegiado.PLENARIO_VIA_COMISSAO) {
-            sb.append(" siglaComissao=\"")
-                    .append(colegiado.getSiglaComissao())
-                    .append("\"");
+        element.addAttribute("siglaCasaLegislativa", colegiado.getSiglaCasaLegislativa().name());
+        element.addAttribute("tipoColegiado", colegiado.getTipoColegiado().getDescricao());
+
+        if (colegiado.getTipoColegiado() == TipoColegiado.COMISSAO ||
+                colegiado.getTipoColegiado() == TipoColegiado.PLENARIO_VIA_COMISSAO) {
+            element.addAttribute("siglaComissao", colegiado.getSiglaComissao());
         }
-
-        sb.append(" />\n");
     }
 
-    protected void geraSubstituicaoTermo(SubstituicaoTermo substituicaoTermo, StringBuilder sb) {
+    protected void geraSubstituicaoTermo(SubstituicaoTermo substituicaoTermo, Element emendaElement) {
         if (substituicaoTermo != null) {
-            sb.append("  <SubstituicaoTermo ")
-                    .append("tipo=\"")
-                    .append(substituicaoTermo.getTipo().getDescricao())
-                    .append("\" ")
-                    .append("termo=\"")
-                    .append(StringEscapeUtils.escapeXml10(substituicaoTermo.getTermo()))
-                    .append("\" ")
-                    .append("novoTermo=\"")
-                    .append(StringEscapeUtils.escapeXml10(substituicaoTermo.getNovoTermo()))
-                    .append("\" ")
-                    .append("flexaoGenero=\"")
-                    .append(substituicaoTermo.isFlexaoGenero())
-                    .append("\" ")
-                    .append("flexaoNumero=\"")
-                    .append(substituicaoTermo.isFlexaoNumero())
-                    .append("\" ")
-                    .append(FECHA_TAG_SEM_CONTEUDO);
+            Element element = emendaElement.addElement("SubstituicaoTermo");
+
+            element.addAttribute("tipo", substituicaoTermo.getTipo().getDescricao());
+            element.addAttribute("termo", StringEscapeUtils.escapeXml10(substituicaoTermo.getTermo()));
+            element.addAttribute("novoTermo", StringEscapeUtils.escapeXml10(substituicaoTermo.getNovoTermo()));
+            element.addAttribute("flexaoGenero", String.valueOf(substituicaoTermo.isFlexaoGenero()));
+            element.addAttribute("flexaoNumero", String.valueOf(substituicaoTermo.isFlexaoNumero()));
         }
     }
 
-    protected void geraEpigrafe(Epigrafe epigrafe, StringBuilder sb) {
-        sb.append("  <Epigrafe ")
-                .append("texto=\"")
-                .append(StringEscapeUtils.escapeXml10(epigrafe.getTexto()).trim())
-                .append("\" ");
+    protected void geraEpigrafe(Epigrafe epigrafe, Element emendaElement) {
+        if (epigrafe != null) {
+            Element element = emendaElement.addElement("Epigrafe");
 
-        if (epigrafe.getComplemento() != null) {
-            sb.append("complemento=\"")
-                    .append(StringEscapeUtils.escapeXml10(epigrafe.getComplemento()))
-                    .append("\" ");
+            element.addAttribute("texto", StringEscapeUtils.escapeXml10(epigrafe.getTexto()).trim());
+
+            if (epigrafe.getComplemento() != null) {
+                element.addAttribute("complemento", StringEscapeUtils.escapeXml10(epigrafe.getComplemento()));
+            }
         }
-
-        sb.append("/>\n");
     }
 
-    protected void geraComponentes(List<? extends ComponenteEmendado> componentes, StringBuilder sb) {
-        componentes.forEach(componente -> {
-            sb.append("  <Componente ")
-                    .append("urn=\"")
-                    .append(componente.getUrn())
-                    .append("\" ")
-                    .append("articulado=\"")
-                    .append(componente.isArticulado())
-                    .append("\" ");
+    protected void geraComponentes(List<? extends ComponenteEmendado> componentes, Element emendaElement) {
+        Element dispositivoElement;
+        for (ComponenteEmendado componente : componentes) {
+            Element componenteElement = emendaElement.addElement("Componente");
+
+            componenteElement.addAttribute("urn", componente.getUrn());
+            componenteElement.addAttribute("articulado", String.valueOf(componente.isArticulado()));
 
             if (componente.getTituloAnexo() != null) {
-                sb.append("tituloAnexo=\"")
-                        .append(StringEscapeUtils.escapeXml10(componente.getTituloAnexo()))
-                        .append("\" ");
+                componenteElement.addAttribute("tituloAnexo", StringEscapeUtils.escapeXml10(componente.getTituloAnexo()));
             }
 
             if (componente.getRotuloAnexo() != null) {
-                sb.append("rotuloAnexo=\"")
-                        .append(StringEscapeUtils.escapeXml10(componente.getRotuloAnexo()))
-                        .append("\" ");
+                componenteElement.addAttribute("rotuloAnexo", StringEscapeUtils.escapeXml10(componente.getRotuloAnexo()));
             }
 
-            sb.append(">\n");
-            geraDispositivos(componente.getDispositivos(), sb);
-            sb.append("  </Componente>\n");
-        });
+            dispositivoElement = componenteElement.addElement("Dispositivos");
+            geraDispositivos(componente.getDispositivos(), dispositivoElement);
+        }
     }
 
-    protected void geraAnexos(List<? extends Anexo> anexos, StringBuilder sb) {
-    	if(anexos != null) {    		
-    		anexos.forEach(anexo -> {
-    			sb.append("  <Anexo ")
-    			.append("nomeArquivo=\"")
-    			.append(anexo.getNomeArquivo())
-    			.append("\" ")
-    			.append("base64=\"")
-    			.append(anexo.getBase64())
-    			.append("\" ")
-    			.append(FECHA_TAG_SEM_CONTEUDO);
-    		});
-    	}
+    protected void geraAnexos(List<? extends Anexo> anexos, Element emendaElement) {
+        if (anexos != null) {
+            Element anexosElement = emendaElement.addElement("Anexos");
+
+            anexos.forEach(anexo -> {
+                anexosElement.addElement("Anexo")
+                        .addAttribute("nomeArquivo", anexo.getNomeArquivo())
+                        .addAttribute("base64", anexo.getBase64());
+            });
+        }
     }
 
-    protected void geraDispositivos(DispositivosEmenda dispositivos, StringBuilder sb) {
-        sb.append("    <Dispositivos>\n");
-        dispositivos.getDispositivosSuprimidos().forEach(suprimido -> geraDispositivosSuprimidos(suprimido, sb));
-        dispositivos.getDispositivosModificados().forEach(modificado -> geraDispositivosModificados(modificado, sb));
-        dispositivos.getDispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, sb));
-        sb.append("    </Dispositivos>\n");
+    protected void geraDispositivos(DispositivosEmenda dispositivos, Element emendaElement) {
+        emendaElement.addElement("Dispositivos");
+        dispositivos.getDispositivosSuprimidos().forEach(adicionado -> geraDispositivosSuprimidos(adicionado, emendaElement));
+        dispositivos.getDispositivosModificados().forEach(adicionado -> geraDispositivosModificados(adicionado, emendaElement));
+        dispositivos.getDispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, emendaElement));
     }
 
-    private void geraDispositivosSuprimidos(DispositivoEmendaSuprimido suprimido, StringBuilder sb) {
-        sb.append("      <DispositivoSuprimido ")
-                .append("tipo=\"")
-                .append(suprimido.getTipo())
-                .append("\" ")
-                .append("id=\"")
-                .append(suprimido.getId())
-                .append("\" ")
-                .append("rotulo=\"")
-                .append(suprimido.getRotulo())
-                .append("\" ");
-        
+    private void geraDispositivosSuprimidos(DispositivoEmendaSuprimido suprimido, Element element) {
+        Element suprimidoElement = element.addElement("DispositivoSuprimido");
+
+        suprimidoElement.addAttribute("tipo", suprimido.getTipo());
+        suprimidoElement.addAttribute("id", suprimido.getId());
+        suprimidoElement.addAttribute("rotulo", suprimido.getRotulo());
+
         if (suprimido.getUrnNormaAlterada() != null) {
-            sb.append("xml:base=\"")
-                    .append(suprimido.getUrnNormaAlterada())
-                    .append("\" ");
+            suprimidoElement.addAttribute("xml:base", suprimido.getUrnNormaAlterada());
         }
-        
-        sb.append(FECHA_TAG_SEM_CONTEUDO);
+
+        suprimidoElement.addText("");
     }
 
-    private void geraDispositivosModificados(DispositivoEmendaModificado modificado, StringBuilder sb) {
-        sb.append("      <DispositivoModificado ")
-                .append("tipo=\"")
-                .append(modificado.getTipo())
-                .append("\" ")
-                .append("id=\"")
-                .append(modificado.getId())
-                .append("\" ")
-                .append("rotulo=\"")
-                .append(modificado.getRotulo())
-                .append("\" ");
+    private void geraDispositivosModificados(DispositivoEmendaModificado modificado, Element parentElement) {
+        Element modificadoElement = parentElement.addElement("DispositivoModificado");
+
+        modificadoElement.addAttribute("tipo", modificado.getTipo());
+        modificadoElement.addAttribute("id", modificado.getId());
+        modificadoElement.addAttribute("rotulo", modificado.getRotulo());
+
         if (modificado.isTextoOmitido() != null && modificado.isTextoOmitido()) {
-            sb.append("textoOmitido=\"")
-                    .append(modificado.isTextoOmitido())
-                    .append("\" ");
+            modificadoElement.addAttribute("textoOmitido", String.valueOf(modificado.isTextoOmitido()));
         }
-        if (modificado.isAbreAspas() != null && modificado.isAbreAspas()) {
-            sb.append("abreAspas=\"")
-                    .append(modificado.isAbreAspas())
-                    .append("\" ");
-        }
-        if (modificado.isFechaAspas() != null && modificado.isFechaAspas()) {
-            sb.append("fechaAspas=\"")
-                    .append(modificado.isFechaAspas())
-                    .append("\" ");
-        }
-        if (modificado.getNotaAlteracao() != null) {
-            sb.append("notaAlteracao=\"")
-                    .append(modificado.getNotaAlteracao())
-                    .append("\" ");
-        }
-        
-        if (modificado.getUrnNormaAlterada() != null) {
-            sb.append("xml:base=\"")
-                    .append(modificado.getUrnNormaAlterada())
-                    .append("\" ");
-        }
-        
-        sb.append(">\n");
-        sb.append("        <Texto>")
-                .append(modificado.getTexto().trim())
-                .append("</Texto>\n");
-        sb.append("      </DispositivoModificado> ");
 
+        if (modificado.isAbreAspas() != null && modificado.isAbreAspas()) {
+            modificadoElement.addAttribute("abreAspas", String.valueOf(modificado.isAbreAspas()));
+        }
+
+        if (modificado.isFechaAspas() != null && modificado.isFechaAspas()) {
+            modificadoElement.addAttribute("fechaAspas", String.valueOf(modificado.isFechaAspas()));
+        }
+
+        if (modificado.getNotaAlteracao() != null) {
+            modificadoElement.addAttribute("notaAlteracao", modificado.getNotaAlteracao().toString());
+        }
+
+        if (modificado.getUrnNormaAlterada() != null) {
+            modificadoElement.addAttribute("xml:base", modificado.getUrnNormaAlterada());
+        }
+
+        // Adiciona o elemento Texto
+        Element textoElement = modificadoElement.addElement("Texto");
+        textoElement.setText(modificado.getTexto() != null ? modificado.getTexto().trim() : "");
     }
 
-    private void geraDispositivosAdicionados(DispositivoEmendaAdicionado adicionado, StringBuilder sb) {
-        sb.append("      <DispositivoAdicionado ");
+    private void geraDispositivosAdicionados(DispositivoEmendaAdicionado adicionado, Element element) {
+        Element dispositivoAdicionadoElement = element.addElement("DispositivoAdicionado");
 
         if (adicionado.isOndeCouber() != null) {
-            sb.append("ondeCouber=\"")
-                    .append(adicionado.isOndeCouber())
-                    .append("\" ");
+            dispositivoAdicionadoElement.addAttribute("ondeCouber", String.valueOf(adicionado.isOndeCouber()));
         }
 
         if (adicionado.getIdPai() != null) {
-            sb.append("idPai=\"")
-                    .append(adicionado.getIdPai())
-                    .append("\" ");
+            dispositivoAdicionadoElement.addAttribute("idPai", adicionado.getIdPai());
         }
 
         if (adicionado.getIdIrmaoAnterior() != null) {
-            sb.append("idIrmaoAnterior=\"")
-                    .append(adicionado.getIdIrmaoAnterior())
-                    .append("\" ");
+            dispositivoAdicionadoElement.addAttribute("idIrmaoAnterior", adicionado.getIdIrmaoAnterior());
         }
 
         if (adicionado.getIdPosicaoAgrupador() != null) {
-            sb.append("idPosicaoAgrupador=\"")
-                    .append(adicionado.getIdPosicaoAgrupador())
-                    .append("\" ");
+            dispositivoAdicionadoElement.addAttribute("idPosicaoAgrupador", adicionado.getIdPosicaoAgrupador());
         }
 
-        sb.append(">\n");
-
-        geraFilhosDispositivosAdicionados(adicionado, sb);
-
-        sb.append("      </DispositivoAdicionado>\n");
-
+        geraFilhosDispositivosAdicionados(adicionado, dispositivoAdicionadoElement);
     }
 
-    private void geraFilhosDispositivosAdicionados(DispositivoEmendaAdicionado filho, StringBuilder sb) {
-        sb.append("        <");
-        sb.append(filho.getTipo());
-        
-        sb.append(" id=\"")
-        	.append(filho.getId())
-        	.append("\" ");
+    private void geraFilhosDispositivosAdicionados(DispositivoEmendaAdicionado filho, Element element) {
+        Element filhoElement = element.addElement(filho.getTipo());
+
+        filhoElement.addAttribute("id", filho.getId());
 
         if (filho.getUuid2() != null) {
-            sb.append("uuid2=\"")
-                    .append(filho.getUuid2())
-                    .append("\" ");
+            filhoElement.addAttribute("uuid2", filho.getUuid2());
         }
 
         if (filho.getUrnNormaAlterada() != null) {
-            sb.append("xml:base=\"")
-                    .append(filho.getUrnNormaAlterada())
-                    .append("\" ");
+            filhoElement.addAttribute("xml:base", filho.getUrnNormaAlterada());
         }
 
-        // TODO - Avaliar uso do true/false ou s/n por estar na estrutura lexml (não é atributo lexml)
         if (filho.isExisteNaNormaAlterada() != null) {
-            sb.append("existeNaNormaAlterada=\"")
-                    .append(filho.isExisteNaNormaAlterada())
-                    .append("\" ");
+            filhoElement.addAttribute("existeNaNormaAlterada", String.valueOf(filho.isExisteNaNormaAlterada()));
         }
-        
+
         if (filho.isTextoOmitido() != null && filho.isTextoOmitido()) {
-            sb.append("textoOmitido=\"s\" ");
+            filhoElement.addAttribute("textoOmitido", "s");
         }
+
         if (filho.isAbreAspas() != null && filho.isAbreAspas()) {
-            sb.append("abreAspas=\"s\" ");
+            filhoElement.addAttribute("abreAspas", "s");
         }
+
         if (filho.isFechaAspas() != null && filho.isFechaAspas()) {
-            sb.append("fechaAspas=\"s\" ");
+            filhoElement.addAttribute("fechaAspas", "s");
         }
+
         if (filho.getNotaAlteracao() != null) {
-            sb.append("notaAlteracao=\"")
-                    .append(filho.getNotaAlteracao())
-                    .append("\" ");
+            filhoElement.addAttribute("notaAlteracao", filho.getNotaAlteracao().toString());
         }
-        
+
         if (filho.getRotulo() == null
                 && (filho.getTexto() == null || filho.getTipo().equals("Omissis"))
                 && (filho.getFilhos() == null || filho.getFilhos().isEmpty())) {
-            sb.append(FECHA_TAG_SEM_CONTEUDO);
+            filhoElement.addText("");  // Pode adicionar texto vazio ou manipular conforme necessário
         } else {
-            sb.append(">\n");
             if (filho.getRotulo() != null) {
-                sb.append("          <Rotulo>")
-                        .append(filho.getRotulo())
-                        .append("</Rotulo>\n");
+                Element rotuloElement = filhoElement.addElement("Rotulo");
+                rotuloElement.setText(filho.getRotulo());
             }
+
             if (filho.getTexto() != null) {
-                sb.append("          <p>")
-                        .append(filho.getTexto())
-                        .append("</p>\n");
+                Element textoElement = filhoElement.addElement("p");
+                textoElement.setText(filho.getTexto());
             }
 
-            filho.getFilhos().forEach(filhoFilho -> geraFilhosDispositivosAdicionados(filhoFilho, sb));
-
-            sb.append("        </");
-            sb.append(filho.getTipo());
-            sb.append(">\n");
+            if (filho.getFilhos() != null) {
+                for (DispositivoEmendaAdicionado filhoFilho : filho.getFilhos()) {
+                    geraFilhosDispositivosAdicionados(filhoFilho, filhoElement);
+                }
+            }
         }
     }
 
-
-    protected void geraComandoEmenda(ComandoEmenda comandoEmenda, StringBuilder sb) {
-        sb.append("  <ComandoEmenda>\n");
+    protected void geraComandoEmenda(ComandoEmenda comandoEmenda, Element emendaElement) {
+        Element element = emendaElement.addElement("ComandoEmenda");
 
         if (comandoEmenda.getCabecalhoComum() != null) {
-            sb.append("    <CabecalhoComum>")
-                    .append(comandoEmenda.getCabecalhoComum())
-                    .append("</CabecalhoComum>\n");
+            Element cabecalhoComumElement = element.addElement("CabecalhoComum");
+            cabecalhoComumElement.addText(comandoEmenda.getCabecalhoComum());
         }
 
-        comandoEmenda.getComandos().forEach(comando -> geraComando(comando, sb));
-        sb.append("  </ComandoEmenda>\n");
+        comandoEmenda.getComandos().forEach(comando -> geraComando(comando, element));
     }
 
-    private void geraComando(ItemComandoEmenda comando, StringBuilder sb) {
-        sb.append("    <ItemComandoEmenda>\n");
+    private void geraComando(ItemComandoEmenda comando, Element parentElement) {
+        Element comandoElement = parentElement.addElement("ItemComandoEmenda");
 
         if (comando.getRotulo() != null) {
-            sb.append("      <Rotulo>")
-                    .append(comando.getRotulo())
-                    .append("</Rotulo>\n");
+            Element rotuloElement = comandoElement.addElement("Rotulo");
+            rotuloElement.addText(comando.getRotulo());
         }
 
-        sb.append("      <Cabecalho>")
-                .append(comando.getCabecalho())
-                .append("</Cabecalho>\n");
+        Element cabecalhoElement = comandoElement.addElement("Cabecalho");
+        cabecalhoElement.addText(comando.getCabecalho());
 
         if (comando.getCitacao() != null) {
-            sb.append("      <Citacao>")
-                    .append(comando.getCitacao())
-                    .append("</Citacao>\n");
+            Element citacaoElement = comandoElement.addElement("Citacao");
+            citacaoElement.addText(comando.getCitacao());
         }
 
         if (comando.getComplemento() != null) {
-            sb.append("      <Complemento>")
-                    .append(comando.getComplemento())
-                    .append("</Complemento>\n");
+            Element complementoElement = comandoElement.addElement("Complemento");
+            complementoElement.addText(comando.getComplemento());
         }
-        
-        sb.append("    </ItemComandoEmenda>\n");
     }
 
-    protected void geraComandoEmendaTextoLivre(ComandoEmendaTextoLivre comandoEmendaTextoLivre, StringBuilder sb) {
-    	if(comandoEmendaTextoLivre != null) {
-    		sb.append("  <ComandoEmendaTextoLivre");
-    		
-    		if(comandoEmendaTextoLivre.getMotivo() != null) {
-    			sb.append(" motivo=\"")
-	    			.append(comandoEmendaTextoLivre.getMotivo())
-	    			.append("\" ");    			
-    		}
-    		
-    		sb.append(">");
-    		sb.append(comandoEmendaTextoLivre.getTexto() != null ? StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()) : "");
-    		sb.append("  </ComandoEmendaTextoLivre>\n");
-    		
-    		if(comandoEmendaTextoLivre.getTextoAntesRevisao() != null) {
-    			sb.append("  <ComandoEmendaTextoLivreAntesRevisao>");
-        		sb.append(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTextoAntesRevisao()));
-        		sb.append("  </ComandoEmendaTextoLivreAntesRevisao>\n");	
-    		}
-    		
-    	}
+    protected void geraComandoEmendaTextoLivre(ComandoEmendaTextoLivre comandoEmendaTextoLivre, Element emendaElement) {
+        if (comandoEmendaTextoLivre != null) {
+            Element comandoElement = emendaElement.addElement("ComandoEmendaTextoLivre");
+
+            if (comandoEmendaTextoLivre.getMotivo() != null) {
+                comandoElement.addAttribute("motivo", comandoEmendaTextoLivre.getMotivo());
+            }
+
+            comandoElement.addText(comandoEmendaTextoLivre.getTexto() != null ? StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTexto()) : "");
+
+            if (comandoEmendaTextoLivre.getTextoAntesRevisao() != null) {
+                Element antesRevisaoElement = emendaElement.addElement("ComandoEmendaTextoLivreAntesRevisao");
+                antesRevisaoElement.addText(StringEscapeUtils.escapeXml10(comandoEmendaTextoLivre.getTextoAntesRevisao()));
+            }
+        }
     }
 
-    protected void geraJustificativa(String justificativa, StringBuilder sb) {
-    	if(justificativa != null) {
-			sb.append("  <Justificativa>")
-	    		.append(StringEscapeUtils.escapeXml10(justificativa))
-	    		.append("</Justificativa>\n");    		
-    	}
+    protected void geraJustificativa(String justificativa, Element parentElement) {
+        if (justificativa != null) {
+            Element justificativaElement = parentElement.addElement("Justificativa");
+            justificativaElement.addText(StringEscapeUtils.escapeXml10(justificativa));
+        }
     }
 
-    protected void geraJustificativaAntesRevisao(String justificativa, StringBuilder sb) {
-    	if(justificativa != null) {
-    		sb.append("  <JustificativaAntesRevisao>")
-	    		.append(StringEscapeUtils.escapeXml10(justificativa))
-	    		.append("</JustificativaAntesRevisao>\n");    		
-    	}
+    protected void geraJustificativaAntesRevisao(String justificativa, Element parentElement) {
+        if (justificativa != null) {
+            Element justificativaElement = parentElement.addElement("JustificativaAntesRevisao");
+            justificativaElement.addText(StringEscapeUtils.escapeXml10(justificativa));
+        }
     }
 
-    protected void geraAutoria(Autoria autoria, StringBuilder sb) {
-        sb.append("  <Autoria ")
-                .append(" tipo=\"")
-                .append(autoria.getTipo().getDescricao())
-                .append("\" imprimirPartidoUF=\"")
-                .append(autoria.isImprimirPartidoUF())
-                .append("\" quantidadeAssinaturasAdicionaisDeputados=\"")
-                .append(autoria.getQuantidadeAssinaturasAdicionaisDeputados())
-                .append("\" quantidadeAssinaturasAdicionaisSenadores=\"")
-                .append(autoria.getQuantidadeAssinaturasAdicionaisSenadores())
-                .append("\" >\n");
+    protected void geraAutoria(Autoria autoria, Element emendaElement) {
+        Element element = emendaElement.addElement("Autoria");
+        element.addAttribute("tipo", autoria.getTipo().getDescricao());
+        element.addAttribute("imprimirPartidoUF", String.valueOf(autoria.isImprimirPartidoUF()));
+        element.addAttribute("quantidadeAssinaturasAdicionaisDeputados", String.valueOf(autoria.getQuantidadeAssinaturasAdicionaisDeputados()));
+        element.addAttribute("quantidadeAssinaturasAdicionaisSenadores", String.valueOf(autoria.getQuantidadeAssinaturasAdicionaisSenadores()));
 
-        autoria.getParlamentares().forEach(autor -> geraParlamentar(autor, sb));
+        for (Parlamentar autor : autoria.getParlamentares()) {
+            geraParlamentar(autor, element);
+        }
 
         if (autoria.getColegiado() != null) {
-            geraColegiadoAutor(autoria.getColegiado(), sb);
+            geraColegiadoAutor(autoria.getColegiado(), element);
         }
-
-        sb.append("  </Autoria>\n");
-
-
     }
 
-    private void geraParlamentar(Parlamentar autor, StringBuilder sb) {
-        sb.append("    <Parlamentar ")
-                .append(" identificacao=\"")
-                .append(autor.getIdentificacao())
-                .append("\" ")
-                .append("nome=\"")
-                .append(StringEscapeUtils.escapeXml10(autor.getNome()))
-                .append("\" ")
-                .append("tratamento=\"")
-                .append(autor.getTratamento())
-                .append("\" ")
-                .append("siglaPartido=\"")
-                .append(autor.getSiglaPartido())
-                .append("\" ")
-                .append("siglaUF=\"")
-                .append(autor.getSiglaUF())
-                .append("\" ")
-                .append("siglaCasaLegislativa=\"")
-                .append(autor.getSiglaCasaLegislativa())
-                .append("\" ")
-                .append("sexo=\"")
-                .append(autor.getSexo())
-                .append("\" ");
+    private void geraParlamentar(Parlamentar autor, Element parentElement) {
+        Element parlamentarElement = parentElement.addElement("Parlamentar");
+
+        parlamentarElement.addAttribute("identificacao", autor.getIdentificacao());
+        parlamentarElement.addAttribute("nome", StringEscapeUtils.escapeXml10(autor.getNome()));
+        parlamentarElement.addAttribute("tratamento", autor.getTratamento());
+        parlamentarElement.addAttribute("siglaPartido", autor.getSiglaPartido());
+        parlamentarElement.addAttribute("siglaUF", autor.getSiglaUF());
+        parlamentarElement.addAttribute("siglaCasaLegislativa", autor.getSiglaCasaLegislativa().name());
+        parlamentarElement.addAttribute("sexo", autor.getSexo().name());
 
         if (autor.getCargo() != null) {
-            sb.append("cargo=\"")
-                    .append(StringEscapeUtils.escapeXml10(autor.getCargo()))
-                    .append("\" ");
+            parlamentarElement.addAttribute("cargo", StringEscapeUtils.escapeXml10(autor.getCargo()));
         }
-        sb.append(FECHA_TAG_SEM_CONTEUDO);
     }
 
-    private void geraColegiadoAutor(ColegiadoAutor colegiado, StringBuilder sb) {
-        sb.append("    <Colegiado ")
-                .append("identificacao=\"")
-                .append(colegiado.getIdentificacao())
-                .append("\" ")
-                .append("nome=\"")
-                .append(StringEscapeUtils.escapeXml10(colegiado.getNome()))
-                .append("\" ")
-                .append("sigla=\"")
-                .append(colegiado.getSigla())
-                .append("\" ")
-                .append(FECHA_TAG_SEM_CONTEUDO);
+    private void geraColegiadoAutor(ColegiadoAutor colegiado, Element parentElement) {
+        Element colegiadoElement = parentElement.addElement("Colegiado");
+
+        colegiadoElement.addAttribute("identificacao", colegiado.getIdentificacao());
+        colegiadoElement.addAttribute("nome", StringEscapeUtils.escapeXml10(colegiado.getNome()));
+        colegiadoElement.addAttribute("sigla", colegiado.getSigla());
     }
 
-    protected void geraOpcoesImpressao(OpcoesImpressao opcoesImpressao, StringBuilder sb) {
-        sb.append("  <OpcoesImpressao ")
-                .append(" imprimirBrasao=\"")
-                .append(opcoesImpressao.isImprimirBrasao())
-                .append("\" ");
+    protected void geraOpcoesImpressao(OpcoesImpressao opcoesImpressao, Element parentElement) {
+        Element opcoesElement = parentElement.addElement("OpcoesImpressao");
+
+        opcoesElement.addAttribute("imprimirBrasao", String.valueOf(opcoesImpressao.isImprimirBrasao()));
 
         if (opcoesImpressao.getTextoCabecalho() != null) {
-            sb.append(" textoCabecalho=\"")
-                    .append(StringEscapeUtils.escapeXml10(opcoesImpressao.getTextoCabecalho()))
-                    .append("\" ");
+            opcoesElement.addAttribute("textoCabecalho", StringEscapeUtils.escapeXml10(opcoesImpressao.getTextoCabecalho()));
         }
-        
-        sb.append(" tamanhoFonte=\"")
-        .append(opcoesImpressao.getTamanhoFonte())
-        .append("\" ");
-        
-        sb.append(" reduzirEspacoEntreLinhas=\"")
-                .append(opcoesImpressao.isReduzirEspacoEntreLinhas())
-                .append("\" ")
-                .append(FECHA_TAG_SEM_CONTEUDO);
 
-
+        opcoesElement.addAttribute("tamanhoFonte", String.valueOf(opcoesImpressao.getTamanhoFonte()));
+        opcoesElement.addAttribute("reduzirEspacoEntreLinhas", String.valueOf(opcoesImpressao.isReduzirEspacoEntreLinhas()));
     }
 
     private static String htmlAttribute2txt(String html) {
@@ -598,44 +437,87 @@ public class EmendaXmlMarshaller {
 	}
 
     protected void geraRevisoes(List<? extends Revisao> revisoes, StringBuilder sb) throws Exception {
-    	
-    	if(revisoes == null || revisoes.isEmpty()) {
-    		return;
-    	}
-    	
-    	JAXBContext jcRevisaoJustificativa = JAXBContext.newInstance(RevisaoJustificativaPojo.class);    	
-    	Marshaller jmRevisaoJustificativa = jcRevisaoJustificativa.createMarshaller();
-    	jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FRAGMENT, true);
-    	jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-    	JAXBContext jcRevisaoTextoLivre = JAXBContext.newInstance(RevisaoTextoLivrePojo.class);    	
-    	Marshaller jmRevisaoTextoLivre = jcRevisaoTextoLivre.createMarshaller();
-    	jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FRAGMENT, true);
-    	jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        if(revisoes == null || revisoes.isEmpty()) {
+            return;
+        }
 
-    	JAXBContext jcRevisaoElemento = JAXBContext.newInstance(RevisaoElementoPojo.class);    	
-    	Marshaller jmRevisaoElemento = jcRevisaoElemento.createMarshaller();
-    	jmRevisaoElemento.setProperty(Marshaller.JAXB_FRAGMENT, true);
-    	jmRevisaoElemento.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-    	
-    	sb.append("<Revisoes>\n");
+        JAXBContext jcRevisaoJustificativa = JAXBContext.newInstance(RevisaoJustificativaPojo.class);
+        Marshaller jmRevisaoJustificativa = jcRevisaoJustificativa.createMarshaller();
+        jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-    	StringBuilderWriter sw = new StringBuilderWriter(sb);
-    	for(Revisao r: revisoes) { 
-    		if (r instanceof RevisaoElementoPojo) {    			
-    			jmRevisaoElemento.marshal(r, sw);
-    		}
-    		else if (r instanceof RevisaoJustificativaPojo) {
-    			jmRevisaoJustificativa.marshal(r, sw);
-    		}
-    		else if (r instanceof RevisaoTextoLivrePojo) {
-    			jmRevisaoTextoLivre.marshal(r, sw);
-    		}
-        	sb.append("\n");
-    	}
-    	
-    	sb.append("</Revisoes>\n");
-	}
+        JAXBContext jcRevisaoTextoLivre = JAXBContext.newInstance(RevisaoTextoLivrePojo.class);
+        Marshaller jmRevisaoTextoLivre = jcRevisaoTextoLivre.createMarshaller();
+        jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        JAXBContext jcRevisaoElemento = JAXBContext.newInstance(RevisaoElementoPojo.class);
+        Marshaller jmRevisaoElemento = jcRevisaoElemento.createMarshaller();
+        jmRevisaoElemento.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        jmRevisaoElemento.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        sb.append("<Revisoes>\n");
+
+        StringBuilderWriter sw = new StringBuilderWriter(sb);
+        for(Revisao r: revisoes) {
+            if (r instanceof RevisaoElementoPojo) {
+                jmRevisaoElemento.marshal(r, sw);
+            }
+            else if (r instanceof RevisaoJustificativaPojo) {
+                jmRevisaoJustificativa.marshal(r, sw);
+            }
+            else if (r instanceof RevisaoTextoLivrePojo) {
+                jmRevisaoTextoLivre.marshal(r, sw);
+            }
+            sb.append("\n");
+        }
+
+        sb.append("</Revisoes>\n");
+    }
+
+    protected void geraRevisoes(List<? extends Revisao> revisoes, Element emendaElement) throws Exception {
+        if (revisoes == null || revisoes.isEmpty()) {
+            return;
+        }
+
+        JAXBContext jcRevisaoJustificativa = JAXBContext.newInstance(RevisaoJustificativaPojo.class);
+        Marshaller jmRevisaoJustificativa = jcRevisaoJustificativa.createMarshaller();
+        jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        JAXBContext jcRevisaoTextoLivre = JAXBContext.newInstance(RevisaoTextoLivrePojo.class);
+        Marshaller jmRevisaoTextoLivre = jcRevisaoTextoLivre.createMarshaller();
+        jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        JAXBContext jcRevisaoElemento = JAXBContext.newInstance(RevisaoElementoPojo.class);
+        Marshaller jmRevisaoElemento = jcRevisaoElemento.createMarshaller();
+        jmRevisaoElemento.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        jmRevisaoElemento.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+        // Criar o elemento pai "Revisoes"
+        Element revisoesElement = emendaElement.addElement("Revisoes");
+
+        for (Revisao r : revisoes) {
+            StringWriter sw = new StringWriter();
+            if (r instanceof RevisaoElementoPojo) {
+                jmRevisaoElemento.marshal(r, sw);
+            } else if (r instanceof RevisaoJustificativaPojo) {
+                jmRevisaoJustificativa.marshal(r, sw);
+            } else if (r instanceof RevisaoTextoLivrePojo) {
+                jmRevisaoTextoLivre.marshal(r, sw);
+            }
+
+            // Converter a string XML em um Element dom4j
+            String xmlString = sw.toString();
+            Document document = DocumentHelper.parseText(xmlString);
+            Element element = document.getRootElement();
+
+            // Adicionar o elemento filho ao elemento pai
+            revisoesElement.add(element);
+        }
+    }
     
     protected void geraNotasRodape(List<? extends NotaRodape> notasRodape, StringBuilder sb) throws Exception {
     	if(notasRodape == null || notasRodape.isEmpty()) {
@@ -658,22 +540,55 @@ public class EmendaXmlMarshaller {
     	sb.append("</NotasRodape>\n");    	
     }
 
-    protected void geraPendenciasPreenchimento(List<String> pendenciasPreenchimento, StringBuilder sb) throws Exception {
+    protected void geraNotasRodape(List<? extends NotaRodape> notasRodape, Element emendaElement) {
+        if (notasRodape == null || notasRodape.isEmpty()) {
+            return;
+        }
+
+        Element notasRodapeElement = emendaElement.addElement("NotasRodape");
+
+        for (NotaRodape nr : notasRodape) {
+            NotaRodapePojo notaRodapePojo = (NotaRodapePojo) nr;
+            Element notaRodapeElement = notasRodapeElement.addElement("NotaRodape");
+
+            if (notaRodapePojo.getId() != null) {
+                notaRodapeElement.addAttribute("id", notaRodapePojo.getId());
+            }
+            if (notaRodapePojo.getNumero() != null) {
+                notaRodapeElement.addAttribute("numero", String.valueOf(notaRodapePojo.getNumero()));
+            }
+            if (notaRodapePojo.getTexto() != null) {
+                notaRodapeElement.addAttribute("texto", notaRodapePojo.getTexto());
+            }
+        }
+    }
+
+    protected void geraPendenciasPreenchimento(List<String> pendenciasPreenchimento, Element emendaElement) {
         if (pendenciasPreenchimento == null || pendenciasPreenchimento.isEmpty()) {
             return;
         }
 
-        sb.append("  <PendenciasPreenchimento>\n");
-        for(String pendencia: pendenciasPreenchimento) {
-            sb.append("    <PendenciaPreenchimento>");
-            sb.append(StringEscapeUtils.escapeXml10(pendencia));
-            sb.append("</PendenciaPreenchimento>\n");
+        Element pendenciasElement = emendaElement.addElement("PendenciasPreenchimento");
+
+        for (String pendencia : pendenciasPreenchimento) {
+            Element pendenciaElement = pendenciasElement.addElement("PendenciaPreenchimento");
+
+            pendenciaElement.addText(StringEscapeUtils.escapeXml10(pendencia));
         }
-        sb.append("  </PendenciasPreenchimento>\n");
     }
 
-//    public static void main(String[] args) {
-//		System.out.println(html2txt("teste  <a href=\"...\">link</a> <br>Nova linha."));
-//	}
+    public String toString(Element element) throws IOException {
+        StringWriter stringWriter = new StringWriter();
 
+        OutputFormat format = OutputFormat.createPrettyPrint();
+        format.setEncoding("UTF-8");
+
+        XMLWriter writer = new XMLWriter(stringWriter, format);
+
+        writer.write(element);
+
+        writer.close();
+
+        return stringWriter.toString();
+    }
 }
