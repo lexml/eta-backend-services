@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -51,12 +52,13 @@ import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
+import org.dom4j.io.XMLWriter;
 
 public class EmendaXmlUnmarshaller {
     public Emenda fromXml(final String xml) throws DocumentException {
 
         final SAXReader reader = new SAXReader();
-        final Document doc = reader.read(new StringReader(xml));
+        final Document doc = reader.read(new StringReader(StringEscapeUtils.unescapeXml((xml))));
 
         return parseEmenda(doc.getRootElement());
     }
