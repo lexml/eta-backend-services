@@ -1130,6 +1130,32 @@ class EmendaXmlMarshallingTest {
         Document document = DocumentHelper.parseText(xmlEmenda);
 
         assertEquals(1, document.selectNodes("//Emenda").size());
+        assertEquals(4, document.selectNodes("//Metadados/*").size());
+
+        assertEquals(1, document.selectNodes("//Proposicao").size());
+        Element proposicao = (Element) document.selectNodes("//Proposicao").get(0);
+        assertEquals("urn:lex:br:senado.federal:projeto.lei;pl:2024;53", proposicao.attributeValue("urn"));
+        assertEquals("PL", proposicao.attributeValue("sigla"));
+        assertEquals("53", proposicao.attributeValue("numero"));
+        assertEquals("2024", proposicao.attributeValue("ano"));
+        assertEquals("Dispõe sobre a criação do Programa de Medicamentos do Trabalhador – PMT.", proposicao.attributeValue("ementa"));
+        assertEquals("Texto inicial", proposicao.attributeValue("identificacaoTexto"));
+        assertEquals("false", proposicao.attributeValue("emendarTextoSubstitutivo"));
+
+        assertEquals(1, document.selectNodes("//ColegiadoApreciador").size());
+        Element colegiadoElement = (Element) document.selectNodes("//ColegiadoApreciador").get(0);
+        assertEquals("SF", colegiadoElement.attributeValue("siglaCasaLegislativa"));
+        assertEquals("Comissão", colegiadoElement.attributeValue("tipoColegiado"));
+        assertEquals("CCJ", colegiadoElement.attributeValue("siglaComissao"));
+
+        assertEquals(1, document.selectNodes("//Epigrafe").size());
+        Element epigrafeElement = (Element) document.selectNodes("//Epigrafe").get(0);
+        assertEquals("EMENDA Nº         - CCJ", epigrafeElement.attributeValue("texto"));
+        assertEquals("(ao PL 53/2024)", epigrafeElement.attributeValue("complemento"));
+
+        assertEquals(7, document.selectNodes("//Componente/Dispositivos/*").size());
+        Element dispositivoElement1 = (Element) document.selectNodes("//Componente/Dispositivos/DispositivoModificado").get(0);
+        assertEquals("DispositivoModificado", dispositivoElement1.getName());
     }
 
     private static Element createRootElement() {

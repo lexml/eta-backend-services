@@ -1,45 +1,118 @@
 <Emenda versaoFormatoArquivo="1.0" local="Sala da comissão" data="2024-10-31">
-  <Metadados>
-    <DataUltimaModificacao>2024-10-31T17:44:05.134Z</DataUltimaModificacao>
-    <Aplicacao></Aplicacao>
-    <VersaoAplicacao></VersaoAplicacao>
-    <ModoEdicao>emenda</ModoEdicao>
-  </Metadados>
-  <Proposicao urn="urn:lex:br:senado.federal:projeto.lei;pl:2024;53" sigla="PL" numero="53" ano="2024" ementa="Dispõe sobre a criação do Programa de Medicamentos do Trabalhador – PMT." identificacaoTexto="Texto inicial" emendarTextoSubstitutivo="false" />
-  <ColegiadoApreciador siglaCasaLegislativa="SF" tipoColegiado="Comissão" siglaComissao="CCJ" />
-  <Epigrafe texto="EMENDA Nº         - CCJ" complemento="(ao PL 53/2024)" />
-  <Componente urn="urn:lex:br:senado.federal:projeto.lei;pl:2024;53" articulado="true" >
-    <Dispositivos>
-      <DispositivoModificado tipo="Caput" id="art1_cpt" rotulo="Art. 1º" >
-        <Texto>É instituído o Programa de Medicamentos do Trabalhador – PMT, destinado ao fornecimento de medicamentos para o empregado e seus dependentes, na forma e de acordo com os limites dispostos nesta Lei e em regulamento. Teste.</Texto>
-      </DispositivoModificado>       <DispositivoModificado tipo="Paragrafo" id="art2_par1u" rotulo="Parágrafo único." >
-        <Texto>A parcela despendida pela empresa participante do Programa de Medicamentos ao Trabalhador-PMT, com medicamentos para seus empregados, desde que não seja paga em dinheiro, não possui natureza salarial, nem é tributável para efeito da contribuição previdenciária e dos demais tributos incidentes sobre a folha de salários e, tampouco, integra a base de cálculo do imposto sobre a renda da pessoa física.Teste.</Texto>
-      </DispositivoModificado>       <DispositivoModificado tipo="Caput" id="art5_cpt" rotulo="Art. 5º" >
-        <Texto>As pessoas jurídicas poderão deduzir do lucro tributável, para fins de apuração do imposto sobre a renda, o dobro das despesas comprovadamente realizadas no período-base no Programa de Medicamentos do Trabalhador, na forma e de acordo com os limites dispostos no decreto que regulamenta esta Lei.Teste.</Texto>
-      </DispositivoModificado>       <DispositivoModificado tipo="Alinea" id="art7_cpt_inc1_ali1" rotulo="a)" >
-        <Texto>deverão ser disponibilizados limites financeiros para viabilizar a aquisição dos medicamentos prescritos cobertos pelo PMT e serão escriturados separadamente de quaisquer outros recursos do trabalhador.Teste.</Texto>
-      </DispositivoModificado>       <DispositivoModificado tipo="Caput" id="art11_cpt" rotulo="Art. 11." >
-        <Texto>Esta Lei entra em vigor na data de sua publicação, produzindo efeitos a partir do primeiro dia do exercício subsequente àquele em que for implementado o disposto no seu art. 10. Teste.</Texto>
-      </DispositivoModificado>       <DispositivoAdicionado idIrmaoAnterior="art11" >
-        <Artigo id="art12" >
-          <Rotulo>Art. 12.</Rotulo>
-        <Caput id="art12_cpt" >
-          <p>Teste.</p>
-        </Caput>
-        </Artigo>
-      </DispositivoAdicionado>
-    </Dispositivos>
-  </Componente>
-  <ComandoEmendaTextoLivre>  </ComandoEmendaTextoLivre>
-  <ComandoEmenda>
-    <ItemComandoEmenda>
-      <Cabecalho>Dê-se nova redação ao art. 1º, ao parágrafo único do art. 2º, ao <i>caput</i> do art. 5º, à alínea “a” do inciso I do <i>caput</i> do art. 7º e ao art. 11; e acrescente-se art. 12 ao Projeto, nos termos a seguir:</Cabecalho>
-      <Citacao><p class="artigo">“<Rotulo>Art. 1º</Rotulo> É instituído o Programa de Medicamentos do Trabalhador – PMT, destinado ao fornecimento de medicamentos para o empregado e seus dependentes, na forma e de acordo com os limites dispostos nesta Lei e em regulamento. Teste.”</p><p class="artigo">“<Rotulo>Art. 2º</Rotulo> <Omissis/></p><p class="paragrafo"><Rotulo>Parágrafo único.</Rotulo> A parcela despendida pela empresa participante do Programa de Medicamentos ao Trabalhador-PMT, com medicamentos para seus empregados, desde que não seja paga em dinheiro, não possui natureza salarial, nem é tributável para efeito da contribuição previdenciária e dos demais tributos incidentes sobre a folha de salários e, tampouco, integra a base de cálculo do imposto sobre a renda da pessoa física.Teste.”</p><p class="artigo">“<Rotulo>Art. 5º</Rotulo> As pessoas jurídicas poderão deduzir do lucro tributável, para fins de apuração do imposto sobre a renda, o dobro das despesas comprovadamente realizadas no período-base no Programa de Medicamentos do Trabalhador, na forma e de acordo com os limites dispostos no decreto que regulamenta esta Lei.Teste.</p><p class="omissis"><Omissis/>”</p><p class="artigo">“<Rotulo>Art. 7º</Rotulo> <Omissis/></p><p class="inciso"><Rotulo>I –</Rotulo> <Omissis/></p><p class="alinea"><Rotulo>a)</Rotulo> deverão ser disponibilizados limites financeiros para viabilizar a aquisição dos medicamentos prescritos cobertos pelo PMT e serão escriturados separadamente de quaisquer outros recursos do trabalhador.Teste.</p><p class="omissis"><Omissis/>”</p><p class="artigo">“<Rotulo>Art. 11.</Rotulo> Esta Lei entra em vigor na data de sua publicação, produzindo efeitos a partir do primeiro dia do exercício subsequente àquele em que for implementado o disposto no seu art. 10. Teste.”</p><p class="artigo">“<Rotulo>Art. 12.</Rotulo> Teste.”</p></Citacao>
-    </ItemComandoEmenda>
-  </ComandoEmenda>
-  <Justificativa>&lt;p class=&quot;align-justify&quot;&gt; Teste.&lt;/p&gt;</Justificativa>
-  <Autoria  tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="3" quantidadeAssinaturasAdicionaisSenadores="1" >
-    <Parlamentar  identificacao="6331" nome="Sergio Moro" tratamento="Senador" siglaPartido="UNIÃO" siglaUF="PR" siglaCasaLegislativa="SF" sexo="M" cargo="" />
-  </Autoria>
-  <OpcoesImpressao  imprimirBrasao="true"  textoCabecalho="Teste."  tamanhoFonte="16"  reduzirEspacoEntreLinhas="false" />
+    <Metadados>
+        <DataUltimaModificacao>2024-10-31T17:44:05.134Z</DataUltimaModificacao>
+        <Aplicacao></Aplicacao>
+        <VersaoAplicacao></VersaoAplicacao>
+        <ModoEdicao>emenda</ModoEdicao>
+    </Metadados>
+    <Proposicao urn="urn:lex:br:senado.federal:projeto.lei;pl:2024;53" sigla="PL" numero="53" ano="2024"
+                ementa="Dispõe sobre a criação do Programa de Medicamentos do Trabalhador – PMT."
+                identificacaoTexto="Texto inicial" emendarTextoSubstitutivo="false"/>
+    <ColegiadoApreciador siglaCasaLegislativa="SF" tipoColegiado="Comissão" siglaComissao="CCJ"/>
+    <Epigrafe texto="EMENDA Nº         - CCJ" complemento="(ao PL 53/2024)"/>
+    <Componente urn="urn:lex:br:senado.federal:projeto.lei;pl:2024;53" articulado="true">
+        <Dispositivos>
+            <DispositivoModificado tipo="Caput" id="art1_cpt" rotulo="Art. 1º">
+                <Texto>É instituído o Programa de Medicamentos do Trabalhador – PMT, destinado ao fornecimento de
+                    medicamentos para o empregado e seus dependentes, na forma e de acordo com os limites dispostos
+                    nesta Lei e em regulamento. Teste.
+                </Texto>
+            </DispositivoModificado>
+            <DispositivoModificado tipo="Paragrafo" id="art2_par1u" rotulo="Parágrafo único.">
+                <Texto>A parcela despendida pela empresa participante do Programa de Medicamentos ao Trabalhador-PMT,
+                    com medicamentos para seus empregados, desde que não seja paga em dinheiro, não possui natureza
+                    salarial, nem é tributável para efeito da contribuição previdenciária e dos demais tributos
+                    incidentes sobre a folha de salários e, tampouco, integra a base de cálculo do imposto sobre a renda
+                    da pessoa física.Teste.
+                </Texto>
+            </DispositivoModificado>
+            <DispositivoModificado tipo="Caput" id="art5_cpt" rotulo="Art. 5º">
+                <Texto>As pessoas jurídicas poderão deduzir do lucro tributável, para fins de apuração do imposto sobre
+                    a renda, o dobro das despesas comprovadamente realizadas no período-base no Programa de Medicamentos
+                    do Trabalhador, na forma e de acordo com os limites dispostos no decreto que regulamenta esta
+                    Lei.Teste.
+                </Texto>
+            </DispositivoModificado>
+            <DispositivoModificado tipo="Alinea" id="art7_cpt_inc1_ali1" rotulo="a)">
+                <Texto>deverão ser disponibilizados limites financeiros para viabilizar a aquisição dos medicamentos
+                    prescritos cobertos pelo PMT e serão escriturados separadamente de quaisquer outros recursos do
+                    trabalhador.Teste.
+                </Texto>
+            </DispositivoModificado>
+            <DispositivoModificado tipo="Caput" id="art11_cpt" rotulo="Art. 11.">
+                <Texto>Esta Lei entra em vigor na data de sua publicação, produzindo efeitos a partir do primeiro dia do
+                    exercício subsequente àquele em que for implementado o disposto no seu art. 10. Teste.
+                </Texto>
+            </DispositivoModificado>
+            <DispositivoAdicionado idIrmaoAnterior="art11">
+                <Artigo id="art12">
+                    <Rotulo>Art. 12.</Rotulo>
+                    <Caput id="art12_cpt">
+                        <p>Teste.</p>
+                    </Caput>
+                </Artigo>
+            </DispositivoAdicionado>
+        </Dispositivos>
+    </Componente>
+    <ComandoEmendaTextoLivre></ComandoEmendaTextoLivre>
+    <ComandoEmenda>
+        <ItemComandoEmenda>
+            <Cabecalho>Dê-se nova redação ao art. 1º, ao parágrafo único do art. 2º, ao <i>caput</i> do art. 5º, à
+                alínea “a” do inciso I do <i>caput</i> do art. 7º e ao art. 11; e acrescente-se art. 12 ao Projeto, nos
+                termos a seguir:
+            </Cabecalho>
+            <Citacao>
+                <p class="artigo">“<Rotulo>Art. 1º</Rotulo> É instituído o Programa de Medicamentos do Trabalhador –
+                    PMT, destinado ao fornecimento de medicamentos para o empregado e seus dependentes, na forma e de
+                    acordo com os limites dispostos nesta Lei e em regulamento. Teste.”
+                </p>
+                <p class="artigo">“<Rotulo>Art. 2º</Rotulo>
+                    <Omissis/>
+                </p>
+                <p class="paragrafo">
+                    <Rotulo>Parágrafo único.</Rotulo>
+                    A parcela despendida pela empresa participante do Programa de Medicamentos ao Trabalhador-PMT, com
+                    medicamentos para seus empregados, desde que não seja paga em dinheiro, não possui natureza
+                    salarial, nem é tributável para efeito da contribuição previdenciária e dos demais tributos
+                    incidentes sobre a folha de salários e, tampouco, integra a base de cálculo do imposto sobre a renda
+                    da pessoa física.Teste.”
+                </p>
+                <p class="artigo">“<Rotulo>Art. 5º</Rotulo> As pessoas jurídicas poderão deduzir do lucro tributável,
+                    para fins de apuração do imposto sobre a renda, o dobro das despesas comprovadamente realizadas no
+                    período-base no Programa de Medicamentos do Trabalhador, na forma e de acordo com os limites
+                    dispostos no decreto que regulamenta esta Lei.Teste.
+                </p>
+                <p class="omissis"><Omissis/>”
+                </p>
+                <p class="artigo">“<Rotulo>Art. 7º</Rotulo>
+                    <Omissis/>
+                </p>
+                <p class="inciso">
+                    <Rotulo>I –</Rotulo>
+                    <Omissis/>
+                </p>
+                <p class="alinea">
+                    <Rotulo>a)</Rotulo>
+                    deverão ser disponibilizados limites financeiros para viabilizar a aquisição dos medicamentos
+                    prescritos cobertos pelo PMT e serão escriturados separadamente de quaisquer outros recursos do
+                    trabalhador.Teste.
+                </p>
+                <p class="omissis"><Omissis/>”
+                </p>
+                <p class="artigo">“<Rotulo>Art. 11.</Rotulo> Esta Lei entra em vigor na data de sua publicação,
+                    produzindo efeitos a partir do primeiro dia do exercício subsequente àquele em que for implementado
+                    o disposto no seu art. 10. Teste.”
+                </p>
+                <p class="artigo">“<Rotulo>Art. 12.</Rotulo> Teste.”
+                </p>
+            </Citacao>
+        </ItemComandoEmenda>
+    </ComandoEmenda>
+    <Justificativa>&lt;p class=&quot;align-justify&quot;&gt; Teste.&lt;/p&gt;</Justificativa>
+    <Autoria tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="3"
+             quantidadeAssinaturasAdicionaisSenadores="1">
+        <Parlamentar identificacao="6331" nome="Sergio Moro" tratamento="Senador" siglaPartido="UNIÃO" siglaUF="PR"
+                     siglaCasaLegislativa="SF" sexo="M" cargo=""/>
+    </Autoria>
+    <OpcoesImpressao imprimirBrasao="true" textoCabecalho="Teste." tamanhoFonte="16" reduzirEspacoEntreLinhas="false"/>
 </Emenda>
