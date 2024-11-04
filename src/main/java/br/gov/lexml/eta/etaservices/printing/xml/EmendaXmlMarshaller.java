@@ -161,8 +161,7 @@ public class EmendaXmlMarshaller {
                 componenteElement.addAttribute("rotuloAnexo", StringEscapeUtils.escapeXml10(componente.getRotuloAnexo()));
             }
 
-            dispositivoElement = componenteElement.addElement("Dispositivos");
-            geraDispositivos(componente.getDispositivos(), dispositivoElement);
+            geraDispositivos(componente.getDispositivos(), componenteElement);
         }
     }
 
@@ -178,15 +177,15 @@ public class EmendaXmlMarshaller {
         }
     }
 
-    protected void geraDispositivos(DispositivosEmenda dispositivos, Element emendaElement) {
-        emendaElement.addElement("Dispositivos");
-        dispositivos.getDispositivosSuprimidos().forEach(adicionado -> geraDispositivosSuprimidos(adicionado, emendaElement));
-        dispositivos.getDispositivosModificados().forEach(adicionado -> geraDispositivosModificados(adicionado, emendaElement));
-        dispositivos.getDispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, emendaElement));
+    protected void geraDispositivos(DispositivosEmenda dispositivos, Element componenteElement) {
+        Element dispositivosElement = componenteElement.addElement("Dispositivos");
+        dispositivos.getDispositivosSuprimidos().forEach(adicionado -> geraDispositivosSuprimidos(adicionado, dispositivosElement));
+        dispositivos.getDispositivosModificados().forEach(adicionado -> geraDispositivosModificados(adicionado, dispositivosElement));
+        dispositivos.getDispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, dispositivosElement));
     }
 
-    private void geraDispositivosSuprimidos(DispositivoEmendaSuprimido suprimido, Element emendaElement) {
-        Element suprimidoElement = emendaElement.addElement("DispositivoSuprimido");
+    private void geraDispositivosSuprimidos(DispositivoEmendaSuprimido suprimido, Element dispositivosElement) {
+        Element suprimidoElement = dispositivosElement.addElement("DispositivoSuprimido");
 
         suprimidoElement.addAttribute("tipo", suprimido.getTipo());
         suprimidoElement.addAttribute("id", suprimido.getId());
@@ -199,8 +198,8 @@ public class EmendaXmlMarshaller {
         suprimidoElement.addText("");
     }
 
-    private void geraDispositivosModificados(DispositivoEmendaModificado modificado, Element emendaElement) {
-        Element modificadoElement = emendaElement.addElement("DispositivoModificado");
+    private void geraDispositivosModificados(DispositivoEmendaModificado modificado, Element dispositivosElement) {
+        Element modificadoElement = dispositivosElement.addElement("DispositivoModificado");
 
         modificadoElement.addAttribute("tipo", modificado.getTipo());
         modificadoElement.addAttribute("id", modificado.getId());
@@ -230,8 +229,8 @@ public class EmendaXmlMarshaller {
         textoElement.setText(modificado.getTexto() != null ? modificado.getTexto().trim() : "");
     }
 
-    private void geraDispositivosAdicionados(DispositivoEmendaAdicionado adicionado, Element element) {
-        Element dispositivoAdicionadoElement = element.addElement("DispositivoAdicionado");
+    private void geraDispositivosAdicionados(DispositivoEmendaAdicionado adicionado, Element dispositivosElement) {
+        Element dispositivoAdicionadoElement = dispositivosElement.addElement("DispositivoAdicionado");
 
         if (adicionado.isOndeCouber() != null) {
             dispositivoAdicionadoElement.addAttribute("ondeCouber", String.valueOf(adicionado.isOndeCouber()));
