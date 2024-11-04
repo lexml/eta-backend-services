@@ -54,9 +54,7 @@ public class PdfGeneratorTest {
     @Test
     void testGeneratePdfWithEmenda() throws Exception {
 
-    	// Configuração dos dados
         EmendaPojo emenda = new EmendaPojo();
-
         
         emenda.setDataUltimaModificacao(Instant.now());
         emenda.setAplicacao("");
@@ -84,12 +82,6 @@ public class PdfGeneratorTest {
         epigrafe.setTexto("EMENDA Nº         ");
         epigrafe.setComplemento("(ao PL 8/2024)");
         emenda.setEpigrafe(epigrafe);
-
-        //DispositivosEmendaPojo dispositivos = new DispositivosEmendaPojo();
-        //dispositivos.setDispositivosSuprimidos(Collections.emptyList());
-        //dispositivos.setDispositivosModificados(Collections.emptyList());
-        //dispositivos.setDispositivosAdicionados(Collections.emptyList());
-        //componente.setDispositivos(dispositivos);
         
         DispositivoEmendaModificadoPojo dispositivoModificado = new DispositivoEmendaModificadoPojo();
         dispositivoModificado.setTipo("Ementa");
@@ -100,8 +92,6 @@ public class PdfGeneratorTest {
 
         // Configuração de DispositivosEmendaPojo com dispositivos preenchidos
         DispositivosEmendaPojo dispositivos = new DispositivosEmendaPojo(new ArrayList<>(), dispositivosModificados, new ArrayList<>());
-
-
         
         ComponenteEmendadoPojo componente = new ComponenteEmendadoPojo();
         componente.setUrn("urn:lex:br:senado.federal:projeto.lei;pl:2024;4223");
@@ -109,13 +99,11 @@ public class PdfGeneratorTest {
         componente.setRotuloAnexo("null");
         componente.setTituloAnexo("null");
         componente.setDispositivos(dispositivos);
-        
-        //
 
         emenda.setComponentes(Collections.singletonList(componente));
 
         ComandoEmendaPojo comandoEmenda = new ComandoEmendaPojo();
-        comandoEmenda.setCabecalhoComum("null");
+        comandoEmenda.setCabecalhoComum("Teste gera pdf e converte em xml");
         comandoEmenda.setComandos(Collections.emptyList());
         emenda.setComandoEmenda(comandoEmenda);
 
@@ -158,17 +146,10 @@ public class PdfGeneratorTest {
         emenda.setRevisoes(Collections.emptyList());
         emenda.setPendenciasPreenchimento(Collections.singletonList("Deve ser feita pelo menos uma modificação no texto da proposição para a geração do comando de emenda."));
 
-        // ByteArrayOutputStream para capturar a saída do PDF
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
-        // Executa o método de geração do PDF
         pdfGeneratorBean.generate(emenda, outputStream);
 
-        // Verificações
-     //   verify(emendaXmlMarshaller, times(1)).toXml(any(Emenda.class));
-      //  verify(templateProcessorFactory.get(), times(1)).getTemplateResult(any(Emenda.class));
-
-        // Salvando o PDF em um arquivo
         byte[] pdfBytes = outputStream.toByteArray();
         File pdfFile = new File("emenda.pdf");
         try (FileOutputStream fileOutputStream = new FileOutputStream(pdfFile)) {
