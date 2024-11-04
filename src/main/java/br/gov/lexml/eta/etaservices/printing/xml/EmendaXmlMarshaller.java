@@ -161,8 +161,7 @@ public class EmendaXmlMarshaller {
                 componenteElement.addAttribute("rotuloAnexo", StringEscapeUtils.escapeXml10(componente.getRotuloAnexo()));
             }
 
-            dispositivoElement = componenteElement.addElement("Dispositivos");
-            geraDispositivos(componente.getDispositivos(), dispositivoElement);
+            geraDispositivos(componente.getDispositivos(), componenteElement);
         }
     }
 
@@ -178,15 +177,15 @@ public class EmendaXmlMarshaller {
         }
     }
 
-    protected void geraDispositivos(DispositivosEmenda dispositivos, Element emendaElement) {
-        emendaElement.addElement("Dispositivos");
-        dispositivos.getDispositivosSuprimidos().forEach(adicionado -> geraDispositivosSuprimidos(adicionado, emendaElement));
-        dispositivos.getDispositivosModificados().forEach(adicionado -> geraDispositivosModificados(adicionado, emendaElement));
-        dispositivos.getDispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, emendaElement));
+    protected void geraDispositivos(DispositivosEmenda dispositivos, Element componenteElement) {
+        Element dispositivosElement = componenteElement.addElement("Dispositivos");
+        dispositivos.getDispositivosSuprimidos().forEach(adicionado -> geraDispositivosSuprimidos(adicionado, dispositivosElement));
+        dispositivos.getDispositivosModificados().forEach(adicionado -> geraDispositivosModificados(adicionado, dispositivosElement));
+        dispositivos.getDispositivosAdicionados().forEach(adicionado -> geraDispositivosAdicionados(adicionado, dispositivosElement));
     }
 
-    private void geraDispositivosSuprimidos(DispositivoEmendaSuprimido suprimido, Element element) {
-        Element suprimidoElement = element.addElement("DispositivoSuprimido");
+    private void geraDispositivosSuprimidos(DispositivoEmendaSuprimido suprimido, Element dispositivosElement) {
+        Element suprimidoElement = dispositivosElement.addElement("DispositivoSuprimido");
 
         suprimidoElement.addAttribute("tipo", suprimido.getTipo());
         suprimidoElement.addAttribute("id", suprimido.getId());
@@ -199,8 +198,8 @@ public class EmendaXmlMarshaller {
         suprimidoElement.addText("");
     }
 
-    private void geraDispositivosModificados(DispositivoEmendaModificado modificado, Element parentElement) {
-        Element modificadoElement = parentElement.addElement("DispositivoModificado");
+    private void geraDispositivosModificados(DispositivoEmendaModificado modificado, Element dispositivosElement) {
+        Element modificadoElement = dispositivosElement.addElement("DispositivoModificado");
 
         modificadoElement.addAttribute("tipo", modificado.getTipo());
         modificadoElement.addAttribute("id", modificado.getId());
@@ -226,13 +225,12 @@ public class EmendaXmlMarshaller {
             modificadoElement.addAttribute("xml:base", modificado.getUrnNormaAlterada());
         }
 
-        // Adiciona o elemento Texto
         Element textoElement = modificadoElement.addElement("Texto");
         textoElement.setText(modificado.getTexto() != null ? modificado.getTexto().trim() : "");
     }
 
-    private void geraDispositivosAdicionados(DispositivoEmendaAdicionado adicionado, Element element) {
-        Element dispositivoAdicionadoElement = element.addElement("DispositivoAdicionado");
+    private void geraDispositivosAdicionados(DispositivoEmendaAdicionado adicionado, Element dispositivosElement) {
+        Element dispositivoAdicionadoElement = dispositivosElement.addElement("DispositivoAdicionado");
 
         if (adicionado.isOndeCouber() != null) {
             dispositivoAdicionadoElement.addAttribute("ondeCouber", String.valueOf(adicionado.isOndeCouber()));
@@ -253,8 +251,8 @@ public class EmendaXmlMarshaller {
         geraFilhosDispositivosAdicionados(adicionado, dispositivoAdicionadoElement);
     }
 
-    private void geraFilhosDispositivosAdicionados(DispositivoEmendaAdicionado filho, Element element) {
-        Element filhoElement = element.addElement(filho.getTipo());
+    private void geraFilhosDispositivosAdicionados(DispositivoEmendaAdicionado filho, Element emendaElement) {
+        Element filhoElement = emendaElement.addElement(filho.getTipo());
 
         filhoElement.addAttribute("id", filho.getId());
 
@@ -289,7 +287,7 @@ public class EmendaXmlMarshaller {
         if (filho.getRotulo() == null
                 && (filho.getTexto() == null || filho.getTipo().equals("Omissis"))
                 && (filho.getFilhos() == null || filho.getFilhos().isEmpty())) {
-            filhoElement.addText("");  // Pode adicionar texto vazio ou manipular conforme necessário
+            filhoElement.addText("");
         } else {
             if (filho.getRotulo() != null) {
                 Element rotuloElement = filhoElement.addElement("Rotulo");
@@ -320,8 +318,8 @@ public class EmendaXmlMarshaller {
         comandoEmenda.getComandos().forEach(comando -> geraComando(comando, element));
     }
 
-    private void geraComando(ItemComandoEmenda comando, Element parentElement) {
-        Element comandoElement = parentElement.addElement("ItemComandoEmenda");
+    private void geraComando(ItemComandoEmenda comando, Element emendaElement) {
+        Element comandoElement = emendaElement.addElement("ItemComandoEmenda");
 
         if (comando.getRotulo() != null) {
             Element rotuloElement = comandoElement.addElement("Rotulo");
@@ -359,16 +357,16 @@ public class EmendaXmlMarshaller {
         }
     }
 
-    protected void geraJustificativa(String justificativa, Element parentElement) {
+    protected void geraJustificativa(String justificativa, Element emendaElement) {
         if (justificativa != null) {
-            Element justificativaElement = parentElement.addElement("Justificativa");
+            Element justificativaElement = emendaElement.addElement("Justificativa");
             justificativaElement.addText(StringEscapeUtils.escapeXml10(justificativa));
         }
     }
 
-    protected void geraJustificativaAntesRevisao(String justificativa, Element parentElement) {
+    protected void geraJustificativaAntesRevisao(String justificativa, Element emendaElement) {
         if (justificativa != null) {
-            Element justificativaElement = parentElement.addElement("JustificativaAntesRevisao");
+            Element justificativaElement = emendaElement.addElement("JustificativaAntesRevisao");
             justificativaElement.addText(StringEscapeUtils.escapeXml10(justificativa));
         }
     }
@@ -389,8 +387,8 @@ public class EmendaXmlMarshaller {
         }
     }
 
-    private void geraParlamentar(Parlamentar autor, Element parentElement) {
-        Element parlamentarElement = parentElement.addElement("Parlamentar");
+    private void geraParlamentar(Parlamentar autor, Element emendaElement) {
+        Element parlamentarElement = emendaElement.addElement("Parlamentar");
 
         parlamentarElement.addAttribute("identificacao", autor.getIdentificacao());
         parlamentarElement.addAttribute("nome", StringEscapeUtils.escapeXml10(autor.getNome()));
@@ -405,16 +403,16 @@ public class EmendaXmlMarshaller {
         }
     }
 
-    private void geraColegiadoAutor(ColegiadoAutor colegiado, Element parentElement) {
-        Element colegiadoElement = parentElement.addElement("Colegiado");
+    private void geraColegiadoAutor(ColegiadoAutor colegiado, Element emendaElement) {
+        Element colegiadoElement = emendaElement.addElement("Colegiado");
 
         colegiadoElement.addAttribute("identificacao", colegiado.getIdentificacao());
         colegiadoElement.addAttribute("nome", StringEscapeUtils.escapeXml10(colegiado.getNome()));
         colegiadoElement.addAttribute("sigla", colegiado.getSigla());
     }
 
-    protected void geraOpcoesImpressao(OpcoesImpressao opcoesImpressao, Element parentElement) {
-        Element opcoesElement = parentElement.addElement("OpcoesImpressao");
+    protected void geraOpcoesImpressao(OpcoesImpressao opcoesImpressao, Element emendaElement) {
+        Element opcoesElement = emendaElement.addElement("OpcoesImpressao");
 
         opcoesElement.addAttribute("imprimirBrasao", String.valueOf(opcoesImpressao.isImprimirBrasao()));
 
@@ -436,46 +434,6 @@ public class EmendaXmlMarshaller {
 				.trim();
 	}
 
-    protected void geraRevisoes(List<? extends Revisao> revisoes, StringBuilder sb) throws Exception {
-
-        if(revisoes == null || revisoes.isEmpty()) {
-            return;
-        }
-
-        JAXBContext jcRevisaoJustificativa = JAXBContext.newInstance(RevisaoJustificativaPojo.class);
-        Marshaller jmRevisaoJustificativa = jcRevisaoJustificativa.createMarshaller();
-        jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        jmRevisaoJustificativa.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-        JAXBContext jcRevisaoTextoLivre = JAXBContext.newInstance(RevisaoTextoLivrePojo.class);
-        Marshaller jmRevisaoTextoLivre = jcRevisaoTextoLivre.createMarshaller();
-        jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        jmRevisaoTextoLivre.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-        JAXBContext jcRevisaoElemento = JAXBContext.newInstance(RevisaoElementoPojo.class);
-        Marshaller jmRevisaoElemento = jcRevisaoElemento.createMarshaller();
-        jmRevisaoElemento.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        jmRevisaoElemento.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-        sb.append("<Revisoes>\n");
-
-        StringBuilderWriter sw = new StringBuilderWriter(sb);
-        for(Revisao r: revisoes) {
-            if (r instanceof RevisaoElementoPojo) {
-                jmRevisaoElemento.marshal(r, sw);
-            }
-            else if (r instanceof RevisaoJustificativaPojo) {
-                jmRevisaoJustificativa.marshal(r, sw);
-            }
-            else if (r instanceof RevisaoTextoLivrePojo) {
-                jmRevisaoTextoLivre.marshal(r, sw);
-            }
-            sb.append("\n");
-        }
-
-        sb.append("</Revisoes>\n");
-    }
-
     protected void geraRevisoes(List<? extends Revisao> revisoes, Element emendaElement) throws Exception {
         if (revisoes == null || revisoes.isEmpty()) {
             return;
@@ -496,7 +454,6 @@ public class EmendaXmlMarshaller {
         jmRevisaoElemento.setProperty(Marshaller.JAXB_FRAGMENT, true);
         jmRevisaoElemento.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
-        // Criar o elemento pai "Revisoes"
         Element revisoesElement = emendaElement.addElement("Revisoes");
 
         for (Revisao r : revisoes) {
@@ -509,35 +466,12 @@ public class EmendaXmlMarshaller {
                 jmRevisaoTextoLivre.marshal(r, sw);
             }
 
-            // Converter a string XML em um Element dom4j
             String xmlString = sw.toString();
             Document document = DocumentHelper.parseText(xmlString);
             Element element = document.getRootElement();
 
-            // Adicionar o elemento filho ao elemento pai
             revisoesElement.add(element);
         }
-    }
-    
-    protected void geraNotasRodape(List<? extends NotaRodape> notasRodape, StringBuilder sb) throws Exception {
-    	if(notasRodape == null || notasRodape.isEmpty()) {
-    		return;
-    	}
-    	
-    	JAXBContext jcNotaRodape = JAXBContext.newInstance(NotaRodapePojo.class);    	
-    	Marshaller jmNotaRodape = jcNotaRodape.createMarshaller();
-    	jmNotaRodape.setProperty(Marshaller.JAXB_FRAGMENT, true);
-    	jmNotaRodape.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-
-    	sb.append("<NotasRodape>\n");
-
-    	StringBuilderWriter sw = new StringBuilderWriter(sb);
-    	for(NotaRodape nr: notasRodape) {
-    		jmNotaRodape.marshal(nr, sw);
-        	sb.append("\n");
-    	}
-    	
-    	sb.append("</NotasRodape>\n");    	
     }
 
     protected void geraNotasRodape(List<? extends NotaRodape> notasRodape, Element emendaElement) {
@@ -584,9 +518,7 @@ public class EmendaXmlMarshaller {
         format.setEncoding("UTF-8");
 
         XMLWriter writer = new XMLWriter(stringWriter, format);
-
         writer.write(element);
-
         writer.close();
 
         return stringWriter.toString();

@@ -1,0 +1,39 @@
+<Emenda versaoFormatoArquivo="1.0" local="Sala das sessões" data="2024-10-31">
+    <Metadados>
+        <DataUltimaModificacao>2024-10-31T17:48:08.908Z</DataUltimaModificacao>
+        <Aplicacao></Aplicacao>
+        <VersaoAplicacao></VersaoAplicacao>
+        <ModoEdicao>emenda</ModoEdicao>
+    </Metadados>
+    <Proposicao urn="urn:lex:br:senado.federal:projeto.lei;pl:2024;6" sigla="PL" numero="6" ano="2024"
+                ementa="Altera a Lei nº 8.078, de 11 de setembro de 1990, que dispõe sobre a proteção do consumidor e dá outras providências, para dispor sobre o prazo prescricional da ação coletiva de consumo."
+                identificacaoTexto="Texto inicial" emendarTextoSubstitutivo="false"/>
+    <ColegiadoApreciador siglaCasaLegislativa="SF" tipoColegiado="Plenário"/>
+    <Epigrafe texto="EMENDA Nº" complemento="(ao PL 6/2024)"/>
+    <Componente urn="urn:lex:br:senado.federal:projeto.lei;pl:2024;6" articulado="true">
+        <Dispositivos>
+            <DispositivoModificado tipo="Caput" id="art2_cpt" rotulo="Art. 2º">
+                <Texto>Esta Lei entra em vigor na data de sua publicação. Teste.</Texto>
+            </DispositivoModificado>
+        </Dispositivos>
+    </Componente>
+    <ComandoEmendaTextoLivre></ComandoEmendaTextoLivre>
+    <ComandoEmenda>
+        <ItemComandoEmenda>
+            <Cabecalho>Dê-se ao art. 2º do Projeto a seguinte redação:</Cabecalho>
+            <Citacao>
+                <p class="artigo">“<Rotulo>Art. 2º</Rotulo> Esta Lei entra em vigor na data de sua publicação. Teste.”
+                </p>
+            </Citacao>
+        </ItemComandoEmenda>
+    </ComandoEmenda>
+    <Justificativa>&lt;p class=&quot;align-justify&quot;&gt;Teste.&lt;/p&gt;</Justificativa>
+    <Autoria tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="0"
+             quantidadeAssinaturasAdicionaisSenadores="0">
+        <Parlamentar identificacao="6331" nome="Sergio Moro" tratamento="Senador" siglaPartido="UNIÃO" siglaUF="PR"
+                     siglaCasaLegislativa="SF" sexo="M" cargo="Presidente"/>
+        <Parlamentar identificacao="5732" nome="Rodrigo Pacheco" tratamento="Senador" siglaPartido="PSD" siglaUF="MG"
+                     siglaCasaLegislativa="SF" sexo="M" cargo="Presidente"/>
+    </Autoria>
+    <OpcoesImpressao imprimirBrasao="true" textoCabecalho="Teste." tamanhoFonte="16" reduzirEspacoEntreLinhas="false"/>
+</Emenda>

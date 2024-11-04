@@ -11,12 +11,12 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 
 import br.gov.lexml.eta.etaservices.emenda.*;
+import br.gov.lexml.eta.etaservices.parsing.xml.EmendaXmlUnmarshaller;
 import br.gov.lexml.eta.etaservices.printing.json.*;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
@@ -873,7 +873,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraComandoEmendaTextoLivreComMotivoETexto() throws Exception {
+    public void deveGerarComandoEmendaTextoLivreComMotivoETextoTest() throws Exception {
         ComandoEmendaTextoLivrePojo comando = new ComandoEmendaTextoLivrePojo();
         comando.setTexto("Texto de teste");
         comando.setMotivo("Motivo de Teste");
@@ -892,7 +892,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraComandoEmendaTextoLivreSemMotivoESemTexto() throws Exception {
+    public void deveGerarComandoEmendaTextoLivreSemMotivoESemTextoTest() throws Exception {
         ComandoEmendaTextoLivrePojo comando = new ComandoEmendaTextoLivrePojo();
         comando.setTexto("Texto Antes de Revisao");
 
@@ -907,7 +907,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraJustificativaComTextoEscapado() throws Exception {
+    public void deveGerarJustificativaComTextoEscapadoTest() throws Exception {
         String justificativa = "Justificativa com caracteres especiais: <, >, &";
 
         Element emendaElement = createRootElement();
@@ -919,7 +919,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraJustificativaSemTexto() throws Exception {
+    public void deveGerarJustificativaSemTextoTest() throws Exception {
         String justificativa = null;
 
         Element emendaElement = createRootElement();
@@ -929,7 +929,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraJustificativaAntesRevisaoComTexto() throws Exception {
+    public void deveGerarJustificativaAntesRevisaoComTextoTest() throws Exception {
         String justificativa = "Esta é uma justificativa antes da revisão.";
 
         Element emendaElement = createRootElement();
@@ -941,7 +941,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraJustificativaAntesRevisaoComTextoEscapado() throws Exception {
+    public void deveGerarJustificativaAntesRevisaoComTextoEscapadoTest() throws Exception {
         String justificativa = "Justificativa com caracteres especiais: <, >, &";
 
         Element emendaElement = createRootElement();
@@ -953,7 +953,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraAutoriaComTodosOsCampos() throws Exception {
+    public void deveGerarAutoriaComTodosOsCamposTest() throws Exception {
         AutoriaPojo autoria = new AutoriaPojo();
         autoria.setTipo(TipoAutoria.NAO_IDENTIFICADO);
         autoria.setImprimirPartidoUF(true);
@@ -989,7 +989,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraOpcoesImpressaoComTodosOsCampos() throws Exception {
+    public void deveGerarOpcoesImpressaoComTodosOsCamposTest() throws Exception {
         OpcoesImpressaoPojo opcoesImpressao = new OpcoesImpressaoPojo();
         opcoesImpressao.setImprimirBrasao(true);
         opcoesImpressao.setTextoCabecalho("Cabeçalho de Teste");
@@ -1008,7 +1008,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraOpcoesImpressaoSemTextoCabecalho() throws Exception {
+    public void deveGerarOpcoesImpressaoSemTextoCabecalhoTest() throws Exception {
         OpcoesImpressaoPojo opcoesImpressao = new OpcoesImpressaoPojo();
         opcoesImpressao.setImprimirBrasao(false);
         opcoesImpressao.setTamanhoFonte(10);
@@ -1026,7 +1026,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraRevisoesComElementos() throws Exception {
+    public void deveGerarRevisoesComElementosTest() throws Exception {
         List<Revisao> revisoes = new ArrayList<>();
         revisoes.add(new RevisaoElementoPojo("1", "State 1", null, null, "1",  "1"));
         revisoes.add(new RevisaoJustificativaPojo("Type 2", "2", null, "2024-10-24T11:00:00",  "Descricao 2"));
@@ -1060,15 +1060,8 @@ class EmendaXmlMarshallingTest {
         assertEquals("Descricao 3", terceiroElemento.attributeValue("descricao"));
     }
 
-    private static List<Element> getOnlyElements(Element root) {
-        return root.elements().stream()
-                .filter(element -> element instanceof Element)
-                .collect(Collectors.toList());
-
-    }
-
     @Test
-    public void testGeraNotasRodapeComElementos() throws Exception {
+    public void deveGerarNotasRodapeComElementosTest() throws Exception {
         List<NotaRodape> notasRodape = new ArrayList<>();
         notasRodape.add(new NotaRodapePojo("1", 1, "Nota de Rodapé 1"));
         notasRodape.add(new NotaRodapePojo("2", 2, "Nota de Rodapé 2"));
@@ -1089,7 +1082,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraNotasRodapeSemElementos() throws Exception {
+    public void deveGerarNotasRodapeSemElementosTest() throws Exception {
         List<NotaRodape> notasRodape = new ArrayList<>();
 
         Element emendaElement = createRootElement();
@@ -1099,7 +1092,7 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraPendenciasPreenchimentoComElementos() throws Exception {
+    public void deveGerarPendenciasPreenchimentoComElementosTest() throws Exception {
         List<String> pendenciasPreenchimento = Arrays.asList("Pendência 1", "Pendência 2");
 
         Element emendaElement = createRootElement();
@@ -1118,13 +1111,136 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    public void testGeraPendenciasPreenchimentoSemElementos() throws Exception {
+    public void deveGerarPendenciasPreenchimentoSemElementosTest() throws Exception {
         List<String> pendenciasPreenchimento = List.of();
 
         Element emendaElement = createRootElement();
         marshaller.geraPendenciasPreenchimento(pendenciasPreenchimento, emendaElement);
 
         assertEquals(0, emendaElement.selectNodes("//NotasRodape/*").size());
+    }
+
+    @Test
+    void deveFazerParserDeUmaEmendaCompletaTest() throws Exception {
+        String testString = loadFileContent("emenda-teste1.xml");
+        EmendaXmlUnmarshaller unmarshaller = new EmendaXmlUnmarshaller();
+        Emenda emenda = unmarshaller.fromXml(testString);
+
+        String xmlEmenda = marshaller.toXml(emenda);
+        Document document = DocumentHelper.parseText(xmlEmenda);
+
+        assertEquals(1, document.selectNodes("//Emenda").size());
+        assertEquals(4, document.selectNodes("//Metadados/*").size());
+
+        assertEquals(1, document.selectNodes("//Proposicao").size());
+        Element proposicao = (Element) document.selectNodes("//Proposicao").get(0);
+        assertEquals("urn:lex:br:senado.federal:projeto.lei;pl:2024;53", proposicao.attributeValue("urn"));
+        assertEquals("PL", proposicao.attributeValue("sigla"));
+        assertEquals("53", proposicao.attributeValue("numero"));
+        assertEquals("2024", proposicao.attributeValue("ano"));
+        assertEquals("Dispõe sobre a criação do Programa de Medicamentos do Trabalhador – PMT.", proposicao.attributeValue("ementa"));
+        assertEquals("Texto inicial", proposicao.attributeValue("identificacaoTexto"));
+        assertEquals("false", proposicao.attributeValue("emendarTextoSubstitutivo"));
+
+        assertEquals(1, document.selectNodes("//ColegiadoApreciador").size());
+        Element colegiadoElement = (Element) document.selectNodes("//ColegiadoApreciador").get(0);
+        assertEquals("SF", colegiadoElement.attributeValue("siglaCasaLegislativa"));
+        assertEquals("Comissão", colegiadoElement.attributeValue("tipoColegiado"));
+        assertEquals("CCJ", colegiadoElement.attributeValue("siglaComissao"));
+
+        assertEquals(1, document.selectNodes("//Epigrafe").size());
+        Element epigrafeElement = (Element) document.selectNodes("//Epigrafe").get(0);
+        assertEquals("EMENDA Nº         - CCJ", epigrafeElement.attributeValue("texto"));
+        assertEquals("(ao PL 53/2024)", epigrafeElement.attributeValue("complemento"));
+
+    }
+
+    @Test
+    void deveFazerParserDeUmaEmendaCompletaValidandoDispositivosTest() throws Exception {
+        String testString = loadFileContent("emenda-teste1.xml");
+        EmendaXmlUnmarshaller unmarshaller = new EmendaXmlUnmarshaller();
+        Emenda emenda = unmarshaller.fromXml(testString);
+
+        String xmlEmenda = marshaller.toXml(emenda);
+        Document document = DocumentHelper.parseText(xmlEmenda);
+
+        assertEquals(6, document.selectNodes("//Componente/Dispositivos/*").size());
+        Element dispositivoElement1 = (Element) document.selectNodes("//Componente/Dispositivos/DispositivoModificado").get(0);
+        assertEquals("Caput", dispositivoElement1.attributeValue("tipo"));
+        assertEquals("art1_cpt", dispositivoElement1.attributeValue("id"));
+        assertEquals("Art. 1º", dispositivoElement1.attributeValue("rotulo"));
+
+        dispositivoElement1 = (Element) document.selectNodes("//Componente/Dispositivos/DispositivoModificado").get(1);
+        assertEquals("Paragrafo", dispositivoElement1.attributeValue("tipo"));
+        assertEquals("art2_par1u", dispositivoElement1.attributeValue("id"));
+        assertEquals("Parágrafo único.", dispositivoElement1.attributeValue("rotulo"));
+
+        dispositivoElement1 = (Element) document.selectNodes("//Componente/Dispositivos/DispositivoModificado").get(2);
+        assertEquals("Caput", dispositivoElement1.attributeValue("tipo"));
+        assertEquals("art5_cpt", dispositivoElement1.attributeValue("id"));
+        assertEquals("Art. 5º", dispositivoElement1.attributeValue("rotulo"));
+
+        dispositivoElement1 = (Element) document.selectNodes("//Componente/Dispositivos/DispositivoModificado").get(3);
+        assertEquals("Alinea", dispositivoElement1.attributeValue("tipo"));
+        assertEquals("art7_cpt_inc1_ali1", dispositivoElement1.attributeValue("id"));
+        assertEquals("a)", dispositivoElement1.attributeValue("rotulo"));
+
+        dispositivoElement1 = (Element) document.selectNodes("//Componente/Dispositivos/DispositivoModificado").get(4);
+        assertEquals("Caput", dispositivoElement1.attributeValue("tipo"));
+        assertEquals("art11_cpt", dispositivoElement1.attributeValue("id"));
+        assertEquals("Art. 11.", dispositivoElement1.attributeValue("rotulo"));
+    }
+
+    @Test
+    void deveFazerParserDeUmaEmendaCompletaValidandoComandoEmendaTest() throws Exception {
+        String testString = loadFileContent("emenda-teste1.xml");
+        EmendaXmlUnmarshaller unmarshaller = new EmendaXmlUnmarshaller();
+        Emenda emenda = unmarshaller.fromXml(testString);
+
+        String xmlEmenda = marshaller.toXml(emenda);
+        Document document = DocumentHelper.parseText(xmlEmenda);
+
+        List<Node> itens = document.selectNodes("//ComandoEmenda/ItemComandoEmenda/*");
+        assertEquals(2, itens.size());
+        assertEquals("Cabecalho", ((Element) itens.get(0)).getName());
+        assertEquals("Citacao", ((Element) itens.get(1)).getName());
+    }
+
+
+    @Test
+    void deveFazerParserDeUmaEmendaCompletaValidandoJustificativaAutoriaOpcoesImpressaoTest() throws Exception {
+        String testString = loadFileContent("emenda-teste1.xml");
+        EmendaXmlUnmarshaller unmarshaller = new EmendaXmlUnmarshaller();
+        Emenda emenda = unmarshaller.fromXml(testString);
+
+        String xmlEmenda = marshaller.toXml(emenda);
+        Document document = DocumentHelper.parseText(xmlEmenda);
+
+        Element justificativa = (Element) document.selectNodes("//Justificativa").get(0);
+        assertEquals("Teste.", justificativa.getText());
+
+        Element autoria = (Element) document.selectNodes("//Autoria").get(0);
+        assertEquals("Parlamentar", autoria.attributeValue("tipo"));
+        assertEquals("true", autoria.attributeValue("imprimirPartidoUF"));
+        assertEquals( "3", autoria.attributeValue("quantidadeAssinaturasAdicionaisDeputados"));
+        assertEquals("1", autoria.attributeValue("quantidadeAssinaturasAdicionaisSenadores"));
+
+        Element parlamentar = (Element) document.selectNodes("//Autoria/Parlamentar").get(0);
+        assertEquals("6331", parlamentar.attributeValue("identificacao"));
+        assertEquals("Sergio Moro", parlamentar.attributeValue("nome"));
+        assertEquals( "Senador", parlamentar.attributeValue("tratamento"));
+        assertEquals("UNIÃO", parlamentar.attributeValue("siglaPartido"));
+        assertEquals("PR", parlamentar.attributeValue("siglaUF"));
+        assertEquals("SF", parlamentar.attributeValue("siglaCasaLegislativa"));
+        assertEquals("M", parlamentar.attributeValue("sexo"));
+        assertEquals("", parlamentar.attributeValue("cargo"));
+
+        Element opcoesImpressao = (Element) document.selectNodes("//OpcoesImpressao").get(0);
+        assertEquals("true", opcoesImpressao.attributeValue("imprimirBrasao"));
+        assertEquals("Teste.", opcoesImpressao.attributeValue("textoCabecalho"));
+        assertEquals( "16", opcoesImpressao.attributeValue("tamanhoFonte"));
+        assertEquals("false", opcoesImpressao.attributeValue("reduzirEspacoEntreLinhas"));
+
     }
 
     private static Element createRootElement() {
@@ -1142,16 +1258,26 @@ class EmendaXmlMarshallingTest {
     }
 
     private Emenda setupEmenda() {
-
-        ClassLoader classLoader = getClass().getClassLoader();
         try {
-            URL sourceUrl = classLoader.getResource("test1.json");
-            assert sourceUrl != null;
-            File file = new File(sourceUrl.getFile());
-            String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            String text = loadFileContent("test1.json");
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             return objectMapper.readValue(text, EmendaPojo.class);
+
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String loadFileContent(String filename) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        try {
+            URL sourceUrl = classLoader.getResource(filename);
+            assert sourceUrl != null;
+            File file = new File(sourceUrl.getFile());
+            String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+            return text;
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
