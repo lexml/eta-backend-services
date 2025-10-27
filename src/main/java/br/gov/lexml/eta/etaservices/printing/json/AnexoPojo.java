@@ -20,6 +20,13 @@ public class AnexoPojo implements Anexo {
 		return "AnexoPojo [nomeArquivo=" + nomeArquivo + ", base64=" + base64 + "]";
 	}
 	
+    public void setNomeArquivo(String nomeArquivo) {
+        this.nomeArquivo = nomeArquivo;
+    }
+
+    public void setBase64(String base64) {
+        this.base64 = base64;
+    }
 		
 
 }

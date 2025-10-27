@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,16 +95,16 @@ public class FOPProcessor {
 
 	}
 	
-	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML) {
-		this.processFOP(outputStream, xslFo, emendaXML, new ArrayList<>());
+    public void processFOP(OutputStream outputStream, String xslFo, String objetoEmendaXMLOrPareceJSON, TipoDocumento tipoDocumento) {
+        this.processFOP(outputStream, xslFo, objetoEmendaXMLOrPareceJSON, new ArrayList<>(), tipoDocumento);
 	}
 	
 	/**
-	 * Transforma XSL-FO em PDF com emenda.xml embutido
+	 * Transforma XSL-FO em PDF com emenda.xml ou parecer.json embutido
 	 * @param anexos 
 	 */
 	@SuppressWarnings("unchecked")
-	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML, List<ByteArrayInputStream> anexos) {
+    public void processFOP(OutputStream outputStream, String xslFo, String objetoEmendaXMLOrPareceJSON, List<ByteArrayInputStream> anexos, TipoDocumento tipoDocumento) {
 		
 //		System.out.println(xslFo);
 
@@ -160,14 +161,15 @@ public class FOPProcessor {
 			} else {
 				pdfa.addXMP(helper.getXmpmeta().getBytes());
 
-				//adding emenda.xml
-				pdfa.addAttachments(
-						new PDFAttachmentFile(
-								emendaXML.getBytes(),
-								"emenda.xml",
-								"text/xml",
-								helper.getCmpCreateDate(),
-								PDFAttachmentFile.AFRelationShip.SOURCE));
+                if (TipoDocumento.EMENDA.equals(tipoDocumento)) {
+                    // adding emenda.xml
+                    pdfa.addAttachments(new PDFAttachmentFile(objetoEmendaXMLOrPareceJSON.getBytes(), "emenda.xml", "text/xml", helper.getCmpCreateDate(), PDFAttachmentFile.AFRelationShip.SOURCE));
+                }
+                if (TipoDocumento.PARECER.equals(tipoDocumento)) {
+                    // adding emenda.xml
+                    pdfa.addAttachments(new PDFAttachmentFile(objetoEmendaXMLOrPareceJSON.getBytes(StandardCharsets.UTF_8), "parecer.json", "application/json", helper.getCmpCreateDate(),
+                            PDFAttachmentFile.AFRelationShip.SOURCE));
+                }
 
 				//setting version
 				pdfa.setVersion(PDFA.PDFVersion.PDF_VERSION_1_7);

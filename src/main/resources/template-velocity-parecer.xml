@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
+	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	font-family="Gentium Basic">
+	<fo:layout-master-set>
+		<fo:simple-page-master margin-bottom="2cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
+			master-name="firstPage" page-height="29.7cm" page-width="21cm">
+			#if($parecer.opcoesImpressao.imprimirBrasao || !$ve.isEmpty($parecer.opcoesImpressao.textoCabecalho))
+				#set($temCabecalhoPrincipal = true)
+				<fo:region-body margin-top="4cm" />
+				<fo:region-before extent="3cm" region-name="header-principal" />
+			#else
+				<fo:region-body margin-top="1cm"/>
+			#end
+		</fo:simple-page-master>
+		<fo:simple-page-master margin-bottom="2cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
+			master-name="restPage" page-height="29.7cm" page-width="21cm">
+			<fo:region-body/>
+			#*
+			<fo:region-before extent="3cm"
+				region-name="header-assinaturas" />
+			*#
+		</fo:simple-page-master>
+		<fo:page-sequence-master
+			master-name="document">
+			<fo:repeatable-page-master-alternatives>
+				<fo:conditional-page-master-reference
+					master-reference="firstPage" page-position="first" />
+				<fo:conditional-page-master-reference
+					master-reference="restPage" page-position="rest" />
+			</fo:repeatable-page-master-alternatives>
+		</fo:page-sequence-master>
+	</fo:layout-master-set>
+	<fo:declarations>
+		<x:xmpmeta xmlns:x="adobe:ns:meta/" xmlns:check="http://lexeditweb/check">
+			<rdf:RDF
+				xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+				<check:hash>00000000000000000000000000000000</check:hash>					
+				<rdf:Description
+					xmlns:dc="http://purl.org/dc/elements/1.1/"
+					xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
+					xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/"
+					xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#"
+					xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#"
+					xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/"
+					xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+					<xmp:CreatorTool>$parecer.aplicacao</xmp:CreatorTool>
+					#set($dataIso = $ve.dataIso)
+					<xmp:ModifyDate>$dataIso</xmp:ModifyDate>
+					<xmp:CreateDate>$dataIso</xmp:CreateDate>
+					<xmp:MetadataDate>$dataIso</xmp:MetadataDate>
+					<pdf:Keywords>Parecer</pdf:Keywords>
+					<pdf:Producer>$parecer.aplicacao</pdf:Producer>
+					<pdf:PDFVersion>1.7</pdf:PDFVersion>
+					<dc:format>application/pdf</dc:format>
+					<dc:title>
+						<rdf:Alt>
+							<rdf:li xml:lang="x-default">$parecer.epigrafe</rdf:li>
+						</rdf:Alt>
+					</dc:title>
+					<dc:description>
+						<rdf:Alt>
+							<rdf:li xml:lang="x-default">Parecer legislativa</rdf:li>
+						</rdf:Alt>
+					</dc:description>
+					<dc:language>
+						<rdf:Bag>
+							<rdf:li>pt-BR</rdf:li>
+						</rdf:Bag>
+					</dc:language>
+					<dc:creator>
+						<rdf:Seq>
+							#if (!$ve.isEmpty($parecer.autoria.relator))
+								$parecer.autoria.relator.tratamento
+								$parecer.autoria.relator.nome
+							#end
+						</rdf:Seq>
+					</dc:creator>
+					<dc:subject>
+						<rdf:Bag>
+							<rdf:li>Parecer legislativa</rdf:li>
+						</rdf:Bag>
+					</dc:subject>
+					<pdfaid:part>3</pdfaid:part>
+					<pdfaid:conformance>B</pdfaid:conformance>
+					<pdfaExtension:schemas>
+						<rdf:Bag>
+							<rdf:li rdf:parseType="Resource">
+								<pdfaSchema:namespaceURI>http://ns.adobe.com/pdf/1.3/
+								</pdfaSchema:namespaceURI>
+								<pdfaSchema:prefix>pdf</pdfaSchema:prefix>
+								<pdfaSchema:schema>Adobe PDF Schema</pdfaSchema:schema>
+								<pdfaSchema:property>
+									<rdf:Seq>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>A name object indicating whether
+												the document has been modified to include trapping
+												information</pdfaProperty:description>
+											<pdfaProperty:name>Trapped</pdfaProperty:name>
+											<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+										</rdf:li>
+									</rdf:Seq>
+								</pdfaSchema:property>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<pdfaSchema:namespaceURI>http://www.aiim.org/pdfa/ns/id/
+								</pdfaSchema:namespaceURI>
+								<pdfaSchema:prefix>pdfaid</pdfaSchema:prefix>
+								<pdfaSchema:schema>PDF/A ID Schema</pdfaSchema:schema>
+								<pdfaSchema:property>
+									<rdf:Seq>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>Part of PDF/A standard
+											</pdfaProperty:description>
+											<pdfaProperty:name>part</pdfaProperty:name>
+											<pdfaProperty:valueType>Integer</pdfaProperty:valueType>
+										</rdf:li>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>Amendment of PDF/A standard</pdfaProperty:description>
+											<pdfaProperty:name>amd</pdfaProperty:name>
+											<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+										</rdf:li>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>Conformance level of PDF/A standard</pdfaProperty:description>
+											<pdfaProperty:name>conformance</pdfaProperty:name>
+											<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+										</rdf:li>
+									</rdf:Seq>
+								</pdfaSchema:property>
+							</rdf:li>
+						</rdf:Bag>
+					</pdfaExtension:schemas>
+				</rdf:Description>
+			</rdf:RDF>
+		</x:xmpmeta>
+	</fo:declarations>
+## Impressão compacta ------------------------------------------------------------				
+#if($parecer.opcoesImpressao.reduzirEspacoEntreLinhas)
+	#set($lineHeight = "120%")
+	#set($pMarginBottom = "0.45em")
+	#set($spacing1 = "10pt")
+	#set($spacing2 = "19pt")
+	#set($spacing3 = "22pt")
+	#set($spacing4 = "26pt")
+#else
+	#set($lineHeight = "150%")
+	#set($pMarginBottom = "0.6em")
+	#set($spacing1 = "14pt")
+	#set($spacing2 = "21pt")
+	#set($spacing3 = "26pt")
+	#set($spacing4 = "34pt")
+#end
+
+## Impressão tamanho fonte ------------------------------------------------------------				
+#if($parecer.opcoesImpressao.tamanhoFonte  == 18)
+	#set($maxTamanhoFonte = "18pt")	
+#else
+	#set($maxTamanhoFonte = "16pt")
+#end
+	<fo:page-sequence master-reference="document">
+## Brasão e texto do cabeçalho -------------------------------------------------------------------------
+		#if ($temCabecalhoPrincipal)
+		<fo:static-content flow-name="header-principal">
+			#if($parecer.opcoesImpressao.imprimirBrasao)
+			<fo:block text-align="center" margin-bottom="2pt">
+				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')" />
+			</fo:block>
+			
+			#end
+			#if(!$ve.isEmpty($parecer.opcoesImpressao.textoCabecalho))
+			<fo:block text-align="center">$parecer.opcoesImpressao.textoCabecalho</fo:block>
+			#end
+		</fo:static-content>
+		#end
+		#* NÃO RETIRAR. Pode voltar a ser utilizado.
+		<fo:static-content flow-name="header-assinaturas">
+			<fo:block>
+				<fo:retrieve-marker retrieve-boundary="page"
+					retrieve-class-name="marker.texto"
+					retrieve-position="first-including-carryover" />
+			</fo:block>
+		</fo:static-content>
+		*#
+		<fo:static-content flow-name="xsl-footnote-separator">                  
+			<fo:block text-align-last="justify">                         
+				<fo:leader leader-length="50%" rule-thickness="0.5pt" leader-pattern="rule"/>                       
+			</fo:block>
+		</fo:static-content>      
+	
+		<fo:flow flow-name="xsl-region-body" font-size="${parecer.opcoesImpressao.tamanhoFonte}pt">
+			#set($tamanhoFonte = $parecer.opcoesImpressao.tamanhoFonte)
+			<fo:block-container>
+				<fo:marker marker-class-name="marker.texto" />
+## Alertas -------------------------------------------------------------------------
+				#if($parecer.revisoes.size() > 0)
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+					text-align="center" padding=".1cm" space-after=".3cm">
+					Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.
+				</fo:block>
+				#end
+## Pendências de Preenchimento -----------------------------------------------------
+				#if($parecer.pendenciasPreenchimento.size() > 0)
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+						  text-align="left" padding=".1cm" space-after=".3cm" padding-left=".25cm" padding-right=".25cm">
+					Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:
+					<fo:list-block font-weight="normal" 
+						provisional-label-separation="1em" provisional-distance-between-starts="1em" 
+						margin-left=".5cm">
+						#foreach ($pendencia in $parecer.pendenciasPreenchimento)
+						<fo:list-item space-before=".3em">
+						  <fo:list-item-label end-indent="label-end()">
+						    <fo:block>&#8226;</fo:block>
+						  </fo:list-item-label>
+						  <fo:list-item-body start-indent="body-start()">
+						    <fo:block>$pendencia</fo:block>
+						  </fo:list-item-body>
+						</fo:list-item>
+						#end
+					</fo:list-block>
+				</fo:block>
+				#end
+## Epígrafe -------------------------------------------------------------------------
+				<fo:block text-align="center"
+					white-space-collapse="false">
+					<fo:block font-size="$maxTamanhoFonte" font-weight="bold" space-after="$spacing3"> 
+						$parecer.epigrafe.replace(' ', '&#160;')
+					</fo:block>
+				</fo:block>
+
+## Ementa ---------------------------------------------------
+	#if ($parecer.ementa)
+		<!-- Tabela só para “empurrar” a ementa para a direita-->
+		<fo:table table-layout="fixed" width="100%" space-before="$spacing3" space-after="$spacing3">
+			<fo:table-column column-width="proportional-column-width(50)"/>
+			<fo:table-column column-width="proportional-column-width(50)"/>
+			<fo:table-body>
+				<fo:table-row>
+					<fo:table-cell>
+						<fo:block/>
+					</fo:table-cell>
+					<fo:table-cell>
+						<fo:block text-align="justify" line-height="$lineHeight">
+								$ve.html2foTextoLivre($parecer.ementa)
+						</fo:block>
+					</fo:table-cell>
+				</fo:table-row>
+			</fo:table-body>
+		</fo:table>
+	#end
+
+
+## Relator -----------------------------------------------
+	#if ($parecer.autoria.relator)
+		<fo:block role="AutoriaRelator" text-align="center" space-before="$spacing1" space-after="$spacing3">
+			Relator: $parecer.autoria.relator.cargo
+			<fo:inline font-weight="bold" text-transform="uppercase">
+				$parecer.autoria.relator.nome
+			</fo:inline>
+		</fo:block>
+	#end
+
+## Relatorio ----------------------------------------------------------------
+	#if ($parecer.relatorio)
+		<fo:block font-size="$maxTamanhoFonte"
+			font-weight="bold"
+			keep-with-next="always"
+			space-before="$spacing3"
+			text-align="left"
+			white-space-collapse="false">
+			I &#8211; RELATÓRIO
+		</fo:block>
+
+		<fo:block keep-with-previous="always" 
+				line-height="$lineHeight"
+				role="Relatorio"
+				space-before="$spacing1"
+				text-align="justify"
+				text-indent="2.5cm"
+				white-space-collapse="false"
+				margin-bottom="$pMarginBottom">
+			<fo:block>
+					$ve.html2foTextoLivre($parecer.relatorio)
+			</fo:block>
+		</fo:block>
+	#end	
+
+## Analise ----------------------------------------------------------------
+	#if ($parecer.analise)
+		<fo:block font-size="$maxTamanhoFonte"
+			font-weight="bold"
+			keep-with-next="always"
+			space-before="$spacing3"
+			text-align="left"
+			white-space-collapse="false">
+			II &#8211; ANÁLISE
+		</fo:block>
+
+		<fo:block keep-with-previous="always" 
+				line-height="$lineHeight"
+				role="Analise"
+				space-before="$spacing1"
+				text-align="justify"
+				text-indent="2.5cm"
+				white-space-collapse="false"
+				margin-bottom="$pMarginBottom">
+			<fo:block>
+					$ve.html2foTextoLivre($parecer.analise)
+			</fo:block>
+		</fo:block>
+	#end	
+
+## Voto ----------------------------------------------------------------
+#if ($parecer.voto and $parecer.voto.itensVoto and $parecer.voto.itensVoto.size() > 0)
+  <fo:block font-size="$maxTamanhoFonte"
+            font-weight="bold"
+            keep-with-next="always"
+            space-before="$spacing3"
+            text-align="left"
+            white-space-collapse="false">
+    III &#8211; VOTO
+  </fo:block>
+
+  #set($temTextoVoto = false)
+  <fo:block keep-with-previous="always"
+            line-height="$lineHeight"
+            role="Voto"
+            space-before="$spacing1"
+            text-align="justify"
+            text-indent="2.5cm"
+            white-space-collapse="false"
+            margin-bottom="$pMarginBottom">
+    #foreach ($item in $parecer.voto.itensVoto)
+      #if (!$ve.isEmpty($item.texto))
+        #set($temTextoVoto = true)
+        <fo:block margin-bottom="$pMarginBottom">
+          $ve.html2foTextoLivre($item.texto)
+        </fo:block>
+      #end
+    #end
+  </fo:block>
+#end
+				
+## Local e data ----------------------------------------------------------------
+				<fo:block keep-with-next.within-page="always"
+					keep-with-previous="10" role="fecho"
+					space-after="0pt" space-before="2.5cm" text-align="right"
+					text-indent="2.5cm" white-space-collapse="false">
+						$parecer.local, 
+						#if($ve.isEmpty($parecer.data))
+	                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+	                        de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+	                        de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.
+						#else
+							${parecer.dataFormatada}.
+						#end
+				</fo:block>
+
+## Presidente fecho ----------------------------------------------------------------
+#if ($parecer.autoria.presidente)
+  <fo:block keep-with-next.within-page="always"
+            keep-with-previous="10" role="Presidentefecho"
+            space-after="0pt" space-before="2.5cm"
+            text-align="right" text-indent="0cm" white-space-collapse="false">
+    <fo:inline font-weight="bold">
+      $parecer.autoria.presidente.cargo $parecer.autoria.presidente.nome,
+    </fo:inline>Presidente
+  </fo:block>
+#end
+
+## Relator fecho ----------------------------------------------------------------
+#if ($parecer.autoria.relator)
+  <fo:block keep-with-next.within-page="always"
+            keep-with-previous="10" role="Relatorfecho"
+            space-after="0pt" space-before="2.0cm"
+            text-align="right" text-indent="0cm" white-space-collapse="false">
+    <fo:inline font-weight="bold">
+      $parecer.autoria.relator.cargo $parecer.autoria.relator.nome,
+    </fo:inline>Relator
+  </fo:block>
+#end
+			</fo:block-container>
+		</fo:flow>
+	</fo:page-sequence>
+</fo:root>

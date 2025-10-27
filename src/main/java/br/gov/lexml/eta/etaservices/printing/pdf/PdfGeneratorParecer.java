@@ -13,31 +13,34 @@ import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
 
-import br.gov.lexml.eta.etaservices.emenda.Emenda;
-import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import br.gov.lexml.eta.etaservices.parecer.Parecer;
+import br.gov.lexml.eta.etaservices.parecer.ParecerJsonDTO;
+import br.gov.lexml.eta.etaservices.parecer.ParecerMapper;
 import br.gov.lexml.eta.etaservices.util.BytesUtil;
 
 @SuppressWarnings("unused")
-public class PdfGeneratorBean implements PdfGenerator {
+public class PdfGeneratorParecer  {
     private final VelocityTemplateProcessorFactory templateProcessorFactory;
-    private final EmendaXmlMarshaller emendaXmlMarshaller;
 
-    public PdfGeneratorBean(VelocityTemplateProcessorFactory templateProcessorFactory,
-                            EmendaXmlMarshaller emendaXmlMarshaller) {
+    public PdfGeneratorParecer(VelocityTemplateProcessorFactory templateProcessorFactory) {
         this.templateProcessorFactory = templateProcessorFactory;
-        this.emendaXmlMarshaller = emendaXmlMarshaller;
     }
 
-    @Override
-    public void generate(Emenda emenda, OutputStream outputStream) throws Exception {
-        final String xml = emendaXmlMarshaller.toXml(emenda);
+    public void generate(String parecerInJson, OutputStream outputStream) throws Exception {
+        Parecer parecer = getParecer(parecerInJson);
+        System.out.println("parecer");
+        System.out.println(parecer);
         final String templateResult =
-                templateProcessorFactory.get().getTemplateResult(emenda);
-        List<ByteArrayInputStream> anexos = getAnexos(emenda);
+                templateProcessorFactory.get().getTemplateResult(parecer);
+        List<ByteArrayInputStream> anexos = getAnexos(parecer);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
     
-        new FOPProcessor().processFOP(baos, templateResult, xml, anexos, TipoDocumento.EMENDA);
+        new FOPProcessor().processFOP(baos, templateResult, parecerInJson, anexos, TipoDocumento.PARECER);
         
         // Insere hash de verificação
 		byte[] bytearr = baos.toByteArray();
@@ -52,6 +55,18 @@ public class PdfGeneratorBean implements PdfGenerator {
 		outputStream.flush();
     }
     
+    private Parecer getParecer(String parecerInJson) {
+        try {
+            ObjectMapper om = new ObjectMapper().registerModule(new JavaTimeModule()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+            ParecerJsonDTO dto = om.readValue(parecerInJson, ParecerJsonDTO.class);
+            return ParecerMapper.from(dto);
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Falha ao processar parecer.json", e);
+        }
+    }
+
     private String md5Hex(byte[] bytes) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(bytes);
@@ -59,9 +74,9 @@ public class PdfGeneratorBean implements PdfGenerator {
         return DatatypeConverter.printHexBinary(digest).toUpperCase();    	
     }
 
-	private List<ByteArrayInputStream> getAnexos(Emenda emenda) {
-		if(emenda.getAnexos() != null) {
-        	return emenda.getAnexos().parallelStream()
+    private List<ByteArrayInputStream> getAnexos(Parecer parecer) {
+        if (parecer.getAnexos() != null) {
+            return parecer.getAnexos().parallelStream()
         		.map(anexo -> Base64.getDecoder().decode(anexo.getBase64()))
         		.map(anexo -> new ByteArrayInputStream(anexo))
         		.collect(Collectors.toList());        	

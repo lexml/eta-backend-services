@@ -1,18 +1,8 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import br.gov.lexml.eta.etaservices.emenda.Emenda;
-import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
-import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.xmlunit.builder.Input;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
-import javax.xml.transform.Source;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,8 +13,19 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.xmlunit.assertj3.XmlAssert.assertThat;
+import javax.xml.transform.Source;
+
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.xmlunit.builder.Input;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
+import br.gov.lexml.eta.etaservices.printing.xml.EmendaXmlMarshaller;
 
 class VelocityTemplateProcessorTest {
 
@@ -61,7 +62,7 @@ class VelocityTemplateProcessorTest {
         assert resource != null;
 
         try (final OutputStream out = Files.newOutputStream(Paths.get(resource.toURI()))) {
-            new FOPProcessor().processFOP(out, templateResult, xml);
+            new FOPProcessor().processFOP(out, templateResult, xml, TipoDocumento.EMENDA);
         }
     }
 

@@ -1,13 +1,15 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
-import org.apache.commons.io.FileUtils;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
+import org.apache.commons.io.FileUtils;
+
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
 
 /**
  * Para executar e testar geração do PDF durante desenvolvimento.
@@ -24,8 +26,8 @@ public class TesteGeracaoPDF {
 	}
 
 	private static void processaVelocity() throws IOException {
-
-		String fo = new VelocityTemplateProcessor(new TemplateLoaderBean()).getTemplateResult(null);
+        Emenda emenda = null;
+        String fo = new VelocityTemplateProcessor(new TemplateLoaderBean()).getTemplateResult(emenda);
 		FileUtils.writeStringToFile(new File(TARGET_FO_EMENDA_XML), fo, StandardCharsets.UTF_8);
 
 	}
@@ -34,7 +36,7 @@ public class TesteGeracaoPDF {
 		try(OutputStream out = Files.newOutputStream(Paths.get(TARGET_EMENDA_PDF))) {
 			String xslFo = FileUtils.readFileToString(new File(TARGET_FO_EMENDA_XML),
 					StandardCharsets.UTF_8);
-			new FOPProcessor().processFOP(out, xslFo, EMENDA_XML);
+            new FOPProcessor().processFOP(out, xslFo, EMENDA_XML, TipoDocumento.EMENDA);
 		}
 	}
 

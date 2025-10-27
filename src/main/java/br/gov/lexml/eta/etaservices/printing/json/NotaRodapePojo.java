@@ -30,5 +30,17 @@ public class NotaRodapePojo implements NotaRodape {
 	public String getTexto() {
 		return texto;
 	}
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
+    }
+
+    public void setTexto(String texto) {
+        this.texto = texto;
+    }
 		
 }
