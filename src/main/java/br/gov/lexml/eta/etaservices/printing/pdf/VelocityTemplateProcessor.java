@@ -79,8 +79,8 @@ public class VelocityTemplateProcessor {
                     brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao_sf.jpg");
                     break;
                 case CD:
-                    //TODO Implement
-                    // break;   // Por enquanto, será exibido o brasao do CN
+                    brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao_cd.jpg");
+                    break;
                 case CN:
                     brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao_cn.jpg");
                     break;
