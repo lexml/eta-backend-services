@@ -73,7 +73,9 @@ public class VelocityTemplateProcessor {
         ctx.put("ve", vex);
                 
         if (emenda.getOpcoesImpressao().isImprimirBrasao()) {
+        	/*
         	InputStream brasaoStream = null;
+        	
             switch (emenda.getColegiadoApreciador().getSiglaCasaLegislativa()) {
                 case SF:
                     brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao_sf.jpg");
@@ -85,7 +87,9 @@ public class VelocityTemplateProcessor {
                     brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao_cn.jpg");
                     break;
             }
+            */
 
+        	InputStream brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao.jpg");
             String brasaoBase64 = EtaFileUtil.readFromImageAsBase64String(brasaoStream);
             ctx.put("brasao", brasaoBase64);
         }
