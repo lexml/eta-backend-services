@@ -9,17 +9,19 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.gov.lexml.eta.etaservices.parecer.Parecer;
-import br.gov.lexml.eta.etaservices.parecer.ParecerJsonDTO;
-import br.gov.lexml.eta.etaservices.parecer.ParecerMapper;
 import br.gov.lexml.eta.etaservices.util.BytesUtil;
 
 @SuppressWarnings("unused")
@@ -30,8 +32,7 @@ public class PdfGeneratorParecer  {
         this.templateProcessorFactory = templateProcessorFactory;
     }
 
-    public void generate(String parecerInJson, OutputStream outputStream) throws Exception {
-        Parecer parecer = getParecer(parecerInJson);
+    public void generate(Parecer parecer, OutputStream outputStream) throws Exception {
         System.out.println("parecer");
         System.out.println(parecer);
         final String templateResult =
@@ -39,7 +40,9 @@ public class PdfGeneratorParecer  {
         List<ByteArrayInputStream> anexos = getAnexos(parecer);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    
+
+        String parecerInJson = toParecerJson(parecer);
+
         new FOPProcessor().processFOP(baos, templateResult, parecerInJson, anexos, TipoDocumento.PARECER);
         
         // Insere hash de verificação
@@ -55,23 +58,31 @@ public class PdfGeneratorParecer  {
 		outputStream.flush();
     }
     
-    private Parecer getParecer(String parecerInJson) {
-        try {
-            ObjectMapper om = new ObjectMapper().registerModule(new JavaTimeModule()).configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-            ParecerJsonDTO dto = om.readValue(parecerInJson, ParecerJsonDTO.class);
-            return ParecerMapper.from(dto);
-
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Falha ao processar parecer.json", e);
-        }
-    }
 
     private String md5Hex(byte[] bytes) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update(bytes);
         byte[] digest = md.digest();
         return DatatypeConverter.printHexBinary(digest).toUpperCase();    	
+    }
+
+    private String toParecerJson(Parecer parecer) {
+        ObjectMapper om = new ObjectMapper();
+
+        om.registerModule(new JavaTimeModule());
+
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        om.setTimeZone(TimeZone.getTimeZone("UTC"));
+        om.setDateFormat(new StdDateFormat().withColonInTimeZone(true));
+
+        om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        try {
+            return om.writeValueAsString(parecer);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Erro ao serializar Parecer para JSON", e);
+        }
     }
 
     private List<ByteArrayInputStream> getAnexos(Parecer parecer) {

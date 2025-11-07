@@ -1,7 +1,5 @@
 package br.gov.lexml.eta.etaservices.parecer;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Voto {
-    private List<ItemVoto> itensVoto;
+public class Destino {
+    private String colegiadoApreciador;
+    private Comissao comissao;
 }

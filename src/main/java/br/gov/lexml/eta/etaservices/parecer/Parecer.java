@@ -7,14 +7,10 @@ import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Map;
 
-import br.gov.lexml.eta.etaservices.emenda.Anexo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
-import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
-import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
-import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
-import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
-import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
-import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
+import br.gov.lexml.eta.etaservices.emenda.TipoMateria;
 import br.gov.lexml.eta.etaservices.printing.json.AnexoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.ColegiadoApreciadorPojo;
 import br.gov.lexml.eta.etaservices.printing.json.ComandoEmendaPojo;
@@ -25,9 +21,17 @@ import br.gov.lexml.eta.etaservices.printing.json.OpcoesImpressaoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RefProposicaoEmendadaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.SubstituicaoTermoPojo;
+import io.vavr.collection.Stream;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Parecer {
-
     private Instant dataUltimaModificacao;
     private String aplicacao;
     private String versaoAplicacao;
@@ -53,51 +57,8 @@ public class Parecer {
     private String ementa;
     private String relatorio;
     private String analise;
-
-    public String getDataFormatada() {
-        return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)).toLowerCase();
-    }
-
-    public Instant getDataUltimaModificacao() {
-        return dataUltimaModificacao;
-    }
-
-    public void setDataUltimaModificacao(Instant dataUltimaModificacao) {
-        this.dataUltimaModificacao = dataUltimaModificacao;
-    }
-
-    public String getAplicacao() {
-        return aplicacao;
-    }
-
-    public void setAplicacao(String aplicacao) {
-        this.aplicacao = aplicacao;
-    }
-
-    public String getVersaoAplicacao() {
-        return versaoAplicacao;
-    }
-
-    public void setVersaoAplicacao(String versaoAplicacao) {
-        this.versaoAplicacao = versaoAplicacao;
-    }
-
-
-    public Map<String, Object> getMetadados() {
-        return metadados;
-    }
-
-    public void setMetadados(Map<String, Object> metadados) {
-        this.metadados = metadados;
-    }
-
-    public RefProposicaoEmendada getProposicao() {
-        return proposicao;
-    }
-
-    public void setProposicao(RefProposicaoEmendadaPojo proposicao) {
-        this.proposicao = proposicao;
-    }
+    private Long ano;
+    private Destino destino;
 
     public ColegiadoApreciador getColegiadoApreciador() {
         return colegiado;
@@ -107,152 +68,19 @@ public class Parecer {
         this.colegiado = colegiado;
     }
 
-    public String getEpigrafe() {
-        return epigrafe;
+    @JsonIgnore()
+    public String getDataFormatada() {
+        return getData().format(DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)).toLowerCase();
     }
 
-    public void setEpigrafe(String epigrafe) {
-        this.epigrafe = epigrafe;
+    @JsonIgnore()
+    public boolean isPossuiMarcasRevisao() {
+        return getRevisoes() != null && !getRevisoes().isEmpty();
     }
 
-    public List<? extends ComponenteEmendado> getComponentes() {
-        return componentes;
-    }
-
-    public void setComponentes(List<? extends ComponenteEmendadoPojo> componentes) {
-        this.componentes = componentes;
-    }
-
-    public ComandoEmenda getComandoEmenda() {
-        return comandoEmenda;
-    }
-
-    public ComandoEmendaTextoLivre getComandoEmendaTextoLivre() {
-        return comandoEmendaTextoLivre;
-    }
-
-    public void setComandoEmenda(ComandoEmendaPojo comandoEmenda) {
-        this.comandoEmenda = comandoEmenda;
-    }
-
-    public void setComandoEmendaTextoLivre(ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre) {
-        this.comandoEmendaTextoLivre = comandoEmendaTextoLivre;
-    }
-
-    public SubstituicaoTermo getSubstituicaoTermo() {
-        return substituicaoTermo;
-    }
-
-    public void setSubstituicaoTermo(SubstituicaoTermoPojo substituicaoTermo) {
-        this.substituicaoTermo = substituicaoTermo;
-    }
-
-    public String getJustificativa() {
-        return justificativa;
-    }
-
-    public void setJustificativa(String justificativa) {
-        this.justificativa = justificativa;
-    }
-
-    public String getJustificativaAntesRevisao() {
-        return justificativaAntesRevisao;
-    }
-
-    public void setJustificativaAntesRevisao(String justificativaAntesRevisao) {
-        this.justificativaAntesRevisao = justificativaAntesRevisao;
-    }
-
-    public String getLocal() {
-        return local;
-    }
-
-    public void setLocal(String local) {
-        this.local = local;
-    }
-
-    public LocalDate getData() {
-        return data;
-    }
-
-    public void setData(LocalDate data) {
-        this.data = data;
-    }
-
-    public AutoriaParecer getAutoria() {
-        return autoria;
-    }
-
-    public void setAutoria(AutoriaParecer autoria) {
-        this.autoria = autoria;
-    }
-
-    public OpcoesImpressao getOpcoesImpressao() {
-        return opcoesImpressao;
-    }
-
-    public void setOpcoesImpressao(OpcoesImpressaoPojo opcoesImpressao) {
-        this.opcoesImpressao = opcoesImpressao;
-    }
-
-    public List<? extends Anexo> getAnexos() {
-        return this.anexos;
-    }
-
-    public List<? extends RevisaoPojo> getRevisoes() {
-        return revisoes;
-    }
-
-    public void setRevisoes(List<? extends RevisaoPojo> revisoes) {
-        this.revisoes = revisoes;
-    }
-
-    public List<? extends NotaRodapePojo> getNotasRodape() {
-        return notasRodape;
-    }
-
-    public void setNotasRodape(List<? extends NotaRodapePojo> notasRodape) {
-        this.notasRodape = notasRodape;
-    }
-
-    public List<String> getPendenciasPreenchimento() {
-        return pendenciasPreenchimento;
-    }
-
-    public void setPendenciasPreenchimento(List<String> pendenciasPreenchimento) {
-        this.pendenciasPreenchimento = pendenciasPreenchimento;
-    }
-
-    public Voto getVoto() {
-        return voto;
-    }
-
-    public void setVoto(Voto voto) {
-        this.voto = voto;
-    }
-
-    public String getRelatorio() {
-        return relatorio;
-    }
-
-    public void setRelatorio(String relatorio) {
-        this.relatorio = relatorio;
-    }
-
-    public String getAnalise() {
-        return analise;
-    }
-
-    public void setAnalise(String analise) {
-        this.analise = analise;
-    }
-
-    public String getEmenta() {
-        return ementa;
-    }
-
-    public void setEmenta(String ementa) {
-        this.ementa = ementa;
+    @JsonIgnore()
+    public boolean isMateriaCongressoNacional() {
+        return Stream.of(TipoMateria.values()).exists(t -> t.name().equals(getProposicao().getSigla()));
     }
 
 }
