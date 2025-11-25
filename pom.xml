@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.gov.lexml.eta</groupId>
     <artifactId>eta-backend-services</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.2-SNAPSHOT</version>
     <name>ETA Backend Services</name>
     <description>Library to generate/parse pdf for the editor-emendas application</description>
     <url>https://github.com/lexml/eta-backend-services</url>
@@ -23,6 +23,11 @@
             <name>Ricardo Lima</name>
             <email>rslima@gmail.com</email>
         </developer>
+        <developer>
+          <id>fragomeni</id>
+          <name>Marcos Fragomeni</name>
+          <email>marcos.fragomeni@gmail.com</email>
+        </developer>
     </developers>
 
     <licenses>
@@ -33,22 +38,11 @@
     </licenses>
 
     <scm>
-        <url>https://github.com/lexml/eta-backend-services</url>
-        <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
-        <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
-  	  <tag>HEAD</tag>
-  </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+      <url>https://github.com/lexml/eta-backend-services</url>
+      <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
+      <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
+      <tag>HEAD</tag>
+    </scm>
 
     <dependencyManagement>
         <dependencies>
@@ -78,7 +72,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -96,23 +89,21 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.commons</groupId>
-		    <artifactId>commons-text</artifactId>
-		    <version>1.9</version>
-		</dependency>
-
+    		<dependency>
+    			<groupId>commons-io</groupId>
+    			<artifactId>commons-io</artifactId>
+    			<version>2.11.0</version>
+    		</dependency>
+    		<dependency>
+    		    <groupId>org.apache.commons</groupId>
+    		    <artifactId>commons-text</artifactId>
+    		    <version>1.9</version>
+    		</dependency>
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
             <version>0.10.4</version>
         </dependency>
-
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
@@ -134,7 +125,6 @@
             <artifactId>xmlunit-assertj3</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
@@ -146,14 +136,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>
         </dependency>
-
-        <!-- FOP -->
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
@@ -165,51 +152,40 @@
             	</exclusion>
             </exclusions>
         </dependency>
-
-        <!-- XML Graphics -->
-
-        <!-- PDF BOX -->
-		<dependency>
-		    <groupId>org.apache.pdfbox</groupId>
-		    <artifactId>pdfbox</artifactId>
-		    <version>2.0.28</version>
-		</dependency>
-		
+    		<dependency>
+    		    <groupId>org.apache.pdfbox</groupId>
+    		    <artifactId>pdfbox</artifactId>
+    		    <version>2.0.28</version>
+    		</dependency>
         <dependency>
             <groupId>br.gov.lexml</groupId>
             <artifactId>pdfa-helper</artifactId>
             <version>0.10.3</version>
         </dependency>
-        
-		<dependency>
-			<groupId>net.sourceforge.htmlcleaner</groupId>
-			<artifactId>htmlcleaner</artifactId>
-			<version>2.2</version>
-		</dependency>
-
-	    <dependency>
-	      <groupId>br.gov.lexml.parser.pl</groupId>
-	      <artifactId>lexml-parser-projeto-lei</artifactId>
-	      <version>1.14.1</version>
-	    </dependency>
-	    
+    		<dependency>
+    			<groupId>net.sourceforge.htmlcleaner</groupId>
+    			<artifactId>htmlcleaner</artifactId>
+    			<version>2.2</version>
+    		</dependency>
+  	    <dependency>
+  	      <groupId>br.gov.lexml.parser.pl</groupId>
+  	      <artifactId>lexml-parser-projeto-lei</artifactId>
+  	      <version>1.14.1</version>
+  	    </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        
-		<dependency>
-		    <groupId>javax.activation</groupId>
-		    <artifactId>activation</artifactId>
-		    <version>1.1</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.glassfish.jaxb</groupId>
-		    <artifactId>jaxb-runtime</artifactId>
-		</dependency>        
-	    
+    		<dependency>
+    		    <groupId>javax.activation</groupId>
+    		    <artifactId>activation</artifactId>
+    		    <version>1.1</version>
+    		</dependency>
+    		<dependency>
+    		    <groupId>org.glassfish.jaxb</groupId>
+    		    <artifactId>jaxb-runtime</artifactId>
+    		</dependency>        
     </dependencies>
 
     <build>
@@ -238,15 +214,17 @@
                         </configuration>
                     </plugin>
                     <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
+                      <groupId>org.sonatype.central</groupId>
+                      <artifactId>central-publishing-maven-plugin</artifactId>
+                      <version>0.9.0</version>
+                      <extensions>true</extensions>
+                      <configuration>
+                        <publishingServerId>central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                        <!--                 
+                        <waitUntil>published</waitUntil>
+                        -->
+                      </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -303,7 +281,6 @@
                     </plugin>
                 </plugins>
             </build>
-
         </profile>
         <profile>
             <id>github</id>
