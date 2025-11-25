@@ -143,6 +143,9 @@
 			</rdf:RDF>
 		</x:xmpmeta>
 	</fo:declarations>
+
+#set($siglaCasaLegislativa = $parecer.siglaCasaLegislativa)
+
 ## Impressão compacta ------------------------------------------------------------				
 #if($parecer.opcoesImpressao.reduzirEspacoEntreLinhas)
 	#set($lineHeight = "120%")
@@ -171,10 +174,18 @@
 		#if ($temCabecalhoPrincipal)
 		<fo:static-content flow-name="header-principal">
 			#if($parecer.opcoesImpressao.imprimirBrasao)
-			<fo:block text-align="center" margin-bottom="2pt">
-				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')" />
-			</fo:block>
-			
+				<fo:block text-align="center" margin-bottom="2pt">
+					<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')" />
+					<fo:block font-size="12pt" font-weight="bold">
+					#if ($siglaCasaLegislativa == 'SF')
+						<fo:block>SENADO FEDERAL</fo:block>
+					#elseif ($siglaCasaLegislativa == 'CD')
+						<fo:block>CÂMARA DOS DEPUTADOS</fo:block>
+					#elseif ($siglaCasaLegislativa == 'CN')
+						<fo:block>CONGRESSO NACIONAL</fo:block>
+					#end
+					</fo:block>
+				</fo:block>		
 			#end
 			#if(!$ve.isEmpty($parecer.opcoesImpressao.textoCabecalho))
 			<fo:block text-align="center">$parecer.opcoesImpressao.textoCabecalho</fo:block>
@@ -228,13 +239,48 @@
 					</fo:list-block>
 				</fo:block>
 				#end
+
+## CD - Âmbito do parecer -------------------------------------------------------------------------
+				
+				#if ($siglaCasaLegislativa == 'CD' and $parecer.metadados.descricaoAmbitoParecer)
+				<fo:block font-size="$maxTamanhoFonte" font-weight="bold" text-align="center" padding=".1cm" space-after=".3cm" text-transform="uppercase">
+					$parecer.metadados.descricaoAmbitoParecer
+				</fo:block>
+				#end
+
 ## Epígrafe -------------------------------------------------------------------------
 				<fo:block text-align="center"
 					white-space-collapse="false">
-					<fo:block font-size="$maxTamanhoFonte" font-weight="bold" space-after="$spacing3"> 
+					#if ($siglaCasaLegislativa == 'CD' and $parecer.metadados.apensados and $parecer.metadados.apensados.size() > 0)
+						#set($epigrafeSpacer = "5pt")
+					#else
+						#set($epigrafeSpacer = $spacing3)
+					#end
+					<fo:block font-size="$maxTamanhoFonte" font-weight="bold" space-after="$epigrafeSpacer"> 
 						$parecer.epigrafe.replace(' ', '&#160;')
 					</fo:block>
 				</fo:block>
+
+## CD - Apensados -------------------------------------------------------------------
+		#if ($siglaCasaLegislativa == 'CD' and $parecer.metadados.apensados and $parecer.metadados.apensados.size() > 0)
+			<fo:block font-size="14pt" text-align="center" space-after="$spacing3">
+				#if ($parecer.metadados.apensados.size() == 1)
+					Apensado: 
+				#else
+					Apensados: 
+				#end
+				
+				#foreach($apensado in $parecer.metadados.apensados)
+					#if($foreach.count > 1 and !$foreach.hasNext)
+						e $apensado.nomProposicao
+					#elseif($foreach.count > 1)
+						, $apensado.nomProposicao
+					#else
+						$apensado.nomProposicao
+					#end
+				#end						
+			</fo:block>
+		#end
 
 ## Ementa ---------------------------------------------------
 	#if ($parecer.ementa)
@@ -257,14 +303,66 @@
 		</fo:table>
 	#end
 
+## CD - Autor e Relator ---------------------------------------------------------
+
+	#if ($siglaCasaLegislativa == 'CD')
+		<fo:table table-layout="fixed" width="100%" space-before="$spacing3" space-after="$spacing3">
+			<fo:table-column column-width="proportional-column-width(50)"/>
+			<fo:table-column column-width="proportional-column-width(50)"/>
+			<fo:table-body>
+				#if ($parecer.metadados.nomAutorProposicao)
+				<fo:table-row>
+					<fo:table-cell>
+						<fo:block/>
+					</fo:table-cell>
+					<fo:table-cell>
+						<fo:block text-align="left" line-height="$lineHeight">
+							<fo:inline font-weight="bold">
+								$parecer.metadados.labelAutorProposicao: 
+							</fo:inline> 
+							$parecer.metadados.nomAutorProposicao
+						</fo:block>
+					</fo:table-cell>
+				</fo:table-row>
+				#end
+
+				#if ($parecer.autoria.relator)
+				<fo:table-row>
+					<fo:table-cell>
+						<fo:block/>
+					</fo:table-cell>
+					<fo:table-cell>
+						<fo:block text-align="left" line-height="$lineHeight">
+							<fo:inline font-weight="bold">
+								#if ($parecer.autoria.relator.indSexo == 'F')
+									Relatora: 
+								#else
+									Relator: 
+								#end
+							</fo:inline> 
+							$parecer.autoria.relator.nome
+						</fo:block>
+					</fo:table-cell>
+				</fo:table-row>
+				#end
+			</fo:table-body>
+		</fo:table>
+	#end
 
 ## Relator -----------------------------------------------
-	#if ($parecer.autoria.relator)
+	#if ($parecer.autoria.relator and $siglaCasaLegislativa != 'CD')
 		<fo:block role="AutoriaRelator" text-align="center" space-before="$spacing1" space-after="$spacing3">
 			Relator: $parecer.autoria.relator.cargo
 			<fo:inline font-weight="bold" text-transform="uppercase">
 				$parecer.autoria.relator.nome
 			</fo:inline>
+		</fo:block>
+	#end
+
+## CD - Tipo do Parecer -----------------------------------------------------
+	#if ($siglaCasaLegislativa == 'CD' and $parecer.metadados.descricaoTipoParecer)
+		<fo:block font-size="$maxTamanhoFonte" font-weight="bold" text-align="center" space-before="$spacing1" space-after="$spacing3" text-transform="uppercase">
+			$parecer.metadados.descricaoTipoParecer
 		</fo:block>
 	#end
 
