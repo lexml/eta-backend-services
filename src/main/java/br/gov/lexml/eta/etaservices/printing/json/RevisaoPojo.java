@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoAnalise;
+import br.gov.lexml.eta.etaservices.parecer.RevisaoEmenta;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoRelatorio;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoTextoItemVoto;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoVoto;
@@ -19,7 +20,8 @@ import lombok.Data;
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = RevisaoElementoPojo.class, name = "RevisaoElemento"), @JsonSubTypes.Type(value = RevisaoJustificativaPojo.class, name = "RevisaoJustificativa"),
-        @JsonSubTypes.Type(value = RevisaoTextoLivrePojo.class, name = "RevisaoTextoLivre"), @JsonSubTypes.Type(value = RevisaoRelatorio.class, name = "RevisaoRelatorio"),
+        @JsonSubTypes.Type(value = RevisaoTextoLivrePojo.class, name = "RevisaoTextoLivre"), @JsonSubTypes.Type(value = RevisaoEmenta.class, name = "RevisaoEmenta"),
+        @JsonSubTypes.Type(value = RevisaoRelatorio.class, name = "RevisaoRelatorio"),
         @JsonSubTypes.Type(value = RevisaoAnalise.class, name = "RevisaoAnalise"),
         @JsonSubTypes.Type(value = RevisaoVoto.class, name = "RevisaoVoto"),
         @JsonSubTypes.Type(value = RevisaoTextoItemVoto.class, name = "RevisaoTextoItemVoto")

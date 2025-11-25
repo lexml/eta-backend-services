@@ -36,7 +36,6 @@ public class Parecer {
     private String aplicacao;
     private String versaoAplicacao;
     private Map<String, Object> metadados;
-    private RefProposicaoEmendadaPojo proposicao;
     private ColegiadoApreciadorPojo colegiado;
     private String epigrafe;
     private List<? extends ComponenteEmendadoPojo> componentes;
@@ -59,6 +58,7 @@ public class Parecer {
     private String analise;
     private Long ano;
     private Destino destino;
+    private RefProposicaoEmendadaPojo materia;
 
     public ColegiadoApreciador getColegiadoApreciador() {
         return colegiado;
@@ -80,7 +80,7 @@ public class Parecer {
 
     @JsonIgnore()
     public boolean isMateriaCongressoNacional() {
-        return Stream.of(TipoMateria.values()).exists(t -> t.name().equals(getProposicao().getSigla()));
+        return Stream.of(TipoMateria.values()).exists(t -> t.name().equals(getMateria().getSigla()));
     }
 
 }
