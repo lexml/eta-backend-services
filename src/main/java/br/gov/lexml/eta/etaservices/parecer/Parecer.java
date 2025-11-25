@@ -9,18 +9,13 @@ import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
+import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 import br.gov.lexml.eta.etaservices.emenda.TipoMateria;
 import br.gov.lexml.eta.etaservices.printing.json.AnexoPojo;
-import br.gov.lexml.eta.etaservices.printing.json.ColegiadoApreciadorPojo;
-import br.gov.lexml.eta.etaservices.printing.json.ComandoEmendaPojo;
-import br.gov.lexml.eta.etaservices.printing.json.ComandoEmendaTextoLivrePojo;
-import br.gov.lexml.eta.etaservices.printing.json.ComponenteEmendadoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.OpcoesImpressaoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RefProposicaoEmendadaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
-import br.gov.lexml.eta.etaservices.printing.json.SubstituicaoTermoPojo;
 import io.vavr.collection.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,15 +31,8 @@ public class Parecer {
     private String aplicacao;
     private String versaoAplicacao;
     private Map<String, Object> metadados;
-    private ColegiadoApreciadorPojo colegiado;
     private String epigrafe;
-    private List<? extends ComponenteEmendadoPojo> componentes;
-    private ComandoEmendaPojo comandoEmenda;
-    private ComandoEmendaTextoLivrePojo comandoEmendaTextoLivre;
-    private SubstituicaoTermoPojo substituicaoTermo;
     private List<? extends AnexoPojo> anexos;
-    private String justificativa;
-    private String justificativaAntesRevisao;
     private String local;
     private LocalDate data;
     private AutoriaParecer autoria;
@@ -59,14 +47,7 @@ public class Parecer {
     private Long ano;
     private Destino destino;
     private RefProposicaoEmendadaPojo materia;
-
-    public ColegiadoApreciador getColegiadoApreciador() {
-        return colegiado;
-    }
-
-    public void setColegiadoApreciador(ColegiadoApreciadorPojo colegiado) {
-        this.colegiado = colegiado;
-    }
+    public SiglaCasaLegislativa siglaCasaLegislativa;
 
     @JsonIgnore()
     public String getDataFormatada() {
