@@ -231,6 +231,7 @@
                             <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
                             <postReleaseGoals>deploy</postReleaseGoals>
                             <postHotfixGoals>deploy</postHotfixGoals>
+                            <pushRemote>true</pushRemote>
                         </configuration>
                     </plugin>   
                     <plugin>
