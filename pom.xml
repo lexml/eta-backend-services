@@ -221,11 +221,16 @@
                         <version>1.21.0</version>
                         <configuration>
                             <verbose>true</verbose>
+                            <gitFlowConfig>
+                              <productionBranch>main</productionBranch>
+                            </gitFlowConfig>
                             <skipTestProject>true</skipTestProject>
                             <allowSnapshots>false</allowSnapshots>
                             <useSnapshotInRelease>true</useSnapshotInRelease>
                             <useSnapshotInHotfix>true</useSnapshotInHotfix>
                             <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                            <postReleaseGoals>deploy</postReleaseGoals>
+                            <postHotfixGoals>deploy</postHotfixGoals>
                         </configuration>
                     </plugin>   
                     <plugin>
