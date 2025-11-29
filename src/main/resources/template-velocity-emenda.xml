@@ -174,8 +174,8 @@
 		<fo:static-content flow-name="header-principal">
 			#if($emenda.opcoesImpressao.imprimirBrasao)
 			<fo:block text-align="center" margin-bottom="2pt">
-				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')" />
-				<fo:block font-size="12pt" font-weight="bold">
+				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')"/>
+				<fo:block font-size="11pt" font-family="ITC-StoneSansStd" margin-top="3pt">
 				#if ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'SF')
 					<fo:block>SENADO FEDERAL</fo:block>
 				#elseif ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'CD')
