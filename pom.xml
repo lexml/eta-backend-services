@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.gov.lexml.eta</groupId>
     <artifactId>eta-backend-services</artifactId>
-    <version>1.2.3-SNAPSHOT</version>
+    <version>1.2.4</version>
     <name>ETA Backend Services</name>
     <description>Library to generate/parse pdf for the editor-emendas application</description>
     <url>https://github.com/lexml/eta-backend-services</url>
@@ -199,6 +199,7 @@
             </activation>
             <build>
                 <plugins>
+<!--   
                     <plugin>
                         <groupId>org.sonarsource.scanner.maven</groupId>
                         <artifactId>sonar-maven-plugin</artifactId>
@@ -213,6 +214,26 @@
                             <tagNameFormat>@{project.version}</tagNameFormat>
                         </configuration>
                     </plugin>
+-->            
+                    <plugin>
+                        <groupId>com.amashchenko.maven.plugin</groupId>
+                        <artifactId>gitflow-maven-plugin</artifactId>
+                        <version>1.21.0</version>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <gitFlowConfig>
+                              <productionBranch>main</productionBranch>
+                            </gitFlowConfig>
+                            <skipTestProject>true</skipTestProject>
+                            <allowSnapshots>false</allowSnapshots>
+                            <useSnapshotInRelease>true</useSnapshotInRelease>
+                            <useSnapshotInHotfix>true</useSnapshotInHotfix>
+                            <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                            <postReleaseGoals>deploy</postReleaseGoals>
+                            <postHotfixGoals>deploy</postHotfixGoals>
+                            <pushRemote>true</pushRemote>
+                        </configuration>
+                    </plugin>   
                     <plugin>
                       <groupId>org.sonatype.central</groupId>
                       <artifactId>central-publishing-maven-plugin</artifactId>
@@ -282,16 +303,5 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>github</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>gh-eta-backend-services</id>
-                    <name>Github Lexml Snapshot Repository</name>
-                    <url>https://maven.pkg.github.com/lexml/eta-backend-services</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
     </profiles>
-
 </project>
