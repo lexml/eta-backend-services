@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.gov.lexml.eta</groupId>
     <artifactId>eta-backend-services</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.6-SNAPSHOT</version>
     <name>ETA Backend Services</name>
     <description>Library to generate/parse pdf for the editor-emendas application</description>
     <url>https://github.com/lexml/eta-backend-services</url>
@@ -41,7 +41,7 @@
       <url>https://github.com/lexml/eta-backend-services</url>
       <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
       <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
-      <tag>1.2.1</tag>
+      <tag>HEAD</tag>
     </scm>
 
     <dependencyManagement>
@@ -59,9 +59,8 @@
     <properties>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-        <sonar.host.url>https://sonar.senado.leg.br</sonar.host.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
     <dependencies>
         <dependency>
@@ -189,30 +188,40 @@
     </dependencies>
 
     <build>
+      <plugins>
+          <plugin>
+              <groupId>com.amashchenko.maven.plugin</groupId>
+              <artifactId>gitflow-maven-plugin</artifactId>
+              <version>1.21.0</version>
+              <configuration>
+                  <verbose>true</verbose>
+                  <gitFlowConfig>
+                    <productionBranch>main</productionBranch>
+                  </gitFlowConfig>
+                  <skipTestProject>true</skipTestProject>
+                  <allowSnapshots>false</allowSnapshots>
+                  <useSnapshotInRelease>true</useSnapshotInRelease>
+                  <useSnapshotInHotfix>true</useSnapshotInHotfix>
+                  <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                  <pushRemote>true</pushRemote>
+              </configuration>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>3.2.2</version>
+          </plugin>
+      </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>release</id>
+            <id>deploy</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>${sonar-maven-plugin.version}</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>3.0.0-M6</version>
-                        <configuration>
-                            <detail>true</detail>
-                            <tagNameFormat>@{project.version}</tagNameFormat>
-                        </configuration>
-                    </plugin>
                     <plugin>
                       <groupId>org.sonatype.central</groupId>
                       <artifactId>central-publishing-maven-plugin</artifactId>
@@ -221,9 +230,6 @@
                       <configuration>
                         <publishingServerId>central</publishingServerId>
                         <autoPublish>true</autoPublish>
-                        <!--                 
-                        <waitUntil>published</waitUntil>
-                        -->
                       </configuration>
                     </plugin>
                     <plugin>
@@ -254,11 +260,6 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.2.2</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.0.1</version>
                         <executions>
@@ -282,16 +283,5 @@
                 </plugins>
             </build>
         </profile>
-        <profile>
-            <id>github</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>gh-eta-backend-services</id>
-                    <name>Github Lexml Snapshot Repository</name>
-                    <url>https://maven.pkg.github.com/lexml/eta-backend-services</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
     </profiles>
-
 </project>
