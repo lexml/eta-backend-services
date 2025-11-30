@@ -24,7 +24,7 @@ Está configurado o plugin [gitflow-maven-plugin](https://github.com/aleksandr-m
 
 ## Deploy
 
-Fazer o deploy no repositório central de forma independente da gestão de releases do gitflow.
+Fazer o deploy no repositório central usando o [central-publishing-maven-plugin](https://central.sonatype.org/publish/publish-portal-maven) de forma independente da gestão de releases do gitflow.
 
 Lembrar que o ambiente local deve estar preparado para o deplo (settings.xml e chave pgp do desenvolvedor).
 
