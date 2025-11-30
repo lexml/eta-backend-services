@@ -59,9 +59,8 @@
     <properties>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-        <sonar.host.url>https://sonar.senado.leg.br</sonar.host.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.test.skip>true</maven.test.skip>
     </properties>
     <dependencies>
         <dependency>
@@ -189,51 +188,40 @@
     </dependencies>
 
     <build>
+      <plugins>
+          <plugin>
+              <groupId>com.amashchenko.maven.plugin</groupId>
+              <artifactId>gitflow-maven-plugin</artifactId>
+              <version>1.21.0</version>
+              <configuration>
+                  <verbose>true</verbose>
+                  <gitFlowConfig>
+                    <productionBranch>main</productionBranch>
+                  </gitFlowConfig>
+                  <skipTestProject>true</skipTestProject>
+                  <allowSnapshots>false</allowSnapshots>
+                  <useSnapshotInRelease>true</useSnapshotInRelease>
+                  <useSnapshotInHotfix>true</useSnapshotInHotfix>
+                  <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                  <pushRemote>true</pushRemote>
+              </configuration>
+          </plugin>
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-jar-plugin</artifactId>
+              <version>3.2.2</version>
+          </plugin>
+      </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>release</id>
+            <id>deploy</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <plugins>
-<!--   
-                    <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>${sonar-maven-plugin.version}</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>3.0.0-M6</version>
-                        <configuration>
-                            <detail>true</detail>
-                            <tagNameFormat>@{project.version}</tagNameFormat>
-                        </configuration>
-                    </plugin>
--->            
-                    <plugin>
-                        <groupId>com.amashchenko.maven.plugin</groupId>
-                        <artifactId>gitflow-maven-plugin</artifactId>
-                        <version>1.21.0</version>
-                        <configuration>
-                            <verbose>true</verbose>
-                            <gitFlowConfig>
-                              <productionBranch>main</productionBranch>
-                            </gitFlowConfig>
-                            <skipTestProject>true</skipTestProject>
-                            <allowSnapshots>false</allowSnapshots>
-                            <useSnapshotInRelease>true</useSnapshotInRelease>
-                            <useSnapshotInHotfix>true</useSnapshotInHotfix>
-                            <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
-                            <postReleaseGoals>deploy</postReleaseGoals>
-                            <postHotfixGoals>deploy</postHotfixGoals>
-                            <pushRemote>true</pushRemote>
-                        </configuration>
-                    </plugin>   
                     <plugin>
                       <groupId>org.sonatype.central</groupId>
                       <artifactId>central-publishing-maven-plugin</artifactId>
@@ -242,9 +230,6 @@
                       <configuration>
                         <publishingServerId>central</publishingServerId>
                         <autoPublish>true</autoPublish>
-                        <!--                 
-                        <waitUntil>published</waitUntil>
-                        -->
                       </configuration>
                     </plugin>
                     <plugin>
@@ -272,11 +257,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.2.2</version>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
