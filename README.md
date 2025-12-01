@@ -26,8 +26,8 @@ Está configurado o plugin [gitflow-maven-plugin](https://github.com/aleksandr-m
 
 Fazer o deploy no repositório central usando o [central-publishing-maven-plugin](https://central.sonatype.org/publish/publish-portal-maven) de forma independente da gestão de releases do gitflow.
 
-Lembrar que o ambiente local deve estar preparado para o deplo (settings.xml e chave pgp do desenvolvedor).
+Lembrar que o ambiente local deve estar preparado para o deplo (settings.xml e chave gpg do desenvolvedor).
 
-Gerar a release/tage pelo gitflow e depois fazer checkout da tage e rodar o comando abaixo.
+Gerar a release/tag pelo gitflow e depois fazer checkout da tage e rodar o comando abaixo.
 
 `mvn -Pdeploy deploy`
