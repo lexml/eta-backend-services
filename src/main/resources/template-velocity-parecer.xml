@@ -174,9 +174,9 @@
 		#if ($temCabecalhoPrincipal)
 		<fo:static-content flow-name="header-principal">
 			#if($parecer.opcoesImpressao.imprimirBrasao)
-				<fo:block text-align="center" margin-bottom="2pt">
-					<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')" />
-					<fo:block font-size="12pt" font-weight="bold">
+			<fo:block text-align="center" margin-bottom="2pt">
+				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')" />
+        <fo:block font-size="11pt" font-family="ITC-StoneSansStd" margin-top="3pt">
 					#if ($siglaCasaLegislativa == 'SF')
 						<fo:block>SENADO FEDERAL</fo:block>
 					#elseif ($siglaCasaLegislativa == 'CD')

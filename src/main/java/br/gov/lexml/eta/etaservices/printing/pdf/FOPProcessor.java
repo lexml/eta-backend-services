@@ -55,6 +55,7 @@ public class FOPProcessor {
 			carregaFonte("GenBasBI.ttf");
 			carregaFonte("GenBasI.ttf");
 			carregaFonte("GenBasR.ttf");
+			carregaFonte("ITC-StoneSansStd-Medium.ttf");
 			InputStream xconf = FOPProcessor.class.getResourceAsStream("/fop.xconf");
 			ResourceResolver resolver = new UriResolver();
 			FopConfParser parser = new FopConfParser(xconf, new URI("file://./"), resolver);
