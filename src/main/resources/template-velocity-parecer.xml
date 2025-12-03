@@ -391,7 +391,7 @@
 		</fo:block>
 	#end	
 
-## Analise ----------------------------------------------------------------
+## Analise/Voto ----------------------------------------------------------------
 	#if ($parecer.analise)
 		<fo:block font-size="$maxTamanhoFonte"
 			font-weight="bold"
@@ -399,7 +399,7 @@
 			space-before="$spacing3"
 			text-align="left"
 			white-space-collapse="false">
-			II &#8211; ANÁLISE
+			II &#8211; $parecer.tituloSecao2.toUpperCase()
 		</fo:block>
 
 		<fo:block keep-with-previous="always" 
@@ -416,7 +416,7 @@
 		</fo:block>
 	#end	
 
-## Voto ----------------------------------------------------------------
+## Voto/Conclusão do Voto ----------------------------------------------------------------
 #if ($parecer.voto and $parecer.voto.itensVoto and $parecer.voto.itensVoto.size() > 0)
   <fo:block font-size="$maxTamanhoFonte"
             font-weight="bold"
@@ -424,7 +424,7 @@
             space-before="$spacing3"
             text-align="left"
             white-space-collapse="false">
-    III &#8211; VOTO
+    III &#8211; $parecer.tituloSecao3.toUpperCase()
   </fo:block>
 
   #set($temTextoVoto = false)

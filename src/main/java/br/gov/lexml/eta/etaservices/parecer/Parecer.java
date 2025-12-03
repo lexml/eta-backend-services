@@ -48,6 +48,8 @@ public class Parecer {
     private Destino destino;
     private RefProposicaoEmendadaPojo materia;
     public SiglaCasaLegislativa siglaCasaLegislativa;
+    private String tituloSecao2;
+    private String tituloSecao3;
 
     @JsonIgnore()
     public String getDataFormatada() {
