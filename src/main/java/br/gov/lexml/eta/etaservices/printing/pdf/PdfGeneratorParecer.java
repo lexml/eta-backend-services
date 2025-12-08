@@ -2,15 +2,15 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import br.gov.lexml.eta.etaservices.parecer.AnexoPDFA;
 import br.gov.lexml.eta.etaservices.parecer.Parecer;
 import br.gov.lexml.eta.etaservices.util.BytesUtil;
 
@@ -32,18 +33,38 @@ public class PdfGeneratorParecer  {
         this.templateProcessorFactory = templateProcessorFactory;
     }
 
-    public void generate(Parecer parecer, OutputStream outputStream) throws Exception {
+    public void generate(Parecer parecer, List<AnexoPDFA> anexosPDF_A, OutputStream outputStream) throws Exception {
         System.out.println("parecer");
         System.out.println(parecer);
         final String templateResult =
                 templateProcessorFactory.get().getTemplateResult(parecer);
-        List<ByteArrayInputStream> anexos = getAnexos(parecer);
+
+        List<AnexoPDFA> anexosParaPDFA = new ArrayList<>();
+        List<ByteArrayInputStream> anexosByteParaImpressao = new ArrayList<>();
+
+        if (anexosPDF_A != null) {
+            for (AnexoPDFA anexo : anexosPDF_A) {
+                if (anexo == null || anexo.getFile() == null) {
+                    continue;
+                }
+
+                byte[] bytes = toByteArray(anexo.getFile());
+
+                AnexoPDFA cloneParaPDFA = AnexoPDFA.builder().nomeArquivo(anexo.getNomeArquivo()).file(new ByteArrayInputStream(bytes)) // stream novo
+                        .imprimir(anexo.isImprimir()).build();
+                anexosParaPDFA.add(cloneParaPDFA);
+
+                if (anexo.isImprimir()) {
+                    anexosByteParaImpressao.add(new ByteArrayInputStream(bytes));
+                }
+            }
+        }
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         String parecerInJson = toParecerJson(parecer);
 
-        new FOPProcessor().processFOP(baos, templateResult, parecerInJson, anexos, TipoDocumento.PARECER);
+        new FOPProcessor().processFOP(baos, templateResult, parecerInJson, anexosParaPDFA, anexosByteParaImpressao, TipoDocumento.PARECER);
         
         // Insere hash de verificação
 		byte[] bytearr = baos.toByteArray();
@@ -85,15 +106,15 @@ public class PdfGeneratorParecer  {
         }
     }
 
-    private List<ByteArrayInputStream> getAnexos(Parecer parecer) {
-        if (parecer.getAnexos() != null) {
-            return parecer.getAnexos().parallelStream()
-        		.map(anexo -> Base64.getDecoder().decode(anexo.getBase64()))
-        		.map(anexo -> new ByteArrayInputStream(anexo))
-        		.collect(Collectors.toList());        	
+    private byte[] toByteArray(InputStream is) throws IOException {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        byte[] data = new byte[8192];
+        int nRead;
+        while ((nRead = is.read(data, 0, data.length)) != -1) {
+            buffer.write(data, 0, nRead);
         }
-		return new ArrayList<>();
-	}
+        return buffer.toByteArray();
+    }
 
 }
 

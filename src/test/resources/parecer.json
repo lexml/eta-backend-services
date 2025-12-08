@@ -6,10 +6,9 @@
     "pendenciasPreenchimento": [],
     "ano": 2025,
     "ementa": "<p>Da COMISSÃO DE SERVIÇOS DE INFRAESTRUTURA, sobre o Projeto de Lei nº 124, de 2022, do Deputado Júlio Delgado, que <em>altera as Leis nºs 12.608, de 10 de abril de 2012, 12.340, de 1º de dezembro de 2010, e 11.445, de 5 de janeiro de 2007, para prever medidas de flexibilização tarifária referentes aos serviços de energia elétrica e de abastecimento de água e esgotamento sanitário durante a vigência de calamidade pública decretada em razão de desastres naturais ou de emergências climáticas.</em></p><p><br></p>",
-    "colegiadoApreciador": {
-        "siglaCasaLegislativa": "CN",
-        "tipoColegiado": "Plenário"
-    },
+    "siglaCasaLegislativa": "CN",
+    "tituloSecao2":"tituloSecao2",
+    "tituloSecao3":"tituloSecao3",
     "materia": {
         "urn": "urn:lex:br:senado.federal:projeto.lei:2022;987",
         "sigla": "PL",

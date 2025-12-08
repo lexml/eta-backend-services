@@ -37,7 +37,7 @@ public class PdfGeneratorBean implements PdfGenerator {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
     
-        new FOPProcessor().processFOP(baos, templateResult, xml, anexos, TipoDocumento.EMENDA);
+        new FOPProcessor().processFOP(baos, templateResult, xml, null, anexos, TipoDocumento.EMENDA);
         
         // Insere hash de verificação
 		byte[] bytearr = baos.toByteArray();
