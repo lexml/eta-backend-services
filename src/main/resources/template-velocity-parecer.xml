@@ -417,7 +417,7 @@
 	#end	
 
 ## Voto/Conclusão do Voto ----------------------------------------------------------------
-#if ($parecer.voto and $parecer.voto.itensVoto and $parecer.voto.itensVoto.size() > 0)
+#if ($parecer.voto)
   <fo:block font-size="$maxTamanhoFonte"
             font-weight="bold"
             keep-with-next="always"
@@ -427,24 +427,18 @@
     III &#8211; $parecer.tituloSecao3.toUpperCase()
   </fo:block>
 
-  #set($temTextoVoto = false)
-  <fo:block keep-with-previous="always"
-            line-height="$lineHeight"
-            role="Voto"
-            space-before="$spacing1"
-            text-align="justify"
-            text-indent="2.5cm"
-            white-space-collapse="false"
-            margin-bottom="$pMarginBottom">
-    #foreach ($item in $parecer.voto.itensVoto)
-      #if (!$ve.isEmpty($item.texto))
-        #set($temTextoVoto = true)
-        <fo:block margin-bottom="$pMarginBottom">
-          $ve.html2foTextoLivre($item.texto)
-        </fo:block>
-      #end
-    #end
-  </fo:block>
+  <fo:block keep-with-previous="always" 
+				line-height="$lineHeight"
+				role="Relatorio"
+				space-before="$spacing1"
+				text-align="justify"
+				text-indent="2.5cm"
+				white-space-collapse="false"
+				margin-bottom="$pMarginBottom">
+			<fo:block>
+					$ve.html2foTextoLivre($parecer.voto)
+			</fo:block>
+		</fo:block>
 #end
 				
 ## Local e data ----------------------------------------------------------------

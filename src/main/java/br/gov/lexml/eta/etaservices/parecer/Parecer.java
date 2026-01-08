@@ -11,7 +11,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 import br.gov.lexml.eta.etaservices.emenda.TipoMateria;
-import br.gov.lexml.eta.etaservices.printing.json.AnexoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.OpcoesImpressaoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RefProposicaoEmendadaPojo;
@@ -32,7 +31,7 @@ public class Parecer {
     private String versaoAplicacao;
     private Map<String, Object> metadados;
     private String epigrafe;
-    private List<? extends AnexoPojo> anexos;
+    private List<AnexoParecer> anexos;
     private String local;
     private LocalDate data;
     private AutoriaParecer autoria;
@@ -40,10 +39,10 @@ public class Parecer {
     private List<? extends RevisaoPojo> revisoes;
     private List<? extends NotaRodapePojo> notasRodape;
     private List<String> pendenciasPreenchimento;
-    private Voto voto;
     private String ementa;
     private String relatorio;
     private String analise;
+    private String voto;
     private Long ano;
     private Destino destino;
     private RefProposicaoEmendadaPojo materia;

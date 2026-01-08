@@ -1,4 +1,4 @@
-package br.gov.lexml.eta.etaservices.emenda;
+package br.gov.lexml.eta.etaservices.parecer;
 
 import java.io.File;
 import java.io.IOException;

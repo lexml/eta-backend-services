@@ -12,7 +12,6 @@ import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoAnalise;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoEmenta;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoRelatorio;
-import br.gov.lexml.eta.etaservices.parecer.RevisaoTextoItemVoto;
 import br.gov.lexml.eta.etaservices.parecer.RevisaoVoto;
 import lombok.Data;
 
@@ -24,7 +23,6 @@ import lombok.Data;
         @JsonSubTypes.Type(value = RevisaoRelatorio.class, name = "RevisaoRelatorio"),
         @JsonSubTypes.Type(value = RevisaoAnalise.class, name = "RevisaoAnalise"),
         @JsonSubTypes.Type(value = RevisaoVoto.class, name = "RevisaoVoto"),
-        @JsonSubTypes.Type(value = RevisaoTextoItemVoto.class, name = "RevisaoTextoItemVoto")
 })
 @XmlAccessorType(XmlAccessType.FIELD)
 @com.fasterxml.jackson.annotation.JsonIgnoreProperties(value = "type")
