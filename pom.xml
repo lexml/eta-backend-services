@@ -228,7 +228,6 @@
                   <useSnapshotInHotfix>true</useSnapshotInHotfix>
                   <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
                   <pushRemote>true</pushRemote>
-                  <productionBranch>main</productionBranch>                 
               </configuration>
           </plugin>
           <plugin>
