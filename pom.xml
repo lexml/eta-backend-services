@@ -227,7 +227,8 @@
                   <useSnapshotInRelease>true</useSnapshotInRelease>
                   <useSnapshotInHotfix>true</useSnapshotInHotfix>
                   <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
-                  <pushRemote>true</pushRemote>                  
+                  <pushRemote>true</pushRemote>
+                  <productionBranch>main</productionBranch>                 
               </configuration>
           </plugin>
           <plugin>
