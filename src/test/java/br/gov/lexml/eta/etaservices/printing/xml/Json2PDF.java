@@ -24,7 +24,7 @@ class Json2PDF {
 	
     public static void main(String[] args) throws Exception {
 //    	Json2PDF.process("emenda_mpv_905_2019_agrupadores");
-    	Json2PDF.process("test1");
+Json2PDF.process("test1");
     	System.out.println("Feito.");
 	}
   

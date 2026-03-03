@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.gov.lexml.eta</groupId>
     <artifactId>eta-backend-services</artifactId>
-    <version>1.2.6</version>
+    <version>1.3.0-RC1</version>
     <name>ETA Backend Services</name>
-    <description>Library to generate/parse pdf for the editor-emendas application</description>
+    <description>Serviços de back-end para os componentes lexml-emenda, lexml-eta e lexml-parecer</description>
     <url>https://github.com/lexml/eta-backend-services</url>
 
     <organization>
@@ -37,12 +37,14 @@
         </license>
     </licenses>
 
+<!--   
     <scm>
       <url>https://github.com/lexml/eta-backend-services</url>
       <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
       <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
       <tag>HEAD</tag>
     </scm>
+-->
 
     <dependencyManagement>
         <dependencies>
@@ -57,11 +59,33 @@
     </dependencyManagement>
 
     <properties>
+        <maven.site.skip>true</maven.site.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.test.skip>true</maven.test.skip>
+        
+        <maven.build.timestamp.format>dd/MM/yyyy HH:mm:ss</maven.build.timestamp.format>
+        <buildtimestamp>${maven.build.timestamp}</buildtimestamp>
     </properties>
+    
+    <!-- configuracoes usadas para deployment de artefatos -->
+    <distributionManagement>
+      <!-- repositorio de releases oficiais -->
+      <repository>
+        <id>sfmvnrepo</id>
+        <name>sfmvnrepo-releases</name>
+        <url>http://www20.senado.gov.br/artifactory/libs-releases-local</url>
+      </repository>
+      <!-- repositorio para snapshots -->
+      <snapshotRepository>
+        <id>sfmvnrepo</id>
+        <name>sfmvnrepo-snapshots</name>
+        <url>http://www20.senado.gov.br/artifactory/libs-snapshots-local</url>
+      </snapshotRepository>
+    </distributionManagement>
+    
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -203,7 +227,7 @@
                   <useSnapshotInRelease>true</useSnapshotInRelease>
                   <useSnapshotInHotfix>true</useSnapshotInHotfix>
                   <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
-                  <pushRemote>true</pushRemote>
+                  <pushRemote>true</pushRemote>                  
               </configuration>
           </plugin>
           <plugin>

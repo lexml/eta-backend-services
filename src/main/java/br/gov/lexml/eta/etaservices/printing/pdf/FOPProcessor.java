@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,6 +38,7 @@ import org.dom4j.io.DocumentSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.gov.lexml.eta.etaservices.parecer.AnexoPDFA;
 import br.gov.lexml.pdfa.PDFA;
 import br.gov.lexml.pdfa.PDFAttachmentFile;
 
@@ -95,16 +97,16 @@ public class FOPProcessor {
 
 	}
 	
-	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML) {
-		this.processFOP(outputStream, xslFo, emendaXML, new ArrayList<>());
+    public void processFOP(OutputStream outputStream, String xslFo, String objetoEmendaXMLOrPareceJSON, TipoDocumento tipoDocumento) {
+        this.processFOP(outputStream, xslFo, objetoEmendaXMLOrPareceJSON, new ArrayList<>(), new ArrayList<>(), tipoDocumento);
 	}
 	
 	/**
-	 * Transforma XSL-FO em PDF com emenda.xml embutido
+	 * Transforma XSL-FO em PDF com emenda.xml ou parecer.json embutido
 	 * @param anexos 
 	 */
 	@SuppressWarnings("unchecked")
-	public void processFOP(OutputStream outputStream, String xslFo, String emendaXML, List<ByteArrayInputStream> anexos) {
+    public void processFOP(OutputStream outputStream, String xslFo, String objetoEmendaXMLOrPareceJSON, List<AnexoPDFA> anexosPDFA, List<ByteArrayInputStream> anexos, TipoDocumento tipoDocumento) {
 		
 //		System.out.println(xslFo);
 
@@ -161,14 +163,42 @@ public class FOPProcessor {
 			} else {
 				pdfa.addXMP(helper.getXmpmeta().getBytes());
 
-				//adding emenda.xml
-				pdfa.addAttachments(
-						new PDFAttachmentFile(
-								emendaXML.getBytes(),
-								"emenda.xml",
-								"text/xml",
-								helper.getCmpCreateDate(),
-								PDFAttachmentFile.AFRelationShip.SOURCE));
+                if (TipoDocumento.EMENDA.equals(tipoDocumento)) {
+                    // adding emenda.xml
+                    pdfa.addAttachments(new PDFAttachmentFile(objetoEmendaXMLOrPareceJSON.getBytes(), "emenda.xml", "text/xml", helper.getCmpCreateDate(), PDFAttachmentFile.AFRelationShip.SOURCE));
+                }
+                if (TipoDocumento.PARECER.equals(tipoDocumento)) {
+                    // adding parecer.json
+                    pdfa.addAttachments(new PDFAttachmentFile(objetoEmendaXMLOrPareceJSON.getBytes(StandardCharsets.UTF_8), "parecer.json", "application/json", helper.getCmpCreateDate(),
+                            PDFAttachmentFile.AFRelationShip.SOURCE));
+                }
+                
+                // adding anexos pdfs e docxs
+                List<PDFAttachmentFile> anexosForPDF_A = new ArrayList<>();
+
+                if (anexosPDFA != null) {
+                    for (AnexoPDFA anexo : anexosPDFA) {
+                        if (anexo == null || anexo.getFile() == null) {
+                            continue;
+                        }
+
+                        byte[] bytesAnexo = IOUtils.toByteArray(anexo.getFile());
+
+                        String nomeArquivo = anexo.getNomeArquivo() != null ? anexo.getNomeArquivo() : "anexo.pdf";
+
+                        String mimeType = guessMimeType(nomeArquivo);
+
+                        PDFAttachmentFile attachment = new PDFAttachmentFile(bytesAnexo, nomeArquivo, mimeType, helper.getCmpCreateDate(), PDFAttachmentFile.AFRelationShip.DATA // é "dado" relacionado
+                        );
+
+                        anexosForPDF_A.add(attachment);
+                    }
+                }
+
+                // Adiciona todos os anexos da lista ao PDF/A
+                for (PDFAttachmentFile attachment : anexosForPDF_A) {
+                    pdfa.addAttachments(attachment);
+                }
 
 				//setting version
 				pdfa.setVersion(PDFA.PDFVersion.PDF_VERSION_1_7);
@@ -194,5 +224,19 @@ public class FOPProcessor {
 		
 		
 	}
+
+    private String guessMimeType(String nomeArquivo) {
+        if (nomeArquivo == null) {
+            return "application/octet-stream";
+        }
+        String lower = nomeArquivo.toLowerCase();
+        if (lower.endsWith(".pdf")) {
+            return "application/pdf";
+        }
+        if (lower.endsWith(".docx")) {
+            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        }
+        return "application/octet-stream";
+    }
 
 }

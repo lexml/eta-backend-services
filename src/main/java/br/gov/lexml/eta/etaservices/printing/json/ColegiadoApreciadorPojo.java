@@ -1,10 +1,10 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
+import java.util.Objects;
+
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
-
-import java.util.Objects;
 
 public class ColegiadoApreciadorPojo implements ColegiadoApreciador {
     private SiglaCasaLegislativa siglaCasaLegislativa;
@@ -16,7 +16,6 @@ public class ColegiadoApreciadorPojo implements ColegiadoApreciador {
         return siglaCasaLegislativa;
     }
 
-    @SuppressWarnings("unused")
     public void setSiglaCasaLegislativa(SiglaCasaLegislativa siglaCasaLegislativa) {
         this.siglaCasaLegislativa = siglaCasaLegislativa;
     }
