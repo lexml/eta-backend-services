@@ -1,5 +1,5 @@
 
-# Serviços para back-end do lexml-emenda e lexml-eta
+# Serviços de back-end para os componentes lexml-emenda, lexml-eta e lexml-parecer
 
 Principais funcionalidades:
 - Geração de PDF de emenda e parecere a partir do JSON e arquivos anexados;
@@ -22,7 +22,11 @@ Está configurado o plugin [gitflow-maven-plugin](https://github.com/aleksandr-m
 - gitflow:version-update - Updates version in release or support branch, optionally tagging and pushing it to the remote repository.
 - gitflow:help - Displays help information.
 
-## Deploy
+## Deploy no repositório do Senado
+
+É possível fazer o deploy no repositório Maven do Senado sincronizando os fontes com o git interno e comandando o deploy via Jenkins.
+
+## Deploy no repositório Maven Central
 
 Fazer o deploy no repositório central usando o [central-publishing-maven-plugin](https://central.sonatype.org/publish/publish-portal-maven) de forma independente da gestão de releases do gitflow.
 
