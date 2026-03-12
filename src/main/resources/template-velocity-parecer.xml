@@ -334,7 +334,7 @@
 					<fo:table-cell>
 						<fo:block text-align="left" line-height="$lineHeight">
 							<fo:inline font-weight="bold">
-								#if ($parecer.autoria.relator.indSexo == 'F')
+								#if ($parecer.autoria.relator.sexo == 'F')
 									Relatora: 
 								#else
 									Relator: 
@@ -476,7 +476,12 @@
             text-align="right" text-indent="0cm" white-space-collapse="false">
     <fo:inline font-weight="bold">
       $parecer.autoria.relator.cargo $parecer.autoria.relator.nome,
-    </fo:inline>Relator
+    </fo:inline>
+	#if ($parecer.autoria.relator.sexo == 'F')
+		Relatora
+  	#else
+		Relator
+  	#end	
   </fo:block>
 #end
 			</fo:block-container>
