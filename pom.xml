@@ -5,7 +5,7 @@
     <artifactId>eta-backend-services</artifactId>
     <version>1.2.7-SNAPSHOT</version>
     <name>ETA Backend Services</name>
-    <description>Library to generate/parse pdf for the editor-emendas application</description>
+    <description>Serviços de back-end para os componentes lexml-emenda, lexml-eta e lexml-parecer</description>
     <url>https://github.com/lexml/eta-backend-services</url>
 
     <organization>
@@ -37,12 +37,14 @@
         </license>
     </licenses>
 
+<!--   
     <scm>
       <url>https://github.com/lexml/eta-backend-services</url>
       <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
       <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
       <tag>HEAD</tag>
     </scm>
+-->
 
     <dependencyManagement>
         <dependencies>
@@ -57,12 +59,33 @@
     </dependencyManagement>
 
     <properties>
+        <maven.site.skip>true</maven.site.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.test.skip>true</maven.test.skip>
+        
+        <maven.build.timestamp.format>dd/MM/yyyy HH:mm:ss</maven.build.timestamp.format>
+        <buildtimestamp>${maven.build.timestamp}</buildtimestamp>
     </properties>
     
+    <!-- configuracoes usadas para deployment de artefatos -->
+    <distributionManagement>
+      <!-- repositorio de releases oficiais -->
+      <repository>
+        <id>sfmvnrepo</id>
+        <name>sfmvnrepo-releases</name>
+        <url>http://www20.senado.gov.br/artifactory/libs-releases-local</url>
+      </repository>
+      <!-- repositorio para snapshots -->
+      <snapshotRepository>
+        <id>sfmvnrepo</id>
+        <name>sfmvnrepo-snapshots</name>
+        <url>http://www20.senado.gov.br/artifactory/libs-snapshots-local</url>
+      </snapshotRepository>
+    </distributionManagement>
+        
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -251,18 +274,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.2.2</version>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
