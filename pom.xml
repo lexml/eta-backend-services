@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.gov.lexml.eta</groupId>
     <artifactId>eta-backend-services</artifactId>
-    <version>1.2.7</version>
+    <version>1.2.8-SNAPSHOT</version>
     <name>ETA Backend Services</name>
     <description>Serviços de back-end para os componentes lexml-emenda, lexml-eta e lexml-parecer</description>
     <url>https://github.com/lexml/eta-backend-services</url>
