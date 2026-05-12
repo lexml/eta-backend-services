@@ -167,7 +167,7 @@ public class Proposicao {
                     
                     if (this.caracteristicasDetectadas != null && !this.caracteristicasDetectadas.isEmpty()) {
                         
-                        Set<String> caracteristicasImpeditivas = new HashSet<>(Arrays.asList("possui imagem","possui tabela na articulacao","possui pena"));
+                        Set<String> caracteristicasImpeditivas = new HashSet<>(Arrays.asList("possui imagem","possui tabela na articulacao","possui pena","possui alteracao de ementa"));
                         
                         boolean hasCaracteristicasImpeditivas = !Collections.disjoint(caracteristicasImpeditivas,this.caracteristicasDetectadas);
                         
