@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>br.gov.lexml.eta</groupId>
     <artifactId>eta-backend-services</artifactId>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.2.10-SNAPSHOT</version>
     <name>ETA Backend Services</name>
-    <description>Library to generate/parse pdf for the editor-emendas application</description>
+    <description>Serviços de back-end para os componentes lexml-emenda, lexml-eta e lexml-parecer</description>
     <url>https://github.com/lexml/eta-backend-services</url>
 
     <organization>
@@ -23,6 +23,11 @@
             <name>Ricardo Lima</name>
             <email>rslima@gmail.com</email>
         </developer>
+        <developer>
+          <id>fragomeni</id>
+          <name>Marcos Fragomeni</name>
+          <email>marcos.fragomeni@gmail.com</email>
+        </developer>
     </developers>
 
     <licenses>
@@ -32,23 +37,14 @@
         </license>
     </licenses>
 
+<!--   
     <scm>
-        <url>https://github.com/lexml/eta-backend-services</url>
-        <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
-        <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
-  	  <tag>HEAD</tag>
-  </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+      <url>https://github.com/lexml/eta-backend-services</url>
+      <developerConnection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</developerConnection>
+      <connection>scm:git:ssh://git@github.com/lexml/${project.artifactId}.git</connection>
+      <tag>HEAD</tag>
+    </scm>
+-->
 
     <dependencyManagement>
         <dependencies>
@@ -63,12 +59,33 @@
     </dependencyManagement>
 
     <properties>
+        <maven.site.skip>true</maven.site.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <sonar-maven-plugin.version>3.9.1.2184</sonar-maven-plugin.version>
-        <sonar.host.url>https://sonar.senado.leg.br</sonar.host.url>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <maven.build.timestamp.format>dd/MM/yyyy HH:mm:ss</maven.build.timestamp.format>
+        <buildtimestamp>${maven.build.timestamp}</buildtimestamp>
     </properties>
+    
+    <!-- configuracoes usadas para deployment de artefatos -->
+    <distributionManagement>
+      <!-- repositorio de releases oficiais -->
+      <repository>
+        <id>sfmvnrepo</id>
+        <name>sfmvnrepo-releases</name>
+        <url>http://www20.senado.gov.br/artifactory/libs-releases-local</url>
+      </repository>
+      <!-- repositorio para snapshots -->
+      <snapshotRepository>
+        <id>sfmvnrepo</id>
+        <name>sfmvnrepo-snapshots</name>
+        <url>http://www20.senado.gov.br/artifactory/libs-snapshots-local</url>
+      </snapshotRepository>
+    </distributionManagement>
+        
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,14 +93,37 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-json</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+       
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -92,27 +132,28 @@
             <groupId>jakarta.activation</groupId>
             <artifactId>jakarta.activation-api</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-		<dependency>
 		    <groupId>org.apache.commons</groupId>
 		    <artifactId>commons-text</artifactId>
-		    <version>1.9</version>
+		    <version>1.10.0</version>
 		</dependency>
-
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.21.0</version>
+		</dependency>
+		
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>
             <version>0.10.4</version>
         </dependency>
-
+        
         <dependency>
             <groupId>com.sun.xml.bind</groupId>
             <artifactId>jaxb-impl</artifactId>
@@ -125,16 +166,23 @@
             <version>4.0.1</version>
             <scope>runtime</scope>
         </dependency>
+        
+		<dependency>
+		    <groupId>org.glassfish.jaxb</groupId>
+		    <artifactId>jaxb-runtime</artifactId>
+		</dependency>        
+        
         <dependency>
             <groupId>jaxen</groupId>
             <artifactId>jaxen</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-assertj3</artifactId>
             <scope>test</scope>
         </dependency>
-
+        
         <dependency>
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
@@ -146,14 +194,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>
         </dependency>
-
-        <!-- FOP -->
+        
         <dependency>
             <groupId>org.apache.xmlgraphics</groupId>
             <artifactId>fop</artifactId>
@@ -165,10 +212,7 @@
             	</exclusion>
             </exclusions>
         </dependency>
-
-        <!-- XML Graphics -->
-
-        <!-- PDF BOX -->
+        
 		<dependency>
 		    <groupId>org.apache.pdfbox</groupId>
 		    <artifactId>pdfbox</artifactId>
@@ -186,67 +230,71 @@
 			<artifactId>htmlcleaner</artifactId>
 			<version>2.2</version>
 		</dependency>
-
-	    <dependency>
-	      <groupId>br.gov.lexml.parser.pl</groupId>
-	      <artifactId>lexml-parser-projeto-lei</artifactId>
-	      <version>1.14.1</version>
-	    </dependency>
-	    
+		
+  	    <dependency>
+  	      <groupId>br.gov.lexml.parser.pl</groupId>
+  	      <artifactId>lexml-parser-projeto-lei</artifactId>
+  	      <version>1.14.1</version>
+  	    </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        
+    		<groupId>br.gov.lexml.parser.pl</groupId>
+   			<artifactId>lexml-parser-projeto-lei-ws-api</artifactId>
+    		<version>1.6.6</version>
+    		<scope>compile</scope>
+		</dependency>
+  	    
 		<dependency>
 		    <groupId>javax.activation</groupId>
 		    <artifactId>activation</artifactId>
 		    <version>1.1</version>
 		</dependency>
 		
-		<dependency>
-		    <groupId>org.glassfish.jaxb</groupId>
-		    <artifactId>jaxb-runtime</artifactId>
-		</dependency>        
-	    
     </dependencies>
 
-    <build>
-    </build>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.amashchenko.maven.plugin</groupId>
+				<artifactId>gitflow-maven-plugin</artifactId>
+				<version>1.21.0</version>
+				<configuration>
+					<verbose>true</verbose>
+					<gitFlowConfig>
+						<productionBranch>main</productionBranch>
+					</gitFlowConfig>
+					<skipTestProject>true</skipTestProject>
+					<allowSnapshots>false</allowSnapshots>
+					<useSnapshotInRelease>true</useSnapshotInRelease>
+					<useSnapshotInHotfix>true</useSnapshotInHotfix>
+					<commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+					<pushRemote>true</pushRemote>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.2</version>
+			</plugin>
+		</plugins>
+	</build>
 
     <profiles>
         <profile>
-            <id>release</id>
+            <id>deploy</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.sonarsource.scanner.maven</groupId>
-                        <artifactId>sonar-maven-plugin</artifactId>
-                        <version>${sonar-maven-plugin.version}</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <version>3.0.0-M6</version>
-                        <configuration>
-                            <detail>true</detail>
-                            <tagNameFormat>@{project.version}</tagNameFormat>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.sonatype.plugins</groupId>
-                        <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.13</version>
-                        <extensions>true</extensions>
-                        <configuration>
-                            <serverId>ossrh</serverId>
-                            <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                        </configuration>
+                      <groupId>org.sonatype.central</groupId>
+                      <artifactId>central-publishing-maven-plugin</artifactId>
+                      <version>0.9.0</version>
+                      <extensions>true</extensions>
+                      <configuration>
+                        <publishingServerId>central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                      </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -276,11 +324,6 @@
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.2.2</version>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>3.0.1</version>
                         <executions>
@@ -291,7 +334,7 @@
                                     <goal>sign</goal>
                                 </goals>
                                 <configuration>
-                                    <!-- Prevent gpg from using pinentry programs. Fixes: gpg: signing
+									<!-- Prevent gpg from using pinentry programs. Fixes: gpg: signing
                                         failed: Inappropriate ioctl for device -->
                                     <gpgArguments>
                                         <arg>--pinentry-mode</arg>
@@ -303,18 +346,6 @@
                     </plugin>
                 </plugins>
             </build>
-
-        </profile>
-        <profile>
-            <id>github</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>gh-eta-backend-services</id>
-                    <name>Github Lexml Snapshot Repository</name>
-                    <url>https://maven.pkg.github.com/lexml/eta-backend-services</url>
-                </snapshotRepository>
-            </distributionManagement>
         </profile>
     </profiles>
-
 </project>

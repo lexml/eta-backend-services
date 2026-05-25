@@ -32,7 +32,13 @@
 		<font kerning="yes" embed-url="GenBasR.ttf" encoding-mode="single-byte">
 			<font-triplet name="Gentium Basic" style="normal" weight="normal"/>
 		</font>
-		
+
+    <!-- ITC StoneSansStd -->
+
+    <font kerning="yes" embed-url="ITC-StoneSansStd-Medium.ttf" encoding-mode="single-byte">
+      <font-triplet name="ITC-StoneSansStd" style="normal" weight="normal"/>
+    </font>
+        		
       </fonts>
       
     </renderer>
