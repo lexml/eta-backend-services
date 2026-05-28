@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.parecer.Parecer;
+import br.gov.lexml.eta.etaservices.proposicao.Proposicao;
 import br.gov.lexml.eta.etaservices.util.EtaFileUtil;
 
 public class VelocityTemplateProcessor {
@@ -21,6 +22,8 @@ public class VelocityTemplateProcessor {
     private static final String TEMPLATE_EMENDA_RESOURCE = "/template-velocity-emenda.xml";
 
     private static final String TEMPLATE_PARECER_RESOURCE = "/template-velocity-parecer.xml";
+    
+    private static final String TEMPLATE_PROPOSICAO_RESOURCE = "/template-velocity-proposicao.xml";
 
     private final TemplateLoader templateLoader;
 
@@ -132,6 +135,29 @@ public class VelocityTemplateProcessor {
      * @throws IOException
      *             - if there is some issue reading the resource
      */
+    public String getTemplateResult(final Proposicao proposicao) throws IOException {
+
+        if (velocityResult == null) {
+
+            String finalTemplate = this.templateLoader.loadTemplate(TEMPLATE_PROPOSICAO_RESOURCE);
+
+            if (log.isDebugEnabled()) {
+                log.debug("finalTemplate: {}", finalTemplate);
+            }
+
+            velocityResult = getVelocityResult(finalTemplate, proposicao);
+        }
+
+        return velocityResult;
+    }
+
+    /**
+     * Process a Velocity template. Returns a FOP pure code.
+     *
+     * @return a final FO code processed by Velocity
+     * @throws IOException
+     *             - if there is some issue reading the resource
+     */
     public String getTemplateResult(final Parecer parecer) throws IOException {
 
         if (velocityResult == null) {
@@ -197,6 +223,46 @@ public class VelocityTemplateProcessor {
                 String notaRodape = nr.getTexto().replaceFirst("<p>", "<p>" + nr.getNumero() + " ");
                 ctx.put(nr.getId(), vex.html2fo(notaRodape));
             });
+        }
+
+        StringWriter w = new StringWriter();
+        ve.evaluate(ctx, w, "defaultTemplate", template);
+        String result = w.toString();
+
+        if (StringUtils.isEmpty(result)) {
+            return "";
+        }
+
+        // Retira espaços duplicados e espaço antes de pontuação
+        result = result.replaceAll("\\s{2,}", " ");
+        result = result.replaceAll("\\s([.,;:!?])", "$1");
+
+        log.debug("getVelocityResult: {}", result);
+
+        return result;
+    }
+
+    /**
+     * Returns an FO code from a template
+     */
+    private String getVelocityResult(String template, final Proposicao proposicao) {
+
+        VelocityEngine ve = new VelocityEngine();
+
+        ve.setProperty("runtime.log.logsystem.log4j.logger", getClass().getName());
+
+        ve.init();
+
+        VelocityContext ctx = new VelocityContext();
+        VelocityExtension vex = new VelocityExtension(ctx, ve);
+
+        ctx.put("proposicao", proposicao);
+        ctx.put("ve", vex);
+
+        if (proposicao.getOpcoesImpressao() != null && proposicao.getOpcoesImpressao().isImprimirBrasao()) {
+            InputStream brasaoStream = VelocityTemplateProcessor.class.getResourceAsStream("/static/img/brasao.jpg");
+            String brasaoBase64 = EtaFileUtil.readFromImageAsBase64String(brasaoStream);
+            ctx.put("brasao", brasaoBase64);
         }
 
         StringWriter w = new StringWriter();

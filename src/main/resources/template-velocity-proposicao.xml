@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
+	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	font-family="Gentium Basic">
+	<fo:layout-master-set>
+		<fo:simple-page-master margin-bottom="2cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
+			master-name="firstPage" page-height="29.7cm" page-width="21cm">
+			#if(!$ve.isEmpty($proposicao.opcoesImpressao) && ($proposicao.opcoesImpressao.imprimirBrasao || !$ve.isEmpty($proposicao.opcoesImpressao.textoCabecalho)))
+				#set($temCabecalhoPrincipal = true)
+				<fo:region-body margin-top="4cm" />
+				<fo:region-before extent="3cm" region-name="header-principal" />
+			#else
+				<fo:region-body margin-top="1cm"/>
+			#end
+		</fo:simple-page-master>
+		<fo:simple-page-master margin-bottom="2cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
+			master-name="restPage" page-height="29.7cm" page-width="21cm">
+			<fo:region-body/>
+		</fo:simple-page-master>
+		<fo:page-sequence-master master-name="document">
+			<fo:repeatable-page-master-alternatives>
+				<fo:conditional-page-master-reference master-reference="firstPage" page-position="first" />
+				<fo:conditional-page-master-reference master-reference="restPage" page-position="rest" />
+			</fo:repeatable-page-master-alternatives>
+		</fo:page-sequence-master>
+	</fo:layout-master-set>
+
+	<fo:declarations>
+		<x:xmpmeta xmlns:x="adobe:ns:meta/" xmlns:check="http://lexeditweb/check">
+			<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+				<check:hash>00000000000000000000000000000000</check:hash>
+				<rdf:Description
+					xmlns:dc="http://purl.org/dc/elements/1.1/"
+					xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
+					xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/"
+					xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+					rdf:about="">
+					#set($dataIso = $ve.dataIso)
+					<xmp:CreatorTool>$proposicao.aplicacao</xmp:CreatorTool>
+					<xmp:ModifyDate>$dataIso</xmp:ModifyDate>
+					<xmp:CreateDate>$dataIso</xmp:CreateDate>
+					<xmp:MetadataDate>$dataIso</xmp:MetadataDate>
+					<pdf:Keywords>Proposição</pdf:Keywords>
+					<pdf:Producer>$proposicao.aplicacao</pdf:Producer>
+					<pdf:PDFVersion>1.7</pdf:PDFVersion>
+					<dc:format>application/pdf</dc:format>
+					<dc:title>
+						<rdf:Alt>
+							<rdf:li xml:lang="x-default">$proposicao.sigla $proposicao.numero/$proposicao.ano</rdf:li>
+						</rdf:Alt>
+					</dc:title>
+					<dc:description>
+						<rdf:Alt>
+							<rdf:li xml:lang="x-default">Proposição legislativa</rdf:li>
+						</rdf:Alt>
+					</dc:description>
+					<dc:language>
+						<rdf:Bag>
+							<rdf:li>pt-BR</rdf:li>
+						</rdf:Bag>
+					</dc:language>
+					<dc:subject>
+						<rdf:Bag>
+							<rdf:li>Proposição legislativa</rdf:li>
+						</rdf:Bag>
+					</dc:subject>
+					<pdfaid:part>3</pdfaid:part>
+					<pdfaid:conformance>B</pdfaid:conformance>
+				</rdf:Description>
+			</rdf:RDF>
+		</x:xmpmeta>
+	</fo:declarations>
+
+## Impressão compacta
+#if(!$ve.isEmpty($proposicao.opcoesImpressao) && $proposicao.opcoesImpressao.reduzirEspacoEntreLinhas)
+	#set($lineHeight = "120%")
+#else
+	#set($lineHeight = "150%")
+#end
+
+## Impressão tamanho fonte
+#if(!$ve.isEmpty($proposicao.opcoesImpressao) && $proposicao.opcoesImpressao.tamanhoFonte == 18)
+	#set($tamanhoFonte = "18")
+#else
+	#set($tamanhoFonte = "14")
+#end
+
+	<fo:page-sequence master-reference="document">
+		#if ($temCabecalhoPrincipal)
+		<fo:static-content flow-name="header-principal">
+			#if(!$ve.isEmpty($proposicao.opcoesImpressao) && $proposicao.opcoesImpressao.imprimirBrasao && !$ve.isEmpty($brasao))
+			<fo:block text-align="center" margin-bottom="2pt">
+				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')" />
+			</fo:block>
+			#end
+			#if(!$ve.isEmpty($proposicao.opcoesImpressao) && !$ve.isEmpty($proposicao.opcoesImpressao.textoCabecalho))
+			<fo:block text-align="center">$proposicao.opcoesImpressao.textoCabecalho</fo:block>
+			#end
+		</fo:static-content>
+		#end
+
+		<fo:flow flow-name="xsl-region-body" font-size="${tamanhoFonte}pt" line-height="$lineHeight">
+			#if($proposicao.revisoes && $proposicao.revisoes.size() > 0)
+			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+				text-align="center" padding=".1cm" space-after=".3cm">
+				Este documento contém marcas de revisão.
+			</fo:block>
+			#end
+
+			#if($proposicao.pendenciasPreenchimento && $proposicao.pendenciasPreenchimento.size() > 0)
+			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+				text-align="left" padding=".1cm" space-after=".3cm">
+				Este documento contém pendências de preenchimento.
+			</fo:block>
+			#end
+
+			<fo:block text-align="center" font-weight="bold" margin-bottom="8pt">PROPOSIÇÃO</fo:block>
+			<fo:block text-align="center" margin-bottom="12pt">$proposicao.sigla $proposicao.numero/$proposicao.ano</fo:block>
+
+			#if(!$ve.isEmpty($proposicao.ementa))
+			<fo:block margin-bottom="12pt">$ve.html2foTextoLivre($proposicao.ementa)</fo:block>
+			#end
+
+			#if(!$ve.isEmpty($proposicao.texto))
+			<fo:block>$ve.html2foTextoLivre($proposicao.texto)</fo:block>
+			#elseif(!$ve.isEmpty($proposicao.justificativa))
+			<fo:block>$ve.html2foTextoLivre($proposicao.justificativa)</fo:block>
+			#else
+			<fo:block>Texto da proposição não informado.</fo:block>
+			#end
+		</fo:flow>
+	</fo:page-sequence>
+</fo:root>

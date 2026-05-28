@@ -172,6 +172,11 @@ public class FOPProcessor {
                     pdfa.addAttachments(new PDFAttachmentFile(objetoEmendaXMLOrPareceJSON.getBytes(StandardCharsets.UTF_8), "parecer.json", "application/json", helper.getCmpCreateDate(),
                             PDFAttachmentFile.AFRelationShip.SOURCE));
                 }
+                if (TipoDocumento.PROPOSICAO.equals(tipoDocumento)) {
+                    // adding proposicao.json
+                    pdfa.addAttachments(new PDFAttachmentFile(objetoEmendaXMLOrPareceJSON.getBytes(StandardCharsets.UTF_8), "proposicao.json", "application/json", helper.getCmpCreateDate(),
+                            PDFAttachmentFile.AFRelationShip.SOURCE));
+                }
                 
                 // adding anexos pdfs e docxs
                 List<PDFAttachmentFile> anexosForPDF_A = new ArrayList<>();

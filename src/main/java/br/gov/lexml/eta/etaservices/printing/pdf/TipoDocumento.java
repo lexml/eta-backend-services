@@ -3,7 +3,7 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 import java.util.Locale;
 
 public enum TipoDocumento {
-    EMENDA, PARECER, SUBSTITUTIVO, OUTRO;
+    EMENDA, PARECER, PROPOSICAO, SUBSTITUTIVO, OUTRO;
 
     /**
      * Faz o parse de uma string para TipoDocumento. - Ignora maiúsculas/minúsculas
@@ -27,6 +27,9 @@ public enum TipoDocumento {
             return EMENDA;
         case "parecer":
             return PARECER;
+        case "proposicao":
+        case "proposição":
+            return PROPOSICAO;
         case "substitutivo":
             return SUBSTITUTIVO;
         case "outro":
