@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import javax.xml.transform.Source;
 
@@ -20,7 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.printing.json.ComentarioPojo;
 import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.SequenciaComentarioPojo;
+import br.gov.lexml.eta.etaservices.printing.json.UsuarioPojo;
 
 class EmendaXmlMarshallingTest {
     private Source xmlSource;
@@ -41,6 +45,25 @@ class EmendaXmlMarshallingTest {
                 .isEqualToIgnoringCase("CN");
     }
 
+    @Test
+    void testSequenciasComentario() {
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/@id")
+                .isEqualTo("sc123");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/@local")
+                .isEqualTo("justificação");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/Comentario/@dataHora")
+                .isEqualTo("2026-05-18 15:48:26");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/Comentario/Usuario/@nome")
+                .isEqualTo("fragomeni");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/Comentario/Texto")
+                .isEqualTo("Texto com acentuação & revisão <validada>.");
+    }
+
     @BeforeEach
     void setUp() {
         final Emenda emenda = setupEmenda();
@@ -57,12 +80,32 @@ class EmendaXmlMarshallingTest {
             String text = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            return objectMapper.readValue(text, EmendaPojo.class);                     
+            EmendaPojo emenda = objectMapper.readValue(text, EmendaPojo.class);
+            emenda.setSequenciasComentario(List.of(criaSequenciaComentario()));
+            return emenda;
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    private SequenciaComentarioPojo criaSequenciaComentario() {
+        UsuarioPojo usuario = new UsuarioPojo();
+        usuario.setNome("fragomeni");
+        usuario.setId("fragomeni");
+        usuario.setSigla("F");
+
+        ComentarioPojo comentario = new ComentarioPojo();
+        comentario.setUsuario(usuario);
+        comentario.setDataHora("2026-05-18 15:48:26");
+        comentario.setTexto("Texto com acentuação & revisão <validada>.");
+
+        SequenciaComentarioPojo sequencia = new SequenciaComentarioPojo();
+        sequencia.setId("sc123");
+        sequencia.setLocal("justificação");
+        sequencia.setComentarios(List.of(comentario));
+        return sequencia;
     }
 
     private Source getXmlSource(Emenda emenda) {

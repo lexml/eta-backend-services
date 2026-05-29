@@ -59,6 +59,8 @@ public interface Emenda {
     
     List<? extends NotaRodape> getNotasRodape();
 
+    List<? extends SequenciaComentario> getSequenciasComentario();
+
     List<String> getPendenciasPreenchimento();
     
     @JsonIgnore()

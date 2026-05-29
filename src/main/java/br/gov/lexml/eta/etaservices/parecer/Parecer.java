@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 import br.gov.lexml.eta.etaservices.emenda.TipoMateria;
@@ -15,6 +16,7 @@ import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.OpcoesImpressaoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RefProposicaoEmendadaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojoDeserializer;
 import io.vavr.collection.Stream;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,6 +38,7 @@ public class Parecer {
     private LocalDate data;
     private AutoriaParecer autoria;
     private OpcoesImpressaoPojo opcoesImpressao;
+    @JsonDeserialize(contentUsing = RevisaoPojoDeserializer.class)
     private List<? extends RevisaoPojo> revisoes;
     private List<? extends NotaRodapePojo> notasRodape;
     private List<String> pendenciasPreenchimento;

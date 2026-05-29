@@ -22,6 +22,7 @@ import br.gov.lexml.eta.etaservices.emenda.NotaRodape;
 import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.emenda.SequenciaComentario;
 import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
 
 public final class EmendaRecord implements Emenda {
@@ -47,6 +48,7 @@ public final class EmendaRecord implements Emenda {
     // Utilizando RevisaoPojo para permitir marshaling jaxb entre jsone xml e vice versa.
     private final List<? extends Revisao> revisoes;
     private final List<? extends NotaRodape> notasRodape;
+    private final List<? extends SequenciaComentario> sequenciasComentario;
     private final List<String> pendenciasPreenchimento;
 
     public EmendaRecord(
@@ -71,6 +73,7 @@ public final class EmendaRecord implements Emenda {
             OpcoesImpressao opcoesImpressao,
             List<? extends Revisao> revisoes,
             List<? extends NotaRodape> notasRodape,
+            List<? extends SequenciaComentario> sequenciasComentario,
             List<String> pendenciasPreenchimento) {
         this.dataUltimaModificacao = dataUltimaModificacao;
         this.aplicacao = aplicacao;
@@ -93,6 +96,7 @@ public final class EmendaRecord implements Emenda {
         this.opcoesImpressao = opcoesImpressao;
         this.revisoes = revisoes;
         this.notasRodape = notasRodape;
+        this.sequenciasComentario = sequenciasComentario;
         this.pendenciasPreenchimento = pendenciasPreenchimento;
     }
 
@@ -232,6 +236,11 @@ public final class EmendaRecord implements Emenda {
     @Override
     public List<? extends NotaRodape> getNotasRodape() {
     	return notasRodape;
+    }
+
+    @Override
+    public List<? extends SequenciaComentario> getSequenciasComentario() {
+        return sequenciasComentario;
     }
 
     @Override

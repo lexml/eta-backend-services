@@ -6,6 +6,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import br.gov.lexml.eta.etaservices.emenda.Elemento;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,5 +55,6 @@ public class ElementoPojo extends ReferenciaPojo implements Elemento {
 	@XmlElement(name = "ElementoAnteriorNaSequenciaDeLeitura")
     private ReferenciaPojo elementoAnteriorNaSequenciaDeLeitura;
 	@XmlElement(name = "Revisao")
+    @JsonDeserialize(using = RevisaoPojoDeserializer.class)
     private RevisaoPojo revisao;
 }

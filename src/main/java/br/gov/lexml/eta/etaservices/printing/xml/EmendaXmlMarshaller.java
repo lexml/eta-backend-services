@@ -15,6 +15,7 @@ import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
+import br.gov.lexml.eta.etaservices.emenda.Comentario;
 import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
@@ -28,8 +29,10 @@ import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.emenda.SequenciaComentario;
 import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
 import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
+import br.gov.lexml.eta.etaservices.emenda.Usuario;
 import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
@@ -58,6 +61,7 @@ public class EmendaXmlMarshaller {
 	        geraOpcoesImpressao(emenda.getOpcoesImpressao(), sb);
 	        geraRevisoes(emenda.getRevisoes(), sb);
 	        geraNotasRodape(emenda.getNotasRodape(), sb);
+            geraSequenciasComentario(emenda.getSequenciasComentario(), sb);
             geraPendenciasPreenchimento(emenda.getPendenciasPreenchimento(), sb);
 
 			sb.append("</Emenda>");
@@ -657,6 +661,55 @@ public class EmendaXmlMarshaller {
     	sb.append("</NotasRodape>\n");    	
     }
 
+    private void geraSequenciasComentario(List<? extends SequenciaComentario> sequenciasComentario, StringBuilder sb) {
+        if(sequenciasComentario == null || sequenciasComentario.isEmpty()) {
+            return;
+        }
+
+        sb.append("  <SequenciasComentario>\n");
+        for(SequenciaComentario sequencia: sequenciasComentario) {
+            sb.append("    <SequenciaComentario id=\"")
+                    .append(xml(sequencia.getId()))
+                    .append("\" local=\"")
+                    .append(xml(sequencia.getLocal()))
+                    .append("\">\n");
+
+            if(sequencia.getComentarios() != null) {
+                for(Comentario comentario: sequencia.getComentarios()) {
+                    geraComentario(comentario, sb);
+                }
+            }
+
+            sb.append("    </SequenciaComentario>\n");
+        }
+        sb.append("  </SequenciasComentario>\n");
+    }
+
+    private void geraComentario(Comentario comentario, StringBuilder sb) {
+        sb.append("      <Comentario dataHora=\"")
+                .append(xml(comentario.getDataHora()))
+                .append("\">\n");
+        geraUsuarioComentario(comentario.getUsuario(), sb);
+        sb.append("        <Texto>")
+                .append(xml(comentario.getTexto()))
+                .append("</Texto>\n");
+        sb.append("      </Comentario>\n");
+    }
+
+    private void geraUsuarioComentario(Usuario usuario, StringBuilder sb) {
+        sb.append("        <Usuario");
+        if(usuario != null) {
+            sb.append(" nome=\"")
+                    .append(xml(usuario.getNome()))
+                    .append("\" id=\"")
+                    .append(xml(usuario.getId()))
+                    .append("\" sigla=\"")
+                    .append(xml(usuario.getSigla()))
+                    .append("\"");
+        }
+        sb.append(FECHA_TAG_SEM_CONTEUDO);
+    }
+
     private void geraPendenciasPreenchimento(List<String> pendenciasPreenchimento, StringBuilder sb) throws Exception {
         if (pendenciasPreenchimento == null || pendenciasPreenchimento.isEmpty()) {
             return;
@@ -669,6 +722,10 @@ public class EmendaXmlMarshaller {
             sb.append("</PendenciaPreenchimento>\n");
         }
         sb.append("  </PendenciasPreenchimento>\n");
+    }
+
+    private String xml(String value) {
+        return StringEscapeUtils.escapeXml10(value == null ? "" : value);
     }
 
 //    public static void main(String[] args) {
