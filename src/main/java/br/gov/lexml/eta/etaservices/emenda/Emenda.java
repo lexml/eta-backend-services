@@ -67,6 +67,13 @@ public interface Emenda {
     default boolean isPossuiMarcasRevisao() {
     	return getRevisoes() != null && !getRevisoes().isEmpty();
     }
+
+    @JsonIgnore()
+    default boolean isPossuiComentarios() {
+        return getSequenciasComentario() != null
+                && getSequenciasComentario().stream()
+                        .anyMatch(seq -> seq.getComentarios() != null && !seq.getComentarios().isEmpty());
+    }
     
     @JsonIgnore()
     default boolean isMateriaCongressoNacional() {
