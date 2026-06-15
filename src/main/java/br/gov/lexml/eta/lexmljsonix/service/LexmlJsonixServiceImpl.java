@@ -92,21 +92,33 @@ public class LexmlJsonixServiceImpl implements LexmlJsonixService {
 		Proposicao proposicao = getProposicao(sigla, ano, numero, preferirSubstitutivo);
 		if (ObjectUtils.isEmpty(proposicao.getIdSdlegDocumentoItemDigital()))
 			return null;
-		return getTextoProposicaoAsXml(proposicao.getIdSdlegDocumentoItemDigital());
+		return getTextoProposicaoAsXml(proposicao.getIdSdlegDocumentoItemDigital(), sigla);
 	}
 
 	@Override
-	public String getTextoProposicaoAsXml(String idSdlegDocumentoItemDigital) {
+	public String getTextoProposicaoAsXml(String idSdlegDocumentoItemDigital, String sigla) {
 		try {
 			byte[] zip = getLexmlZip(idSdlegDocumentoItemDigital);
 	        byte[] xml = ZipUtils.readEntry(zip, "texto.xml");
-	        return xml==null ? null : new String(xml);
+	        String xmlString = xml==null ? null : new String(xml);
+	        return corrigeURN(xmlString, sigla);
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
-	/**
+	private String corrigeURN(String xmlString, String sigla) {
+	    // Correção rápida e suja da URN de PLP com URN de PL
+	    if (xmlString != null && "plp".equalsIgnoreCase(sigla)) {
+	        xmlString = xmlString.replaceAll(
+	            "(<Identificacao\\s+URN=\"urn:lex:br:(senado\\.federal|camara\\.deputados)):projeto\\.lei(\\.complementar)?;pl:",
+	            "$1:projeto.lei.complementar;plp:"
+	        );
+	    }	    
+        return xmlString;
+    }
+
+    /**
 	 * {@inheritDoc}
 	 *
 	 * Este método utiliza um bean que implementa a interface ConversorLexmlJsonix para realizar a conversão
@@ -118,7 +130,7 @@ public class LexmlJsonixServiceImpl implements LexmlJsonixService {
 		Proposicao proposicao = getProposicao(sigla, ano, numero, preferirSubstitutivo);
 		if (ObjectUtils.isEmpty(proposicao.getIdSdlegDocumentoItemDigital()))
 			return null;
-		return getTextoProposicaoAsJson(proposicao.getIdSdlegDocumentoItemDigital());
+		return getTextoProposicaoAsJson(proposicao.getIdSdlegDocumentoItemDigital(), sigla);
 	}
 
 	/**
@@ -129,8 +141,8 @@ public class LexmlJsonixServiceImpl implements LexmlJsonixService {
 	 *
 	 */
 	@Override
-	public String getTextoProposicaoAsJson(String idSdlegDocumentoItemDigital) {
-		String xml = getTextoProposicaoAsXml(idSdlegDocumentoItemDigital);
+	public String getTextoProposicaoAsJson(String idSdlegDocumentoItemDigital, String sigla) {
+		String xml = getTextoProposicaoAsXml(idSdlegDocumentoItemDigital, sigla);
 		return conversorLexmlJsonix.xmlToJson(xml);
 	}
 
