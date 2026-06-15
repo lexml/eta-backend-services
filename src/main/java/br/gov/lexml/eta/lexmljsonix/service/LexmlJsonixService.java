@@ -57,9 +57,10 @@ public interface LexmlJsonixService {
 	 * Retorna o texto Lexml de uma proposição em formato xml.
 	 * 
 	 * @param idSdlegDocumentoItemDigital id do documento da proposição.
+	 * @param sigla Sigla da proposição.
 	 * @return string xml do texto de uma proposição.
 	 */
-	public String getTextoProposicaoAsXml(String idSdlegDocumentoItemDigital);
+	public String getTextoProposicaoAsXml(String idSdlegDocumentoItemDigital, String sigla);
 	
 	/**
 	 * Retorna o texto Lexml de uma proposição em formato json.
@@ -75,8 +76,9 @@ public interface LexmlJsonixService {
 	 * Retorna o texto Lexml de uma proposição em formato json.
 	 * 
 	 * @param idSdlegDocumentoItemDigital id do documento da proposição.
+	 * @param sigla Sigla da proposição. 
 	 * @return string json do texto de uma proposição.
 	 */	
-	public String getTextoProposicaoAsJson(String idSdlegDocumentoItemDigital);
+	public String getTextoProposicaoAsJson(String idSdlegDocumentoItemDigital, String sigla);
 
 }
