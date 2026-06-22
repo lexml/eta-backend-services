@@ -13,6 +13,7 @@ class EmendaPojoComentariosTest {
         String json = "{"
                 + "\"sequenciasComentario\":[{"
                 + "\"id\":\"sc123\","
+                + "\"idDispositivo\":\"art3_par2\","
                 + "\"local\":\"texto\","
                 + "\"comentarios\":[{"
                 + "\"usuario\":{\"nome\":\"fragomeni\",\"id\":\"fragomeni\",\"sigla\":\"F\"},"
@@ -27,6 +28,7 @@ class EmendaPojoComentariosTest {
         assertThat(emenda.getSequenciasComentario()).hasSize(1);
         SequenciaComentarioPojo sequencia = emenda.getSequenciasComentario().get(0);
         assertThat(sequencia.getId()).isEqualTo("sc123");
+        assertThat(sequencia.getIdDispositivo()).isEqualTo("art3_par2");
         assertThat(sequencia.getLocal()).isEqualTo("texto");
         assertThat(sequencia.getComentarios()).hasSize(1);
 

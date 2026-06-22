@@ -19,6 +19,9 @@ public class SequenciaComentarioPojo implements SequenciaComentario {
     private String id;
 
     @XmlAttribute
+    private String idDispositivo;
+
+    @XmlAttribute
     private String local;
 
     @XmlElement(name = "Comentario")
@@ -31,6 +34,15 @@ public class SequenciaComentarioPojo implements SequenciaComentario {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String getIdDispositivo() {
+        return idDispositivo;
+    }
+
+    public void setIdDispositivo(String idDispositivo) {
+        this.idDispositivo = idDispositivo;
     }
 
     @Override
@@ -53,7 +65,7 @@ public class SequenciaComentarioPojo implements SequenciaComentario {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, local, comentarios);
+        return Objects.hash(id, idDispositivo, local, comentarios);
     }
 
     @Override
@@ -66,6 +78,7 @@ public class SequenciaComentarioPojo implements SequenciaComentario {
         }
         SequenciaComentarioPojo other = (SequenciaComentarioPojo) obj;
         return Objects.equals(id, other.id)
+                && Objects.equals(idDispositivo, other.idDispositivo)
                 && Objects.equals(local, other.local)
                 && Objects.equals(comentarios, other.comentarios);
     }

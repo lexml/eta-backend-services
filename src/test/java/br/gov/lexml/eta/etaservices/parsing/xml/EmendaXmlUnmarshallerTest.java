@@ -60,6 +60,7 @@ class EmendaXmlUnmarshallerTest {
 
         SequenciaComentario sequencia = emenda.getSequenciasComentario().get(0);
         assertThat(sequencia.getId()).isEqualTo("sc123");
+        assertThat(sequencia.getIdDispositivo()).isEqualTo("art3_par2");
         assertThat(sequencia.getLocal()).isEqualTo("justificação");
         assertThat(sequencia.getComentarios()).hasSize(1);
 
@@ -82,7 +83,7 @@ class EmendaXmlUnmarshallerTest {
 
     private String blocoSequenciasComentario() {
         return "  <SequenciasComentario>\n"
-                + "    <SequenciaComentario id=\"sc123\" local=\"justificação\">\n"
+                + "    <SequenciaComentario id=\"sc123\" local=\"justificação\" idDispositivo=\"art3_par2\">\n"
                 + "      <Comentario dataHora=\"2026-05-18 15:48:26\">\n"
                 + "        <Usuario nome=\"fragomeni\" id=\"fragomeni\" sigla=\"F\"/>\n"
                 + "        <Texto>Texto com acentuação &amp; revisão &lt;validada&gt;.</Texto>\n"

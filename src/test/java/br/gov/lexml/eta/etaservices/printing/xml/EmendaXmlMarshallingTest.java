@@ -64,6 +64,13 @@ class EmendaXmlMarshallingTest {
                 .isEqualTo("Texto com acentuação & revisão <validada>.");
     }
 
+    @Test
+    void testSequenciaComentarioDispositivo() {
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario[@id='sc456']/@idDispositivo")
+                .isEqualTo("art3_par2");
+    }
+
     @BeforeEach
     void setUp() {
         final Emenda emenda = setupEmenda();
@@ -81,7 +88,7 @@ class EmendaXmlMarshallingTest {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
             EmendaPojo emenda = objectMapper.readValue(text, EmendaPojo.class);
-            emenda.setSequenciasComentario(List.of(criaSequenciaComentario()));
+            emenda.setSequenciasComentario(List.of(criaSequenciaComentario(), criaSequenciaComentarioDispositivo()));
             return emenda;
 
         } catch (IOException e) {
@@ -104,6 +111,19 @@ class EmendaXmlMarshallingTest {
         SequenciaComentarioPojo sequencia = new SequenciaComentarioPojo();
         sequencia.setId("sc123");
         sequencia.setLocal("justificação");
+        sequencia.setComentarios(List.of(comentario));
+        return sequencia;
+    }
+
+    private SequenciaComentarioPojo criaSequenciaComentarioDispositivo() {
+        ComentarioPojo comentario = new ComentarioPojo();
+        comentario.setDataHora("2026-06-11 13:26:00");
+        comentario.setTexto("Comentario em dispositivo.");
+
+        SequenciaComentarioPojo sequencia = new SequenciaComentarioPojo();
+        sequencia.setId("sc456");
+        sequencia.setIdDispositivo("art3_par2");
+        sequencia.setLocal("texto");
         sequencia.setComentarios(List.of(comentario));
         return sequencia;
     }

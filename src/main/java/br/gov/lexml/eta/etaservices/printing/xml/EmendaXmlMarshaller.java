@@ -668,11 +668,19 @@ public class EmendaXmlMarshaller {
 
         sb.append("  <SequenciasComentario>\n");
         for(SequenciaComentario sequencia: sequenciasComentario) {
+            final String idDispositivo = sequencia.getIdDispositivo();
+
             sb.append("    <SequenciaComentario id=\"")
                     .append(xml(sequencia.getId()))
                     .append("\" local=\"")
                     .append(xml(sequencia.getLocal()))
-                    .append("\">\n");
+                    .append("\"");
+
+            if(idDispositivo != null && !idDispositivo.trim().isEmpty()) {
+                sb.append(" idDispositivo=\"").append(xml(idDispositivo)).append("\"");
+            }
+
+            sb.append(">\n");
 
             if(sequencia.getComentarios() != null) {
                 for(Comentario comentario: sequencia.getComentarios()) {

@@ -606,6 +606,7 @@ public class EmendaXmlUnmarshaller {
 
     private SequenciaComentario parseSequenciaComentario(Element sequenciaComentario) {
         final String id = sequenciaComentario.attributeValue("id");
+        final String idDispositivo = sequenciaComentario.attributeValue("idDispositivo");
         final String local = sequenciaComentario.attributeValue("local");
         final List<Comentario> comentarios = new ArrayList<>();
 
@@ -613,7 +614,7 @@ public class EmendaXmlUnmarshaller {
             comentarios.add(parseComentario(comentario));
         }
 
-        return new SequenciaComentarioRecord(id, local, comentarios);
+        return new SequenciaComentarioRecord(id, idDispositivo, local, comentarios);
     }
 
     private Comentario parseComentario(Element comentario) {
