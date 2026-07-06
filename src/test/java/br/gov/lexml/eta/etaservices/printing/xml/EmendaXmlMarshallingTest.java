@@ -1,7 +1,9 @@
 package br.gov.lexml.eta.etaservices.printing.xml;
 
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
 import java.io.File;
@@ -10,14 +12,15 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 
-import br.gov.lexml.eta.etaservices.emenda.*;
-import br.gov.lexml.eta.etaservices.parsing.xml.EmendaXmlUnmarshaller;
-import br.gov.lexml.eta.etaservices.printing.json.*;
 import org.apache.commons.io.FileUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -30,6 +33,43 @@ import org.xmlunit.builder.Input;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import br.gov.lexml.eta.etaservices.emenda.Anexo;
+import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
+import br.gov.lexml.eta.etaservices.emenda.DispositivosEmenda;
+import br.gov.lexml.eta.etaservices.emenda.Emenda;
+import br.gov.lexml.eta.etaservices.emenda.ModoEdicaoEmenda;
+import br.gov.lexml.eta.etaservices.emenda.NotaAlteracao;
+import br.gov.lexml.eta.etaservices.emenda.NotaRodape;
+import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.emenda.Sexo;
+import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
+import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
+import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
+import br.gov.lexml.eta.etaservices.emenda.TipoSubstituicaoTermo;
+import br.gov.lexml.eta.etaservices.parsing.xml.EmendaXmlUnmarshaller;
+import br.gov.lexml.eta.etaservices.printing.json.AnexoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.AutoriaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.ColegiadoApreciadorPojo;
+import br.gov.lexml.eta.etaservices.printing.json.ColegiadoAutorPojo;
+import br.gov.lexml.eta.etaservices.printing.json.ComandoEmendaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.ComandoEmendaTextoLivrePojo;
+import br.gov.lexml.eta.etaservices.printing.json.ComponenteEmendadoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.DispositivoEmendaAdicionadoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.DispositivoEmendaModificadoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.DispositivoEmendaSuprimidoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.DispositivosEmendaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.EmendaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.EpigrafePojo;
+import br.gov.lexml.eta.etaservices.printing.json.ItemComandoEmendaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
+import br.gov.lexml.eta.etaservices.printing.json.OpcoesImpressaoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.ParlamentarPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RefProposicaoEmendadaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
+import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
+import br.gov.lexml.eta.etaservices.printing.json.SubstituicaoTermoPojo;
 
 class EmendaXmlMarshallingTest {
     private Source xmlSource;
@@ -164,13 +204,13 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    void deveGerarProposicaoComEmentaEscapadaTest() {
+    void deveGerarProposicaoComEmendaSemTagsHTMLTest() {
         RefProposicaoEmendadaPojo proposicao = new RefProposicaoEmendadaPojo();
         proposicao.setUrn("urn:1234");
         proposicao.setSigla("SIG");
         proposicao.setNumero("123");
         proposicao.setAno("2023");
-        proposicao.setEmenta("Ementa com & e < e >");
+        proposicao.setEmenta("Ementa <em>itálico</em> e <br/> quebra de linha.");
         proposicao.setIdentificacaoTexto("Identificação teste");
         proposicao.setEmendarTextoSubstitutivo(true);
 
@@ -178,7 +218,7 @@ class EmendaXmlMarshallingTest {
         marshaller.geraProposicao(proposicao, emendaElement);
 
         Element proposicaoElement = (Element) emendaElement.selectNodes("//Proposicao").get(0);
-        assertEquals("Ementa com &amp; e", proposicaoElement.attributeValue("ementa"));
+        assertEquals("Ementa itálico e quebra de linha.", proposicaoElement.attributeValue("ementa"));
     }
 
     @Test
@@ -266,8 +306,8 @@ class EmendaXmlMarshallingTest {
         marshaller.geraSubstituicaoTermo(substituicaoTermo, emendaElement);
 
         Element substituicaoTermoElement = (Element) emendaElement.selectNodes("//SubstituicaoTermo").get(0);
-        assertEquals("termo &amp; especial &lt; &gt;", substituicaoTermoElement.attributeValue("termo"));
-        assertEquals("novo termo &amp; especial &lt; &gt;", substituicaoTermoElement.attributeValue("novoTermo"));
+        assertEquals("termo & especial < >", substituicaoTermoElement.attributeValue("termo"));
+        assertEquals("novo termo & especial < >", substituicaoTermoElement.attributeValue("novoTermo"));
     }
 
     @Test
@@ -317,8 +357,8 @@ class EmendaXmlMarshallingTest {
         marshaller.geraEpigrafe(epigrafe, emendaElement);
 
         Element epigrafeElement = (Element) emendaElement.selectNodes("//Epigrafe").get(0);
-        assertEquals("Texto com &amp; e &lt; e &gt;", epigrafeElement.attributeValue("texto"));
-        assertEquals("Complemento com &amp; e &lt; e &gt;", epigrafeElement.attributeValue("complemento"));
+        assertEquals("Texto com & e < e >", epigrafeElement.attributeValue("texto"));
+        assertEquals("Complemento com & e < e >", epigrafeElement.attributeValue("complemento"));
     }
 
     @Test
@@ -915,7 +955,7 @@ class EmendaXmlMarshallingTest {
         Element element = (Element) emendaElement.selectNodes("//Justificativa").get(0);
 
         assertEquals("Justificativa", element.getName());
-        assertEquals("Justificativa com caracteres especiais: &lt;, &gt;, &amp;", element.getText().trim());
+        assertEquals(justificativa, element.getText().trim());
     }
 
     @Test
@@ -949,7 +989,7 @@ class EmendaXmlMarshallingTest {
         Element element = (Element) emendaElement.selectNodes("//JustificativaAntesRevisao").get(0);
 
         assertEquals("JustificativaAntesRevisao", element.getName());
-        assertEquals("Justificativa com caracteres especiais: &lt;, &gt;, &amp;", element.getText().trim());
+        assertEquals("Justificativa com caracteres especiais: <, >, &", element.getText().trim());
     }
 
     @Test
@@ -1217,7 +1257,7 @@ class EmendaXmlMarshallingTest {
         Document document = DocumentHelper.parseText(xmlEmenda);
 
         Element justificativa = (Element) document.selectNodes("//Justificativa").get(0);
-        assertEquals("Teste.", justificativa.getText());
+        assertEquals("<p class=\"align-justify\">&lt;Teste.&gt;</p>", justificativa.getText());
 
         Element autoria = (Element) document.selectNodes("//Autoria").get(0);
         assertEquals("Parlamentar", autoria.attributeValue("tipo"));
@@ -1228,7 +1268,7 @@ class EmendaXmlMarshallingTest {
         Element parlamentar = (Element) document.selectNodes("//Autoria/Parlamentar").get(0);
         assertEquals("6331", parlamentar.attributeValue("identificacao"));
         assertEquals("Sergio Moro", parlamentar.attributeValue("nome"));
-        assertEquals( "Senador", parlamentar.attributeValue("tratamento"));
+        assertEquals("Senador", parlamentar.attributeValue("tratamento"));
         assertEquals("UNIÃO", parlamentar.attributeValue("siglaPartido"));
         assertEquals("PR", parlamentar.attributeValue("siglaUF"));
         assertEquals("SF", parlamentar.attributeValue("siglaCasaLegislativa"));

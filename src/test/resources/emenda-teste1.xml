@@ -108,7 +108,7 @@
             </Citacao>
         </ItemComandoEmenda>
     </ComandoEmenda>
-    <Justificativa>&lt;p class=&quot;align-justify&quot;&gt; Teste.&lt;/p&gt;</Justificativa>
+    <Justificativa>&lt;p class="align-justify"&gt;&amp;lt;Teste.&amp;gt;&lt;/p&gt;</Justificativa>
     <Autoria tipo="Parlamentar" imprimirPartidoUF="true" quantidadeAssinaturasAdicionaisDeputados="3"
              quantidadeAssinaturasAdicionaisSenadores="1">
         <Parlamentar identificacao="6331" nome="Sergio Moro" tratamento="Senador" siglaPartido="UNIÃO" siglaUF="PR"
