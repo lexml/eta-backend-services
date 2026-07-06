@@ -10,7 +10,12 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ZipUtils {
+    
+    private static final Logger log = LoggerFactory.getLogger(ZipUtils.class);
 	
 	private ZipUtils() {}
 	
@@ -34,7 +39,7 @@ public class ZipUtils {
 //	    byte contents[] = new byte[4096];
 //	    int direct;
 //	    while ((direct = zip.read(contents, 0, contents.length)) >= 0) {
-//	        System.out.println("Read " + direct + "bytes content.");
+//	         log.debug("Read " + direct + "bytes content.");
 //	    }
 	    
 	    BufferedOutputStream bos = null;

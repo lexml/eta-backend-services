@@ -188,7 +188,7 @@
 			
 			#end
 			#if(!$ve.isEmpty($emenda.opcoesImpressao.textoCabecalho))
-			<fo:block text-align="center">$emenda.opcoesImpressao.textoCabecalho</fo:block>
+			<fo:block text-align="center">$ve.escapeXml($emenda.opcoesImpressao.textoCabecalho)</fo:block>
 			#end
 		</fo:static-content>
 		#end

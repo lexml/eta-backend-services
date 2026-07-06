@@ -7,6 +7,8 @@ import java.io.StringWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.log.CommonsLogLogChute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +63,9 @@ public class VelocityTemplateProcessor {
 
         VelocityEngine ve = new VelocityEngine();
 
-        ve.setProperty("runtime.log.logsystem.log4j.logger", getClass().getName());
+        // Força o Velocity a usar o SLF4J (que o Logback implementa)
+        ve.setProperty(CommonsLogLogChute.LOGCHUTE_COMMONS_LOG_NAME, getClass().getName());
+        ve.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, CommonsLogLogChute.class.getName());       
 
         ve.init();
 
