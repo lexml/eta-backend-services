@@ -9,9 +9,13 @@ import java.util.Base64;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
 public class EtaFileUtil {
+    
+    private static final Logger log = LoggerFactory.getLogger(EtaFileUtil.class);    
 	
 	private EtaFileUtil() {}
 
@@ -41,7 +45,7 @@ public class EtaFileUtil {
 			byte imageData[] = IOUtils.toByteArray(is);
 			base64Image = Base64.getEncoder().encodeToString(imageData);
 		} catch (IOException ioe) {
-			System.out.println("Exception while reading the Image " + ioe);
+			log.error("Exception while reading the Image ", ioe);
 		}
 		return base64Image;	
 	}

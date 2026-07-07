@@ -85,7 +85,7 @@
         <url>http://www20.senado.gov.br/artifactory/libs-snapshots-local</url>
       </snapshotRepository>
     </distributionManagement>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

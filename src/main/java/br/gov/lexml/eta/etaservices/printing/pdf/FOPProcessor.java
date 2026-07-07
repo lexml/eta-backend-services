@@ -108,7 +108,7 @@ public class FOPProcessor {
 	@SuppressWarnings("unchecked")
     public void processFOP(OutputStream outputStream, String xslFo, String objetoEmendaXMLOrPareceJSON, List<AnexoPDFA> anexosPDFA, List<ByteArrayInputStream> anexos, TipoDocumento tipoDocumento) {
 		
-//		System.out.println(xslFo);
+//		log.debug(xslFo);
 
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 

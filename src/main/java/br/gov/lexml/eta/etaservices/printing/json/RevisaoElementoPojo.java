@@ -6,13 +6,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import br.gov.lexml.eta.etaservices.emenda.RevisaoElemento;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @XmlRootElement(name = "RevisaoElemento")
 @XmlAccessorType(XmlAccessType.FIELD)
+@AllArgsConstructor
+@NoArgsConstructor
 public class RevisaoElementoPojo extends RevisaoPojo implements RevisaoElemento {
 	@XmlAttribute
     private String actionType;
