@@ -3,7 +3,6 @@ package br.gov.lexml.eta.etaservices.printing.pdf;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -72,9 +70,8 @@ public class HTML2FOConverter {
 		
 		String html = "<table table_id=\"blxo9sgc3vs\" border=\"1\" style=\"width:10\"><tbody><tr row_id=\"4j93afnxz3d\"><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"d42la0hzavh\" ><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"rn637mq1g1\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"9r7vrbxou2g\" width=\"70\"><p>asd</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"4j93afnxz3d\" cell_id=\"0gttwfm47k3i\" width=\"10\"><p>1</p></td></tr><tr row_id=\"9mkbzh2lxuj\"><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"rdvbktvyuva\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"t6fbhsrmgea\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"h7jfhpzmize\" width=\"70\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"9mkbzh2lxuj\" cell_id=\"ufr2ks5r2u\" width=\"10\"><p>1</p></td></tr><tr row_id=\"irujxrvemal\"><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"axpw4fpst76\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"at9mi8se1qa\" width=\"10\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"w8l6fyiq5vl\" width=\"70\"><p>1</p></td><td class=\"td-q\" table_id=\"blxo9sgc3vs\" row_id=\"irujxrvemal\" cell_id=\"ajua79g7sjh\" width=\"10\"><p>1</p></td></tr></tbody></table><p><br></p>";
 		
-		System.out.println(html);
-		System.out.println("-----------------");
-		System.out.println(new HTML2FOConverter().html2fo(html));
+		log.debug(html);
+		log.debug(new HTML2FOConverter().html2fo(html));
 	}
 	
 	// HTML to XSL-FO
@@ -147,7 +144,7 @@ public class HTML2FOConverter {
 	        // Coloca div para poder processar conteúdo inline.
 	        xhtml = "<div>" + xhtml + "</div>";
 	        
-//        	System.out.println(xhtml);
+//        	log.debug(xhtml);
 	        if (log.isDebugEnabled()) {
 	        	log.debug("xhtml2fo: xhtml depois=\n"+xhtml);
 	        }
@@ -283,7 +280,7 @@ public class HTML2FOConverter {
 		String colWidths = m.getColWidths(); 
 		table.addAttribute("colwidths", colWidths);
 		
-//		System.out.println(">>>>>>>>>>>>>>>>>>>> " + colWidths);
+//		log.debug(">>>>>>>>>>>>>>>>>>>> " + colWidths);
 		
 	}
 	
@@ -327,7 +324,7 @@ public class HTML2FOConverter {
 
 		public void addCell(CellInfo cellInfo) {
 			
-//			System.out.println("addCell - " + cellInfo );
+//			log.debug("addCell - " + cellInfo );
 			
 			List<CellInfo> r = getRow(cellInfo);
 			r.add(cellInfo);

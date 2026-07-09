@@ -44,26 +44,30 @@ public class VelocityExtension {
 		}
 	}
 	
-	// HTML to XSL-FO
-	public String html2fo(String html) {
-		try {
-//			log.info("HTML\n---------------------------\n" + html);
-			String fo = html2foConverter.html2fo(StringEscapeUtils.unescapeHtml4(html));
-//			log.info("FO\n---------------------------\n" + fo);
-			return VelocityExtensionUtils.render(fo, ctx, velocityEngine);
-		} catch (Exception e) {
-			log.error("Falha na conversão para FO", e);
-			return e.getLocalizedMessage();
-		}
+	public String escapeXml(String html) {
+	    return StringEscapeUtils.escapeXml11(html);
 	}
+	
+    // HTML to XSL-FO
+    public String html2fo(String html) {
+        try {
+//          log.debug("HTML\n---------------------------\n" + html);
+            String fo = html2foConverter.html2fo(html);
+//          log.debug("FO\n---------------------------\n" + fo);
+            return VelocityExtensionUtils.render(fo, ctx, velocityEngine);
+        } catch (Exception e) {
+            log.error("Falha na conversão para FO", e);
+            return e.getLocalizedMessage();
+        }
+    }
 	
 	public String html2foTextoLivre(String html) {
 		
 		html = trataImagens(html);
 		
-//		System.out.println("---------------------------");
-//		System.out.println(html);
-//		System.out.println("---------------------------");
+//		log.debug("---------------------------");
+//		log.debug(html);
+//		log.debug("---------------------------");
 		
 		html = addStyle(html, "(p|ol|ul)", "margin-bottom: $pMarginBottom");
 		
