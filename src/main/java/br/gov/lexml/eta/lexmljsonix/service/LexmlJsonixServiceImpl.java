@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import br.gov.lexml.eta.lexmljsonix.conversor.LexmlJsonixProperties;
 import br.gov.lexml.eta.lexmljsonix.utils.ZipUtils;
 
 public class LexmlJsonixServiceImpl implements LexmlJsonixService {
+    
+    private static final Logger log = LoggerFactory.getLogger(LexmlJsonixServiceImpl.class);
 
 	private ConversorLexmlJsonix conversorLexmlJsonix;
 	private LexmlJsonixProperties jsonixProperties;
@@ -92,21 +96,33 @@ public class LexmlJsonixServiceImpl implements LexmlJsonixService {
 		Proposicao proposicao = getProposicao(sigla, ano, numero, preferirSubstitutivo);
 		if (ObjectUtils.isEmpty(proposicao.getIdSdlegDocumentoItemDigital()))
 			return null;
-		return getTextoProposicaoAsXml(proposicao.getIdSdlegDocumentoItemDigital());
+		return getTextoProposicaoAsXml(proposicao.getIdSdlegDocumentoItemDigital(), sigla);
 	}
 
 	@Override
-	public String getTextoProposicaoAsXml(String idSdlegDocumentoItemDigital) {
+	public String getTextoProposicaoAsXml(String idSdlegDocumentoItemDigital, String sigla) {
 		try {
 			byte[] zip = getLexmlZip(idSdlegDocumentoItemDigital);
 	        byte[] xml = ZipUtils.readEntry(zip, "texto.xml");
-	        return xml==null ? null : new String(xml);
+	        String xmlString = xml==null ? null : new String(xml);
+	        return corrigeURN(xmlString, sigla);
 		} catch (IOException e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
-	/**
+	private String corrigeURN(String xmlString, String sigla) {
+	    // Correção rápida e suja da URN de PLP com URN de PL
+	    if (xmlString != null && "plp".equalsIgnoreCase(sigla)) {
+	        xmlString = xmlString.replaceAll(
+	            "(<Identificacao\\s+URN=\"urn:lex:br:(senado\\.federal|camara\\.deputados)):projeto\\.lei(\\.complementar)?;pl:",
+	            "$1:projeto.lei.complementar;plp:"
+	        );
+	    }	    
+        return xmlString;
+    }
+
+    /**
 	 * {@inheritDoc}
 	 *
 	 * Este método utiliza um bean que implementa a interface ConversorLexmlJsonix para realizar a conversão
@@ -118,7 +134,7 @@ public class LexmlJsonixServiceImpl implements LexmlJsonixService {
 		Proposicao proposicao = getProposicao(sigla, ano, numero, preferirSubstitutivo);
 		if (ObjectUtils.isEmpty(proposicao.getIdSdlegDocumentoItemDigital()))
 			return null;
-		return getTextoProposicaoAsJson(proposicao.getIdSdlegDocumentoItemDigital());
+		return getTextoProposicaoAsJson(proposicao.getIdSdlegDocumentoItemDigital(), sigla);
 	}
 
 	/**
@@ -129,8 +145,8 @@ public class LexmlJsonixServiceImpl implements LexmlJsonixService {
 	 *
 	 */
 	@Override
-	public String getTextoProposicaoAsJson(String idSdlegDocumentoItemDigital) {
-		String xml = getTextoProposicaoAsXml(idSdlegDocumentoItemDigital);
+	public String getTextoProposicaoAsJson(String idSdlegDocumentoItemDigital, String sigla) {
+		String xml = getTextoProposicaoAsXml(idSdlegDocumentoItemDigital, sigla);
 		return conversorLexmlJsonix.xmlToJson(xml);
 	}
 
@@ -208,7 +224,7 @@ public class LexmlJsonixServiceImpl implements LexmlJsonixService {
 		String url = jsonixProperties.getUrlDatasMPVs() + idsProcessos.stream()
 			.map(idProcesso -> idProcesso.toString())
 			.reduce("?", (queryParam, idProcesso) ->  queryParam + "idsProcessos=" + idProcesso + "&");
-		System.out.println("URL: " + url);
+		log.debug("URL: " + url);
 		ResponseEntity<List<DatasMP>> responseEntity = restTemplate
 				.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<DatasMP>>(){});
 		return responseEntity.getBody();
