@@ -64,13 +64,7 @@ public class VelocityTemplateProcessor {
      */
     private String getVelocityResult(String template, final Emenda emenda) {
 
-        VelocityEngine ve = new VelocityEngine();
-
-        // Força o Velocity a usar o SLF4J (que o Logback implementa)
-        ve.setProperty(CommonsLogLogChute.LOGCHUTE_COMMONS_LOG_NAME, getClass().getName());
-        ve.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, CommonsLogLogChute.class.getName());       
-
-        ve.init();
+        VelocityEngine ve = createVelocityEngine();
 
         VelocityContext ctx = new VelocityContext();
 
@@ -162,11 +156,7 @@ public class VelocityTemplateProcessor {
      */
     private String getVelocityResult(String template, final Parecer parecer) {
 
-        VelocityEngine ve = new VelocityEngine();
-
-        ve.setProperty("runtime.log.logsystem.log4j.logger", getClass().getName());
-
-        ve.init();
+        VelocityEngine ve = createVelocityEngine();
 
         VelocityContext ctx = new VelocityContext();
 
@@ -219,4 +209,17 @@ public class VelocityTemplateProcessor {
 
         return result;
     }
+
+    private VelocityEngine createVelocityEngine() {
+        VelocityEngine ve = new VelocityEngine();
+
+        // Força o Velocity a usar o SLF4J (que o Logback implementa)
+        ve.setProperty(CommonsLogLogChute.LOGCHUTE_COMMONS_LOG_NAME, getClass().getName());
+        ve.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, CommonsLogLogChute.class.getName());       
+
+        ve.init();
+        
+        return ve;
+    }
+
 }
