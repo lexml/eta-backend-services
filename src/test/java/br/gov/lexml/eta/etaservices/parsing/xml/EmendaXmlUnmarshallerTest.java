@@ -3,6 +3,7 @@ package br.gov.lexml.eta.etaservices.parsing.xml;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.FileWriter;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.io.IOUtils;
@@ -79,6 +80,42 @@ class EmendaXmlUnmarshallerTest {
         Emenda emenda = unmarshaller.fromXml(xml);
 
         assertThat(emenda.getSequenciasComentario()).isEmpty();
+    }
+
+    @Test
+    void fromXmlComAnexoParecerRetornaTrue() throws Exception {
+        String xml = IOUtils.resourceToString("/mp-com-revisoes.xml", StandardCharsets.UTF_8)
+                .replace("</Metadados>", "<AnexoParecer>true</AnexoParecer></Metadados>");
+
+        Emenda emenda = unmarshaller.fromXml(xml);
+        StringWriter jsonWriter = new StringWriter();
+        new EmendaJsonGeneratorBean().writeJson(emenda, jsonWriter);
+
+        assertThat(emenda.isAnexoParecer()).isTrue();
+        assertThat(emenda.getJustificativa()).isNull();
+        assertThat(emenda.getJustificativaAntesRevisao()).isNull();
+        assertThat(emenda.getLocal()).isNull();
+        assertThat(emenda.getData()).isNull();
+        assertThat(emenda.getAutoria()).isNull();
+        assertThat(emenda.getNotasRodape()).isEmpty();
+        assertThat(jsonWriter.toString())
+                .doesNotContain("\"justificativa\"")
+                .doesNotContain("\"justificativaAntesRevisao\"")
+                .doesNotContain("\"local\"")
+                .doesNotContain("\"data\"")
+                .doesNotContain("\"autoria\"");
+    }
+
+    @Test
+    void fromXmlSemAnexoParecerGeraFalseNoJson() throws Exception {
+        String xml = IOUtils.resourceToString("/mp-com-revisoes.xml", StandardCharsets.UTF_8);
+        Emenda emenda = unmarshaller.fromXml(xml);
+        StringWriter jsonWriter = new StringWriter();
+
+        new EmendaJsonGeneratorBean().writeJson(emenda, jsonWriter);
+
+        assertThat(emenda.isAnexoParecer()).isFalse();
+        assertThat(jsonWriter.toString()).contains("\"anexoParecer\" : false");
     }
 
     private String blocoSequenciasComentario() {

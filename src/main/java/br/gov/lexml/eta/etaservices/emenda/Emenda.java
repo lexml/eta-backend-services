@@ -20,6 +20,8 @@ public interface Emenda {
 
     ModoEdicaoEmenda getModoEdicao();
 
+    boolean isAnexoParecer();
+
     Map<String, Object> getMetadados();
 
     RefProposicaoEmendada getProposicao();

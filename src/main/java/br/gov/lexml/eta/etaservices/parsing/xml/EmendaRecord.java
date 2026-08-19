@@ -30,6 +30,7 @@ public final class EmendaRecord implements Emenda {
     private final String aplicacao;
     private final String versaoAplicacao;
     private final ModoEdicaoEmenda modoEdicao;
+    private final boolean anexoParecer;
     private final Map<String, Object> metadados;
     private final RefProposicaoEmendada proposicao;
     private final ColegiadoApreciador colegiado;
@@ -56,6 +57,7 @@ public final class EmendaRecord implements Emenda {
             String aplicacao,
             String versaoAplicacao,
             ModoEdicaoEmenda modoEdicao,
+            boolean anexoParecer,
             Map<String, Object> metadados,
             RefProposicaoEmendada proposicao,
             ColegiadoApreciador colegiado,
@@ -79,6 +81,7 @@ public final class EmendaRecord implements Emenda {
         this.aplicacao = aplicacao;
         this.versaoAplicacao = versaoAplicacao;
         this.modoEdicao = modoEdicao;
+        this.anexoParecer = anexoParecer;
         this.metadados = metadados;
         this.proposicao = proposicao;
         this.colegiado = colegiado;
@@ -118,6 +121,11 @@ public final class EmendaRecord implements Emenda {
     @Override
 	public ModoEdicaoEmenda getModoEdicao() {
         return modoEdicao;
+    }
+
+    @Override
+    public boolean isAnexoParecer() {
+        return anexoParecer;
     }
 
     @Override
@@ -208,6 +216,7 @@ public final class EmendaRecord implements Emenda {
                 Objects.equals(this.aplicacao, that.aplicacao) &&
                 Objects.equals(this.versaoAplicacao, that.versaoAplicacao) &&
                 Objects.equals(this.modoEdicao, that.modoEdicao) &&
+                this.anexoParecer == that.anexoParecer &&
                 Objects.equals(this.metadados, that.metadados) &&
                 Objects.equals(this.proposicao, that.proposicao) &&
                 Objects.equals(this.colegiado, that.colegiado) &&
@@ -225,7 +234,7 @@ public final class EmendaRecord implements Emenda {
 
     @Override
     public int hashCode() {
-        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmendaTextoLivre, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao, substituicaoTermo);
+        return Objects.hash(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, anexoParecer, metadados, proposicao, colegiado, epigrafe, componentes, comandoEmendaTextoLivre, comandoEmenda, justificativa, local, data, autoria, opcoesImpressao, substituicaoTermo);
     }
     
     @Override
@@ -250,6 +259,7 @@ public final class EmendaRecord implements Emenda {
                 "aplicacao=" + aplicacao + ", " +
                 "versaoAplicacao=" + versaoAplicacao + ", " +
                 "modoEdicao=" + modoEdicao + ", " +
+                "anexoParecer=" + anexoParecer + ", " +
                 "metadados=" + metadados + ", " +
                 "proposicao=" + proposicao + ", " +
                 "colegiado=" + colegiado + ", " +

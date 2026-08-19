@@ -26,6 +26,7 @@ public class EmendaPojo implements Emenda {
     private String aplicacao;
     private String versaoAplicacao;
     private ModoEdicaoEmenda modoEdicao;
+    private boolean anexoParecer;
     private Map<String, Object> metadados;
     private RefProposicaoEmendadaPojo proposicao;
     private ColegiadoApreciadorPojo colegiado;
@@ -85,6 +86,15 @@ public class EmendaPojo implements Emenda {
     @SuppressWarnings("unused")
     public void setModoEdicao(ModoEdicaoEmenda modoEdicao) {
         this.modoEdicao = modoEdicao;
+    }
+
+    @Override
+    public boolean isAnexoParecer() {
+        return anexoParecer;
+    }
+
+    public void setAnexoParecer(boolean anexoParecer) {
+        this.anexoParecer = anexoParecer;
     }
 
     @Override
@@ -266,6 +276,7 @@ public class EmendaPojo implements Emenda {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (anexoParecer ? 1231 : 1237);
 		result = prime * result + ((anexos == null) ? 0 : anexos.hashCode());
 		result = prime * result + ((aplicacao == null) ? 0 : aplicacao.hashCode());
 		result = prime * result + ((autoria == null) ? 0 : autoria.hashCode());
@@ -298,6 +309,8 @@ public class EmendaPojo implements Emenda {
 		if (getClass() != obj.getClass())
 			return false;
 		EmendaPojo other = (EmendaPojo) obj;
+		if (anexoParecer != other.anexoParecer)
+			return false;
 		if (anexos == null) {
 			if (other.anexos != null)
 				return false;
@@ -406,7 +419,7 @@ public class EmendaPojo implements Emenda {
 	@Override
 	public String toString() {
         return "EmendaPojo [dataUltimaModificacao=" + dataUltimaModificacao + ", aplicacao=" + aplicacao
-				+ ", versaoAplicacao=" + versaoAplicacao + ", modoEdicao=" + modoEdicao + ", metadados=" + metadados
+				+ ", versaoAplicacao=" + versaoAplicacao + ", modoEdicao=" + modoEdicao + ", anexoParecer=" + anexoParecer + ", metadados=" + metadados
 				+ ", proposicao=" + proposicao + ", colegiado=" + colegiado + ", epigrafe=" + epigrafe
 				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre=" + comandoEmendaTextoLivre 
                 + ", substituicaoTermo" + substituicaoTermo + ", anexos=" + anexos + ", justificativa=" + justificativa 

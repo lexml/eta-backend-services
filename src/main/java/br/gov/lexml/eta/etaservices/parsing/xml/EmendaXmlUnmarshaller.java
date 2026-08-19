@@ -68,6 +68,7 @@ public class EmendaXmlUnmarshaller {
 
         final AtributosEmenda atributosEmenda = parseAtributosEmenda(rootElement);
         final Metadados metadados = parseMetadados(rootElement);
+        final boolean anexoParecer = metadados.isAnexoParecer();
         final RefProposicaoEmendada proposicao = parseProposicao(rootElement);
         final ColegiadoApreciador colegiadoApreciador = parseColegiado(rootElement);
         final Epigrafe epigrafe = parseEpigrafe(rootElement);
@@ -76,12 +77,12 @@ public class EmendaXmlUnmarshaller {
         final ComandoEmendaTextoLivre comandoEmendaTextoLivre = parseComandoEmendaTextoLivre(rootElement);
         final ComandoEmenda comandoEmenda = parseComandoEmenda(rootElement);
         final SubstituicaoTermo substituicaoTermo = parseSubstituicaoTermo(rootElement);
-        final String justificativa = parseJustificativa(rootElement);
-        final String JustificativaAntesRevisao = parseJustificativaAntesRevisao(rootElement);
-        final Autoria autoria = parseAutoria(rootElement);
+        final String justificativa = anexoParecer ? null : parseJustificativa(rootElement);
+        final String JustificativaAntesRevisao = anexoParecer ? null : parseJustificativaAntesRevisao(rootElement);
+        final Autoria autoria = anexoParecer ? null : parseAutoria(rootElement);
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
-        final List<? extends NotaRodape> notasRodape = parseNotasRodape(rootElement);
+        final List<? extends NotaRodape> notasRodape = anexoParecer ? List.of() : parseNotasRodape(rootElement);
         final List<? extends SequenciaComentario> sequenciasComentario = parseSequenciasComentario(rootElement);
         final List<String> pendenciasPreenchimento = parsePendenciasPreenchimento(rootElement);
 
@@ -90,6 +91,7 @@ public class EmendaXmlUnmarshaller {
                 metadados.getAplicacao(),
                 metadados.getVersaoAplicacao(),
                 metadados.getModoEdicao(),
+                metadados.isAnexoParecer(),
                 metadados.getMeta(),
                 proposicao,
                 colegiadoApreciador,
@@ -101,8 +103,8 @@ public class EmendaXmlUnmarshaller {
                 anexos,
                 justificativa,
                 JustificativaAntesRevisao,
-                atributosEmenda.getLocal(),
-                atributosEmenda.getData(),
+                anexoParecer ? null : atributosEmenda.getLocal(),
+                anexoParecer ? null : atributosEmenda.getData(),
                 autoria,
                 opcoesImpressao,
                 revisoes,
@@ -136,6 +138,7 @@ public class EmendaXmlUnmarshaller {
         String aplicacao = "";
         String versaoAplicacao = "";
         ModoEdicaoEmenda modoEdicao = EMENDA;
+        boolean anexoParecer = false;
         final Map<String, Object> meta = new LinkedHashMap<>();
         for (Node n : metadados) {
             switch (n.getName()) {
@@ -153,13 +156,16 @@ public class EmendaXmlUnmarshaller {
                     String me = n.getStringValue();
                     modoEdicao = ModoEdicaoEmenda.parse(me);
                     break;
+                case "AnexoParecer":
+                    anexoParecer = booleanAttributeValue(n.getStringValue().trim());
+                    break;
                 default:
                     meta.put(n.getName(), n.getStringValue());
                     break;
             }
 
         }
-        return new Metadados(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, meta);
+        return new Metadados(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, anexoParecer, meta);
     }
 
     private RefProposicaoEmendada parseProposicao(final Element rootElement) {

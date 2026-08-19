@@ -1,8 +1,12 @@
 package br.gov.lexml.eta.etaservices.printing.pdf;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.xmlunit.assertj3.XmlAssert.assertThat;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,8 +20,11 @@ import java.util.Map;
 import javax.xml.transform.Source;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.xmlunit.builder.Input;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,6 +45,48 @@ class VelocityTemplateProcessorTest {
     private String xml;
 
     private VelocityTemplateProcessor velocityTemplateProcessor;
+
+    @Test
+    @DisplayName("Não imprime justificação, local, data ou autoria quando a emenda é anexo de parecer")
+    void naoImprimeDadosSuprimidosNoAnexoParecer() throws Exception {
+        EmendaPojo emendaPojo = (EmendaPojo) emenda;
+        emendaPojo.setAnexoParecer(true);
+        emendaPojo.setJustificativa("<p>JUSTIFICATIVA_NAO_DEVE_APARECER</p>");
+        emendaPojo.setLocal("LOCAL_NAO_DEVE_APARECER");
+
+        String templateResult = velocityTemplateProcessor.getTemplateResult(emendaPojo);
+
+        assertFalse(templateResult.contains("JUSTIFICATIVA_NAO_DEVE_APARECER"));
+        assertFalse(templateResult.contains("LOCAL_NAO_DEVE_APARECER"));
+        assertFalse(templateResult.contains("role=\"Justificativa\""));
+        assertFalse(templateResult.contains("role=\"fecho\""));
+        assertFalse(templateResult.contains("role=\"Signatários\""));
+        assertFalse(templateResult.contains("Alessandro Vieira"));
+
+        ByteArrayOutputStream pdfOutput = new ByteArrayOutputStream();
+        new FOPProcessor().processFOP(pdfOutput, templateResult, convertToXml(emendaPojo), TipoDocumento.EMENDA);
+
+        try (PDDocument pdf = PDDocument.load(new ByteArrayInputStream(pdfOutput.toByteArray()))) {
+            String textoPdf = new PDFTextStripper().getText(pdf);
+            assertFalse(textoPdf.contains("JUSTIFICATIVA_NAO_DEVE_APARECER"));
+            assertFalse(textoPdf.contains("LOCAL_NAO_DEVE_APARECER"));
+            assertFalse(textoPdf.contains("Alessandro Vieira"));
+        }
+    }
+
+    @Test
+    @DisplayName("Mantém justificação, local, data e autoria na impressão comum")
+    void mantemDadosNaEmendaComum() throws IOException {
+        EmendaPojo emendaPojo = (EmendaPojo) emenda;
+        emendaPojo.setAnexoParecer(false);
+
+        String templateResult = velocityTemplateProcessor.getTemplateResult(emendaPojo);
+
+        assertTrue(templateResult.contains("role=\"Justificativa\""));
+        assertTrue(templateResult.contains("role=\"fecho\""));
+        assertTrue(templateResult.contains("role=\"Signatários\""));
+        assertTrue(templateResult.contains("Alessandro Vieira"));
+    }
 
     
     @DisplayName("Verifica se nome da aplicação é preenchido")

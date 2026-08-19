@@ -178,6 +178,7 @@ class EmendaXmlMarshallingTest {
         assertEquals("Aplicação Teste", metadadosElement.selectNodes("//Aplicacao").get(0).getText());
         assertEquals("1.0.0", metadadosElement.selectNodes("//VersaoAplicacao").get(0).getText());
         assertEquals(ModoEdicaoEmenda.EMENDA.getNome(), metadadosElement.selectNodes("//ModoEdicao").get(0).getText());
+        assertEquals("false", metadadosElement.selectNodes("//AnexoParecer").get(0).getText());
         assertEquals(0, metadadosElement.selectNodes("//Autor").size()); // Sem metadados
         assertEquals(0, metadadosElement.selectNodes("//Revisao").size()); // Sem metadados
     }
@@ -189,6 +190,7 @@ class EmendaXmlMarshallingTest {
         emenda.setAplicacao("Aplicação Teste");
         emenda.setVersaoAplicacao("1.0.0");
         emenda.setModoEdicao(ModoEdicaoEmenda.EMENDA);
+        emenda.setAnexoParecer(true);
 
         Map<String, Object> metadados = new HashMap<>();
         metadados.put("Autor", "João");
@@ -204,6 +206,7 @@ class EmendaXmlMarshallingTest {
         assertEquals("Aplicação Teste", emendaElement.selectNodes("//Aplicacao").get(0).getText());
         assertEquals("1.0.0", emendaElement.selectNodes("//VersaoAplicacao").get(0).getText());
         assertEquals(ModoEdicaoEmenda.EMENDA.getNome(), emendaElement.selectNodes("//ModoEdicao").get(0).getText());
+        assertEquals("true", emendaElement.selectNodes("//AnexoParecer").get(0).getText());
         assertEquals("João", emendaElement.selectNodes("//Autor").get(0).getText());
         assertEquals("1", emendaElement.selectNodes("//Revisao").get(0).getText());
     }
@@ -1230,7 +1233,8 @@ class EmendaXmlMarshallingTest {
         Document document = DocumentHelper.parseText(xmlEmenda);
 
         assertEquals(1, document.selectNodes("//Emenda").size());
-        assertEquals(4, document.selectNodes("//Metadados/*").size());
+        assertEquals(5, document.selectNodes("//Metadados/*").size());
+        assertEquals("false", document.selectSingleNode("//Metadados/AnexoParecer").getText());
 
         assertEquals(1, document.selectNodes("//Proposicao").size());
         Element proposicao = (Element) document.selectNodes("//Proposicao").get(0);
@@ -1341,6 +1345,32 @@ class EmendaXmlMarshallingTest {
         assertEquals( "16", opcoesImpressao.attributeValue("tamanhoFonte"));
         assertEquals("false", opcoesImpressao.attributeValue("reduzirEspacoEntreLinhas"));
 
+    }
+
+    @Test
+    void deveManterEstruturaSemPreencherDadosNaoAplicaveisAoAnexoParecer() throws Exception {
+        EmendaPojo emenda = (EmendaPojo) setupEmenda();
+        emenda.setAnexoParecer(true);
+
+        Document document = DocumentHelper.parseText(marshaller.toXml(emenda));
+        Element emendaElement = document.getRootElement();
+
+        assertEquals("true", document.selectSingleNode("//Metadados/AnexoParecer").getText());
+        assertNull(emendaElement.attributeValue("local"));
+        assertNull(emendaElement.attributeValue("data"));
+        Node justificativa = document.selectSingleNode("//Justificativa");
+        assertNotNull(justificativa);
+        assertEquals("", justificativa.getText());
+        assertEquals(0, document.selectNodes("//JustificativaAntesRevisao").size());
+        Element autoria = (Element) document.selectSingleNode("//Autoria");
+        assertNotNull(autoria);
+        assertEquals(TipoAutoria.PARLAMENTAR.getDescricao(), autoria.attributeValue("tipo"));
+        assertEquals("true", autoria.attributeValue("imprimirPartidoUF"));
+        assertEquals("0", autoria.attributeValue("quantidadeAssinaturasAdicionaisDeputados"));
+        assertEquals("0", autoria.attributeValue("quantidadeAssinaturasAdicionaisSenadores"));
+        assertEquals(0, autoria.elements().size());
+        assertEquals(0, document.selectNodes("//NotasRodape").size());
+        assertEquals(1, document.selectNodes("//OpcoesImpressao").size());
     }
 
     private static Element createRootElement() {

@@ -76,7 +76,7 @@
 					<dc:creator>
 						<rdf:Seq>
 							<rdf:li>
-							#if (!$ve.isEmpty($emenda.autoria.parlamentares))
+							#if (!$emenda.anexoParecer && !$ve.isEmpty($emenda.autoria.parlamentares))
 								$emenda.autoria.parlamentares[0].tratamento
 								$emenda.autoria.parlamentares[0].nome
 							#end
@@ -302,7 +302,7 @@
 
 				
 ## Justificativa ----------------------------------------------------------------
-				#if ($emenda.justificativa)
+				#if (!$emenda.anexoParecer && $emenda.justificativa)
 				<fo:block font-size="$maxTamanhoFonte" font-weight="bold"
 					keep-with-next="always" space-before="$spacing3" text-align="center"
 					white-space-collapse="false">JUSTIFICAÇÃO</fo:block>
@@ -383,6 +383,7 @@
 				</fo:block>
 				#end
 			</fo:block-container>
+			#if (!$emenda.anexoParecer)
 			<fo:block-container>
 ## Local e data ----------------------------------------------------------------
 				<fo:block keep-with-next.within-page="always"
@@ -552,6 +553,7 @@
 					#end
 				</fo:block>
 			</fo:block-container>
+			#end
 		</fo:flow>
 	</fo:page-sequence>
 </fo:root>
