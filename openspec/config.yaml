@@ -1,0 +1,51 @@
+schema: spec-driven
+
+context: |
+  Language: pt-BR
+  All artifacts must be written in pt-BR.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Tech stack: Java 11, Maven, Spring Boot 2.7 (library with auto-configuration,
+  not a standalone app), Velocity 1.7 + Apache FOP 2.7 for PDF/A generation,
+  JAXB/dom4j for XML, Jackson for JSON, JUnit 5 + AssertJ + XMLUnit for tests.
+  This library is consumed by the lexml-emenda, lexml-eta and lexml-parecer
+  front-end components (via their host backends).
+
+  Change naming convention: every change directory under openspec/changes/
+  (including the argument passed to `openspec new change`) MUST already be
+  named `<yyyy>-<mm>-<dd>-c<xx>-<change-name>` (e.g.
+  `2026-09-24-c01-anexo-parecer-pdf`) — the date the change is
+  created, plus a 2-digit sequential counter that restarts at c01 on each
+  new day. Do not create a change with a bare name and rely on `openspec
+  archive` to prepend the date later; resolve the correct next counter for
+  today's date first (check openspec/changes/ and openspec/changes/archive/
+  for the highest existing `cXX` used today) and pass the full dated name
+  to `openspec new change` from the start.
+
+# Per-artifact rules
+rules:
+  tasks:
+    - |
+      Always include an explicit automated testing task using JUnit 5 (unit tests and/or
+      tests exercising the full pipeline, e.g. JSON -> PDF -> extracted JSON/XML round-trip,
+      Velocity template output, XML marshalling/unmarshalling). Tests must run with
+      `mvn test` without external services (no network, no jsonix-lexml executable).
+      If an automated test is not feasible or not worth the effort, don't silently omit
+      the step: record the decision and propose a concrete alternative (e.g., manual
+      verification via the Json2PDF/Json2PDFParecer helpers with a documented checklist)
+      that covers the same risk.
+
+# Per-operation guidance
+operations:
+  apply:
+    guidance:
+      - |
+        After finishing all subtasks of a numbered task (e.g., all of 2.x before moving to
+        3.x), stop and ask the user to validate before moving to the next numbered task —
+        never chain different numbered tasks without that pause.
+      - |
+        When pausing for validation, offer two options: the user commits on their own, or
+        you help organize the commit(s). If helping, always follow this guidance: group
+        edited files into semantically correct commits; give each one a concise description
+        (no file listing, no "AI-sounding" tone); never commit directly — present the commit
+        plan for the user's approval first; never list yourself as a co-author.
