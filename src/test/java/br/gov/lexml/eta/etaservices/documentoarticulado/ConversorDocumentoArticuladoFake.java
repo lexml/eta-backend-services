@@ -24,6 +24,11 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
     public static final String JSON_EXEMPLO = "/documentoarticulado/documento-articulado-exemplo.json";
     public static final String XML_EXEMPLO = "/documentoarticulado/documento-articulado-exemplo.xml";
 
+    /** Documentos anexados à issue #72 (pares .json/.xml em /documentoarticulado/). */
+    public static final String ARTICULACAO_E_ALTERACAO = "documento-com-articulacao-e-alteracao-de-norma";
+    public static final String CAPITULO_E_SECAO = "documento-com-capitulo-e-secao";
+    public static final String PENA_E_TITULO_DISPOSITIVO = "documento-com-pena-e-titulo-de-dispositivo";
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final Map<JsonNode, String> xmlPorJson = new LinkedHashMap<>();
@@ -35,6 +40,25 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
         ConversorDocumentoArticuladoFake fake = new ConversorDocumentoArticuladoFake();
         fake.registrar(recurso(JSON_EXEMPLO), recurso(XML_EXEMPLO));
         return fake;
+    }
+
+    /** Conversor com o par de exemplo e os documentos da issue #72 registrados. */
+    public static ConversorDocumentoArticuladoFake comDocumentosDeTeste() {
+        ConversorDocumentoArticuladoFake fake = comExemplo();
+        for (String nome : new String[] { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO }) {
+            fake.registrar(json(nome), xml(nome));
+        }
+        return fake;
+    }
+
+    /** Conteúdo de {@code /documentoarticulado/<nome>.json}. */
+    public static String json(String nome) {
+        return recurso("/documentoarticulado/" + nome + ".json");
+    }
+
+    /** Conteúdo de {@code /documentoarticulado/<nome>.xml}. */
+    public static String xml(String nome) {
+        return recurso("/documentoarticulado/" + nome + ".xml");
     }
 
     public ConversorDocumentoArticuladoFake registrar(String json, String xml) {

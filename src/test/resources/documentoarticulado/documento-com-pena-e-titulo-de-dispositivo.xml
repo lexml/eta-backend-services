@@ -1,0 +1,79 @@
+<LexML xmlns="http://www.lexml.gov.br/1.0" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lexedit="http://www.lexml.gov.br/lexedit/1.0"><Metadado><Identificacao URN="urn:lex:br:senado.federal:projeto.lei;pl:2026;999@data.evento;leitura;2026-09-16t16.01"/></Metadado><ProjetoNorma><Norma><ParteInicial><Epigrafe id="epigrafe">PROJETO DE LEI Nº 999, DE 2026 </Epigrafe><Ementa id="ementa">Tipifica os crimes de desvio de recursos da saúde pública, fraude em registros e inobservância da ordem de atendimento no Sistema Único de Saúde (SUS); altera o <span xlink:href="urn:lex:br:federal:decreto.lei:1940-12-07;2848">Decreto-Lei nº 2.848, de 7 de dezembro de 1940</span> (Código Penal); e dá outras providências. 
+</Ementa><Preambulo id="preambulo"><p>
+    O CONGRESSO NACIONAL decreta: 
+  </p></Preambulo></ParteInicial><Articulacao><Artigo id="art1"><Rotulo>Art. 1º</Rotulo><Caput id="art1_cpt"><p>
+    Esta Lei tipifica os crimes praticados contra a administração da saúde pública. 
+
+  </p></Caput></Artigo><Artigo id="art2"><TituloDispositivo>Desvio ou apropriação de recursos e insumos da saúde </TituloDispositivo><Rotulo>Art. 2º</Rotulo><Caput id="art2_cpt"><p>
+    Desviar, apropriar-se, utilizar, permitir a utilização ou dar destinação diversa da legalmente prevista a recursos financeiros, medicamentos, insumos, equipamentos ou materiais hospitalares ou quaisquer outros bens destinados a ações e serviços públicos de saúde, em proveito próprio ou alheio: 
+
+  </p><Pena id="art2_cpt_pena"><Rotulo>Pena –</Rotulo><p>
+    reclusão, de 4 (quatro) a 12 (doze) anos, e multa. 
+
+  </p></Pena></Caput><Paragrafo id="art2_par1"><Rotulo>§ 1º</Rotulo><p>
+    Incorre na mesma pena quem, tendo a posse, a guarda ou a administração dos bens ou recursos referidos no <i>caput</i>, permite seu desvio ou sua utilização em desacordo com a finalidade pública. 
+
+  </p></Paragrafo><Paragrafo id="art2_par2"><Rotulo>§ 2º</Rotulo><p>
+    A pena é aumentada de 1/3 (um terço) até 2/3 (dois terços) se a conduta: 
+
+  </p><Inciso id="art2_par2_inc1"><Rotulo>I –</Rotulo><p>
+    resulta na interrupção ou no comprometimento relevante de serviço público de saúde; 
+
+  </p></Inciso><Inciso id="art2_par2_inc2"><Rotulo>II –</Rotulo><p>
+    provoca o desabastecimento de medicamentos ou insumos essenciais; 
+
+  </p></Inciso><Inciso id="art2_par2_inc3"><Rotulo>III –</Rotulo><p>
+    envolve recursos destinados a serviços de urgência, emergência, atendimento hospitalar, vacinação ou tratamento de doenças graves; 
+
+  </p></Inciso><Inciso id="art2_par2_inc4"><Rotulo>IV –</Rotulo><p>
+    é praticada durante situação de emergência ou estado de calamidade pública. 
+
+  </p></Inciso><Inciso id="art2_par2_inc5"><Rotulo>V –</Rotulo><p>
+    envolve recursos destinados ao atendimento de crianças, idosos e pessoas em situação de particular vulnerabilidade. 
+
+  </p></Inciso></Paragrafo><Paragrafo id="art2_par3"><Rotulo>§ 3º</Rotulo><p>
+    Se da conduta resulta lesão corporal de natureza grave ou gravíssima: 
+
+  </p><Pena id="art2_par3_pena"><Rotulo>Pena –</Rotulo><p>
+    reclusão, de 6 (seis) a 14 (quatorze) anos, e multa. 
+
+  </p></Pena></Paragrafo><Paragrafo id="art2_par4"><Rotulo>§ 4º</Rotulo><p>
+    Se da conduta resulta morte: 
+
+  </p><Pena id="art2_par4_pena"><Rotulo>Pena –</Rotulo><p>
+    reclusão, de 8 (oito) a 20 (vinte) anos, e multa. 
+
+  </p></Pena></Paragrafo></Artigo><Artigo id="art3"><TituloDispositivo>Fraude em registros e sistemas da saúde pública </TituloDispositivo><Rotulo>Art. 3º</Rotulo><Caput id="art3_cpt"><p>
+    Fraudar, adulterar, falsificar ou inserir dados falsos em documentos, sistemas de informação, notas fiscais, registros de estoque ou prestações de contas, para ocultar ou facilitar o desvio de recursos ou insumos da saúde pública: 
+
+  </p><Pena id="art3_cpt_pena"><Rotulo>Pena –</Rotulo><p>
+    reclusão, de 3 (três) a 8 (oito) anos, e multa. 
+
+  </p></Pena></Caput></Artigo><Artigo id="art4"><TituloDispositivo>Inobservância ilícita da ordem de atendimento </TituloDispositivo><Rotulo>Art. 4º</Rotulo><Caput id="art4_cpt"><p>
+    Alterar, violar ou desrespeitar, injustificadamente, a ordem de precedência de atendimento, exames, cirurgias ou procedimentos fixada pela unidade de saúde ou pelo Sistema Único de Saúde (SUS), em benefício próprio ou de terceiro: 
+
+  </p><Pena id="art4_cpt_pena"><Rotulo>Pena –</Rotulo><p>
+    reclusão, de 2 (dois) a 6 (seis) anos, e multa. 
+
+  </p></Pena></Caput><Paragrafo id="art4_par1u"><Rotulo>Parágrafo único.</Rotulo><p>
+    Incorre na mesma pena o agente público ou gestor que permite, facilita ou determina a alteração irregular da ordem de precedência. 
+
+  </p></Paragrafo></Artigo><Artigo id="art5"><Rotulo>Art. 5º</Rotulo><Caput id="art5_cpt"><p>
+    A condenação por qualquer dos crimes previstos nesta Lei acarreta, como efeito da condenação: 
+
+  </p><Inciso id="art5_cpt_inc1"><Rotulo>I –</Rotulo><p>
+    a perda do cargo, função pública ou mandato eletivo; 
+
+  </p></Inciso><Inciso id="art5_cpt_inc2"><Rotulo>II –</Rotulo><p>
+    a inabilitação para licitar ou contratar com a Administração Pública pelo prazo de 5 (cinco) a 10 (dez) anos. 
+
+  </p></Inciso></Caput></Artigo><Artigo id="art6"><Rotulo>Art. 6º</Rotulo><Caput id="art6_cpt"><p>
+    O <span xlink:href="urn:lex:br:federal:decreto.lei:1940-12-07;2848!art327">art. 327 do Decreto-Lei nº 2.848, de 7 de dezembro de 1940</span> (Código Penal), passa a vigorar acrescido do seguinte parágrafo: 
+
+  </p><Alteracao xml:base="urn:lex:br:federal:decreto.lei:1940-12-07;2848" id="art6_cpt_alt1"><Artigo xlink:href="art327" id="art6_cpt_alt1_art327" abreAspas="s"><Rotulo>Art. 327.</Rotulo><Caput textoOmitido="s" xlink:href="art327_cpt" id="art6_cpt_alt1_art327_cpt"/><Omissis id="art6_cpt_alt1_art327_omi1"/><Paragrafo xlink:href="art327_par3" id="art6_cpt_alt1_art327_par3" fechaAspas="s" notaAlteracao="NR"><Rotulo>§ 3º</Rotulo><p>
+    A pena será aumentada da metade se o crime for praticado contra a administração da saúde pública.
+
+  </p></Paragrafo></Artigo></Alteracao></Caput></Artigo><Artigo id="art7"><Rotulo>Art. 7º</Rotulo><Caput id="art7_cpt"><p>
+    Esta Lei entra em vigor na data de sua publicação. 
+
+  </p></Caput></Artigo></Articulacao></Norma></ProjetoNorma></LexML>
