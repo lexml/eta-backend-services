@@ -7,6 +7,7 @@ import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocument
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -35,10 +36,99 @@ class DocumentoArticuladoConteudoTransformerTest {
 
         assertThat(raiz.getQualifiedName()).isEqualTo("fo:block");
         List<Element> blocos = raiz.elements();
-        assertThat(blocos).hasSize(3);
+        assertThat(blocos).hasSize(4);
         assertThat(blocos.get(0).attributeValue("text-align")).isEqualTo("center");
         assertThat(blocos.get(1).attributeValue("space-before")).isEqualTo("48pt");
         assertThat(blocos.get(2).attributeValue("space-before")).isEqualTo("72pt");
+        // Articulação: formatação da citação de dispositivos da emenda, sem espaço antes (margin-bottom do preâmbulo)
+        Element articulacao = blocos.get(3);
+        assertThat(articulacao.attributeValue("text-indent")).isEqualTo("2.5cm");
+        assertThat(articulacao.attributeValue("text-align")).isEqualTo("justify");
+        assertThat(articulacao.attributeValue("line-height")).isEqualTo("150%");
+        assertThat(articulacao.attributeValue("space-before")).isNull();
+    }
+
+    @Test
+    void artigoComRotuloEmNegritoNoMesmoBlocoDoCaput() throws Exception {
+        List<Element> dispositivos = articulacao(xml(ARTICULACAO_E_ALTERACAO)).elements();
+
+        Element artigo1 = dispositivos.get(0);
+        Element rotulo = (Element) artigo1.elements().get(0);
+        assertThat(rotulo.attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(rotulo.getText()).isEqualTo("Art. 1º");
+        // span com xlink:href sai como texto simples
+        assertThat(texto(artigo1)).startsWith("Art. 1º Esta Lei altera a Lei nº 9.394, de 20 de dezembro de 1996, para");
+        assertThat(artigo1.asXML()).doesNotContain("basic-link").doesNotContain("urn:lex");
+        // Dispositivos sem margens próprias: não há espaço extra entre eles
+        for (Element dispositivo : dispositivos) {
+            assertThat(dispositivo.attributes()).isEmpty();
+        }
+    }
+
+    @Test
+    void dispositivosNaOrdemDoDocumento() throws Exception {
+        List<String> textos = textosDosDispositivos(articulacao(xml(CAPITULO_E_SECAO)));
+
+        assertPrefixosEmOrdem(textos,
+                "Art. 3º Observada a disponibilidade orçamentária e financeira",
+                "§ 1º",
+                "§ 2º Os recursos de que trata o caput:",
+                "I – serão repassados pelo Ministério da Fazenda aos agentes financeiros",
+                "II –",
+                "§ 3º");
+    }
+
+    @Test
+    void hierarquiaIncisoAlineaItem() throws Exception {
+        String xml = lexmlComArticulacao("<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Caput:</p>"
+                + "<Inciso id=\"art1_cpt_inc1\"><Rotulo>I –</Rotulo><p>inciso:</p>"
+                + "<Alinea id=\"art1_cpt_inc1_ali1\"><Rotulo>a)</Rotulo><p>alínea:</p>"
+                + "<Item id=\"art1_cpt_inc1_ali1_ite1\"><Rotulo>1.</Rotulo><p>item;</p></Item></Alinea>"
+                + "<Alinea id=\"art1_cpt_inc1_ali2\"><Rotulo>b)</Rotulo><p>outra alínea.</p></Alinea></Inciso></Caput>"
+                + "<Paragrafo id=\"art1_par1u\"><Rotulo>Parágrafo único.</Rotulo><p>Com <i>itálico</i>.</p></Paragrafo></Artigo>");
+
+        Element articulacao = articulacao(xml);
+
+        assertThat(textosDosDispositivos(articulacao)).containsExactly(
+                "Art. 1º Caput:", "I – inciso:", "a) alínea:", "1. item;", "b) outra alínea.", "Parágrafo único. Com itálico.");
+        assertThat(articulacao.asXML()).contains("<fo:inline font-style=\"italic\">itálico</fo:inline>");
+    }
+
+    @Test
+    void artigosDentroDeCapitulosESecoesSemRotuloENomeDoAgrupador() throws Exception {
+        Element articulacao = articulacao(xml(CAPITULO_E_SECAO));
+        String texto = texto(articulacao);
+
+        assertThat(textosDosDispositivos(articulacao).get(0)).startsWith("Art. 1º Fica instituído o Programa");
+        assertThat(texto).contains("Art. 4º");
+        assertThat(texto).doesNotContain("CAPÍTULO").doesNotContain("DISPOSIÇÕES PRELIMINARES")
+                .doesNotContain("Seção I").doesNotContain("Dos beneficiários");
+    }
+
+    @Test
+    void alteracaoDeNormaOmitida() throws Exception {
+        String texto = texto(articulacao(xml(ARTICULACAO_E_ALTERACAO)));
+
+        assertThat(texto).contains("Art. 2º A Lei nº 9.394, de 20 de dezembro de 1996, passa a vigorar acrescida do seguinte art. 12-A:")
+                .contains("Art. 3º Esta Lei entra em vigor na data de sua publicação.")
+                .doesNotContain("Art. 12-A.");
+    }
+
+    @Test
+    void penaETituloDeDispositivoOmitidos() throws Exception {
+        String texto = texto(articulacao(xml(PENA_E_TITULO_DISPOSITIVO)));
+
+        assertThat(texto).contains("Art. 2º Desviar, apropriar-se, utilizar")
+                .doesNotContain("Pena –")
+                .doesNotContain("Desvio ou apropriação de recursos e insumos da saúde");
+    }
+
+    @Test
+    void semAspasEnvolvendoAArticulacao() throws Exception {
+        List<String> textos = textosDosDispositivos(articulacao(xml(PENA_E_TITULO_DISPOSITIVO)));
+
+        assertThat(textos.get(0)).startsWith("Art. 1º");
+        assertThat(textos.get(textos.size() - 1)).doesNotEndWith("”").doesNotEndWith("\"");
     }
 
     @Test
@@ -106,31 +196,23 @@ class DocumentoArticuladoConteudoTransformerTest {
     }
 
     @Test
-    void naoImprimeTextoDosDispositivos() throws Exception {
-        assertThat(transformer.transformar(xml(ARTICULACAO_E_ALTERACAO), ParametrosImpressaoDocumentoArticulado.padrao()))
-                .doesNotContain("assegurar aos pais");
-        assertThat(transformer.transformar(xml(CAPITULO_E_SECAO), ParametrosImpressaoDocumentoArticulado.padrao()))
-                .doesNotContain("Fica instituído o Programa");
-        assertThat(transformer.transformar(xml(PENA_E_TITULO_DISPOSITIVO), ParametrosImpressaoDocumentoArticulado.padrao()))
-                .doesNotContain("Esta Lei tipifica");
-    }
-
-    @Test
     void elementoAusenteNaoGeraBlocoVazio() throws Exception {
         String xml = lexml("<Epigrafe id=\"epigrafe\">   </Epigrafe><Ementa id=\"ementa\">Dispõe sobre o tema.</Ementa>");
 
         List<Element> blocos = transformar(xml).getRootElement().elements();
 
-        assertThat(blocos).hasSize(1);
+        assertThat(blocos).hasSize(2);
         assertThat(blocos.get(0).attributeValue("margin-left")).isEqualTo("6.5cm");
+        assertThat(blocos.get(1).attributeValue("text-indent")).isEqualTo("2.5cm");
     }
 
     @Test
-    void documentoSemParteInicialGeraApenasARaiz() throws Exception {
+    void documentoSemParteInicialImprimeSoAArticulacao() throws Exception {
         Element raiz = transformar(lexml("")).getRootElement();
 
         assertThat(raiz.getQualifiedName()).isEqualTo("fo:block");
-        assertThat(raiz.elements()).isEmpty();
+        assertThat(raiz.elements()).hasSize(1);
+        assertThat(textosDosDispositivos((Element) raiz.elements().get(0))).containsExactly("Art. 1º Texto do artigo.");
     }
 
     @Test
@@ -151,14 +233,51 @@ class DocumentoArticuladoConteudoTransformerTest {
         return elemento.getStringValue().replaceAll("\\s+", " ").trim();
     }
 
+    /** Bloco da articulação: o que tem recuo de primeira linha de 2,5cm na raiz do fragmento. */
+    private Element articulacao(String xml) throws DocumentException {
+        List<Element> blocos = transformar(xml).getRootElement().elements();
+        return blocos.stream().filter(b -> "2.5cm".equals(b.attributeValue("text-indent"))
+                && b.attributeValue("space-before") == null).findFirst().orElseThrow(AssertionError::new);
+    }
+
+    /** Texto de cada dispositivo (bloco filho da articulação), com espaços normalizados. */
+    private static List<String> textosDosDispositivos(Element articulacao) {
+        List<String> textos = new ArrayList<>();
+        for (Element dispositivo : articulacao.elements()) {
+            textos.add(texto(dispositivo));
+        }
+        return textos;
+    }
+
+    /** Verifica que há, em sequência, dispositivos consecutivos que começam com cada prefixo informado. */
+    private static void assertPrefixosEmOrdem(List<String> textos, String... prefixos) {
+        int inicio = -1;
+        for (int i = 0; i < textos.size() && inicio < 0; i++) {
+            if (textos.get(i).startsWith(prefixos[0])) {
+                inicio = i;
+            }
+        }
+        assertThat(inicio).as("dispositivo iniciado por '%s'", prefixos[0]).isNotNegative();
+        for (int j = 1; j < prefixos.length; j++) {
+            assertThat(textos.get(inicio + j)).startsWith(prefixos[j]);
+        }
+    }
+
     /** Documento LexML mínimo com a parte inicial informada e um artigo na articulação. */
     private static String lexml(String parteInicial) {
+        return documento(parteInicial.isEmpty() ? "" : "<ParteInicial>" + parteInicial + "</ParteInicial>",
+                "<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Texto do artigo.</p></Caput></Artigo>");
+    }
+
+    /** Documento LexML mínimo sem parte inicial e com a articulação informada. */
+    private static String lexmlComArticulacao(String articulacao) {
+        return documento("", articulacao);
+    }
+
+    private static String documento(String parteInicial, String articulacao) {
         return "<LexML xmlns=\"http://www.lexml.gov.br/1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
                 + "<Metadado><Identificacao URN=\"urn:lex:br:senado.federal:projeto.lei:2026;1\"/></Metadado>"
-                + "<ProjetoNorma><Norma>"
-                + (parteInicial.isEmpty() ? "" : "<ParteInicial>" + parteInicial + "</ParteInicial>")
-                + "<Articulacao><Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Texto do artigo.</p></Caput></Artigo></Articulacao>"
-                + "</Norma></ProjetoNorma></LexML>";
+                + "<ProjetoNorma><Norma>" + parteInicial + "<Articulacao>" + articulacao + "</Articulacao></Norma></ProjetoNorma></LexML>";
     }
 
 }

@@ -59,17 +59,26 @@ class DocumentoArticuladoPdfGeneratorTest {
     @ParameterizedTest
     @CsvSource(delimiter = '|', value = {
             ARTICULACAO_E_ALTERACAO + "|PROJETO DE LEI Nº 999, DE 2026|Altera a Lei nº 9.394, de 20 de dezembro de 1996, que estabelece"
-                    + "|O CONGRESSO NACIONAL decreta:|assegurar aos pais",
+                    + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei altera a Lei nº 9.394|Art. 12-A.",
             CAPITULO_E_SECAO + "|MEDIDA PROVISÓRIA Nº 999, DE 2026|Institui o Programa Extraordinário de Reequilíbrio Financeiro"
-                    + "|O PRESIDENTE DA REPÚBLICA, no uso da atribuição|Fica instituído o Programa",
+                    + "|O PRESIDENTE DA REPÚBLICA, no uso da atribuição|Art. 1º Fica instituído o Programa|CAPÍTULO I",
             PENA_E_TITULO_DISPOSITIVO + "|PROJETO DE LEI Nº 999, DE 2026|Tipifica os crimes de desvio de recursos da saúde pública"
-                    + "|O CONGRESSO NACIONAL decreta:|Esta Lei tipifica" })
-    void imprimeAParteInicialNaOrdemSemOsDispositivos(String nome, String epigrafe, String ementa, String preambulo,
-            String dispositivo) throws Exception {
+                    + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei tipifica os crimes|Pena –" })
+    void imprimeParteInicialEArticulacaoNaOrdem(String nome, String epigrafe, String ementa, String preambulo,
+            String primeiroArtigo, String aindaNaoImpresso) throws Exception {
         String texto = textoNormalizado(gerarPdf(nome));
 
-        assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo);
-        assertThat(texto).doesNotContain(dispositivo).doesNotContain("Art. 1º");
+        assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo, primeiroArtigo);
+        // Elementos das partes 3 (agrupadores), 4 (alteração de norma) e 6 (pena) ainda não impressos
+        assertThat(texto).doesNotContain(aindaNaoImpresso);
+    }
+
+    @Test
+    void rotuloDoArtigoEmNegritoETextoDoCaputRegular() throws Exception {
+        Map<String, String> fontes = fontesPorPalavra(gerarPdf(PENA_E_TITULO_DISPOSITIVO));
+
+        assertThat(fontes.get("Art")).containsIgnoringCase("bold");
+        assertThat(fontes.get("tipifica")).doesNotContainIgnoringCase("bold");
     }
 
     @Test
