@@ -7,8 +7,8 @@
   Os valores de formatação foram copiados da emenda e têm a origem indicada em comentário.
 
   Imprime a parte inicial (epígrafe, ementa e preâmbulo; issue #72, parte 1) e a articulação básica
-  (artigo, caput, parágrafo, inciso, alínea e item; parte 2). Os demais elementos da #72 têm templates
-  vazios marcados com a parte responsável.
+  (artigo, caput, parágrafo, inciso, alínea e item; parte 2) com os agrupadores (parte 3). Os demais
+  elementos da #72 têm templates vazios marcados com a parte responsável.
   XSLT 1.0 (processador do JDK).
 -->
 <xsl:stylesheet version="1.0"
@@ -54,10 +54,90 @@
 		</fo:block>
 	</xsl:template>
 
-	<!-- Agrupadores: só atravessados para imprimir os artigos. Rótulo e nome: issue #72, parte 3. -->
-	<xsl:template match="lx:Parte | lx:Livro | lx:Titulo | lx:Capitulo | lx:Secao | lx:Subsecao | lx:Agrupamento"
-		mode="dispositivo">
+	<!--
+	  Agrupadores (issue #72, parte 3): rótulo e nome antes do conteúdo.
+	  Parte, Livro, Título e Capítulo: rótulo e nome em maiúsculas, rótulo em negrito.
+	  Seção e Subseção: rótulo e nome em negrito, com a capitalização do documento.
+	-->
+	<xsl:template match="lx:Parte | lx:Livro | lx:Titulo | lx:Capitulo" mode="dispositivo">
+		<xsl:call-template name="titulo-agrupador">
+			<xsl:with-param name="maiusculas" select="true()"/>
+			<xsl:with-param name="nomeEmNegrito" select="false()"/>
+		</xsl:call-template>
 		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:NomeAgrupador)]" mode="dispositivo"/>
+	</xsl:template>
+
+	<xsl:template match="lx:Secao | lx:Subsecao" mode="dispositivo">
+		<xsl:call-template name="titulo-agrupador">
+			<xsl:with-param name="maiusculas" select="false()"/>
+			<xsl:with-param name="nomeEmNegrito" select="true()"/>
+		</xsl:call-template>
+		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:NomeAgrupador)]" mode="dispositivo"/>
+	</xsl:template>
+
+	<!-- Agrupador genérico do lexml-eta, fora da lista da #72: só atravessado. -->
+	<xsl:template match="lx:Agrupamento" mode="dispositivo">
+		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:NomeAgrupador)]" mode="dispositivo"/>
+	</xsl:template>
+
+	<!--
+	  Título do agrupador: rótulo e nome em linhas próprias, somente texto. Emenda: citacao2html troca
+	  class="agrupador" por align="center" text-indent="0" (sem o text-indent o bloco herdaria o recuo de
+	  2,5cm da articulação) e seção/subseção por font-weight="bold"; rótulo em strong. Sem espaço extra
+	  antes ou depois. keep-together mantém rótulo e nome na mesma página, e keep-with-next mantém o
+	  título com o conteúdo seguinte (evita o título sozinho no fim da página).
+	-->
+	<xsl:template name="titulo-agrupador">
+		<xsl:param name="maiusculas"/>
+		<xsl:param name="nomeEmNegrito"/>
+		<xsl:variable name="rotulo" select="normalize-space(lx:Rotulo)"/>
+		<xsl:variable name="nome" select="normalize-space(lx:NomeAgrupador)"/>
+		<xsl:if test="$rotulo != '' or $nome != ''">
+			<fo:block text-align="center" text-indent="0" keep-together.within-page="always"
+				keep-with-next.within-page="always">
+				<xsl:if test="$rotulo != ''">
+					<fo:block font-weight="bold">
+						<xsl:call-template name="caixa">
+							<xsl:with-param name="texto" select="$rotulo"/>
+							<xsl:with-param name="maiusculas" select="$maiusculas"/>
+						</xsl:call-template>
+					</fo:block>
+				</xsl:if>
+				<xsl:if test="$nome != ''">
+					<fo:block>
+						<xsl:if test="$nomeEmNegrito">
+							<xsl:attribute name="font-weight">bold</xsl:attribute>
+						</xsl:if>
+						<xsl:call-template name="caixa">
+							<xsl:with-param name="texto" select="$nome"/>
+							<xsl:with-param name="maiusculas" select="$maiusculas"/>
+						</xsl:call-template>
+					</fo:block>
+				</xsl:if>
+			</fo:block>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template name="caixa">
+		<xsl:param name="texto"/>
+		<xsl:param name="maiusculas"/>
+		<xsl:choose>
+			<xsl:when test="$maiusculas">
+				<xsl:call-template name="maiusculas">
+					<xsl:with-param name="texto" select="$texto"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise><xsl:value-of select="$texto"/></xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- XSLT 1.0 não tem upper-case(): alfabeto e letras acentuadas do português. -->
+	<xsl:variable name="minusculas" select="'abcdefghijklmnopqrstuvwxyzáàâãäéèêëíìîïóòôõöúùûüçñ'"/>
+	<xsl:variable name="maiusculasTabela" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÇÑ'"/>
+
+	<xsl:template name="maiusculas">
+		<xsl:param name="texto"/>
+		<xsl:value-of select="translate($texto, $minusculas, $maiusculasTabela)"/>
 	</xsl:template>
 
 	<!-- Artigo: o rótulo do artigo é impresso no mesmo bloco do texto do caput. -->
