@@ -12,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,7 @@ class DocumentoArticuladoPdfGeneratorTest {
             ARTICULACAO_E_ALTERACAO + "|PROJETO DE LEI Nº 999, DE 2026|Altera a Lei nº 9.394, de 20 de dezembro de 1996, que estabelece"
                     + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei altera a Lei nº 9.394|Art. 12-A.",
             CAPITULO_E_SECAO + "|MEDIDA PROVISÓRIA Nº 999, DE 2026|Institui o Programa Extraordinário de Reequilíbrio Financeiro"
-                    + "|O PRESIDENTE DA REPÚBLICA, no uso da atribuição|Art. 1º Fica instituído o Programa|CAPÍTULO I",
+                    + "|O PRESIDENTE DA REPÚBLICA, no uso da atribuição|Art. 1º Fica instituído o Programa|k) pessoas físicas beneficiárias",
             PENA_E_TITULO_DISPOSITIVO + "|PROJETO DE LEI Nº 999, DE 2026|Tipifica os crimes de desvio de recursos da saúde pública"
                     + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei tipifica os crimes|Pena –" })
     void imprimeParteInicialEArticulacaoNaOrdem(String nome, String epigrafe, String ementa, String preambulo,
@@ -69,8 +70,23 @@ class DocumentoArticuladoPdfGeneratorTest {
         String texto = textoNormalizado(gerarPdf(nome));
 
         assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo, primeiroArtigo);
-        // Elementos das partes 3 (agrupadores), 4 (alteração de norma) e 6 (pena) ainda não impressos
+        // Elementos das partes 4 (alteração de norma) e 6 (pena) ainda não impressos
         assertThat(texto).doesNotContain(aindaNaoImpresso);
+    }
+
+    @Test
+    void agrupadoresImpressosAntesDosArtigos() throws Exception {
+        byte[] pdf = gerarPdf(CAPITULO_E_SECAO);
+        String texto = textoNormalizado(pdf);
+
+        assertThat(texto).containsSubsequence("CAPÍTULO I DISPOSIÇÕES PRELIMINARES Art. 1º Fica instituído",
+                "CAPÍTULO III DOS PARTICIPANTES DO DESENROLA ADIMPLENTES Seção I Dos beneficiários Art. 4º");
+        Map<String, String> fontes = fontesPorPalavra(pdf);
+        assertThat(fontes.get("CAPÍTULO")).containsIgnoringCase("bold");
+        assertThat(fontes.get("DISPOSIÇÕES")).doesNotContainIgnoringCase("bold");
+        assertThat(fontes.get("Seção")).containsIgnoringCase("bold");
+        // "beneficiários" aparece antes em texto regular: verifica a linha do nome da seção
+        assertThat(fonteDaLinha(pdf, "Dos beneficiários")).containsIgnoringCase("bold");
     }
 
     @Test
@@ -134,6 +150,25 @@ class DocumentoArticuladoPdfGeneratorTest {
             assertThat(documento.getNumberOfPages()).isGreaterThanOrEqualTo(1);
             return new PDFTextStripper().getText(documento).replace(' ', ' ').replaceAll("\\s+", " ").trim();
         }
+    }
+
+    /** Nome da fonte do primeiro caractere da primeira linha do PDF que é exatamente o texto informado. */
+    private static String fonteDaLinha(byte[] pdf, String linha) throws IOException {
+        List<String> fontes = new ArrayList<>();
+        PDFTextStripper stripper = new PDFTextStripper() {
+            @Override
+            protected void writeString(String texto, List<TextPosition> posicoes) throws IOException {
+                if (fontes.isEmpty() && texto.trim().equals(linha)) {
+                    fontes.add(posicoes.get(0).getFont().getName());
+                }
+                super.writeString(texto, posicoes);
+            }
+        };
+        try (PDDocument documento = PDDocument.load(pdf)) {
+            stripper.getText(documento);
+        }
+        assertThat(fontes).as("linha '%s' no PDF", linha).isNotEmpty();
+        return fontes.get(0);
     }
 
     /** Nome da fonte usada no primeiro caractere de cada palavra do PDF. */

@@ -95,14 +95,81 @@ class DocumentoArticuladoConteudoTransformerTest {
     }
 
     @Test
-    void artigosDentroDeCapitulosESecoesSemRotuloENomeDoAgrupador() throws Exception {
-        Element articulacao = articulacao(xml(CAPITULO_E_SECAO));
-        String texto = texto(articulacao);
+    void capituloCentralizadoComRotuloEmNegritoSeguidoDoArtigo() throws Exception {
+        List<Element> blocos = articulacao(xml(CAPITULO_E_SECAO)).elements();
 
-        assertThat(textosDosDispositivos(articulacao).get(0)).startsWith("Art. 1º Fica instituído o Programa");
-        assertThat(texto).contains("Art. 4º");
-        assertThat(texto).doesNotContain("CAPÍTULO").doesNotContain("DISPOSIÇÕES PRELIMINARES")
-                .doesNotContain("Seção I").doesNotContain("Dos beneficiários");
+        Element capitulo = blocos.get(0);
+        assertThat(capitulo.attributeValue("text-align")).isEqualTo("center");
+        assertThat(capitulo.attributeValue("text-indent")).isEqualTo("0");
+        // Rótulo e nome na mesma página, e o título junto do conteúdo seguinte
+        assertThat(capitulo.attributeValue("keep-together.within-page")).isEqualTo("always");
+        assertThat(capitulo.attributeValue("keep-with-next.within-page")).isEqualTo("always");
+        assertThat(capitulo.attributeValue("space-before")).isNull();
+        assertThat(capitulo.attributeValue("space-after")).isNull();
+        List<Element> linhas = capitulo.elements();
+        assertThat(linhas).extracting(Element::getText).containsExactly("CAPÍTULO I", "DISPOSIÇÕES PRELIMINARES");
+        assertThat(linhas.get(0).attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(linhas.get(1).attributeValue("font-weight")).isNull();
+        assertThat(texto(blocos.get(1))).startsWith("Art. 1º Fica instituído o Programa");
+    }
+
+    @Test
+    void capituloSecaoEArtigoNaOrdemComSecaoEmNegrito() throws Exception {
+        List<Element> blocos = articulacao(xml(CAPITULO_E_SECAO)).elements();
+        int capitulo3 = indiceDoTitulo(blocos, "CAPÍTULO III");
+
+        assertThat(linhasDoTitulo(blocos.get(capitulo3))).containsExactly("CAPÍTULO III", "DOS PARTICIPANTES DO DESENROLA ADIMPLENTES");
+        Element secao = blocos.get(capitulo3 + 1);
+        assertThat(linhasDoTitulo(secao)).containsExactly("Seção I", "Dos beneficiários");
+        for (Element linha : secao.elements()) {
+            assertThat(linha.attributeValue("font-weight")).isEqualTo("bold");
+        }
+        // O <b> do nome no documento não gera fo:inline: a linha inteira já é negrito
+        assertThat(secao.asXML()).doesNotContain("fo:inline");
+        assertThat(texto(blocos.get(capitulo3 + 2))).startsWith("Art. 4º");
+    }
+
+    @Test
+    void parteLivroETituloEmMaiusculasComAcentos() throws Exception {
+        String xml = lexmlComArticulacao("<Parte id=\"prt1\"><Rotulo>Parte Geral</Rotulo><NomeAgrupador>das disposições gerais</NomeAgrupador>"
+                + "<Livro id=\"prt1_liv1\"><Rotulo>Livro I</Rotulo><NomeAgrupador>Das Pessoas</NomeAgrupador>"
+                + "<Titulo id=\"prt1_liv1_tit1\"><Rotulo>Título 1º</Rotulo><NomeAgrupador>Da <i>ação</i> e da exceção</NomeAgrupador>"
+                + "<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Texto.</p></Caput></Artigo>"
+                + "</Titulo></Livro></Parte>");
+
+        List<Element> blocos = articulacao(xml).elements();
+
+        assertThat(linhasDoTitulo(blocos.get(0))).containsExactly("PARTE GERAL", "DAS DISPOSIÇÕES GERAIS");
+        assertThat(linhasDoTitulo(blocos.get(1))).containsExactly("LIVRO I", "DAS PESSOAS");
+        assertThat(linhasDoTitulo(blocos.get(2))).containsExactly("TÍTULO 1º", "DA AÇÃO E DA EXCEÇÃO");
+        assertThat(blocos.get(2).asXML()).doesNotContain("fo:inline");
+        assertThat(texto(blocos.get(3))).isEqualTo("Art. 1º Texto.");
+    }
+
+    @Test
+    void subsecaoEmNegritoAgrupadorSemNomeEAgrupamentoSemTitulo() throws Exception {
+        String xml = lexmlComArticulacao("<Capitulo id=\"cap1\"><Rotulo>CAPÍTULO I</Rotulo>"
+                + "<Secao id=\"cap1_sec1\"><Rotulo>Seção I</Rotulo><NomeAgrupador>Das regras</NomeAgrupador>"
+                + "<Subsecao id=\"cap1_sec1_sub1\"><Rotulo>Subseção I</Rotulo><NomeAgrupador>Das exceções</NomeAgrupador>"
+                + "<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Primeiro.</p></Caput></Artigo>"
+                + "</Subsecao></Secao></Capitulo>"
+                + "<Agrupamento id=\"agr1\"><Rotulo>Grupo</Rotulo><NomeAgrupador>Genérico</NomeAgrupador>"
+                + "<Artigo id=\"art2\"><Rotulo>Art. 2º</Rotulo><Caput id=\"art2_cpt\"><p>Segundo.</p></Caput></Artigo></Agrupamento>");
+
+        List<Element> blocos = articulacao(xml).elements();
+
+        assertThat(blocos).hasSize(5);
+        // Capítulo sem nome: só a linha do rótulo
+        assertThat(linhasDoTitulo(blocos.get(0))).containsExactly("CAPÍTULO I");
+        assertThat(linhasDoTitulo(blocos.get(1))).containsExactly("Seção I", "Das regras");
+        Element subsecao = blocos.get(2);
+        assertThat(linhasDoTitulo(subsecao)).containsExactly("Subseção I", "Das exceções");
+        for (Element linha : subsecao.elements()) {
+            assertThat(linha.attributeValue("font-weight")).isEqualTo("bold");
+        }
+        assertThat(texto(blocos.get(3))).isEqualTo("Art. 1º Primeiro.");
+        // Agrupamento genérico: só atravessado, sem título
+        assertThat(texto(blocos.get(4))).isEqualTo("Art. 2º Segundo.");
     }
 
     @Test
@@ -247,6 +314,27 @@ class DocumentoArticuladoConteudoTransformerTest {
             textos.add(texto(dispositivo));
         }
         return textos;
+    }
+
+    /** Linhas (rótulo e nome) do bloco de título de um agrupador. */
+    private static List<String> linhasDoTitulo(Element titulo) {
+        List<String> linhas = new ArrayList<>();
+        for (Element linha : titulo.elements()) {
+            linhas.add(linha.getText());
+        }
+        return linhas;
+    }
+
+    /** Índice do bloco de título de agrupador cuja primeira linha é o rótulo informado. */
+    private static int indiceDoTitulo(List<Element> blocos, String rotulo) {
+        for (int i = 0; i < blocos.size(); i++) {
+            List<Element> linhas = blocos.get(i).elements();
+            if ("center".equals(blocos.get(i).attributeValue("text-align")) && !linhas.isEmpty()
+                    && rotulo.equals(linhas.get(0).getText())) {
+                return i;
+            }
+        }
+        throw new AssertionError("Título de agrupador não encontrado: " + rotulo);
     }
 
     /** Verifica que há, em sequência, dispositivos consecutivos que começam com cada prefixo informado. */
