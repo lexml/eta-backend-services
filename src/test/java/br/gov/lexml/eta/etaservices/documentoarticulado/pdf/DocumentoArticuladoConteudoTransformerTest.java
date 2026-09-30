@@ -182,12 +182,64 @@ class DocumentoArticuladoConteudoTransformerTest {
     }
 
     @Test
-    void penaETituloDeDispositivoOmitidos() throws Exception {
-        String texto = texto(articulacao(xml(PENA_E_TITULO_DISPOSITIVO)));
+    void tituloDeDispositivoEmNegritoAntesDoArtigoEPenaAposOCaput() throws Exception {
+        List<Element> blocos = articulacao(xml(PENA_E_TITULO_DISPOSITIVO)).elements();
+        List<String> textos = textosDosDispositivos(articulacao(xml(PENA_E_TITULO_DISPOSITIVO)));
+        int indiceTitulo = textos.indexOf("Desvio ou apropriação de recursos e insumos da saúde");
 
-        assertThat(texto).contains("Art. 2º Desviar, apropriar-se, utilizar")
-                .doesNotContain("Pena –")
-                .doesNotContain("Desvio ou apropriação de recursos e insumos da saúde");
+        assertThat(indiceTitulo).isNotNegative();
+        Element titulo = blocos.get(indiceTitulo);
+        assertThat(titulo.attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(titulo.attributeValue("keep-with-next.within-page")).isEqualTo("always");
+        // Mesma formatação dos dispositivos: herda recuo e justificação, não é centralizado
+        assertThat(titulo.attributeValue("text-align")).isNull();
+        assertThat(titulo.attributeValue("text-indent")).isNull();
+        assertThat(titulo.elements()).isEmpty();
+        assertPrefixosEmOrdem(textos,
+                "Desvio ou apropriação de recursos e insumos da saúde",
+                "Art. 2º Desviar, apropriar-se, utilizar",
+                "Pena – reclusão, de 4 (quatro) a 12 (doze) anos, e multa.",
+                "§ 1º");
+
+        Element pena = blocos.get(indiceTitulo + 2);
+        assertThat(pena.attributes()).isEmpty();
+        Element rotuloPena = (Element) pena.elements().get(0);
+        assertThat(rotuloPena.getText()).isEqualTo("Pena –");
+        assertThat(rotuloPena.attributeValue("font-weight")).isNull();
+    }
+
+    @Test
+    void penaNoFimDoParagrafo() throws Exception {
+        List<String> textos = textosDosDispositivos(articulacao(xml(PENA_E_TITULO_DISPOSITIVO)));
+
+        int paragrafo3 = -1;
+        for (int i = 0; i < textos.size() && paragrafo3 < 0; i++) {
+            if (textos.get(i).startsWith("§ 3º")) {
+                paragrafo3 = i;
+            }
+        }
+        assertThat(paragrafo3).isNotNegative();
+        assertThat(textos.get(paragrafo3 + 1)).isEqualTo("Pena – reclusão, de 6 (seis) a 14 (quatorze) anos, e multa.");
+        assertThat(textos).filteredOn(t -> t.startsWith("Pena –")).hasSize(5);
+        assertThat(textos).filteredOn(t -> t.equals("Fraude em registros e sistemas da saúde pública")
+                || t.equals("Inobservância ilícita da ordem de atendimento")).hasSize(2);
+    }
+
+    @Test
+    void tituloDeDispositivoEmParagrafoEVaziosSemBloco() throws Exception {
+        String xml = lexmlComArticulacao("<Artigo id=\"art1\"><TituloDispositivo>   </TituloDispositivo><Rotulo>Art. 1º</Rotulo>"
+                + "<Caput id=\"art1_cpt\"><p>Caput.</p><Pena id=\"art1_cpt_pena\"><Rotulo> </Rotulo><p>  </p></Pena></Caput>"
+                + "<Paragrafo id=\"art1_par1u\"><TituloDispositivo>Forma <i>qualificada</i></TituloDispositivo>"
+                + "<Rotulo>Parágrafo único.</Rotulo><p>Texto do parágrafo.</p></Paragrafo></Artigo>");
+
+        List<Element> blocos = articulacao(xml).elements();
+
+        // Título vazio e pena vazia (sem rótulo e sem texto) não geram bloco
+        assertThat(textosDosDispositivos(articulacao(xml)))
+                .containsExactly("Art. 1º Caput.", "Forma qualificada", "Parágrafo único. Texto do parágrafo.");
+        Element tituloDoParagrafo = blocos.get(1);
+        assertThat(tituloDoParagrafo.attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(tituloDoParagrafo.asXML()).contains("<fo:inline font-style=\"italic\">qualificada</fo:inline>");
     }
 
     @Test

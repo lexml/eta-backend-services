@@ -64,14 +64,25 @@ class DocumentoArticuladoPdfGeneratorTest {
             CAPITULO_E_SECAO + "|MEDIDA PROVISÓRIA Nº 999, DE 2026|Institui o Programa Extraordinário de Reequilíbrio Financeiro"
                     + "|O PRESIDENTE DA REPÚBLICA, no uso da atribuição|Art. 1º Fica instituído o Programa|k) pessoas físicas beneficiárias",
             PENA_E_TITULO_DISPOSITIVO + "|PROJETO DE LEI Nº 999, DE 2026|Tipifica os crimes de desvio de recursos da saúde pública"
-                    + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei tipifica os crimes|Pena –" })
+                    + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei tipifica os crimes|A pena será aumentada da metade" })
     void imprimeParteInicialEArticulacaoNaOrdem(String nome, String epigrafe, String ementa, String preambulo,
             String primeiroArtigo, String aindaNaoImpresso) throws Exception {
         String texto = textoNormalizado(gerarPdf(nome));
 
         assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo, primeiroArtigo);
-        // Elementos das partes 4 (alteração de norma) e 6 (pena) ainda não impressos
+        // Dispositivos de blocos de alteração de norma (parte 4) ainda não impressos
         assertThat(texto).doesNotContain(aindaNaoImpresso);
+    }
+
+    @Test
+    void tituloDeDispositivoEPenaImpressos() throws Exception {
+        byte[] pdf = gerarPdf(PENA_E_TITULO_DISPOSITIVO);
+
+        assertThat(textoNormalizado(pdf)).containsSubsequence(
+                "Desvio ou apropriação de recursos e insumos da saúde Art. 2º Desviar",
+                "Pena – reclusão, de 4 (quatro) a 12 (doze) anos, e multa. § 1º");
+        assertThat(fonteDaLinha(pdf, "Desvio ou apropriação de recursos e insumos da saúde")).containsIgnoringCase("bold");
+        assertThat(fonteDaLinha(pdf, "Pena – reclusão, de 4 (quatro) a 12 (doze) anos, e multa.")).doesNotContainIgnoringCase("bold");
     }
 
     @Test
