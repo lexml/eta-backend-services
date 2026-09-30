@@ -7,8 +7,9 @@
   Os valores de formatação foram copiados da emenda e têm a origem indicada em comentário.
 
   Imprime a parte inicial (epígrafe, ementa e preâmbulo; issue #72, parte 1) e a articulação básica
-  (artigo, caput, parágrafo, inciso, alínea e item; parte 2) com os agrupadores (parte 3). Os demais
-  elementos da #72 têm templates vazios marcados com a parte responsável.
+  (artigo, caput, parágrafo, inciso, alínea e item; parte 2), com os agrupadores (parte 3), a pena e o
+  título de dispositivo (parte 6). Os demais elementos da #72 têm templates vazios marcados com a parte
+  responsável.
   XSLT 1.0 (processador do JDK).
 -->
 <xsl:stylesheet version="1.0"
@@ -140,8 +141,12 @@
 		<xsl:value-of select="translate($texto, $minusculas, $maiusculasTabela)"/>
 	</xsl:template>
 
-	<!-- Artigo: o rótulo do artigo é impresso no mesmo bloco do texto do caput. -->
+	<!--
+	  Artigo: o título de dispositivo, se houver, vem antes; o rótulo do artigo é impresso no mesmo bloco
+	  do texto do caput.
+	-->
 	<xsl:template match="lx:Artigo" mode="dispositivo">
+		<xsl:apply-templates select="lx:TituloDispositivo" mode="dispositivo"/>
 		<xsl:apply-templates select="lx:Caput" mode="dispositivo">
 			<xsl:with-param name="rotulo" select="lx:Rotulo"/>
 		</xsl:apply-templates>
@@ -163,18 +168,50 @@
 	</xsl:template>
 
 	<!--
-	  Bloco de um dispositivo: rótulo em negrito (emenda: citacao2html troca Rotulo por strong), espaço e
-	  o primeiro p; os p seguintes em blocos próprios; depois os dispositivos subordinados, na ordem do
-	  documento. Os espaços do início do p são colapsados pelo XSL-FO.
+	  Pena (issue #72, parte 6): mesma formatação dos dispositivos de artigo, sem negrito no rótulo.
+	  Impressa na posição em que aparece (em geral no fim do caput ou do parágrafo).
+	-->
+	<xsl:template match="lx:Pena" mode="dispositivo">
+		<xsl:call-template name="bloco-dispositivo">
+			<xsl:with-param name="rotulo" select="lx:Rotulo"/>
+			<xsl:with-param name="rotuloNegrito" select="false()"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<!--
+	  Título de dispositivo (issue #72, parte 6): mesma formatação dos dispositivos de artigo (herda recuo,
+	  justificação e entrelinha da articulação; não é centralizado), sem rótulo e todo em negrito.
+	  keep-with-next evita o título sozinho no fim da página, como no título dos agrupadores.
+	-->
+	<xsl:template match="lx:TituloDispositivo" mode="dispositivo">
+		<xsl:if test="normalize-space(.) != ''">
+			<fo:block font-weight="bold" keep-with-next.within-page="always">
+				<xsl:apply-templates mode="inline"/>
+			</fo:block>
+		</xsl:if>
+	</xsl:template>
+
+	<!--
+	  Bloco de um dispositivo: título de dispositivo do próprio dispositivo (se houver), rótulo (em
+	  negrito, exceto na pena; emenda: citacao2html troca Rotulo por strong), espaço e o primeiro p; os p
+	  seguintes em blocos próprios; depois os dispositivos subordinados, na ordem do documento. Os espaços
+	  do início do p são colapsados pelo XSL-FO.
 	-->
 	<xsl:template name="bloco-dispositivo">
 		<xsl:param name="rotulo"/>
+		<xsl:param name="rotuloNegrito" select="true()"/>
 		<xsl:variable name="textoRotulo" select="normalize-space($rotulo)"/>
 		<xsl:variable name="paragrafos" select="lx:p"/>
+		<xsl:apply-templates select="lx:TituloDispositivo" mode="dispositivo"/>
 		<xsl:if test="$textoRotulo != '' or normalize-space($paragrafos[1]) != ''">
 			<fo:block>
 				<xsl:if test="$textoRotulo != ''">
-					<fo:inline font-weight="bold"><xsl:value-of select="$textoRotulo"/></fo:inline>
+					<fo:inline>
+						<xsl:if test="$rotuloNegrito">
+							<xsl:attribute name="font-weight">bold</xsl:attribute>
+						</xsl:if>
+						<xsl:value-of select="$textoRotulo"/>
+					</fo:inline>
 					<xsl:text> </xsl:text>
 				</xsl:if>
 				<xsl:apply-templates select="$paragrafos[1]/node()" mode="inline"/>
@@ -183,13 +220,11 @@
 		<xsl:for-each select="$paragrafos[position() &gt; 1][normalize-space(.) != '']">
 			<fo:block><xsl:apply-templates mode="inline"/></fo:block>
 		</xsl:for-each>
-		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:p)]" mode="dispositivo"/>
+		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:p or self::lx:TituloDispositivo)]" mode="dispositivo"/>
 	</xsl:template>
 
 	<!-- Blocos de alteração de norma vigente e omissis: issue #72, parte 4 -->
 	<xsl:template match="lx:Alteracao | lx:Omissis" mode="dispositivo"/>
-	<!-- Pena e título de dispositivo: issue #72, parte 6 -->
-	<xsl:template match="lx:Pena | lx:TituloDispositivo" mode="dispositivo"/>
 	<!-- Demais elementos: não impressos -->
 	<xsl:template match="*" mode="dispositivo" priority="-1"/>
 
