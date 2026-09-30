@@ -60,18 +60,34 @@ class DocumentoArticuladoPdfGeneratorTest {
     @ParameterizedTest
     @CsvSource(delimiter = '|', value = {
             ARTICULACAO_E_ALTERACAO + "|PROJETO DE LEI Nº 999, DE 2026|Altera a Lei nº 9.394, de 20 de dezembro de 1996, que estabelece"
-                    + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei altera a Lei nº 9.394|Art. 12-A.",
+                    + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei altera a Lei nº 9.394|“Art. 12-A.",
             CAPITULO_E_SECAO + "|MEDIDA PROVISÓRIA Nº 999, DE 2026|Institui o Programa Extraordinário de Reequilíbrio Financeiro"
                     + "|O PRESIDENTE DA REPÚBLICA, no uso da atribuição|Art. 1º Fica instituído o Programa|k) pessoas físicas beneficiárias",
             PENA_E_TITULO_DISPOSITIVO + "|PROJETO DE LEI Nº 999, DE 2026|Tipifica os crimes de desvio de recursos da saúde pública"
                     + "|O CONGRESSO NACIONAL decreta:|Art. 1º Esta Lei tipifica os crimes|A pena será aumentada da metade" })
     void imprimeParteInicialEArticulacaoNaOrdem(String nome, String epigrafe, String ementa, String preambulo,
-            String primeiroArtigo, String aindaNaoImpresso) throws Exception {
+            String primeiroArtigo, String trechoDaAlteracao) throws Exception {
         String texto = textoNormalizado(gerarPdf(nome));
 
-        assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo, primeiroArtigo);
-        // Dispositivos de blocos de alteração de norma (parte 4) ainda não impressos
-        assertThat(texto).doesNotContain(aindaNaoImpresso);
+        // O bloco de alteração de norma vigente vem depois do primeiro artigo
+        assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo, primeiroArtigo, trechoDaAlteracao);
+    }
+
+    @Test
+    void justificacaoAindaNaoImpressa() throws Exception {
+        String texto = textoNormalizado(pdfExemplo);
+
+        assertThat(texto).contains("Art. 1º Fica instituído o Programa de Modernização");
+        assertThat(texto).doesNotContain("Esta proposição promove a");
+    }
+
+    @Test
+    void blocoDeAlteracaoComAspasENota() throws Exception {
+        String texto = textoNormalizado(gerarPdf(PENA_E_TITULO_DISPOSITIVO));
+
+        assertThat(texto).containsSubsequence("passa a vigorar acrescido do seguinte parágrafo:", "“Art. 327.",
+                "§ 3º A pena será aumentada da metade", "praticado contra a administração da saúde pública.” (NR)",
+                "Art. 7º");
     }
 
     @Test

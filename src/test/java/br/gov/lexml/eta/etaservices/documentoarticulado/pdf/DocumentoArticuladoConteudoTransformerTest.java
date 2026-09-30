@@ -59,9 +59,13 @@ class DocumentoArticuladoConteudoTransformerTest {
         // span com xlink:href sai como texto simples
         assertThat(texto(artigo1)).startsWith("Art. 1º Esta Lei altera a Lei nº 9.394, de 20 de dezembro de 1996, para");
         assertThat(artigo1.asXML()).doesNotContain("basic-link").doesNotContain("urn:lex");
-        // Dispositivos sem margens próprias: não há espaço extra entre eles
+        // Dispositivos sem margens próprias: não há espaço extra entre eles (o bloco de alteração tem só o recuo)
         for (Element dispositivo : dispositivos) {
-            assertThat(dispositivo.attributes()).isEmpty();
+            if ("3cm".equals(dispositivo.attributeValue("margin-left"))) {
+                assertThat(dispositivo.attributes()).extracting(a -> a.getName()).containsOnly("margin-left", "text-indent");
+            } else {
+                assertThat(dispositivo.attributes()).isEmpty();
+            }
         }
     }
 
@@ -173,12 +177,89 @@ class DocumentoArticuladoConteudoTransformerTest {
     }
 
     @Test
-    void alteracaoDeNormaOmitida() throws Exception {
-        String texto = texto(articulacao(xml(ARTICULACAO_E_ALTERACAO)));
+    void blocoDeAlteracaoRecuadoComAspasENotaPelosAtributos() throws Exception {
+        List<Element> blocos = articulacao(xml(ARTICULACAO_E_ALTERACAO)).elements();
+        int indice = indiceDaAlteracao(blocos);
+        Element alteracao = blocos.get(indice);
 
-        assertThat(texto).contains("Art. 2º A Lei nº 9.394, de 20 de dezembro de 1996, passa a vigorar acrescida do seguinte art. 12-A:")
-                .contains("Art. 3º Esta Lei entra em vigor na data de sua publicação.")
-                .doesNotContain("Art. 12-A.");
+        assertThat(alteracao.attributeValue("margin-left")).isEqualTo("3cm");
+        assertThat(alteracao.attributeValue("text-indent")).isEqualTo("1.5cm");
+        assertThat(alteracao.attributeValue("space-before")).isNull();
+        assertThat(alteracao.attributeValue("space-after")).isNull();
+        assertThat(texto(blocos.get(indice - 1)))
+                .isEqualTo("Art. 2º A Lei nº 9.394, de 20 de dezembro de 1996, passa a vigorar acrescida do seguinte art. 12-A:");
+        assertThat(texto(blocos.get(indice + 1))).startsWith("Art. 3º Esta Lei entra em vigor");
+
+        List<Element> dispositivos = alteracao.elements();
+        Element primeiro = dispositivos.get(0);
+        // Aspas de abertura antes do rótulo e fora do negrito
+        assertThat(texto(primeiro)).startsWith("“Art. 12-A. As instituições de ensino");
+        assertThat(primeiro.content().get(0).getText()).isEqualTo("“");
+        Element rotulo = (Element) primeiro.elements().get(0);
+        assertThat(rotulo.getText()).isEqualTo("Art. 12-A.");
+        assertThat(rotulo.attributeValue("font-weight")).isEqualTo("bold");
+        // Fechamento só no último dispositivo, colado ao texto, com a nota e nada depois
+        String ultimo = texto(dispositivos.get(dispositivos.size() - 1));
+        assertThat(ultimo).startsWith("§ 4º").endsWith("diálogo entre escola e família.” (NR)");
+        String textoDoBloco = texto(alteracao);
+        assertThat(textoDoBloco.chars().filter(c -> c == '“').count()).isEqualTo(1);
+        assertThat(textoDoBloco.chars().filter(c -> c == '”').count()).isEqualTo(1);
+    }
+
+    @Test
+    void textoOmitidoOmissisEFechamentoNoParagrafo() throws Exception {
+        List<Element> blocos = articulacao(xml(PENA_E_TITULO_DISPOSITIVO)).elements();
+        List<Element> dispositivos = blocos.get(indiceDaAlteracao(blocos)).elements();
+
+        assertThat(dispositivos).hasSize(3);
+        // Caput com textoOmitido: rótulo do artigo seguido de linha pontilhada
+        assertThat(texto(dispositivos.get(0))).isEqualTo("“Art. 327.");
+        assertThat(temLinhaPontilhada(dispositivos.get(0))).isTrue();
+        // Omissis: só a linha pontilhada
+        assertThat(texto(dispositivos.get(1))).isEmpty();
+        assertThat(temLinhaPontilhada(dispositivos.get(1))).isTrue();
+        assertThat(texto(dispositivos.get(2)))
+                .isEqualTo("§ 3º A pena será aumentada da metade se o crime for praticado contra a administração da saúde pública.” (NR)");
+    }
+
+    @Test
+    void incisoComTextoOmitidoOmissisEFechamentoNoOmissis() throws Exception {
+        List<Element> blocos = articulacao(xml(CAPITULO_E_SECAO)).elements();
+        List<Element> dispositivos = blocos.get(indiceDaAlteracao(blocos)).elements();
+        List<String> textos = new ArrayList<>();
+        for (Element dispositivo : dispositivos) {
+            textos.add(texto(dispositivo));
+        }
+
+        assertThat(textos).hasSize(6);
+        assertThat(textos.get(0)).isEqualTo("“Art. 7º");
+        assertThat(textos.get(1)).isEqualTo("I –");
+        assertThat(textos.get(2)).isEmpty();
+        assertThat(textos.get(3)).startsWith("k) pessoas físicas beneficiárias do Fundo de Financiamento Estudantil");
+        assertThat(textos.get(4)).startsWith("l) pessoas físicas participantes do Programa Extraordinário");
+        // Omissis final com o fechamento das aspas e a nota na mesma linha
+        assertThat(textos.get(5)).isEqualTo("” (NR)");
+        for (int i : new int[] { 0, 1, 2, 5 }) {
+            assertThat(temLinhaPontilhada(dispositivos.get(i))).as("linha pontilhada no bloco %d", i).isTrue();
+        }
+    }
+
+    @Test
+    void semAspasForaDosAtributosEFechamentoNoUltimoParagrafo() throws Exception {
+        String xml = lexmlComArticulacao("<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Altera:</p>"
+                + "<Alteracao id=\"art1_cpt_alt1\">"
+                + "<Artigo id=\"art1_cpt_alt1_art5\"><Rotulo>Art. 5º</Rotulo><Caput id=\"art1_cpt_alt1_art5_cpt\"><p>Sem aspas.</p></Caput>"
+                + "<Paragrafo id=\"art1_cpt_alt1_art5_par1u\" fechaAspas=\"s\" notaAlteracao=\"NR\"><Rotulo>Parágrafo único.</Rotulo>"
+                + "<p>Primeiro.</p><p>Segundo <i>trecho</i>. </p></Paragrafo></Artigo>"
+                + "</Alteracao></Caput></Artigo>");
+
+        List<Element> blocos = articulacao(xml).elements();
+        List<Element> dispositivos = blocos.get(indiceDaAlteracao(blocos)).elements();
+
+        assertThat(dispositivos).extracting(e -> texto(e))
+                .containsExactly("Art. 5º Sem aspas.", "Parágrafo único. Primeiro.", "Segundo trecho.” (NR)");
+        // O espaço do fim do texto não fica antes das aspas
+        assertThat(dispositivos.get(2).asXML()).contains(".” (NR)");
     }
 
     @Test
@@ -366,6 +447,26 @@ class DocumentoArticuladoConteudoTransformerTest {
             textos.add(texto(dispositivo));
         }
         return textos;
+    }
+
+    /** Índice do bloco de alteração de norma (margem esquerda de 3cm) entre os blocos da articulação. */
+    private static int indiceDaAlteracao(List<Element> blocos) {
+        for (int i = 0; i < blocos.size(); i++) {
+            if ("3cm".equals(blocos.get(i).attributeValue("margin-left"))) {
+                return i;
+            }
+        }
+        throw new AssertionError("Bloco de alteração não encontrado");
+    }
+
+    /** Se o bloco tem uma linha pontilhada (fo:leader de pontos). */
+    private static boolean temLinhaPontilhada(Element bloco) {
+        for (Element filho : bloco.elements()) {
+            if ("leader".equals(filho.getName()) && "dots".equals(filho.attributeValue("leader-pattern"))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** Linhas (rótulo e nome) do bloco de título de um agrupador. */
