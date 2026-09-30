@@ -33,7 +33,7 @@ O PDF gerado SHALL conter os metadados XMP de PDF/A (título, datas de criação
 - **THEN** o XMP não contém mais o valor de placeholder `00000000000000000000000000000000` no hash de verificação
 
 ### Requirement: Conteúdo impresso
-O PDF SHALL imprimir, a partir do `documento-articulado.xml` gerado para o documento, a parte inicial (epígrafe, ementa e preâmbulo) seguida da articulação, na ordem do documento. Nesta etapa MUST NOT ser impressos: os blocos de alteração de norma vigente e os omissis, a pena e o título de dispositivo, a justificação, o local e data e as assinaturas.
+O PDF SHALL imprimir, a partir do `documento-articulado.xml` gerado para o documento, a parte inicial (epígrafe, ementa e preâmbulo) seguida da articulação, na ordem do documento. Nesta etapa MUST NOT ser impressos: os blocos de alteração de norma vigente e os omissis, a justificação, o local e data e as assinaturas.
 
 #### Scenario: Ordem do conteúdo
 - **WHEN** um documento com epígrafe, ementa, preâmbulo e articulação é convertido em PDF
@@ -44,11 +44,11 @@ O PDF SHALL imprimir, a partir do `documento-articulado.xml` gerado para o docum
 - **THEN** o PDF é gerado com os demais elementos, sem bloco vazio no lugar do ausente
 
 #### Scenario: Elementos ainda não impressos
-- **WHEN** o documento contém um bloco de alteração de norma vigente, pena ou título de dispositivo
-- **THEN** o texto extraído do PDF não contém os dispositivos da norma alterada (ex.: "Art. 12-A."), a pena (ex.: "Pena –") nem o título de dispositivo
+- **WHEN** o documento contém um bloco de alteração de norma vigente
+- **THEN** o texto extraído do PDF não contém os dispositivos da norma alterada (ex.: "Art. 12-A.")
 
 ### Requirement: Dispositivos da articulação
-O PDF SHALL imprimir os dispositivos Artigo, Caput, Parágrafo, Inciso, Alínea e Item na ordem do documento, cada um em um bloco próprio iniciado pelo seu rótulo, seguido de um espaço e do texto. O rótulo do artigo MUST ser impresso no mesmo bloco do texto do caput. Os dispositivos subordinados (incisos do caput ou do parágrafo, alíneas, itens) MUST aparecer logo após o texto do dispositivo a que pertencem. Artigos dentro de agrupadores MUST ser impressos logo após o rótulo e o nome do agrupador.
+O PDF SHALL imprimir os dispositivos Artigo, Caput, Parágrafo, Inciso, Alínea, Item e Pena na ordem do documento, cada um em um bloco próprio iniciado pelo seu rótulo, seguido de um espaço e do texto. O rótulo do artigo MUST ser impresso no mesmo bloco do texto do caput. Os dispositivos subordinados (incisos do caput ou do parágrafo, alíneas, itens, pena) MUST aparecer logo após o texto do dispositivo a que pertencem. Artigos dentro de agrupadores MUST ser impressos logo após o rótulo e o nome do agrupador.
 
 #### Scenario: Artigo com incisos e parágrafos
 - **WHEN** um artigo tem caput com incisos e, depois, parágrafos com incisos
@@ -63,7 +63,7 @@ O PDF SHALL imprimir os dispositivos Artigo, Caput, Parágrafo, Inciso, Alínea 
 - **THEN** o PDF apresenta o rótulo e o nome do capítulo, depois os da seção e em seguida os artigos com seus dispositivos
 
 ### Requirement: Formatação dos dispositivos
-Os dispositivos SHALL ser impressos com a formatação da citação de dispositivos da emenda: texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. O rótulo MUST ser impresso em negrito. No texto, negrito e itálico MUST ser preservados, e referências com link (`span` ou `Remissao` com `xlink:href`) MUST ser impressas como texto simples, sem link. A articulação MUST NOT ser envolvida por aspas.
+Os dispositivos SHALL ser impressos com a formatação da citação de dispositivos da emenda: texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. O rótulo MUST ser impresso em negrito, exceto o rótulo da pena, que MUST ser impresso em fonte regular. No texto, negrito e itálico MUST ser preservados, e referências com link (`span` ou `Remissao` com `xlink:href`) MUST ser impressas como texto simples, sem link. A articulação MUST NOT ser envolvida por aspas.
 
 #### Scenario: Rótulo em negrito
 - **WHEN** o PDF de um documento com o artigo "Art. 1º Esta Lei tipifica os crimes ..." é gerado
@@ -107,6 +107,29 @@ O PDF SHALL imprimir o rótulo e o nome de cada agrupador de artigos (Parte, Liv
 #### Scenario: Sem espaço adicional
 - **WHEN** o PDF apresenta um capítulo seguido de uma seção e de um artigo
 - **THEN** a distância entre as linhas do capítulo, da seção e do artigo é a mesma entrelinha usada entre dispositivos
+
+### Requirement: Pena e título de dispositivo
+A pena SHALL ser impressa na posição em que aparece no documento, com a formatação dos dispositivos e o rótulo ("Pena –") em fonte regular. O título de dispositivo SHALL ser impresso antes do dispositivo a que pertence, em bloco próprio com a formatação dos dispositivos, sem rótulo e com todo o texto em negrito, e MUST ser mantido na mesma página do dispositivo que o segue. Pena ou título de dispositivo vazio MUST NOT gerar bloco.
+
+#### Scenario: Pena no fim do caput
+- **WHEN** o caput do Art. 2º termina com a pena "Pena – reclusão, de 4 (quatro) a 12 (doze) anos, e multa."
+- **THEN** o PDF apresenta essa pena logo após o texto do caput e antes do § 1º, com "Pena –" em fonte regular e o mesmo recuo de primeira linha dos dispositivos
+
+#### Scenario: Pena no fim de um parágrafo
+- **WHEN** um parágrafo termina com uma pena
+- **THEN** o PDF apresenta a pena logo após o texto e os incisos desse parágrafo
+
+#### Scenario: Título de dispositivo antes do artigo
+- **WHEN** o Art. 2º tem o título de dispositivo "Desvio ou apropriação de recursos e insumos da saúde"
+- **THEN** o PDF apresenta esse título, todo em negrito, sem rótulo e com o recuo de primeira linha dos dispositivos, na linha imediatamente anterior ao "Art. 2º"
+
+#### Scenario: Título de dispositivo de outro tipo de dispositivo
+- **WHEN** um parágrafo tem título de dispositivo
+- **THEN** o título é apresentado em negrito na linha imediatamente anterior ao parágrafo
+
+#### Scenario: Título não fica sozinho no fim da página
+- **WHEN** o título de dispositivo cairia na última linha de uma página
+- **THEN** o título é apresentado na página seguinte, junto com o dispositivo a que pertence
 
 ### Requirement: Epígrafe
 A epígrafe SHALL ser impressa centralizada, em negrito, no tamanho de fonte de destaque, em uma única linha (espaços não quebráveis) e com os espaços excedentes do texto removidos. O complemento da epígrafe usado na emenda MUST NOT ser impresso.
