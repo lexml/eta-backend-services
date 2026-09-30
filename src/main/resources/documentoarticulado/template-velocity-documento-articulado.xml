@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+## Template XSL-FO do documento articulado, derivado de template-velocity-emenda.xml.
+## Nesta etapa o PDF não imprime o texto da proposição: a impressão herdada da emenda está preservada
+## em comentários de bloco do Velocity marcados "NÃO RETIRAR", para aproveitamento posterior. Como esses
+## comentários não podem ser aninhados, os comentários originais da emenda ficam entre os blocos.
+## Contexto: $documento (documento-articulado.json como Map), $titulo e $aplicacao (já escapados para
+## XML) e $dataIso (data e hora da geração, ISO-8601).
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
+	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
+	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	font-family="Gentium Basic">
+	<fo:layout-master-set>
+		<fo:simple-page-master margin-bottom="2cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
+			master-name="firstPage" page-height="29.7cm" page-width="21cm">
+			<fo:region-body margin-top="1cm"/>
+			#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
+			#if($emenda.opcoesImpressao.imprimirBrasao || !$ve.isEmpty($emenda.opcoesImpressao.textoCabecalho))
+				#set($temCabecalhoPrincipal = true)
+				<fo:region-body margin-top="4cm" />
+				<fo:region-before extent="3cm" region-name="header-principal" />
+			#else
+				<fo:region-body margin-top="1cm"/>
+			#end
+			*#
+		</fo:simple-page-master>
+		<fo:simple-page-master margin-bottom="2cm"
+			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
+			master-name="restPage" page-height="29.7cm" page-width="21cm">
+			<fo:region-body/>
+			#*
+			<fo:region-before extent="3cm"
+				region-name="header-assinaturas" />
+			*#
+		</fo:simple-page-master>
+		<fo:page-sequence-master
+			master-name="document">
+			<fo:repeatable-page-master-alternatives>
+				<fo:conditional-page-master-reference
+					master-reference="firstPage" page-position="first" />
+				<fo:conditional-page-master-reference
+					master-reference="restPage" page-position="rest" />
+			</fo:repeatable-page-master-alternatives>
+		</fo:page-sequence-master>
+	</fo:layout-master-set>
+	<fo:declarations>
+		<x:xmpmeta xmlns:x="adobe:ns:meta/" xmlns:check="http://lexeditweb/check">
+			<rdf:RDF
+				xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+				<check:hash>00000000000000000000000000000000</check:hash>
+				<rdf:Description
+					xmlns:dc="http://purl.org/dc/elements/1.1/"
+					xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
+					xmlns:pdfaExtension="http://www.aiim.org/pdfa/ns/extension/"
+					xmlns:pdfaProperty="http://www.aiim.org/pdfa/ns/property#"
+					xmlns:pdfaSchema="http://www.aiim.org/pdfa/ns/schema#"
+					xmlns:pdfaid="http://www.aiim.org/pdfa/ns/id/"
+					xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+					<xmp:CreatorTool>$aplicacao</xmp:CreatorTool>
+					<xmp:ModifyDate>$dataIso</xmp:ModifyDate>
+					<xmp:CreateDate>$dataIso</xmp:CreateDate>
+					<xmp:MetadataDate>$dataIso</xmp:MetadataDate>
+					<pdf:Keywords>Proposição</pdf:Keywords>
+					<pdf:Producer>$aplicacao</pdf:Producer>
+					<pdf:PDFVersion>1.7</pdf:PDFVersion>
+					<dc:format>application/pdf</dc:format>
+					<dc:title>
+						<rdf:Alt>
+							<rdf:li xml:lang="x-default">$titulo</rdf:li>
+						</rdf:Alt>
+					</dc:title>
+					<dc:description>
+						<rdf:Alt>
+							<rdf:li xml:lang="x-default">Proposição legislativa</rdf:li>
+						</rdf:Alt>
+					</dc:description>
+					<dc:language>
+						<rdf:Bag>
+							<rdf:li>pt-BR</rdf:li>
+						</rdf:Bag>
+					</dc:language>
+					<dc:subject>
+						<rdf:Bag>
+							<rdf:li>Proposição legislativa</rdf:li>
+						</rdf:Bag>
+					</dc:subject>
+					<pdfaid:part>3</pdfaid:part>
+					<pdfaid:conformance>B</pdfaid:conformance>
+					<pdfaExtension:schemas>
+						<rdf:Bag>
+							<rdf:li rdf:parseType="Resource">
+								<pdfaSchema:namespaceURI>http://ns.adobe.com/pdf/1.3/
+								</pdfaSchema:namespaceURI>
+								<pdfaSchema:prefix>pdf</pdfaSchema:prefix>
+								<pdfaSchema:schema>Adobe PDF Schema</pdfaSchema:schema>
+								<pdfaSchema:property>
+									<rdf:Seq>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>A name object indicating whether
+												the document has been modified to include trapping
+												information</pdfaProperty:description>
+											<pdfaProperty:name>Trapped</pdfaProperty:name>
+											<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+										</rdf:li>
+									</rdf:Seq>
+								</pdfaSchema:property>
+							</rdf:li>
+							<rdf:li rdf:parseType="Resource">
+								<pdfaSchema:namespaceURI>http://www.aiim.org/pdfa/ns/id/
+								</pdfaSchema:namespaceURI>
+								<pdfaSchema:prefix>pdfaid</pdfaSchema:prefix>
+								<pdfaSchema:schema>PDF/A ID Schema</pdfaSchema:schema>
+								<pdfaSchema:property>
+									<rdf:Seq>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>Part of PDF/A standard
+											</pdfaProperty:description>
+											<pdfaProperty:name>part</pdfaProperty:name>
+											<pdfaProperty:valueType>Integer</pdfaProperty:valueType>
+										</rdf:li>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>Amendment of PDF/A standard</pdfaProperty:description>
+											<pdfaProperty:name>amd</pdfaProperty:name>
+											<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+										</rdf:li>
+										<rdf:li rdf:parseType="Resource">
+											<pdfaProperty:category>internal</pdfaProperty:category>
+											<pdfaProperty:description>Conformance level of PDF/A standard</pdfaProperty:description>
+											<pdfaProperty:name>conformance</pdfaProperty:name>
+											<pdfaProperty:valueType>Text</pdfaProperty:valueType>
+										</rdf:li>
+									</rdf:Seq>
+								</pdfaSchema:property>
+							</rdf:li>
+						</rdf:Bag>
+					</pdfaExtension:schemas>
+				</rdf:Description>
+			</rdf:RDF>
+		</x:xmpmeta>
+	</fo:declarations>
+#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
+## Impressão compacta ------------------------------------------------------------				
+#if($emenda.opcoesImpressao.reduzirEspacoEntreLinhas)
+	#set($lineHeight = "120%")
+	#set($pMarginBottom = "0.45em")
+	#set($spacing1 = "10pt")
+	#set($spacing2 = "19pt")
+	#set($spacing3 = "22pt")
+	#set($spacing4 = "26pt")
+#else
+	#set($lineHeight = "150%")
+	#set($pMarginBottom = "0.6em")
+	#set($spacing1 = "14pt")
+	#set($spacing2 = "21pt")
+	#set($spacing3 = "26pt")
+	#set($spacing4 = "34pt")
+#end
+
+## Impressão tamanho fonte ------------------------------------------------------------				
+#if($emenda.opcoesImpressao.tamanhoFonte  == 18)
+	#set($maxTamanhoFonte = "18pt")	
+#else
+	#set($maxTamanhoFonte = "16pt")
+#end
+*#
+	<fo:page-sequence master-reference="document">
+#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
+## Brasão e texto do cabeçalho -------------------------------------------------------------------------
+		#if ($temCabecalhoPrincipal)
+		<fo:static-content flow-name="header-principal">
+			#if($emenda.opcoesImpressao.imprimirBrasao)
+			<fo:block text-align="center" margin-bottom="2pt">
+				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')"/>
+				<fo:block font-size="11pt" font-family="ITC-StoneSansStd" margin-top="3pt">
+				#if ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'SF')
+					<fo:block>SENADO FEDERAL</fo:block>
+				#elseif ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'CD')
+					<fo:block>CÂMARA DOS DEPUTADOS</fo:block>
+				#elseif ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'CN')
+					<fo:block>CONGRESSO NACIONAL</fo:block>
+				#end
+				</fo:block>
+			</fo:block>
+			
+			#end
+			#if(!$ve.isEmpty($emenda.opcoesImpressao.textoCabecalho))
+			<fo:block text-align="center">$ve.escapeXml($emenda.opcoesImpressao.textoCabecalho)</fo:block>
+			#end
+		</fo:static-content>
+		#end
+*#
+		#* NÃO RETIRAR. Pode voltar a ser utilizado.
+		<fo:static-content flow-name="header-assinaturas">
+			<fo:block>
+				<fo:retrieve-marker retrieve-boundary="page"
+					retrieve-class-name="marker.texto"
+					retrieve-position="first-including-carryover" />
+			</fo:block>
+		</fo:static-content>
+		*#
+#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
+		<fo:static-content flow-name="xsl-footnote-separator">                  
+			<fo:block text-align-last="justify">                         
+				<fo:leader leader-length="50%" rule-thickness="0.5pt" leader-pattern="rule"/>                       
+			</fo:block>
+		</fo:static-content>      
+	
+*#
+		<fo:flow flow-name="xsl-region-body">
+			## O FOP exige ao menos um bloco no fluxo.
+			<fo:block/>
+#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
+		<fo:flow flow-name="xsl-region-body" font-size="${emenda.opcoesImpressao.tamanhoFonte}pt">
+			#set($tamanhoFonte = $emenda.opcoesImpressao.tamanhoFonte)
+			<fo:block-container>
+				<fo:marker marker-class-name="marker.texto" />
+## Alertas -------------------------------------------------------------------------
+				#if($emenda.revisoes.size() > 0)
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+					text-align="center" padding=".1cm" space-after=".3cm">
+					Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.
+				</fo:block>
+				#end
+				#if($emenda.possuiComentarios)
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+					text-align="center" padding=".1cm" space-after=".3cm">
+					Este documento contém comentários e não deve ser protocolado até que sejam removidos.
+				</fo:block>
+				#end
+## Pendências de Preenchimento -----------------------------------------------------
+				#if($emenda.pendenciasPreenchimento.size() > 0)
+				<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+						  text-align="left" padding=".1cm" space-after=".3cm" padding-left=".25cm" padding-right=".25cm">
+					Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:
+					<fo:list-block font-weight="normal" 
+						provisional-label-separation="1em" provisional-distance-between-starts="1em" 
+						margin-left=".5cm">
+						#foreach ($pendencia in $emenda.pendenciasPreenchimento)
+						<fo:list-item space-before=".3em">
+						  <fo:list-item-label end-indent="label-end()">
+						    <fo:block>&#8226;</fo:block>
+						  </fo:list-item-label>
+						  <fo:list-item-body start-indent="body-start()">
+						    <fo:block>$pendencia</fo:block>
+						  </fo:list-item-body>
+						</fo:list-item>
+						#end
+					</fo:list-block>
+				</fo:block>
+				#end
+## Epígrafe -------------------------------------------------------------------------
+				<fo:block text-align="center"
+					white-space-collapse="false">
+					<fo:block font-size="$maxTamanhoFonte" font-weight="bold">
+						$emenda.epigrafe.texto.replace(' ', '&#160;')
+					</fo:block>
+				</fo:block>
+				<fo:block space-after="$spacing2" text-align="center"
+					white-space-collapse="false">
+					<fo:block font-size="$maxTamanhoFonte">$emenda.epigrafe.complemento</fo:block>
+				</fo:block>
+## Comando de emenda ----------------------------------------------------------------
+				<fo:block role="Comando de emenda" line-height="$lineHeight"
+					text-align="justify" text-indent="2.5cm" white-space-collapse="false">
+					
+				#if ($emenda.comandoEmenda.cabecalhoComum)
+					<fo:block margin-bottom="$pMarginBottom">
+						$emenda.comandoEmenda.cabecalhoComum
+					</fo:block>
+					#set ($usarRotulo = true)							
+				#end
+				
+				#foreach ($i in $emenda.comandoEmenda.comandos)
+					<fo:block margin-bottom="$pMarginBottom">
+						#if ($usarRotulo)
+							<fo:inline font-weight="bold">$i.rotulo</fo:inline>
+						#end
+						$ve.html2fo($i.cabecalho)
+					</fo:block>	
+
+					#if ($i.citacao)
+						<fo:block margin-bottom="$pMarginBottom">
+							$ve.html2fo($ve.citacao2html($i.citacao))
+						</fo:block>	
+					#end
+					#if ($i.complemento)
+						<fo:block margin-bottom="$pMarginBottom" text-align="center"
+							border-style="solid" border-width=".5pt" font-size="12pt"
+							padding=".1cm" text-indent="0cm">
+							$i.complemento
+						</fo:block>	
+					#end
+				#end
+				</fo:block>
+## Comando de emenda Texto Livre ----------------------------------------------------------------
+				<fo:block role="Comando de emenda Texto Livre" line-height="$lineHeight"
+					text-indent="2.5cm" white-space-collapse="false">
+					
+					#if ($emenda.comandoEmendaTextoLivre.texto)
+						<fo:block margin-bottom="$pMarginBottom">							
+							$ve.html2foTextoLivre($emenda.comandoEmendaTextoLivre.texto)
+						</fo:block>
+					#end					
+				</fo:block>			
+
+				
+## Justificativa ----------------------------------------------------------------
+				#if (!$emenda.anexoParecer && $emenda.justificativa)
+				<fo:block font-size="$maxTamanhoFonte" font-weight="bold"
+					keep-with-next="always" space-before="$spacing3" text-align="center"
+					white-space-collapse="false">JUSTIFICAÇÃO</fo:block>
+				<fo:block keep-with-previous="always" line-height="$lineHeight"
+					role="Justificativa" space-before="$spacing1"
+					text-indent="2.5cm" white-space-collapse="false">
+					<fo:block>
+						$ve.html2foTextoLivre($emenda.justificativa)
+					</fo:block>
+*#
+					#*
+					<fo:block margin-bottom="0.6em">Parágrafo justificado (primeira
+						linha endentada, Padrão) Nonono nonono noonono nonon onono nonono
+						nonono noonono nonon ononononono nonono noonono nonon ononononono
+						nonono.</fo:block>
+					<fo:block margin-bottom="0.6em" text-align="left">Parágrafo alinhado à
+						esquerda (primeira linha endentada) Nonono nonono noonono nonon
+						onono nonono nonono noonono nonon ononononono nonono noonono nonon
+						ononononono nonono.</fo:block>
+					<fo:block margin-bottom="0.6em" text-align="center">Parágrafo centralizado (sem
+						endentação da primeira linha) Nonono nonono noonono nonon onono
+						nonono nonono noonono nonon ononononono nonono noonono nonon
+						ononononono nonono.</fo:block>
+					<fo:block margin-bottom="0.6em" text-align="right">Parágrafo alinhado à direita (sem
+						endentação da primeira linha) Nonono nonono noonono nonon onono
+						nonono nonono noonono nonon ononononono nonono noonono nonon
+						ononononono nonono.</fo:block>
+					<fo:block text-indent="0" start-indent="3em"
+						space-after="1em" space-before="1em">
+						<fo:block margin-bottom="0.6em">"Isso é uma citação com margem
+							esquerda maior e justificada, dentro da justificativa. Nonono
+							nonono noonono nonon onono nonono nonono noonono nonon. Nonono
+							nonono noonono nonon onono nonono nonono noonono nonon."
+						</fo:block>
+					</fo:block>
+					<fo:block margin-bottom="0.6em">Lista numerada:</fo:block>
+					<fo:list-block text-indent="0" margin-left="2.5cm"
+						provisional-distance-between-starts="1.5em"
+						provisional-label-separation="1em">
+						<fo:list-item>
+							<fo:list-item-label end-indent="label-end()">
+								<fo:block text-align="end">1.</fo:block>
+							</fo:list-item-label>
+							<fo:list-item-body start-indent="body-start()">
+								<fo:block>Um;</fo:block>
+							</fo:list-item-body>
+						</fo:list-item>
+						<fo:list-item>
+							<fo:list-item-label end-indent="label-end()">
+								<fo:block text-align="end">2.</fo:block>
+							</fo:list-item-label>
+							<fo:list-item-body start-indent="body-start()">
+								<fo:block>Dois.</fo:block>
+							</fo:list-item-body>
+						</fo:list-item>
+					</fo:list-block>
+					<fo:block margin-bottom="0.6em">Lista não numerada:</fo:block>
+					<fo:list-block text-indent="0" margin-left="2.5cm"
+						provisional-distance-between-starts="1em"
+						provisional-label-separation="1em">
+						<fo:list-item>
+							<fo:list-item-label end-indent="label-end()">
+								<fo:block text-align="end">&#x2022;</fo:block>
+							</fo:list-item-label>
+							<fo:list-item-body start-indent="body-start()">
+								<fo:block>Um;</fo:block>
+							</fo:list-item-body>
+						</fo:list-item>
+						<fo:list-item>
+							<fo:list-item-label end-indent="label-end()">
+								<fo:block text-align="end">&#x2022;</fo:block>
+							</fo:list-item-label>
+							<fo:list-item-body start-indent="body-start()">
+								<fo:block>Dois.</fo:block>
+							</fo:list-item-body>
+						</fo:list-item>
+					</fo:list-block>
+				    *#
+#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
+				</fo:block>
+				#end
+			</fo:block-container>
+			#if (!$emenda.anexoParecer)
+			<fo:block-container>
+## Local e data ----------------------------------------------------------------
+				<fo:block keep-with-next.within-page="always"
+					keep-with-previous="10" role="fecho"
+					space-after="0pt" space-before="$spacing4" text-align="justify"
+					text-indent="2.5cm" white-space-collapse="false">
+						$emenda.local, 
+						#if($ve.isEmpty($emenda.data))
+	                        &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+	                        de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+	                        de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.
+						#else
+							${emenda.dataFormatada}.
+						#end
+				</fo:block>
+## Assinaturas ----------------------------------------------------------------
+				<fo:block font-weight="bold">
+					## Signatários nomeados ----------------------------------------------------------------
+					#if ($emenda.autoria.parlamentares.size() > 0)
+					<fo:block>
+						<fo:table role="Signatários"
+							table-layout="fixed" width="100%">
+							<fo:table-column
+								column-width="proportional-column-width(50)" />
+							<fo:table-column
+								column-width="proportional-column-width(50)" />
+							<fo:table-body>
+								#foreach ($assinatura in $emenda.autoria.parlamentaresPair)
+								#if ($assinatura[1])
+								<fo:table-row>
+									<fo:table-cell text-align="center">
+										<fo:block margin-top="30pt">$assinatura[0].tratamento $assinatura[0].nome
+										</fo:block>
+										#if ($emenda.autoria.imprimirPartidoUF)
+										<fo:block keep-with-previous="always">($assinatura[0].siglaPartido - $assinatura[0].siglaUF)</fo:block>
+										#end
+										#if ($assinatura[0].cargo)
+										<fo:block keep-with-previous="always">$assinatura[0].cargo
+										</fo:block>
+										#end
+									</fo:table-cell>
+									<fo:table-cell text-align="center">
+										<fo:block margin-top="30pt">$assinatura[1].tratamento $assinatura[1].nome
+										</fo:block>
+										#if ($emenda.autoria.imprimirPartidoUF)
+										<fo:block keep-with-previous="always">($assinatura[1].siglaPartido - $assinatura[1].siglaUF)</fo:block>
+										#end
+										#if ($assinatura[1].cargo)
+										<fo:block keep-with-previous="always">$assinatura[1].cargo
+										</fo:block>
+										#end
+									</fo:table-cell>
+								</fo:table-row>
+								#else
+								<fo:table-row>
+									<fo:table-cell number-columns-spanned="2"
+										text-align="center">
+										<fo:block margin-top="30pt">$assinatura[0].tratamento $assinatura[0].nome
+										</fo:block>
+										#if ($emenda.autoria.imprimirPartidoUF)
+										<fo:block keep-with-previous="always">($assinatura[0].siglaPartido - $assinatura[0].siglaUF)</fo:block>
+										#end
+										#if ($assinatura[0].cargo)
+										<fo:block keep-with-previous="always">$assinatura[0].cargo
+										</fo:block>
+										#end
+									</fo:table-cell>
+								</fo:table-row>
+								#end
+								#end
+							</fo:table-body>
+						</fo:table>
+					</fo:block>
+					#end
+					## Assinaturas adicionais de senadores ----------------------------------------------------------------
+					#if($emenda.autoria.quantidadeAssinaturasAdicionaisSenadores > 0)
+					<fo:table table-layout="fixed" width="100%">
+						<fo:table-column
+							column-width="proportional-column-width(60)" />
+						<fo:table-column
+							column-width="proportional-column-width(40)" />
+						<fo:table-header>
+							<fo:table-row>
+								<fo:table-cell border-width="0.5pt" height="30pt"
+									number-columns-spanned="2">
+									<fo:block />
+								</fo:table-cell>
+							</fo:table-row>
+							<fo:table-row>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt" padding="2pt">
+									<fo:block font-weight="bold">Nome do Senador</fo:block>
+								</fo:table-cell>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt" padding="2pt">
+									<fo:block font-weight="bold">Assinatura</fo:block>
+								</fo:table-cell>
+							</fo:table-row>
+						</fo:table-header>
+						<fo:table-body>
+							#foreach ($ls in $emenda.autoria.assinaturasAdicionaisSenadores)
+							<fo:table-row height="10mm" line-height="$lineHeight">
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt">
+									<fo:block />
+								</fo:table-cell>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt">
+									<fo:block />
+								</fo:table-cell>
+							</fo:table-row>
+							#end
+						</fo:table-body>
+					</fo:table>
+					#end
+					## Assinaturas adicionais de deputados ----------------------------------------------------------------
+					#if($emenda.autoria.quantidadeAssinaturasAdicionaisDeputados > 0)
+					<fo:block page-break-before="always" />
+					<fo:table table-layout="fixed" width="100%">
+						<fo:table-column
+							column-width="proportional-column-width(15)" />
+						<fo:table-column
+							column-width="proportional-column-width(60)" />
+						<fo:table-column
+							column-width="proportional-column-width(40)" />
+						<fo:table-header>
+							<fo:table-row>
+								<fo:table-cell border-width="0.5pt" height="30pt"
+									number-columns-spanned="2">
+									<fo:block />
+								</fo:table-cell>
+							</fo:table-row>
+							<fo:table-row>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt" padding="2pt">
+									<fo:block font-weight="bold">Gabinete</fo:block>
+								</fo:table-cell>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt" padding="2pt">
+									<fo:block font-weight="bold">Nome do Deputado</fo:block>
+								</fo:table-cell>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt" padding="2pt">
+									<fo:block font-weight="bold">Assinatura</fo:block>
+								</fo:table-cell>
+							</fo:table-row>
+						</fo:table-header>
+						<fo:table-body>
+							#foreach ($ld in $emenda.autoria.assinaturasAdicionaisDeputados)
+							<fo:table-row height="10mm" line-height="$lineHeight">
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt">
+									<fo:block />
+								</fo:table-cell>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt">
+									<fo:block />
+								</fo:table-cell>
+								<fo:table-cell border-color="black"
+									border-style="solid" border-width="0.5pt">
+									<fo:block />
+								</fo:table-cell>
+							</fo:table-row>
+							#end
+						</fo:table-body>
+					</fo:table>
+					#end
+				</fo:block>
+			</fo:block-container>
+			#end
+*#
+		</fo:flow>
+	</fo:page-sequence>
+</fo:root>
