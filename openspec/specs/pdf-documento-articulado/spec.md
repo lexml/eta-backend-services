@@ -33,7 +33,7 @@ O PDF gerado SHALL conter os metadados XMP de PDF/A (título, datas de criação
 - **THEN** o XMP não contém mais o valor de placeholder `00000000000000000000000000000000` no hash de verificação
 
 ### Requirement: Conteúdo impresso
-O PDF SHALL imprimir, a partir do `documento-articulado.xml` gerado para o documento, a parte inicial (epígrafe, ementa e preâmbulo) seguida da articulação, na ordem do documento. Nesta etapa MUST NOT ser impressos: os blocos de alteração de norma vigente e os omissis, a justificação, o local e data e as assinaturas.
+O PDF SHALL imprimir, a partir do `documento-articulado.xml` gerado para o documento, a parte inicial (epígrafe, ementa e preâmbulo) seguida da articulação, na ordem do documento. Nesta etapa MUST NOT ser impressos: a justificação, o local e data e as assinaturas.
 
 #### Scenario: Ordem do conteúdo
 - **WHEN** um documento com epígrafe, ementa, preâmbulo e articulação é convertido em PDF
@@ -44,8 +44,8 @@ O PDF SHALL imprimir, a partir do `documento-articulado.xml` gerado para o docum
 - **THEN** o PDF é gerado com os demais elementos, sem bloco vazio no lugar do ausente
 
 #### Scenario: Elementos ainda não impressos
-- **WHEN** o documento contém um bloco de alteração de norma vigente
-- **THEN** o texto extraído do PDF não contém os dispositivos da norma alterada (ex.: "Art. 12-A.")
+- **WHEN** o documento contém justificação (ex.: "Esta proposição promove a ...")
+- **THEN** o texto extraído do PDF não contém o texto da justificação
 
 ### Requirement: Dispositivos da articulação
 O PDF SHALL imprimir os dispositivos Artigo, Caput, Parágrafo, Inciso, Alínea, Item e Pena na ordem do documento, cada um em um bloco próprio iniciado pelo seu rótulo, seguido de um espaço e do texto. O rótulo do artigo MUST ser impresso no mesmo bloco do texto do caput. Os dispositivos subordinados (incisos do caput ou do parágrafo, alíneas, itens, pena) MUST aparecer logo após o texto do dispositivo a que pertencem. Artigos dentro de agrupadores MUST ser impressos logo após o rótulo e o nome do agrupador.
@@ -130,6 +130,29 @@ A pena SHALL ser impressa na posição em que aparece no documento, com a format
 #### Scenario: Título não fica sozinho no fim da página
 - **WHEN** o título de dispositivo cairia na última linha de uma página
 - **THEN** o título é apresentado na página seguinte, junto com o dispositivo a que pertence
+
+### Requirement: Alteração de norma vigente
+O bloco de alteração de norma vigente SHALL ser impresso logo após o dispositivo que o introduz, com margem esquerda de 3cm e recuo de primeira linha de 1,5cm, sem espaço adicional antes ou depois. Os dispositivos do bloco MUST ser impressos com a mesma formatação dos dispositivos da articulação. As aspas e a nota de alteração MUST ser impressas somente conforme os atributos do documento: aspas de abertura (“) antes do rótulo do dispositivo com `abreAspas="s"`; aspas de fechamento (”) depois do texto, ou da linha pontilhada, do dispositivo com `fechaAspas="s"`; e, quando houver `notaAlteracao`, um espaço e a nota entre parênteses depois das aspas (ex.: `” (NR)`). As aspas MUST NOT ser impressas em negrito. Nada MUST ser impresso depois da nota de alteração. O omissis MUST ser impresso como uma linha pontilhada até a margem direita. O dispositivo com `textoOmitido="s"` MUST ser impresso com o rótulo seguido de uma linha pontilhada, no lugar do texto.
+
+#### Scenario: Bloco de alteração com aspas e nota
+- **WHEN** o Art. 2º altera a Lei nº 9.394 com um bloco cujo artigo "Art. 12-A." tem `abreAspas="s"` e cujo último parágrafo tem `fechaAspas="s"` e `notaAlteracao="NR"`
+- **THEN** o PDF apresenta, logo após o caput do Art. 2º e com o recuo do bloco de alteração, "“Art. 12-A. ..." e, no fim do último parágrafo, "...” (NR)", sem nenhum caractere depois do "(NR)"
+
+#### Scenario: Dispositivo com texto omitido e omissis
+- **WHEN** o bloco altera o art. 327 com o caput com `textoOmitido="s"`, um omissis e o § 3º com `fechaAspas="s"` e `notaAlteracao="NR"`
+- **THEN** o PDF apresenta "“Art. 327." seguido de linha pontilhada, uma linha pontilhada inteira e "§ 3º A pena será aumentada da metade ... pública.” (NR)"
+
+#### Scenario: Aspas de fechamento no omissis
+- **WHEN** o último elemento do bloco é um omissis com `fechaAspas="s"` e `notaAlteracao="NR"`
+- **THEN** o PDF apresenta a linha pontilhada seguida de "” (NR)" no fim da mesma linha
+
+#### Scenario: Omissis dentro de um dispositivo
+- **WHEN** um inciso com `textoOmitido="s"` contém um omissis seguido das alíneas "k)" e "l)"
+- **THEN** o PDF apresenta o rótulo do inciso seguido de linha pontilhada, uma linha pontilhada inteira e em seguida as alíneas "k)" e "l)" com seus textos
+
+#### Scenario: Sem aspas fora dos atributos
+- **WHEN** um dispositivo dentro do bloco de alteração não tem `abreAspas` nem `fechaAspas`
+- **THEN** o PDF não apresenta aspas nesse dispositivo
 
 ### Requirement: Epígrafe
 A epígrafe SHALL ser impressa centralizada, em negrito, no tamanho de fonte de destaque, em uma única linha (espaços não quebráveis) e com os espaços excedentes do texto removidos. O complemento da epígrafe usado na emenda MUST NOT ser impresso.
