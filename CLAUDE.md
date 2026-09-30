@@ -39,6 +39,7 @@ Biblioteca Java (`br.gov.lexml.eta:eta-backend-services`, empacotada como JAR) c
 
 - Gerar PDF/A de **emenda** e **parecer** a partir do modelo (JSON) e dos anexos enviados.
 - Recuperar o JSON de emenda/parecer a partir do PDF gerado (o modelo vai embutido no PDF como anexo).
+- Gerar PDF/A de **proposição** (editor `lexml-eta`) a partir do `documento-articulado.json`, com o `documento-articulado.xml` (LexML) embutido, e recuperar o JSON a partir desse PDF.
 - Listar proposições e obter o texto delas em LexML/jsonix (serviços do Senado + executável `jsonix-lexml`).
 
 Stack: Java 11, Maven, Spring Boot 2.7.7 (BOM importado em `dependencyManagement`), Lombok, Jackson, JAXB/dom4j/jaxen, Velocity 1.7, Apache FOP 2.7, PDFBox, `br.gov.lexml:pdfa-helper`, `lexml-parser-projeto-lei`.
@@ -81,6 +82,22 @@ Pacote raiz `br.gov.lexml.eta`:
 
 As classes de `etaservices` são POJOs instanciados manualmente (sem `@Component`); a aplicação consumidora decide como expô-las como beans.
 
+### `etaservices.documentoarticulado` — proposição do ETA (documento articulado)
+
+Fluxo **isolado** de emenda e parecer: não reutiliza classes, templates nem configurações deles (`FOPProcessor`, `FOHelper`, `VelocityTemplateProcessor*`, `VelocityExtension`, `fop.xconf`, `lexmljsonix`). Compartilha apenas `pdfa-fonts/`, `static/img/` e `util/` (`EtaBackendException`, `BytesUtil`). Não há classes de domínio: o documento trafega como texto JSON/XML.
+
+- `conversor/` — `ConversorDocumentoArticulado` (JSON ↔ XML) e `ConversorDocumentoArticuladoCli`, que executa o `jsonix-lexml` **2.0.0+** (exigido pelos metadados `lexedit:Metadado`). O executável sai com código 0 mesmo em erro (erro só no stderr), por isso saída vazia é tratada como falha; usa UTF-8, diretório temporário por conversão e tempo limite.
+- `pdf/` — `DocumentoArticuladoPdfGenerator.generate(json, out)`: valida o JSON, converte para XML, aplica `documentoarticulado/template-velocity-documento-articulado.xml` (derivado do da emenda, com a impressão do texto comentada em blocos "NÃO RETIRAR"; hoje o PDF sai sem texto), renderiza com FOP (`documentoarticulado/fop-documento-articulado.xconf`) em PDF/A-3B com o anexo `documento-articulado.xml` e grava o MD5 no `<check:hash>`. Template, FOP e helper XMP são package-private.
+- `extracao/` — `DocumentoArticuladoJsonExtractor.extractJsonFromPdf(pdf, writer)`: lê o anexo em memória com PDFBox e converte para JSON; PDF sem o anexo gera `EtaBackendException`.
+
+Montagem manual pela aplicação consumidora (sem auto-configuration nem propriedade própria), por exemplo:
+
+```java
+ConversorDocumentoArticulado conversor = new ConversorDocumentoArticuladoCli(Paths.get(cli), Duration.ofSeconds(30));
+new DocumentoArticuladoPdfGenerator(conversor);
+new DocumentoArticuladoJsonExtractor(conversor);
+```
+
 ### `lexmljsonix` — proposições e conversão LexML ↔ jsonix
 
 Registrado via **auto-configuration** em `META-INF/spring.factories`:
@@ -91,3 +108,5 @@ Registrado via **auto-configuration** em `META-INF/spring.factories`:
 ## Testes
 
 JUnit 5 (via `spring-boot-starter-test`) + AssertJ + XMLUnit (`xmlunit-assertj3`). Fixtures em `src/test/resources` (JSON/XML de emendas, `parecer.json`, PDFs/DOCX de anexo). Principais suítes: `EmendaXmlMarshallingTest` (maior cobertura: modelo → XML), `EmendaXmlUnmarshallerTest`, `VelocityTemplateProcessorTest`/`VelocityTemplateProcessorComentariosTest`, `PdfGeneratorTest`, `EmendaPojoComentariosTest`.
+
+Documento articulado (`src/test/java/.../documentoarticulado/`): os testes não usam o `jsonix-lexml` real — `ConversorDocumentoArticuladoFake` devolve o par de fixtures `src/test/resources/documentoarticulado/documento-articulado-exemplo.json`/`.xml` (o XML foi gerado pelo `jsonix-lexml` 2.0.0 a partir do JSON), e `ConversorDocumentoArticuladoCliTest` simula o executável com a própria JVM (`JsonixLexmlSimulado`).
