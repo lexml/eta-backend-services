@@ -8,8 +8,8 @@
 
   Imprime a parte inicial (epígrafe, ementa e preâmbulo; issue #72, parte 1) e a articulação básica
   (artigo, caput, parágrafo, inciso, alínea e item; parte 2), com os agrupadores (parte 3), a pena e o
-  título de dispositivo (parte 6) e os blocos de alteração de norma vigente (parte 4). Os demais elementos
-  da #72 (links das remissões, parte 5) ainda saem como texto simples.
+  título de dispositivo (parte 6), os blocos de alteração de norma vigente (parte 4) e os links das
+  remissões (parte 5). Justificação, local e data e assinaturas ainda não são impressos.
   XSLT 1.0 (processador do JDK).
 -->
 <xsl:stylesheet version="1.0"
@@ -25,6 +25,25 @@
 	<xsl:param name="maxTamanhoFonte" select="'16pt'"/>
 	<xsl:param name="lineHeight" select="'150%'"/>
 	<xsl:param name="pMarginBottom" select="'0.6em'"/>
+
+	<!--
+	  Remissões (issue #72, parte 5). Dispositivos impressos que podem ser destino de link interno: só os
+	  da articulação (os metadados lexedit também têm dispositivos, que não são impressos).
+	-->
+	<xsl:key name="dispositivo-impresso"
+		match="lx:Articulacao//*[self::lx:Artigo or self::lx:Caput or self::lx:Paragrafo or self::lx:Inciso
+			or self::lx:Alinea or self::lx:Item or self::lx:Pena or self::lx:Parte or self::lx:Livro
+			or self::lx:Titulo or self::lx:Capitulo or self::lx:Secao or self::lx:Subsecao]"
+		use="@id"/>
+	<!-- Remissões internas (href que não é URN), indexadas pelo id do alvo. -->
+	<xsl:key name="remissao-interna"
+		match="lx:Remissao[@xlink:href][not(starts-with(@xlink:href, 'urn:'))]
+			| lx:span[@xlink:href][not(starts-with(@xlink:href, 'urn:'))]"
+		use="@xlink:href"/>
+
+	<!-- Links em cinza (#808080, mais claro que o #404040 e o #666666 testados antes, que se confundiam com o preto), diferenciando-se do texto, sem sublinhado (issue #72). -->
+	<xsl:variable name="corLink" select="'#808080'"/>
+	<xsl:variable name="urlNormas" select="'https://normas.leg.br/?urn='"/>
 
 	<!-- Raiz única do fragmento: o fo:flow sempre recebe ao menos um bloco. -->
 	<xsl:template match="/">
@@ -96,6 +115,7 @@
 		<xsl:if test="$rotulo != '' or $nome != ''">
 			<fo:block text-align="center" text-indent="0" keep-together.within-page="always"
 				keep-with-next.within-page="always">
+				<xsl:call-template name="id-destino"/>
 				<xsl:if test="$rotulo != ''">
 					<fo:block font-weight="bold">
 						<xsl:call-template name="caixa">
@@ -148,9 +168,13 @@
 	<xsl:template match="lx:Artigo" mode="dispositivo">
 		<xsl:apply-templates select="lx:TituloDispositivo" mode="dispositivo"/>
 		<!-- Em bloco de alteração, as aspas de abertura do artigo saem com o rótulo, no bloco do caput. -->
+		<!-- O artigo não tem bloco próprio: se for alvo de remissão, o destino fica no rótulo. -->
 		<xsl:apply-templates select="lx:Caput" mode="dispositivo">
 			<xsl:with-param name="rotulo" select="lx:Rotulo"/>
 			<xsl:with-param name="abreAspas" select="@abreAspas = 's'"/>
+			<xsl:with-param name="idRotulo">
+				<xsl:if test="key('remissao-interna', @id)"><xsl:value-of select="@id"/></xsl:if>
+			</xsl:with-param>
 		</xsl:apply-templates>
 		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:Caput or self::lx:TituloDispositivo)]"
 			mode="dispositivo"/>
@@ -159,9 +183,11 @@
 	<xsl:template match="lx:Caput" mode="dispositivo">
 		<xsl:param name="rotulo" select="/.."/>
 		<xsl:param name="abreAspas" select="@abreAspas = 's'"/>
+		<xsl:param name="idRotulo" select="''"/>
 		<xsl:call-template name="bloco-dispositivo">
 			<xsl:with-param name="rotulo" select="$rotulo"/>
 			<xsl:with-param name="abreAspas" select="$abreAspas"/>
+			<xsl:with-param name="idRotulo" select="$idRotulo"/>
 		</xsl:call-template>
 	</xsl:template>
 
@@ -207,6 +233,7 @@
 		<xsl:param name="rotulo"/>
 		<xsl:param name="rotuloNegrito" select="true()"/>
 		<xsl:param name="abreAspas" select="@abreAspas = 's'"/>
+		<xsl:param name="idRotulo" select="''"/>
 		<xsl:variable name="textoRotulo" select="normalize-space($rotulo)"/>
 		<xsl:variable name="textoOmitido" select="@textoOmitido = 's'"/>
 		<xsl:variable name="fechaAspas" select="@fechaAspas = 's'"/>
@@ -216,11 +243,15 @@
 		<xsl:apply-templates select="lx:TituloDispositivo" mode="dispositivo"/>
 		<xsl:if test="$textoRotulo != '' or normalize-space($paragrafos[1]) != '' or $textoOmitido or $abreAspas">
 			<fo:block>
+				<xsl:call-template name="id-destino"/>
 				<xsl:if test="$abreAspas">
 					<xsl:call-template name="abre-aspas"/>
 				</xsl:if>
 				<xsl:if test="$textoRotulo != ''">
 					<fo:inline>
+						<xsl:if test="$idRotulo != ''">
+							<xsl:attribute name="id"><xsl:value-of select="$idRotulo"/></xsl:attribute>
+						</xsl:if>
 						<xsl:if test="$rotuloNegrito">
 							<xsl:attribute name="font-weight">bold</xsl:attribute>
 						</xsl:if>
@@ -385,9 +416,43 @@
 		<fo:inline font-style="italic"><xsl:apply-templates mode="inline"/></fo:inline>
 	</xsl:template>
 
-	<!-- span (referência a norma) e demais elementos inline: só o texto. Links: issue #72, parte 5. -->
+	<!--
+	  Remissões (issue #72, parte 5): href com URN -> link para o portal normas.leg.br (URN sem codificação);
+	  href com o id de um dispositivo impresso -> link interno; senão (alvo ausente, ex.: artigo excluído)
+	  só o texto, sem link e sem marca visual.
+	-->
+	<xsl:template match="lx:span[@xlink:href] | lx:Remissao[@xlink:href]" mode="inline">
+		<xsl:variable name="href" select="normalize-space(@xlink:href)"/>
+		<xsl:choose>
+			<xsl:when test="starts-with($href, 'urn:')">
+				<fo:basic-link external-destination="url('{$urlNormas}{$href}')" color="{$corLink}">
+					<xsl:apply-templates mode="inline"/>
+				</fo:basic-link>
+			</xsl:when>
+			<xsl:when test="$href != '' and key('dispositivo-impresso', $href)">
+				<fo:basic-link internal-destination="{$href}" color="{$corLink}">
+					<xsl:apply-templates mode="inline"/>
+				</fo:basic-link>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:apply-templates mode="inline"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- Demais elementos inline: só o texto. -->
 	<xsl:template match="*" mode="inline">
 		<xsl:apply-templates mode="inline"/>
+	</xsl:template>
+
+	<!--
+	  Identificador de destino de link interno, só nos elementos que são alvo de alguma remissão interna
+	  (ids repetidos derrubariam o FO; os demais blocos ficam sem atributos).
+	-->
+	<xsl:template name="id-destino">
+		<xsl:if test="@id and key('remissao-interna', @id)">
+			<xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+		</xsl:if>
 	</xsl:template>
 
 	<!--
