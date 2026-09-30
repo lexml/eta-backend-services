@@ -3,6 +3,9 @@ package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.XML_EXEMPLO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.recurso;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.xml;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -14,6 +17,7 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -56,9 +60,10 @@ class DocumentoArticuladoConteudoTransformerTest {
         Element rotulo = (Element) artigo1.elements().get(0);
         assertThat(rotulo.attributeValue("font-weight")).isEqualTo("bold");
         assertThat(rotulo.getText()).isEqualTo("Art. 1º");
-        // span com xlink:href sai como texto simples
+        // span com xlink:href (URN) sai como link para o portal normas.leg.br
         assertThat(texto(artigo1)).startsWith("Art. 1º Esta Lei altera a Lei nº 9.394, de 20 de dezembro de 1996, para");
-        assertThat(artigo1.asXML()).doesNotContain("basic-link").doesNotContain("urn:lex");
+        assertThat(unicoLink(artigo1).attributeValue("external-destination"))
+                .isEqualTo("url('https://normas.leg.br/?urn=urn:lex:br:federal:lei:1996-12-20;9394')");
         // Dispositivos sem margens próprias: não há espaço extra entre eles (o bloco de alteração tem só o recuo)
         for (Element dispositivo : dispositivos) {
             if ("3cm".equals(dispositivo.attributeValue("margin-left"))) {
@@ -342,7 +347,7 @@ class DocumentoArticuladoConteudoTransformerTest {
     }
 
     @Test
-    void ementaComRecuoESpanComoTextoSimples() throws Exception {
+    void ementaComRecuoELinkParaANormaReferida() throws Exception {
         Element ementa = bloco(ARTICULACAO_E_ALTERACAO, 1);
 
         assertThat(ementa.attributeValue("margin-left")).isEqualTo("6.5cm");
@@ -352,7 +357,71 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(texto(ementa))
                 .startsWith("Altera a Lei nº 9.394, de 20 de dezembro de 1996, que estabelece as diretrizes")
                 .doesNotContain("\"").doesNotContain("“");
-        assertThat(ementa.asXML()).doesNotContain("basic-link").doesNotContain("urn:lex");
+        Element link = unicoLink(ementa);
+        assertThat(link.attributeValue("external-destination"))
+                .isEqualTo("url('https://normas.leg.br/?urn=urn:lex:br:federal:lei:1996-12-20;9394')");
+        assertThat(link.attributeValue("color")).isEqualTo("#808080");
+        assertThat(link.attributeValue("text-decoration")).isNull();
+        assertThat(link.getText()).isEqualTo("Lei nº 9.394, de 20 de dezembro de 1996");
+    }
+
+    @Test
+    void remissaoExternaDentroDoBlocoDeAlteracao() throws Exception {
+        List<Element> blocos = articulacao(xml(ARTICULACAO_E_ALTERACAO)).elements();
+
+        List<String> destinos = new ArrayList<>();
+        for (Node link : blocos.get(indiceDaAlteracao(blocos)).selectNodes(".//*[local-name()='basic-link']")) {
+            destinos.add(((Element) link).attributeValue("external-destination"));
+        }
+        assertThat(destinos).contains("url('https://normas.leg.br/?urn=urn:lex:br:federal:lei:1990-07-13;8069!art58')",
+                "url('https://normas.leg.br/?urn=urn:lex:br:federal:constituicao:1988-10-05;1988')");
+    }
+
+    @Test
+    void remissaoInternaComAlvoAusenteSemLink() throws Exception {
+        Document fo = transformar(recurso(XML_EXEMPLO));
+
+        assertThat(fo.selectNodes("//*[local-name()='basic-link']")).isEmpty();
+        assertThat(texto(fo.getRootElement())).contains("observado o disposto no art. 4º desta Lei");
+        assertThat(fo.selectNodes("//@id")).isEmpty();
+    }
+
+    @Test
+    void remissoesInternasValidasComDestinoSoNosAlvos() throws Exception {
+        Document fo = transformar(xml(REMISSOES_INTERNAS));
+
+        // Destinos: rótulo do Art. 1º, bloco do § 1º e bloco do título do Capítulo I; nenhum outro id
+        List<String> ids = new ArrayList<>();
+        for (Node id : fo.selectNodes("//@id")) {
+            ids.add(id.getText());
+        }
+        assertThat(ids).containsExactlyInAnyOrder("art1", "art1_par1", "cap1");
+        Element rotuloArt1 = (Element) fo.selectSingleNode("//*[@id='art1']");
+        assertThat(rotuloArt1.getName()).isEqualTo("inline");
+        assertThat(rotuloArt1.getText()).isEqualTo("Art. 1º");
+        assertThat(texto((Element) fo.selectSingleNode("//*[@id='art1_par1']"))).startsWith("§ 1º As regras valem");
+        assertThat(texto((Element) fo.selectSingleNode("//*[@id='cap1']"))).contains("CAPÍTULO I");
+
+        // Links internos no caput do Art. 2º; o art. 9º (inexistente) fica como texto
+        List<String> internos = new ArrayList<>();
+        for (Node link : fo.selectNodes("//*[local-name()='basic-link'][@internal-destination]")) {
+            internos.add(((Element) link).attributeValue("internal-destination") + "=" + link.getText());
+            assertThat(((Element) link).attributeValue("color")).isEqualTo("#808080");
+        }
+        assertThat(internos).containsExactly("art1=art. 1º", "art1_par1=§ 1º do art. 1º", "cap1=Capítulo I");
+        assertThat(texto(fo.getRootElement())).contains("e o art. 9º.");
+    }
+
+    @Test
+    void preambuloSemLinkEEmentaComLink() throws Exception {
+        List<Element> blocos = transformar(xml(REMISSOES_INTERNAS)).getRootElement().elements();
+
+        assertThat(unicoLink(blocos.get(1)).attributeValue("external-destination"))
+                .isEqualTo("url('https://normas.leg.br/?urn=urn:lex:br:federal:lei:1990-09-11;8078')");
+        Element preambulo = blocos.get(2);
+        assertThat(preambulo.attributeValue("space-before")).isEqualTo("72pt");
+        assertThat(preambulo.asXML()).doesNotContain("basic-link");
+        assertThat(texto(preambulo)).contains("com base na Constituição Federal, decreta:");
     }
 
     @Test
@@ -447,6 +516,13 @@ class DocumentoArticuladoConteudoTransformerTest {
             textos.add(texto(dispositivo));
         }
         return textos;
+    }
+
+    /** O único fo:basic-link dentro do elemento. */
+    private static Element unicoLink(Element elemento) {
+        List<Node> links = elemento.selectNodes(".//*[local-name()='basic-link']");
+        assertThat(links).hasSize(1);
+        return (Element) links.get(0);
     }
 
     /** Índice do bloco de alteração de norma (margem esquerda de 3cm) entre os blocos da articulação. */

@@ -32,7 +32,7 @@ class ConversorDocumentoArticuladoFakeTest {
 
     @ParameterizedTest
     @ValueSource(strings = { ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO, ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO,
-            ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO })
+            ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO, ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS })
     void converteOsDocumentosDaIssue72(String nome) throws Exception {
         ConversorDocumentoArticuladoFake fake = ConversorDocumentoArticuladoFake.comDocumentosDeTeste();
         String json = ConversorDocumentoArticuladoFake.json(nome);

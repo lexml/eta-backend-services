@@ -28,6 +28,8 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
     public static final String ARTICULACAO_E_ALTERACAO = "documento-com-articulacao-e-alteracao-de-norma";
     public static final String CAPITULO_E_SECAO = "documento-com-capitulo-e-secao";
     public static final String PENA_E_TITULO_DISPOSITIVO = "documento-com-pena-e-titulo-de-dispositivo";
+    /** Documento mínimo com remissões internas válidas (artigo, parágrafo, capítulo) e uma inválida (issue #72, parte 5). */
+    public static final String REMISSOES_INTERNAS = "documento-com-remissoes-internas";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -42,10 +44,10 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
         return fake;
     }
 
-    /** Conversor com o par de exemplo e os documentos da issue #72 registrados. */
+    /** Conversor com o par de exemplo, os documentos da issue #72 e o de remissões internas registrados. */
     public static ConversorDocumentoArticuladoFake comDocumentosDeTeste() {
         ConversorDocumentoArticuladoFake fake = comExemplo();
-        for (String nome : new String[] { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO }) {
+        for (String nome : new String[] { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS }) {
             fake.registrar(json(nome), xml(nome));
         }
         return fake;

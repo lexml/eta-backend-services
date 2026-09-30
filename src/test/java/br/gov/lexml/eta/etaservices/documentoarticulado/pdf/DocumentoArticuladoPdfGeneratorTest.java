@@ -4,6 +4,7 @@ import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocument
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JSON_EXEMPLO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.XML_EXEMPLO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.recurso;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +21,15 @@ import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentNameDictionary;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.interactive.action.PDAction;
+import org.apache.pdfbox.pdmodel.interactive.action.PDActionGoTo;
+import org.apache.pdfbox.pdmodel.interactive.action.PDActionURI;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
+import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDNamedDestination;
+import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.common.PDNameTreeNode;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
@@ -71,6 +81,30 @@ class DocumentoArticuladoPdfGeneratorTest {
 
         // O bloco de alteração de norma vigente vem depois do primeiro artigo
         assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo, primeiroArtigo, trechoDaAlteracao);
+    }
+
+    @Test
+    void linksExternosParaOPortalNormas() throws Exception {
+        List<String> links = links(gerarPdf(PENA_E_TITULO_DISPOSITIVO));
+
+        assertThat(links).contains("uri:https://normas.leg.br/?urn=urn:lex:br:federal:decreto.lei:1940-12-07;2848",
+                "uri:https://normas.leg.br/?urn=urn:lex:br:federal:decreto.lei:1940-12-07;2848!art327");
+        assertThat(links).allMatch(l -> l.startsWith("uri:https://normas.leg.br/?urn=urn:lex:"));
+    }
+
+    @Test
+    void linksInternosSoParaAlvosExistentes() throws Exception {
+        List<String> links = links(gerarPdf(REMISSOES_INTERNAS));
+
+        // Ementa: um link externo; preâmbulo: nenhum; Art. 2º: art. 1º, § 1º e Capítulo I (o art. 9º não existe)
+        assertThat(links).filteredOn(l -> l.startsWith("uri:"))
+                .containsExactly("uri:https://normas.leg.br/?urn=urn:lex:br:federal:lei:1990-09-11;8078");
+        assertThat(links).filteredOn(l -> l.startsWith("interno:")).hasSize(3).allMatch(l -> l.equals("interno:pagina 1"));
+    }
+
+    @Test
+    void remissaoInvalidaSemLinkNoPdf() throws Exception {
+        assertThat(links(pdfExemplo)).isEmpty();
     }
 
     @Test
@@ -177,6 +211,45 @@ class DocumentoArticuladoPdfGeneratorTest {
             assertThat(documento.getNumberOfPages()).isGreaterThanOrEqualTo(1);
             return new PDFTextStripper().getText(documento).replace(' ', ' ').replaceAll("\\s+", " ").trim();
         }
+    }
+
+    /**
+     * Anotações de link do PDF, na ordem das páginas: "uri:&lt;URL&gt;" para links externos e
+     * "interno:pagina &lt;n&gt;" para links internos (destino resolvido para a página, 1-based).
+     */
+    private static List<String> links(byte[] pdf) throws IOException {
+        List<String> links = new ArrayList<>();
+        try (PDDocument documento = PDDocument.load(pdf)) {
+            for (PDPage pagina : documento.getPages()) {
+                for (PDAnnotation anotacao : pagina.getAnnotations()) {
+                    if (!(anotacao instanceof PDAnnotationLink)) {
+                        continue;
+                    }
+                    PDAnnotationLink link = (PDAnnotationLink) anotacao;
+                    PDAction acao = link.getAction();
+                    PDDestination destino = link.getDestination();
+                    if (acao instanceof PDActionURI) {
+                        links.add("uri:" + ((PDActionURI) acao).getURI());
+                        continue;
+                    }
+                    if (acao instanceof PDActionGoTo) {
+                        destino = ((PDActionGoTo) acao).getDestination();
+                    }
+                    if (destino instanceof PDNamedDestination) {
+                        destino = documento.getDocumentCatalog().findNamedDestinationPage((PDNamedDestination) destino);
+                    }
+                    if (destino instanceof PDPageDestination) {
+                        PDPageDestination pageDestination = (PDPageDestination) destino;
+                        int indice = pageDestination.getPage() != null ? documento.getPages().indexOf(pageDestination.getPage())
+                                : pageDestination.getPageNumber();
+                        links.add("interno:pagina " + (indice + 1));
+                    } else {
+                        links.add("desconhecido:" + (acao == null ? destino : acao.getType()));
+                    }
+                }
+            }
+        }
+        return links;
     }
 
     /** Nome da fonte do primeiro caractere da primeira linha do PDF que é exatamente o texto informado. */
