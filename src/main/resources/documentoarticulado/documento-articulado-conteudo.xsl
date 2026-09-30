@@ -6,7 +6,9 @@
   Fluxo isolado da emenda: esta XSLT não importa nem referencia xhtml2fo.xsl ou outros recursos da emenda.
   Os valores de formatação foram copiados da emenda e têm a origem indicada em comentário.
 
-  Nesta etapa (issue #72, parte 1) imprime apenas a parte inicial: epígrafe, ementa e preâmbulo.
+  Imprime a parte inicial (epígrafe, ementa e preâmbulo; issue #72, parte 1) e a articulação básica
+  (artigo, caput, parágrafo, inciso, alínea e item; parte 2). Os demais elementos da #72 têm templates
+  vazios marcados com a parte responsável.
   XSLT 1.0 (processador do JDK).
 -->
 <xsl:stylesheet version="1.0"
@@ -36,10 +38,80 @@
 
 	<!-- Demais partes da norma ainda não impressas -->
 	<xsl:template match="lx:Norma/*" priority="-1"/>
-	<!-- Articulação: issue #72, parte 2 -->
-	<xsl:template match="lx:Articulacao"/>
 	<!-- Local, data e assinaturas: continuam comentados no template -->
 	<xsl:template match="lx:ParteFinal"/>
+
+	<!--
+	  Articulação, no lugar da citação com dispositivos da emenda. Emenda: a citação fica dentro do bloco
+	  "Comando de emenda" (line-height="$lineHeight", text-align="justify", text-indent="2.5cm") e, no
+	  xhtml2fo.xsl, cada p vira um fo:block sem margens próprias: não há espaço extra entre dispositivos.
+	  O espaço antes do primeiro dispositivo é o margin-bottom do preâmbulo. Sem as aspas da citação.
+	  A estrutura é percorrida no modo "dispositivo"; o texto de cada p, no modo "inline".
+	-->
+	<xsl:template match="lx:Articulacao">
+		<fo:block line-height="{$lineHeight}" text-align="justify" text-indent="2.5cm">
+			<xsl:apply-templates select="*" mode="dispositivo"/>
+		</fo:block>
+	</xsl:template>
+
+	<!-- Agrupadores: só atravessados para imprimir os artigos. Rótulo e nome: issue #72, parte 3. -->
+	<xsl:template match="lx:Parte | lx:Livro | lx:Titulo | lx:Capitulo | lx:Secao | lx:Subsecao | lx:Agrupamento"
+		mode="dispositivo">
+		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:NomeAgrupador)]" mode="dispositivo"/>
+	</xsl:template>
+
+	<!-- Artigo: o rótulo do artigo é impresso no mesmo bloco do texto do caput. -->
+	<xsl:template match="lx:Artigo" mode="dispositivo">
+		<xsl:apply-templates select="lx:Caput" mode="dispositivo">
+			<xsl:with-param name="rotulo" select="lx:Rotulo"/>
+		</xsl:apply-templates>
+		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:Caput or self::lx:TituloDispositivo)]"
+			mode="dispositivo"/>
+	</xsl:template>
+
+	<xsl:template match="lx:Caput" mode="dispositivo">
+		<xsl:param name="rotulo" select="/.."/>
+		<xsl:call-template name="bloco-dispositivo">
+			<xsl:with-param name="rotulo" select="$rotulo"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template match="lx:Paragrafo | lx:Inciso | lx:Alinea | lx:Item" mode="dispositivo">
+		<xsl:call-template name="bloco-dispositivo">
+			<xsl:with-param name="rotulo" select="lx:Rotulo"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<!--
+	  Bloco de um dispositivo: rótulo em negrito (emenda: citacao2html troca Rotulo por strong), espaço e
+	  o primeiro p; os p seguintes em blocos próprios; depois os dispositivos subordinados, na ordem do
+	  documento. Os espaços do início do p são colapsados pelo XSL-FO.
+	-->
+	<xsl:template name="bloco-dispositivo">
+		<xsl:param name="rotulo"/>
+		<xsl:variable name="textoRotulo" select="normalize-space($rotulo)"/>
+		<xsl:variable name="paragrafos" select="lx:p"/>
+		<xsl:if test="$textoRotulo != '' or normalize-space($paragrafos[1]) != ''">
+			<fo:block>
+				<xsl:if test="$textoRotulo != ''">
+					<fo:inline font-weight="bold"><xsl:value-of select="$textoRotulo"/></fo:inline>
+					<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:apply-templates select="$paragrafos[1]/node()" mode="inline"/>
+			</fo:block>
+		</xsl:if>
+		<xsl:for-each select="$paragrafos[position() &gt; 1][normalize-space(.) != '']">
+			<fo:block><xsl:apply-templates mode="inline"/></fo:block>
+		</xsl:for-each>
+		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:p)]" mode="dispositivo"/>
+	</xsl:template>
+
+	<!-- Blocos de alteração de norma vigente e omissis: issue #72, parte 4 -->
+	<xsl:template match="lx:Alteracao | lx:Omissis" mode="dispositivo"/>
+	<!-- Pena e título de dispositivo: issue #72, parte 6 -->
+	<xsl:template match="lx:Pena | lx:TituloDispositivo" mode="dispositivo"/>
+	<!-- Demais elementos: não impressos -->
+	<xsl:template match="*" mode="dispositivo" priority="-1"/>
 
 	<xsl:template match="lx:ParteInicial">
 		<xsl:apply-templates select="lx:Epigrafe | lx:Ementa | lx:Preambulo"/>
