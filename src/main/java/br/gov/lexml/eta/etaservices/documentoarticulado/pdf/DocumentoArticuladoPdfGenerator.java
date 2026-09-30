@@ -17,7 +17,8 @@ import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 
 /**
  * Gera o PDF/A-3B de uma proposição a partir do documento-articulado.json, embutindo o
- * documento-articulado.xml (LexML) como anexo. Nesta etapa o PDF não imprime o texto da proposição.
+ * documento-articulado.xml (LexML) como anexo. O texto impresso é gerado a partir desse XML pela XSLT
+ * do conteúdo; nesta etapa, apenas a parte inicial (epígrafe, ementa e preâmbulo).
  */
 public class DocumentoArticuladoPdfGenerator {
 
@@ -28,6 +29,7 @@ public class DocumentoArticuladoPdfGenerator {
     private static final int TAMANHO_TAG_HASH = "<check:hash>".getBytes(StandardCharsets.UTF_8).length;
 
     private final ConversorDocumentoArticulado conversor;
+    private final DocumentoArticuladoConteudoTransformer conteudoTransformer = new DocumentoArticuladoConteudoTransformer();
     private final DocumentoArticuladoTemplateProcessor templateProcessor = new DocumentoArticuladoTemplateProcessor();
     private final DocumentoArticuladoFopProcessor fopProcessor = new DocumentoArticuladoFopProcessor();
     private final ObjectMapper mapper = new ObjectMapper();
@@ -45,7 +47,9 @@ public class DocumentoArticuladoPdfGenerator {
     public void generate(String json, OutputStream outputStream) throws IOException {
         JsonNode documento = validar(json);
         String xml = conversor.jsonParaXml(json);
-        String xslFo = templateProcessor.processar(documento);
+        ParametrosImpressaoDocumentoArticulado parametros = ParametrosImpressaoDocumentoArticulado.padrao();
+        String conteudoFo = conteudoTransformer.transformar(xml, parametros);
+        String xslFo = templateProcessor.processar(documento, parametros, conteudoFo);
         byte[] pdf = fopProcessor.gerarPdf(xslFo, xml);
         inserirHash(pdf);
 

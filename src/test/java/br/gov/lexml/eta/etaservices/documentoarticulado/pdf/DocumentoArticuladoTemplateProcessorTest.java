@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.StringReader;
 
 import org.dom4j.Document;
+import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,8 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class DocumentoArticuladoTemplateProcessorTest {
+
+    private static final String CONTEUDO_FO = "<fo:block xmlns:fo=\"http://www.w3.org/1999/XSL/Format\">Conteúdo gerado</fo:block>";
 
     private final DocumentoArticuladoTemplateProcessor processor = new DocumentoArticuladoTemplateProcessor();
 
@@ -29,7 +32,7 @@ class DocumentoArticuladoTemplateProcessorTest {
 
     @Test
     void geraXslFoBemFormadoComMetadadosPdfa() throws Exception {
-        String fo = processor.processar(documento);
+        String fo = processar();
 
         Document xml = new SAXReader().read(new StringReader(fo));
         assertThat(xml.getRootElement().getName()).isEqualTo("root");
@@ -37,14 +40,32 @@ class DocumentoArticuladoTemplateProcessorTest {
                 .contains("<pdfaid:part>3</pdfaid:part>")
                 .contains("<pdfaid:conformance>B</pdfaid:conformance>")
                 .contains("<check:hash>00000000000000000000000000000000</check:hash>")
-                .contains("<xmp:CreatorTool>LexEdit</xmp:CreatorTool>")
-                .contains("<fo:block/>");
+                .contains("<xmp:CreatorTool>LexEdit</xmp:CreatorTool>");
         assertThat(fo).doesNotContain("$titulo").doesNotContain("$dataIso").doesNotContain("$aplicacao");
     }
 
     @Test
+    void insereOConteudoNoFluxoComOTamanhoDeFonte() throws Exception {
+        String fo = processar();
+
+        Document xml = new SAXReader().read(new StringReader(fo));
+        Element fluxo = (Element) xml.selectSingleNode("//*[local-name()='flow']");
+        assertThat(fluxo.attributeValue("font-size")).isEqualTo("14pt");
+        assertThat(fluxo.getStringValue()).contains("Conteúdo gerado");
+    }
+
+    @Test
+    void conteudoNaoEhReinterpretadoPeloVelocity() {
+        String conteudo = "<fo:block xmlns:fo=\"http://www.w3.org/1999/XSL/Format\">Custo de $valor #if(x) ## nota</fo:block>";
+
+        String fo = processor.processar(documento, ParametrosImpressaoDocumentoArticulado.padrao(), conteudo);
+
+        assertThat(fo).contains("Custo de $valor #if(x) ## nota");
+    }
+
+    @Test
     void tituloPelaEpigrafe() {
-        String fo = processor.processar(documento);
+        String fo = processar();
 
         assertThat(fo).contains("<rdf:li xml:lang=\"x-default\">PROJETO DE LEI Nº , DE</rdf:li>");
     }
@@ -53,7 +74,7 @@ class DocumentoArticuladoTemplateProcessorTest {
     void tituloPelaUrnSemEpigrafe() {
         parteInicial().remove("epigrafe");
 
-        String fo = processor.processar(documento);
+        String fo = processar();
 
         assertThat(fo).contains("<rdf:li xml:lang=\"x-default\">urn:lex:br:senado.federal:projeto.lei:999999;9999</rdf:li>");
     }
@@ -63,7 +84,7 @@ class DocumentoArticuladoTemplateProcessorTest {
         ArrayNode content = ((ObjectNode) parteInicial().path("epigrafe")).putArray("content");
         content.add("PROJETO DE LEI \"A\" & <B>");
 
-        String fo = processor.processar(documento);
+        String fo = processar();
 
         new SAXReader().read(new StringReader(fo));
         assertThat(fo).contains("PROJETO DE LEI &quot;A&quot; &amp; &lt;B&gt;");
@@ -71,12 +92,16 @@ class DocumentoArticuladoTemplateProcessorTest {
 
     @Test
     void naoContemTextoDosDispositivos() {
-        String fo = processor.processar(documento);
+        String fo = processar();
 
         assertThat(fo)
                 .doesNotContain("Fica instituído")
                 .doesNotContain("Esta Lei entra em vigor")
                 .doesNotContain("Institui o Programa");
+    }
+
+    private String processar() {
+        return processor.processar(documento, ParametrosImpressaoDocumentoArticulado.padrao(), CONTEUDO_FO);
     }
 
     private ObjectNode parteInicial() {

@@ -36,12 +36,20 @@ class DocumentoArticuladoTemplateProcessor {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    String processar(JsonNode documento) {
+    /**
+     * @param documento documento-articulado.json
+     * @param parametros tamanhos de fonte e espaçamentos
+     * @param conteudoFo fragmento XSL-FO do conteúdo impresso, inserido no {@code fo:flow} sem ser
+     *        reinterpretado pelo Velocity ({@code $} e {@code #} do texto saem literalmente)
+     */
+    String processar(JsonNode documento, ParametrosImpressaoDocumentoArticulado parametros, String conteudoFo) {
         VelocityContext ctx = new VelocityContext();
         ctx.put("documento", mapper.convertValue(documento, new TypeReference<Map<String, Object>>() {}));
         ctx.put("titulo", StringEscapeUtils.escapeXml10(titulo(documento)));
         ctx.put("aplicacao", StringEscapeUtils.escapeXml10(aplicacao(documento)));
         ctx.put("dataIso", OffsetDateTime.now(FUSO_BRASILIA).truncatedTo(ChronoUnit.SECONDS).toString());
+        ctx.put("tamanhoFonte", parametros.getTamanhoFonte());
+        ctx.put("conteudoFo", conteudoFo);
 
         StringWriter resultado = new StringWriter();
         criarVelocityEngine().evaluate(ctx, resultado, "documentoArticulado", carregarTemplate());

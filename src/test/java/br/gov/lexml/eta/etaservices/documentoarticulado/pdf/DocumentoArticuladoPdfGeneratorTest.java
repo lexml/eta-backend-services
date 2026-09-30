@@ -1,6 +1,9 @@
 package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
 
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JSON_EXEMPLO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.XML_EXEMPLO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.recurso;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,8 +24,11 @@ import org.apache.pdfbox.pdmodel.common.PDNameTreeNode;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification;
 import org.apache.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.text.TextPosition;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake;
 import br.gov.lexml.eta.etaservices.util.EtaBackendException;
@@ -50,13 +56,29 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(xml).contains("Sala das Sessões").contains("Fica instituído o Programa de Modernização");
     }
 
+    @ParameterizedTest
+    @CsvSource(delimiter = '|', value = {
+            ARTICULACAO_E_ALTERACAO + "|PROJETO DE LEI Nº 999, DE 2026|Altera a Lei nº 9.394, de 20 de dezembro de 1996, que estabelece"
+                    + "|O CONGRESSO NACIONAL decreta:|assegurar aos pais",
+            CAPITULO_E_SECAO + "|MEDIDA PROVISÓRIA Nº 999, DE 2026|Institui o Programa Extraordinário de Reequilíbrio Financeiro"
+                    + "|O PRESIDENTE DA REPÚBLICA, no uso da atribuição|Fica instituído o Programa",
+            PENA_E_TITULO_DISPOSITIVO + "|PROJETO DE LEI Nº 999, DE 2026|Tipifica os crimes de desvio de recursos da saúde pública"
+                    + "|O CONGRESSO NACIONAL decreta:|Esta Lei tipifica" })
+    void imprimeAParteInicialNaOrdemSemOsDispositivos(String nome, String epigrafe, String ementa, String preambulo,
+            String dispositivo) throws Exception {
+        String texto = textoNormalizado(gerarPdf(nome));
+
+        assertThat(texto).containsSubsequence(epigrafe, ementa, preambulo);
+        assertThat(texto).doesNotContain(dispositivo).doesNotContain("Art. 1º");
+    }
+
     @Test
-    void pdfTemPaginaSemOTextoDaProposicao() throws Exception {
-        try (PDDocument pdf = PDDocument.load(pdfExemplo)) {
-            assertThat(pdf.getNumberOfPages()).isGreaterThanOrEqualTo(1);
-            String texto = new PDFTextStripper().getText(pdf);
-            assertThat(texto).doesNotContain("Fica instituído").doesNotContain("Art. 1");
-        }
+    void preambuloSemNegritoEEpigrafeEmNegrito() throws Exception {
+        Map<String, String> fontes = fontesPorPalavra(gerarPdf(CAPITULO_E_SECAO));
+
+        // No documento o preâmbulo tem "<b>O PRESIDENTE DA REPÚBLICA</b>": o negrito é descartado
+        assertThat(fontes.get("PRESIDENTE")).doesNotContainIgnoringCase("bold");
+        assertThat(fontes.get("PROVISÓRIA")).containsIgnoringCase("bold");
     }
 
     @Test
@@ -88,6 +110,44 @@ class DocumentoArticuladoPdfGeneratorTest {
     void falhaNaConversaoParaXml() {
         assertNadaEscritoAoFalhar(ConversorDocumentoArticuladoFake.comExemplo().falharCom("Element [invalido] is not known"),
                 recurso(JSON_EXEMPLO), "Element [invalido] is not known");
+    }
+
+    private static byte[] gerarPdf(String nome) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        new DocumentoArticuladoPdfGenerator(ConversorDocumentoArticuladoFake.comDocumentosDeTeste())
+                .generate(ConversorDocumentoArticuladoFake.json(nome), out);
+        return out.toByteArray();
+    }
+
+    /** Texto extraído do PDF com espaços (inclusive não quebráveis) e quebras de linha normalizados. */
+    private static String textoNormalizado(byte[] pdf) throws IOException {
+        try (PDDocument documento = PDDocument.load(pdf)) {
+            assertThat(documento.getNumberOfPages()).isGreaterThanOrEqualTo(1);
+            return new PDFTextStripper().getText(documento).replace(' ', ' ').replaceAll("\\s+", " ").trim();
+        }
+    }
+
+    /** Nome da fonte usada no primeiro caractere de cada palavra do PDF. */
+    private static Map<String, String> fontesPorPalavra(byte[] pdf) throws IOException {
+        Map<String, String> fontes = new LinkedHashMap<>();
+        PDFTextStripper stripper = new PDFTextStripper() {
+            @Override
+            protected void writeString(String texto, List<TextPosition> posicoes) throws IOException {
+                String[] palavras = texto.replace(' ', ' ').split(" ");
+                int inicio = 0;
+                for (String palavra : palavras) {
+                    if (!palavra.isEmpty() && inicio < posicoes.size()) {
+                        fontes.putIfAbsent(palavra.replaceAll("[,.:;]$", ""), posicoes.get(inicio).getFont().getName());
+                    }
+                    inicio += palavra.length() + 1;
+                }
+                super.writeString(texto, posicoes);
+            }
+        };
+        try (PDDocument documento = PDDocument.load(pdf)) {
+            stripper.getText(documento);
+        }
+        return fontes;
     }
 
     private static void assertNadaEscritoAoFalhar(ConversorDocumentoArticuladoFake conversor, String json, String mensagem) {

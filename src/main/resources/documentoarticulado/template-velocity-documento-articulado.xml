@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 ## Template XSL-FO do documento articulado, derivado de template-velocity-emenda.xml.
-## Nesta etapa o PDF não imprime o texto da proposição: a impressão herdada da emenda está preservada
-## em comentários de bloco do Velocity marcados "NÃO RETIRAR", para aproveitamento posterior. Como esses
-## comentários não podem ser aninhados, os comentários originais da emenda ficam entre os blocos.
+## O conteúdo impresso é gerado pela XSLT documento-articulado-conteudo.xsl a partir do
+## documento-articulado.xml e chega pronto em $conteudoFo; este template cuida da página e dos metadados.
+## A impressão herdada da emenda que ainda não foi adaptada está preservada em comentários de bloco do
+## Velocity marcados "NÃO RETIRAR", para aproveitamento posterior. Como esses comentários não podem ser
+## aninhados, os comentários originais da emenda ficam entre os blocos.
 ## Contexto: $documento (documento-articulado.json como Map), $titulo e $aplicacao (já escapados para
-## XML) e $dataIso (data e hora da geração, ISO-8601).
+## XML), $dataIso (data e hora da geração, ISO-8601), $tamanhoFonte (pontos) e $conteudoFo (fragmento
+## XSL-FO, inserido sem ser reinterpretado pelo Velocity).
 <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
 	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
@@ -211,9 +214,11 @@
 		</fo:static-content>      
 	
 *#
-		<fo:flow flow-name="xsl-region-body">
-			## O FOP exige ao menos um bloco no fluxo.
-			<fo:block/>
+		<fo:flow flow-name="xsl-region-body" font-size="${tamanhoFonte}pt">
+			## Parte inicial (epígrafe, ementa e preâmbulo), gerada pela XSLT. O fragmento tem sempre um
+			## fo:block raiz, que o FOP exige no fluxo. Os blocos abaixo com epígrafe e comando de emenda
+			## continuam apenas como referência; a formatação equivalente está na XSLT.
+			$conteudoFo
 #* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
 		<fo:flow flow-name="xsl-region-body" font-size="${emenda.opcoesImpressao.tamanhoFonte}pt">
 			#set($tamanhoFonte = $emenda.opcoesImpressao.tamanhoFonte)
