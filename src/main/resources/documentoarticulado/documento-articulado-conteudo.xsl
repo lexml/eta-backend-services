@@ -8,8 +8,8 @@
 
   Imprime a parte inicial (epígrafe, ementa e preâmbulo; issue #72, parte 1) e a articulação básica
   (artigo, caput, parágrafo, inciso, alínea e item; parte 2), com os agrupadores (parte 3), a pena e o
-  título de dispositivo (parte 6). Os demais elementos da #72 têm templates vazios marcados com a parte
-  responsável.
+  título de dispositivo (parte 6) e os blocos de alteração de norma vigente (parte 4). Os demais elementos
+  da #72 (links das remissões, parte 5) ainda saem como texto simples.
   XSLT 1.0 (processador do JDK).
 -->
 <xsl:stylesheet version="1.0"
@@ -147,8 +147,10 @@
 	-->
 	<xsl:template match="lx:Artigo" mode="dispositivo">
 		<xsl:apply-templates select="lx:TituloDispositivo" mode="dispositivo"/>
+		<!-- Em bloco de alteração, as aspas de abertura do artigo saem com o rótulo, no bloco do caput. -->
 		<xsl:apply-templates select="lx:Caput" mode="dispositivo">
 			<xsl:with-param name="rotulo" select="lx:Rotulo"/>
+			<xsl:with-param name="abreAspas" select="@abreAspas = 's'"/>
 		</xsl:apply-templates>
 		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:Caput or self::lx:TituloDispositivo)]"
 			mode="dispositivo"/>
@@ -156,8 +158,10 @@
 
 	<xsl:template match="lx:Caput" mode="dispositivo">
 		<xsl:param name="rotulo" select="/.."/>
+		<xsl:param name="abreAspas" select="@abreAspas = 's'"/>
 		<xsl:call-template name="bloco-dispositivo">
 			<xsl:with-param name="rotulo" select="$rotulo"/>
+			<xsl:with-param name="abreAspas" select="$abreAspas"/>
 		</xsl:call-template>
 	</xsl:template>
 
@@ -192,19 +196,29 @@
 	</xsl:template>
 
 	<!--
-	  Bloco de um dispositivo: título de dispositivo do próprio dispositivo (se houver), rótulo (em
-	  negrito, exceto na pena; emenda: citacao2html troca Rotulo por strong), espaço e o primeiro p; os p
-	  seguintes em blocos próprios; depois os dispositivos subordinados, na ordem do documento. Os espaços
-	  do início do p são colapsados pelo XSL-FO.
+	  Bloco de um dispositivo: título de dispositivo do próprio dispositivo (se houver), aspas de abertura
+	  (abreAspas), rótulo (em negrito, exceto na pena; emenda: citacao2html troca Rotulo por strong),
+	  espaço e o primeiro p, ou a linha pontilhada quando textoOmitido="s"; os p seguintes em blocos
+	  próprios; o fechamento das aspas e a nota de alteração (fechaAspas, notaAlteracao) no último bloco de
+	  texto; depois os dispositivos subordinados, na ordem do documento. Os espaços do início do p são
+	  colapsados pelo XSL-FO.
 	-->
 	<xsl:template name="bloco-dispositivo">
 		<xsl:param name="rotulo"/>
 		<xsl:param name="rotuloNegrito" select="true()"/>
+		<xsl:param name="abreAspas" select="@abreAspas = 's'"/>
 		<xsl:variable name="textoRotulo" select="normalize-space($rotulo)"/>
+		<xsl:variable name="textoOmitido" select="@textoOmitido = 's'"/>
+		<xsl:variable name="fechaAspas" select="@fechaAspas = 's'"/>
+		<xsl:variable name="nota" select="normalize-space(@notaAlteracao)"/>
 		<xsl:variable name="paragrafos" select="lx:p"/>
+		<xsl:variable name="demaisParagrafos" select="$paragrafos[position() &gt; 1][normalize-space(.) != '']"/>
 		<xsl:apply-templates select="lx:TituloDispositivo" mode="dispositivo"/>
-		<xsl:if test="$textoRotulo != '' or normalize-space($paragrafos[1]) != ''">
+		<xsl:if test="$textoRotulo != '' or normalize-space($paragrafos[1]) != '' or $textoOmitido or $abreAspas">
 			<fo:block>
+				<xsl:if test="$abreAspas">
+					<xsl:call-template name="abre-aspas"/>
+				</xsl:if>
 				<xsl:if test="$textoRotulo != ''">
 					<fo:inline>
 						<xsl:if test="$rotuloNegrito">
@@ -214,17 +228,120 @@
 					</fo:inline>
 					<xsl:text> </xsl:text>
 				</xsl:if>
-				<xsl:apply-templates select="$paragrafos[1]/node()" mode="inline"/>
+				<xsl:choose>
+					<xsl:when test="$textoOmitido">
+						<xsl:call-template name="linha-pontilhada"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:apply-templates select="$paragrafos[1]/node()" mode="inline"/>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="$fechaAspas and not($demaisParagrafos)">
+					<xsl:call-template name="fecha-aspas">
+						<xsl:with-param name="nota" select="$nota"/>
+					</xsl:call-template>
+				</xsl:if>
 			</fo:block>
 		</xsl:if>
-		<xsl:for-each select="$paragrafos[position() &gt; 1][normalize-space(.) != '']">
-			<fo:block><xsl:apply-templates mode="inline"/></fo:block>
+		<xsl:for-each select="$demaisParagrafos">
+			<fo:block>
+				<xsl:apply-templates mode="inline"/>
+				<xsl:if test="$fechaAspas and position() = last()">
+					<xsl:call-template name="fecha-aspas">
+						<xsl:with-param name="nota" select="$nota"/>
+					</xsl:call-template>
+				</xsl:if>
+			</fo:block>
 		</xsl:for-each>
 		<xsl:apply-templates select="*[not(self::lx:Rotulo or self::lx:p or self::lx:TituloDispositivo)]" mode="dispositivo"/>
 	</xsl:template>
 
-	<!-- Blocos de alteração de norma vigente e omissis: issue #72, parte 4 -->
-	<xsl:template match="lx:Alteracao | lx:Omissis" mode="dispositivo"/>
+	<!--
+	  Bloco de alteração de norma vigente (issue #72, parte 4). Emenda: citacao2html troca <Alteracao> por
+	  margin-left="3cm" text-indent="1.5cm" (os mesmos valores de estilo-norma-alterada); os dispositivos
+	  de dentro herdam o recuo e usam os templates da articulação. Sem espaço extra. As aspas e a nota de
+	  alteração vêm dos atributos abreAspas, fechaAspas e notaAlteracao; nenhuma aspa é gerada por conta
+	  própria (as aspas da citação da emenda não existem aqui).
+	-->
+	<xsl:template match="lx:Alteracao" mode="dispositivo">
+		<fo:block margin-left="3cm" text-indent="1.5cm">
+			<xsl:apply-templates select="*" mode="dispositivo"/>
+		</fo:block>
+	</xsl:template>
+
+	<!-- Omissis: linha pontilhada inteira, com aspas conforme os atributos. -->
+	<xsl:template match="lx:Omissis" mode="dispositivo">
+		<fo:block>
+			<xsl:if test="@abreAspas = 's'">
+				<xsl:call-template name="abre-aspas"/>
+			</xsl:if>
+			<xsl:call-template name="linha-pontilhada"/>
+			<xsl:if test="@fechaAspas = 's'">
+				<xsl:call-template name="fecha-aspas">
+					<xsl:with-param name="nota" select="normalize-space(@notaAlteracao)"/>
+				</xsl:call-template>
+			</xsl:if>
+		</fo:block>
+	</xsl:template>
+
+	<!--
+	  Linha pontilhada até a margem direita. Emenda: xhtml2fo.xsl (span class="omissis"). O comprimento
+	  mínimo padrão (0) deixa a linha encolher para caber o fechamento das aspas no fim da mesma linha.
+	-->
+	<xsl:template name="linha-pontilhada">
+		<fo:leader leader-pattern="dots" leader-length.optimum="100%"/>
+	</xsl:template>
+
+	<!--
+	  Texto no modo inline. O último texto do último p de um dispositivo com fechaAspas perde os espaços do
+	  fim, para as aspas de fechamento ficarem coladas ao texto ("pública.”" e não "pública. ”").
+	-->
+	<xsl:template match="text()" mode="inline">
+		<xsl:variable name="p" select="ancestor::lx:p[1]"/>
+		<xsl:choose>
+			<xsl:when test="$p/parent::*[@fechaAspas = 's'] and not($p/following-sibling::lx:p[normalize-space(.) != ''])
+					and not(following::text()[generate-id(ancestor::lx:p[1]) = generate-id($p)])">
+				<xsl:call-template name="aparar-fim">
+					<xsl:with-param name="texto" select="."/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="."/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- Remove espaços, tabulações e quebras de linha do fim do texto (XSLT 1.0 não tem regex). -->
+	<xsl:template name="aparar-fim">
+		<xsl:param name="texto"/>
+		<xsl:variable name="ultimo" select="substring($texto, string-length($texto))"/>
+		<xsl:choose>
+			<xsl:when test="string-length($texto) &gt; 0 and contains(' &#9;&#10;&#13;', $ultimo)">
+				<xsl:call-template name="aparar-fim">
+					<xsl:with-param name="texto" select="substring($texto, 1, string-length($texto) - 1)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$texto"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- Aspas fora do negrito do rótulo, como na emenda. -->
+	<xsl:template name="abre-aspas">
+		<xsl:text>“</xsl:text>
+	</xsl:template>
+
+	<!-- Aspas de fechamento e, se houver, a nota de alteração com espaço antes: ” (NR). Nada depois. -->
+	<xsl:template name="fecha-aspas">
+		<xsl:param name="nota"/>
+		<xsl:text>”</xsl:text>
+		<xsl:if test="$nota != ''">
+			<xsl:text> (</xsl:text>
+			<xsl:value-of select="$nota"/>
+			<xsl:text>)</xsl:text>
+		</xsl:if>
+	</xsl:template>
 	<!-- Demais elementos: não impressos -->
 	<xsl:template match="*" mode="dispositivo" priority="-1"/>
 
