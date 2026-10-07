@@ -55,6 +55,22 @@ class DocumentoArticuladoTemplateProcessorTest {
     }
 
     @Test
+    void separadorDasNotasDeRodapeAntesDoFluxo() throws Exception {
+        Document xml = new SAXReader().read(new StringReader(processar()));
+        Element sequencia = (Element) xml.selectSingleNode("//*[local-name()='page-sequence']");
+        java.util.List<Element> filhos = sequencia.elements();
+
+        // Traço de 50% e 0,5pt, como na emenda; o XSL-FO exige o static-content antes do flow
+        assertThat(filhos).extracting(Element::getName).containsExactly("static-content", "flow");
+        Element separador = filhos.get(0);
+        assertThat(separador.attributeValue("flow-name")).isEqualTo("xsl-footnote-separator");
+        Element traco = (Element) separador.selectSingleNode(".//*[local-name()='leader']");
+        assertThat(traco.attributeValue("leader-pattern")).isEqualTo("rule");
+        assertThat(traco.attributeValue("leader-length")).isEqualTo("50%");
+        assertThat(traco.attributeValue("rule-thickness")).isEqualTo("0.5pt");
+    }
+
+    @Test
     void conteudoNaoEhReinterpretadoPeloVelocity() {
         String conteudo = "<fo:block xmlns:fo=\"http://www.w3.org/1999/XSL/Format\">Custo de $valor #if(x) ## nota</fo:block>";
 

@@ -3,6 +3,8 @@ package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JSON_EXEMPLO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JUSTIFICACAO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JUSTIFICACAO_LONGA;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.XML_EXEMPLO;
@@ -106,22 +108,27 @@ class DocumentoArticuladoPdfGeneratorTest {
     void exemploComLinksExternosEInternos() throws Exception {
         List<String> links = links(pdfExemplo);
 
-        // Ementa, § 2º do Art. 1º e Art. 5º: links para o portal; Art. 2º: remissões internas válidas (a do
-        // art. 7º, excluído, é coberta no DocumentoArticuladoConteudoTransformerTest). Um link quebrado em duas
-        // linhas gera duas anotações.
+        // Ementa, § 2º do Art. 1º, Art. 5º e justificação: links para o portal; Art. 2º e justificação: remissões
+        // internas válidas (a do art. 7º, excluído, é coberta no DocumentoArticuladoConteudoTransformerTest); e o
+        // link do editor para o portal do Ministério. Um link quebrado em duas linhas gera duas anotações.
         assertThat(links).filteredOn(l -> l.startsWith("uri:")).isNotEmpty()
-                .allMatch(l -> l.startsWith("uri:https://normas.leg.br/?urn=urn:lex:"))
+                .allMatch(l -> l.startsWith("uri:https://normas.leg.br/?urn=urn:lex:") || l.equals("uri:https://www.gov.br/gestao"))
                 .contains("uri:https://normas.leg.br/?urn=urn:lex:br:federal:lei:2021-04-01;14133!art5",
-                        "uri:https://normas.leg.br/?urn=urn:lex:br:federal:decreto.lei:1940-12-07;2848!art327");
-        assertThat(links).filteredOn(l -> l.startsWith("interno:")).hasSizeGreaterThanOrEqualTo(5);
+                        "uri:https://normas.leg.br/?urn=urn:lex:br:federal:decreto.lei:1940-12-07;2848!art327",
+                        "uri:https://www.gov.br/gestao");
+        assertThat(links).filteredOn(l -> l.startsWith("interno:")).hasSizeGreaterThanOrEqualTo(6);
     }
 
     @Test
-    void justificacaoAindaNaoImpressa() throws Exception {
+    void justificacaoImpressaNaVersaoRevisadaDepoisDaArticulacao() throws Exception {
         String texto = textoNormalizado(pdfExemplo);
 
-        assertThat(texto).contains("Art. 1º Fica instituído o Programa de Modernização");
-        assertThat(texto).doesNotContain("Esta proposição promove a");
+        // Exemplo da especificação do lexml-eta: <del>reforma</del><ins>modernização</ins>
+        assertThat(texto).containsSubsequence("Art. 6º Esta Lei entra em vigor", "JUSTIFICAÇÃO",
+                "Esta proposição promove a modernização da gestão pública");
+        assertThat(texto).doesNotContain("promove a reforma");
+        // Local e data e assinaturas ainda não impressos
+        assertThat(texto).doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke");
     }
 
     @Test
@@ -199,6 +206,72 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertNadaEscritoAoFalhar(ConversorDocumentoArticuladoFake.comExemplo(), "{\"name\":{\"localPart\":\"Outro\"}}", "documento LexML");
         String semUrn = recurso(JSON_EXEMPLO).replace("urn:lex:br:senado.federal:projeto.lei:999999;9999", "");
         assertNadaEscritoAoFalhar(ConversorDocumentoArticuladoFake.comExemplo(), semUrn, "documento LexML");
+    }
+
+    // Justificação (issue #75, parte A) -------------------------------------------------------------------------
+
+    @Test
+    void justificacaoImpressaDepoisDaArticulacaoNaVersaoRevisada() throws Exception {
+        String texto = textoNormalizado(gerarPdf(JUSTIFICACAO));
+
+        assertThat(texto).containsSubsequence("PROJETO DE LEI Nº 123, DE 2026", "O CONGRESSO NACIONAL decreta:",
+                "Art. 2º Esta Lei entra em vigor", "JUSTIFICAÇÃO", "A presente proposição institui",
+                "a livros digitais acessíveis.", "pela coordenação da política, nos termos do art. 1º desta proposição.",
+                "Pelas razões expostas");
+        // Exclusões não impressas; listas, tabelas, local e data e assinaturas ainda não
+        assertThat(texto).doesNotContain("fiscalização").doesNotContain("conforme regulamento")
+                .doesNotContain("Nota excluída").doesNotContain("Item de lista").doesNotContain("Indicador")
+                .doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke");
+    }
+
+    @Test
+    void formatacaoInlineDaJustificacaoNoPdf() throws Exception {
+        List<Linha> linhas = linhas(gerarPdf(JUSTIFICACAO));
+        Linha linha = linhaQueContem(linhas, "livros digitais acessíveis");
+
+        assertThat(linha.fonteDe("livros")).containsIgnoringCase("bold");
+        assertThat(linha.fonteDe("digitais")).containsIgnoringCase("italic");
+        assertThat(linha.fonteDe("acessíveis")).doesNotContainIgnoringCase("bold").doesNotContainIgnoringCase("italic");
+        // Título em negrito, centralizado e no tamanho de destaque
+        Linha titulo = linhaQueContem(linhas, "JUSTIFICAÇÃO");
+        assertThat(titulo.fonteDe("JUSTIFICAÇÃO")).containsIgnoringCase("bold");
+        assertThat(titulo.tamanho).isEqualTo(16f);
+    }
+
+    @Test
+    void linksDaJustificacaoENotasNoPdf() throws Exception {
+        List<String> links = links(gerarPdf(JUSTIFICACAO));
+
+        assertThat(links).contains("uri:https://www.gov.br/mec",
+                "uri:https://normas.leg.br/?urn=urn:lex:br:federal:lei:2015-07-06;13146",
+                "uri:https://normas.leg.br/?urn=urn:lex:br:federal:lei.complementar:2000-05-04;101", "interno:pagina 1");
+    }
+
+    @Test
+    void notasDeRodapeNoRodapeDaPaginaDaReferencia() throws Exception {
+        List<Linha> linhas = linhas(gerarPdf(JUSTIFICACAO));
+
+        assertNotaNaPaginaDaReferencia(linhas, 1, "oficiais1", "Fonte: Pesquisa Nacional de Saúde");
+        assertNotaNaPaginaDaReferencia(linhas, 2, "existente2", "Ver a estimativa de impacto");
+        assertNotaNaPaginaDaReferencia(linhas, 3, "superior3", "Nota simples.");
+        assertThat(linhas).filteredOn(l -> l.texto.startsWith("4 ")).isEmpty();
+    }
+
+    @Test
+    void notasDeRodapeComNumeracaoContinuaEmVariasPaginas() throws Exception {
+        byte[] pdf = gerarPdf(JUSTIFICACAO_LONGA);
+        List<Linha> linhas = linhas(pdf);
+
+        String[] referencias = { "desastres1", "desastres2", "canalização3", "fiscal4", "resposta5", "brasileira6" };
+        List<Integer> paginas = new ArrayList<>();
+        for (int numero = 1; numero <= referencias.length; numero++) {
+            paginas.add(assertNotaNaPaginaDaReferencia(linhas, numero, referencias[numero - 1], ""));
+        }
+        assertThat(paginas).isSorted();
+        assertThat(paginas.stream().distinct().count()).as("páginas com notas").isGreaterThanOrEqualTo(2);
+        try (PDDocument documento = PDDocument.load(pdf)) {
+            assertThat(documento.getNumberOfPages()).isGreaterThanOrEqualTo(3);
+        }
     }
 
     @Test
@@ -301,6 +374,74 @@ class DocumentoArticuladoPdfGeneratorTest {
             stripper.getText(documento);
         }
         return fontes;
+    }
+
+    /** Linha de texto do PDF, com a página (1-based), a posição vertical (de cima para baixo), o tamanho e as fontes. */
+    static class Linha {
+        final int pagina;
+        final float y;
+        final float tamanho;
+        final String texto;
+        final List<String> fontes = new ArrayList<>();
+
+        Linha(int pagina, String texto, List<TextPosition> posicoes) {
+            this.pagina = pagina;
+            this.texto = texto.replace(' ', ' ');
+            this.y = posicoes.get(0).getYDirAdj();
+            this.tamanho = posicoes.get(0).getFontSizeInPt();
+            for (TextPosition posicao : posicoes) {
+                fontes.add(posicao.getFont().getName());
+            }
+        }
+
+        /** Fonte do primeiro caractere da palavra na linha. */
+        String fonteDe(String palavra) {
+            int indice = texto.indexOf(palavra);
+            assertThat(indice).as("'%s' na linha '%s'", palavra, texto).isNotNegative();
+            return fontes.get(Math.min(indice, fontes.size() - 1));
+        }
+
+        @Override
+        public String toString() {
+            return "p" + pagina + " y=" + y + " " + tamanho + "pt: " + texto;
+        }
+    }
+
+    private static List<Linha> linhas(byte[] pdf) throws IOException {
+        List<Linha> linhas = new ArrayList<>();
+        PDFTextStripper stripper = new PDFTextStripper() {
+            @Override
+            protected void writeString(String texto, List<TextPosition> posicoes) throws IOException {
+                linhas.add(new Linha(getCurrentPageNo(), texto, posicoes));
+                super.writeString(texto, posicoes);
+            }
+        };
+        try (PDDocument documento = PDDocument.load(pdf)) {
+            stripper.getText(documento);
+        }
+        return linhas;
+    }
+
+    private static Linha linhaQueContem(List<Linha> linhas, String trecho) {
+        return linhas.stream().filter(l -> l.texto.contains(trecho)).findFirst()
+                .orElseThrow(() -> new AssertionError("Linha com '" + trecho + "' não encontrada em " + linhas));
+    }
+
+    /**
+     * Verifica que o texto da nota (linha em fonte menor iniciada por "número espaço") está na mesma página da
+     * referência (palavra seguida do número sobrescrito, ex.: "oficiais1") e abaixo de todo o texto da página.
+     * Devolve a página.
+     */
+    private static int assertNotaNaPaginaDaReferencia(List<Linha> linhas, int numero, String referencia, String inicioDaNota) {
+        Linha nota = linhas.stream().filter(l -> l.tamanho < 11 && l.texto.startsWith(numero + " " + inicioDaNota))
+                .findFirst().orElseThrow(() -> new AssertionError("Nota " + numero + " não encontrada em " + linhas));
+        Linha linhaDaReferencia = linhaQueContem(linhas, referencia);
+
+        assertThat(nota.pagina).as("página da nota %d", numero).isEqualTo(linhaDaReferencia.pagina);
+        float fimDoTexto = (float) linhas.stream().filter(l -> l.pagina == nota.pagina && l.tamanho >= 14)
+                .mapToDouble(l -> l.y).max().orElse(0);
+        assertThat(nota.y).as("nota %d abaixo do texto da página", numero).isGreaterThan(fimDoTexto);
+        return nota.pagina;
     }
 
     private static void assertNadaEscritoAoFalhar(ConversorDocumentoArticuladoFake conversor, String json, String mensagem) {

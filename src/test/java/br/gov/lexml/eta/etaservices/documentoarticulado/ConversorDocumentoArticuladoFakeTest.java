@@ -32,8 +32,9 @@ class ConversorDocumentoArticuladoFakeTest {
 
     @ParameterizedTest
     @ValueSource(strings = { ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO, ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO,
-            ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO, ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS })
-    void converteOsDocumentosDaIssue72(String nome) throws Exception {
+            ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO, ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS,
+            ConversorDocumentoArticuladoFake.JUSTIFICACAO, ConversorDocumentoArticuladoFake.JUSTIFICACAO_LONGA })
+    void converteOsDocumentosDeTeste(String nome) throws Exception {
         ConversorDocumentoArticuladoFake fake = ConversorDocumentoArticuladoFake.comDocumentosDeTeste();
         String json = ConversorDocumentoArticuladoFake.json(nome);
         String xml = ConversorDocumentoArticuladoFake.xml(nome);
@@ -43,6 +44,26 @@ class ConversorDocumentoArticuladoFakeTest {
         assertThat(new ObjectMapper().readTree(json).at("/value/projetoNorma/norma/parteInicial/epigrafe").isMissingNode()).isFalse();
         // O par de exemplo da #71 continua registrado
         assertThat(fake.jsonParaXml(recurso(JSON_EXEMPLO))).isEqualTo(recurso(XML_EXEMPLO));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { ConversorDocumentoArticuladoFake.JUSTIFICACAO, ConversorDocumentoArticuladoFake.JUSTIFICACAO_LONGA })
+    void documentosComJustificacaoSeguemAEspecificacaoDoLexmlEta(String nome) throws Exception {
+        String xml = ConversorDocumentoArticuladoFake.xml(nome);
+        String json = ConversorDocumentoArticuladoFake.json(nome);
+
+        // Justificação/PartePrincipal com notas de rodapé inline e marcas de revisão com id _rt (specs 06, 07 e 09)
+        assertThat(xml).contains("<Justificacao><PartePrincipal>").contains("<NotaDeRodape>").contains("<del id=\"_rt")
+                .contains("<ins id=\"_rt").contains("lexedit:RevisaoTextual refIdRevisao=\"_rt");
+        assertThat(new ObjectMapper().readTree(json).at("/value/projetoNorma/justificacao/0/partePrincipal").isMissingNode())
+                .isFalse();
+    }
+
+    @Test
+    void justificacaoPreservaOsEspacosEntreElementosInline() {
+        // O JSON imita o que o editor gera; o espaço entre dois elementos inline chega ao XML da impressão
+        assertThat(ConversorDocumentoArticuladoFake.xml(ConversorDocumentoArticuladoFake.JUSTIFICACAO))
+                .contains("<b>livros</b> <i>digitais</i> <u>acessíveis</u>");
     }
 
     @Test

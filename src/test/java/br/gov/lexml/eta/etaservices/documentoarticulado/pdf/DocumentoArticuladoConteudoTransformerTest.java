@@ -2,6 +2,7 @@ package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
 
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JUSTIFICACAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.XML_EXEMPLO;
@@ -387,18 +388,19 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(fo.selectNodes("//*[@internal-destination='art7' or @id='art7']")).isEmpty();
 
         // As demais remissões internas do exemplo são válidas: link e destino (artigo, parágrafo, inciso,
-        // capítulo e subseção), e nenhum outro id
+        // capítulo e subseção); o art. 1º é alvo de uma remissão da articulação e de outra da justificação.
+        // Um id por alvo e nenhum outro id
         List<String> internos = new ArrayList<>();
         for (Node link : fo.selectNodes("//*[local-name()='basic-link'][@internal-destination]")) {
             internos.add(((Element) link).attributeValue("internal-destination"));
         }
         assertThat(internos).containsExactlyInAnyOrder("art1_par1", "art1_par1_inc2", "tit1_cap1", "art1",
-                "tit2_cap2_sec1_sub2");
+                "tit2_cap2_sec1_sub2", "art1");
         List<String> ids = new ArrayList<>();
         for (Node id : fo.selectNodes("//@id")) {
             ids.add(id.getText());
         }
-        assertThat(ids).containsExactlyInAnyOrderElementsOf(internos);
+        assertThat(ids).containsExactlyInAnyOrder("art1_par1", "art1_par1_inc2", "tit1_cap1", "art1", "tit2_cap2_sec1_sub2");
     }
 
     @Test
@@ -499,6 +501,286 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(textosDosDispositivos((Element) raiz.elements().get(0))).containsExactly("Art. 1º Texto do artigo.");
     }
 
+    // Justificação (issue #75, parte A) -------------------------------------------------------------------------
+
+    @Test
+    void justificacaoDepoisDaArticulacaoComTituloECorpo() throws Exception {
+        List<Element> blocos = transformar(xml(JUSTIFICACAO)).getRootElement().elements();
+        Element titulo = blocos.get(blocos.size() - 2);
+        Element corpo = blocos.get(blocos.size() - 1);
+
+        // Antes do título, o bloco da articulação
+        assertThat(blocos.get(blocos.size() - 3).attributeValue("text-align")).isEqualTo("justify");
+        assertThat(texto(blocos.get(blocos.size() - 3))).startsWith("Art. 1º Fica instituída");
+        // Título: valores do bloco "JUSTIFICAÇÃO" da emenda
+        assertThat(titulo.getText()).isEqualTo("JUSTIFICAÇÃO");
+        assertThat(titulo.attributeValue("text-align")).isEqualTo("center");
+        assertThat(titulo.attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(titulo.attributeValue("font-size")).isEqualTo("16pt");
+        assertThat(titulo.attributeValue("space-before")).isEqualTo("26pt");
+        assertThat(titulo.attributeValue("keep-with-next.within-page")).isEqualTo("always");
+        // Corpo: bloco role="Justificativa" da emenda, alinhado à esquerda
+        assertThat(corpo.attributeValue("space-before")).isEqualTo("14pt");
+        assertThat(corpo.attributeValue("line-height")).isEqualTo("150%");
+        assertThat(corpo.attributeValue("text-indent")).isEqualTo("2.5cm");
+        assertThat(corpo.attributeValue("text-align")).isNull();
+        // Um bloco por parágrafo, com o espaço após o parágrafo dos parâmetros de impressão
+        Element primeiro = (Element) corpo.elements().get(0);
+        assertThat(texto(primeiro)).startsWith("A presente proposição");
+        assertThat(primeiro.attributeValue("margin-bottom")).isEqualTo("0.6em");
+        assertThat(primeiro.attributeValue("text-align")).isNull();
+        assertThat(primeiro.attributeValue("text-indent")).isNull();
+        assertThat(texto(corpo)).endsWith("contamos com o apoio dos nobres Pares para a aprovação desta proposição.");
+    }
+
+    @Test
+    void justificacaoComFormatacaoInline() throws Exception {
+        Element paragrafo = paragrafoDaJustificacao("A presente proposição");
+
+        assertThat(texto(paragrafo)).endsWith("deficiência visual a livros digitais acessíveis.");
+        assertThat(inlineComTexto(paragrafo, "livros").attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(inlineComTexto(paragrafo, "digitais").attributeValue("font-style")).isEqualTo("italic");
+        assertThat(inlineComTexto(paragrafo, "acessíveis").attributeValue("text-decoration")).isEqualTo("underline");
+
+        Element formulas = paragrafoDaJustificacao("Os padrões técnicos");
+        assertThat(texto(formulas)).contains("como H2O, e de unidades, como m2, pelos leitores de tela.");
+        List<Node> rebaixados = formulas.selectNodes("*[@baseline-shift='sub']");
+        List<Node> elevados = formulas.selectNodes("*[@baseline-shift='super']");
+        assertThat(rebaixados).hasSize(1);
+        assertThat(elevados).hasSize(1);
+        assertThat(((Element) rebaixados.get(0)).attributeValue("font-size")).isEqualTo("0.7em");
+        assertThat(((Element) elevados.get(0)).getText()).isEqualTo("2");
+    }
+
+    @Test
+    void estilosDeParagrafoDoEditor() throws Exception {
+        Element centralizado = paragrafoDaJustificacao("Parágrafo centralizado");
+        assertThat(centralizado.attributeValue("text-align")).isEqualTo("center");
+        assertThat(centralizado.attributeValue("text-indent")).isEqualTo("0");
+
+        Element direita = paragrafoDaJustificacao("Parágrafo alinhado à direita");
+        assertThat(direita.attributeValue("text-align")).isEqualTo("right");
+        assertThat(direita.attributeValue("text-indent")).isEqualTo("0");
+
+        Element justificado = paragrafoDaJustificacao("Parágrafo justificado");
+        assertThat(justificado.attributeValue("text-align")).isEqualTo("justify");
+        assertThat(justificado.attributeValue("text-indent")).isNull();
+
+        Element semRecuo = paragrafoDaJustificacao("Parágrafo sem recuo e sem espaço depois");
+        assertThat(semRecuo.attributeValue("text-indent")).isEqualTo("0");
+        assertThat(semRecuo.attributeValue("margin-bottom")).isEqualTo("0");
+
+        // Como na emenda: só margem e recuo, sem forçar o alinhamento
+        Element ementa = paragrafoDaJustificacao("Parágrafo com estilo de ementa");
+        assertThat(ementa.attributeValue("margin-left")).isEqualTo("6.5cm");
+        assertThat(ementa.attributeValue("text-indent")).isEqualTo("0");
+        assertThat(ementa.attributeValue("text-align")).isNull();
+
+        Element normaAlterada = paragrafoDaJustificacao("Parágrafo com estilo de norma alterada");
+        assertThat(normaAlterada.attributeValue("margin-left")).isEqualTo("3cm");
+        assertThat(normaAlterada.attributeValue("text-indent")).isEqualTo("1.5cm");
+        assertThat(normaAlterada.attributeValue("text-align")).isNull();
+    }
+
+    @Test
+    void classeDesconhecidaEhIgnorada() throws Exception {
+        Element paragrafo = (Element) corpoDaJustificacao(documentoComJustificacao(
+                "<p class=\"ql-outra ql-align-center\">Texto.</p>")).elements().get(0);
+
+        assertThat(paragrafo.attributeValue("text-align")).isEqualTo("center");
+        assertThat(paragrafo.attributes()).extracting(a -> a.getName())
+                .containsExactlyInAnyOrder("margin-bottom", "text-align", "text-indent");
+    }
+
+    @Test
+    void versaoRevisadaSemExclusoesEComInclusoesSemDestaque() throws Exception {
+        Element paragrafo = paragrafoDaJustificacao("O Ministério da Educação");
+
+        // <del>fiscalização</del><ins>coordenação</ins>; a exclusão com nota de rodapé também some
+        assertThat(texto(paragrafo)).isEqualTo(
+                "O Ministério da Educação será responsável pela coordenação da política, nos termos do art. 1º desta proposição.");
+        assertThat(paragrafo.selectNodes(".//*[@text-decoration or @color != '#808080']")).isEmpty();
+        assertThat(texto(transformar(xml(JUSTIFICACAO)).getRootElement())).doesNotContain("fiscalização")
+                .doesNotContain("conforme regulamento").doesNotContain("Nota excluída na revisão");
+    }
+
+    @Test
+    void trechoComentadoComoTextoNormal() throws Exception {
+        Element paragrafo = paragrafoDaJustificacao("O impacto orçamentário é reduzido");
+
+        assertThat(texto(paragrafo)).startsWith("O impacto orçamentário é reduzido, pois a política utiliza a estrutura existente");
+        assertThat(paragrafo.selectNodes("*[contains(., 'impacto orçamentário')]")).isEmpty();
+        assertThat(transformar(xml(JUSTIFICACAO)).selectNodes("//@id[starts-with(., '_tc')]")).isEmpty();
+    }
+
+    @Test
+    void linksERemissoesNaJustificacao() throws Exception {
+        Element revisado = paragrafoDaJustificacao("O Ministério da Educação");
+        List<Node> links = revisado.selectNodes(".//*[local-name()='basic-link']");
+        assertThat(links).hasSize(2);
+        Element externo = (Element) links.get(0);
+        assertThat(externo.attributeValue("external-destination")).isEqualTo("url('https://www.gov.br/mec')");
+        assertThat(externo.attributeValue("color")).isEqualTo("#808080");
+        assertThat(externo.getText()).isEqualTo("Ministério da Educação");
+        Element interno = (Element) links.get(1);
+        assertThat(interno.attributeValue("internal-destination")).isEqualTo("art1");
+        // O alvo da remissão da justificação recebe o id na articulação
+        assertThat(transformar(xml(JUSTIFICACAO)).selectNodes("//*[@id='art1']")).hasSize(1);
+
+        Element comUrn = paragrafoDaJustificacao("Segundo dados oficiais");
+        assertThat(unicoLink(comUrn).attributeValue("external-destination"))
+                .isEqualTo("url('https://normas.leg.br/?urn=urn:lex:br:federal:lei:2015-07-06;13146')");
+
+        // a sem endereço: só o texto
+        Element semEndereco = paragrafoDaJustificacao("Mais informações");
+        assertThat(semEndereco.selectNodes(".//*[local-name()='basic-link']")).isEmpty();
+        assertThat(texto(semEndereco)).isEqualTo("Mais informações estão disponíveis em endereço não informado.");
+    }
+
+    @Test
+    void paragrafoVazioComoLinhaEmBranco() throws Exception {
+        List<Element> paragrafos = corpoDaJustificacao(xml(JUSTIFICACAO)).elements();
+        List<Element> vazios = new ArrayList<>();
+        for (Element paragrafo : paragrafos) {
+            if (paragrafo.getText().equals(NBSP)) {
+                vazios.add(paragrafo);
+            }
+        }
+
+        assertThat(vazios).hasSize(1);
+        assertThat(vazios.get(0).attributeValue("margin-bottom")).isEqualTo("0.6em");
+    }
+
+    @Test
+    void listasTabelasEImagensAindaNaoImpressas() throws Exception {
+        Document fo = transformar(xml(JUSTIFICACAO));
+
+        assertThat(texto(fo.getRootElement())).doesNotContain("Item de lista").doesNotContain("Indicador")
+                .contains("Imagem ainda não impressa:");
+        assertThat(fo.selectNodes("//*[local-name()='external-graphic' or local-name()='table' or local-name()='list-block']"))
+                .isEmpty();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "<p/>", "<p> </p><p/>", "<p><del id=\"_rt1\">Texto excluído.</del></p>" })
+    void justificacaoSemTextoNaoImprimeTitulo(String partePrincipal) throws Exception {
+        Document fo = transformar(documentoComJustificacao(partePrincipal));
+
+        assertThat(texto(fo.getRootElement())).doesNotContain("JUSTIFICAÇÃO");
+        assertThat(fo.getRootElement().elements()).hasSize(1);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS })
+    void documentoSemJustificacaoNaoImprimeTitulo(String nome) throws Exception {
+        assertThat(texto(transformar(xml(nome)).getRootElement())).doesNotContain("JUSTIFICAÇÃO");
+    }
+
+    @Test
+    void justificacaoDoExemploNaVersaoRevisada() throws Exception {
+        String texto = texto(corpoDaJustificacao(recurso(XML_EXEMPLO)));
+
+        // Exemplo da especificação do lexml-eta: <del>reforma</del><ins>modernização</ins> e trecho comentado
+        assertThat(texto).startsWith("Esta proposição promove a modernização da gestão pública, nos termos do art. 1º.");
+        assertThat(texto).doesNotContain("reforma");
+    }
+
+    @Test
+    void variasJustificacoesComUmUnicoTitulo() throws Exception {
+        String justificacoes = "<Justificacao><PartePrincipal><p>Primeira.</p></PartePrincipal></Justificacao>"
+                + "<Justificacao><PartePrincipal><p>Segunda.</p></PartePrincipal></Justificacao>";
+        Document fo = transformar(documento("", "<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\">"
+                + "<p>Texto.</p></Caput></Artigo>").replace("</Norma></ProjetoNorma>", "</Norma>" + justificacoes + "</ProjetoNorma>"));
+
+        assertThat(fo.selectNodes("//*[text()='JUSTIFICAÇÃO']")).hasSize(1);
+        assertThat(corpoDaJustificacao(fo).elements()).extracting(p -> p.getText()).containsExactly("Primeira.", "Segunda.");
+    }
+
+    // Notas de rodapé (issue #75, parte A) ----------------------------------------------------------------------
+
+    @Test
+    void notasDeRodapeNumeradasNaOrdemSemAsExcluidas() throws Exception {
+        Document fo = transformar(xml(JUSTIFICACAO));
+        List<Node> notas = fo.selectNodes("//*[local-name()='footnote']");
+
+        // Quatro NotaDeRodape no documento; a que está dentro de <del> não é impressa nem numerada
+        assertThat(notas).hasSize(3);
+        List<String> numeros = new ArrayList<>();
+        List<String> corpos = new ArrayList<>();
+        for (Node nota : notas) {
+            Element referencia = (Element) ((Element) nota).elements().get(0);
+            assertThat(referencia.getName()).isEqualTo("inline");
+            assertThat(referencia.attributeValue("baseline-shift")).isEqualTo("super");
+            assertThat(referencia.attributeValue("font-size")).isEqualTo("0.7em");
+            numeros.add(referencia.getText());
+            corpos.add(texto((Element) ((Element) nota).selectSingleNode("*[local-name()='footnote-body']")));
+        }
+        assertThat(numeros).containsExactly("1", "2", "3");
+        assertThat(corpos).containsExactly("1 Fonte: Pesquisa Nacional de Saúde, IBGE, 2019.",
+                "2 Ver a estimativa de impacto, elaborada nos termos da Lei de Responsabilidade Fiscal.", "3 Nota simples.");
+        assertThat(texto(fo.getRootElement())).doesNotContain("Nota excluída na revisão");
+    }
+
+    @Test
+    void notaDeRodapeNaPosicaoDaReferencia() throws Exception {
+        Element paragrafo = paragrafoDaJustificacao("Segundo dados oficiais");
+
+        // A referência fica entre "oficiais" e a vírgula que vinha depois da nota no texto
+        List<Node> filhos = paragrafo.content();
+        int indice = -1;
+        for (int i = 0; i < filhos.size(); i++) {
+            if ("footnote".equals(filhos.get(i).getName())) {
+                indice = i;
+            }
+        }
+        assertThat(filhos.get(indice - 1).getText()).endsWith("Segundo dados oficiais");
+        assertThat(filhos.get(indice + 1).getText()).startsWith(", cerca de 3,4% da população");
+    }
+
+    @Test
+    void corpoDaNotaComFonteMenorEPropriedadesDoParagrafoZeradas() throws Exception {
+        Element nota = (Element) transformar(xml(JUSTIFICACAO)).selectSingleNode("//*[local-name()='footnote-body']");
+        Element externo = (Element) nota.elements().get(0);
+        Element interno = (Element) externo.elements().get(0);
+
+        // Emenda: bloco no tamanho do texto e bloco interno de 0.7em com line-height 1.5em
+        assertThat(externo.attributeValue("font-size")).isEqualTo("14pt");
+        assertThat(interno.attributeValue("font-size")).isEqualTo("0.7em");
+        assertThat(interno.attributeValue("line-height")).isEqualTo("1.5em");
+        // Recuos, alinhamento, peso, estilo e decoração herdados do parágrafo são zerados
+        assertThat(externo.attributeValue("text-indent")).isEqualTo("0");
+        assertThat(externo.attributeValue("start-indent")).isEqualTo("0");
+        assertThat(externo.attributeValue("end-indent")).isEqualTo("0");
+        assertThat(externo.attributeValue("text-align")).isEqualTo("start");
+        assertThat(externo.attributeValue("font-weight")).isEqualTo("normal");
+        assertThat(externo.attributeValue("font-style")).isEqualTo("normal");
+        assertThat(externo.attributeValue("text-decoration")).isEqualTo("none");
+    }
+
+    @Test
+    void formatacaoERemissaoDentroDaNota() throws Exception {
+        Element paragrafo = paragrafoDaJustificacao("O impacto orçamentário é reduzido");
+        Element corpo = (Element) paragrafo.selectSingleNode(".//*[local-name()='footnote-body']");
+
+        assertThat(corpo.selectNodes(".//*[@font-weight='bold' and text()='estimativa']")).hasSize(1);
+        assertThat(unicoLink(corpo).attributeValue("external-destination"))
+                .isEqualTo("url('https://normas.leg.br/?urn=urn:lex:br:federal:lei.complementar:2000-05-04;101')");
+    }
+
+    @Test
+    void numeracaoContinuaEntreJustificacoes() throws Exception {
+        String justificacoes = "<Justificacao><PartePrincipal><p>Primeira<NotaDeRodape>A.</NotaDeRodape>.</p></PartePrincipal></Justificacao>"
+                + "<Justificacao><PartePrincipal><p>Segunda<NotaDeRodape>B.</NotaDeRodape>.</p></PartePrincipal></Justificacao>";
+        Document fo = transformar(documento("", "<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\">"
+                + "<p>Texto.</p></Caput></Artigo>").replace("</Norma></ProjetoNorma>", "</Norma>" + justificacoes + "</ProjetoNorma>"));
+
+        List<String> corpos = new ArrayList<>();
+        for (Node corpo : fo.selectNodes("//*[local-name()='footnote-body']")) {
+            corpos.add(texto((Element) corpo));
+        }
+        assertThat(corpos).containsExactly("1 A.", "2 B.");
+    }
+
     @Test
     void xmlInvalido() {
         assertThatThrownBy(() -> transformer.transformar("<LexML><sem-fechamento>", ParametrosImpressaoDocumentoArticulado.padrao()))
@@ -593,6 +875,44 @@ class DocumentoArticuladoConteudoTransformerTest {
         for (int j = 1; j < prefixos.length; j++) {
             assertThat(textos.get(inicio + j)).startsWith(prefixos[j]);
         }
+    }
+
+    /** Bloco do corpo da justificação: o último bloco da raiz, depois do título "JUSTIFICAÇÃO". */
+    private Element corpoDaJustificacao(String xml) throws DocumentException {
+        return corpoDaJustificacao(transformar(xml));
+    }
+
+    private static Element corpoDaJustificacao(Document fo) {
+        List<Element> blocos = fo.getRootElement().elements();
+        assertThat(blocos.get(blocos.size() - 2).getText()).isEqualTo("JUSTIFICAÇÃO");
+        return blocos.get(blocos.size() - 1);
+    }
+
+    /** Bloco do parágrafo da justificação do documento-com-justificacao que começa com o texto informado. */
+    private Element paragrafoDaJustificacao(String inicio) throws DocumentException {
+        for (Element paragrafo : corpoDaJustificacao(xml(JUSTIFICACAO)).elements()) {
+            if (texto(paragrafo).startsWith(inicio)) {
+                return paragrafo;
+            }
+        }
+        throw new AssertionError("Parágrafo da justificação não encontrado: " + inicio);
+    }
+
+    /** O fo:inline filho do bloco cujo texto é o informado. */
+    private static Element inlineComTexto(Element bloco, String texto) {
+        for (Element filho : bloco.elements()) {
+            if ("inline".equals(filho.getName()) && texto.equals(filho.getText())) {
+                return filho;
+            }
+        }
+        throw new AssertionError("fo:inline não encontrado: " + texto);
+    }
+
+    /** Documento LexML mínimo com um artigo e a justificação com o conteúdo de PartePrincipal informado. */
+    private static String documentoComJustificacao(String partePrincipal) {
+        return documento("", "<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Texto.</p></Caput></Artigo>")
+                .replace("</Norma></ProjetoNorma>", "</Norma><Justificacao><PartePrincipal>" + partePrincipal
+                        + "</PartePrincipal></Justificacao></ProjetoNorma>");
     }
 
     /** Documento LexML mínimo com a parte inicial informada e um artigo na articulação. */

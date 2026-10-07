@@ -30,6 +30,13 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
     public static final String PENA_E_TITULO_DISPOSITIVO = "documento-com-pena-e-titulo-de-dispositivo";
     /** Documento mínimo com remissões internas válidas (artigo, parágrafo, capítulo) e uma inválida (issue #72, parte 5). */
     public static final String REMISSOES_INTERNAS = "documento-com-remissoes-internas";
+    /**
+     * Justificação com todos os recursos da issue #75, parte A (formatação inline, estilos de parágrafo, revisões,
+     * comentário e notas de rodapé), segundo a especificação do lexml-eta (docs/extensao-formato-lexml).
+     */
+    public static final String JUSTIFICACAO = "documento-com-justificacao";
+    /** Justificação longa, com notas de rodapé em páginas diferentes (issue #75, parte A). */
+    public static final String JUSTIFICACAO_LONGA = "documento-com-justificacao-longa";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -44,10 +51,11 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
         return fake;
     }
 
-    /** Conversor com o par de exemplo, os documentos da issue #72 e o de remissões internas registrados. */
+    /** Conversor com o par de exemplo, os documentos das issues #72 e #75 registrados. */
     public static ConversorDocumentoArticuladoFake comDocumentosDeTeste() {
         ConversorDocumentoArticuladoFake fake = comExemplo();
-        for (String nome : new String[] { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS }) {
+        for (String nome : new String[] { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS,
+                JUSTIFICACAO, JUSTIFICACAO_LONGA }) {
             fake.registrar(json(nome), xml(nome));
         }
         return fake;

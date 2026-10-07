@@ -1,0 +1,951 @@
+{
+    "name": {
+        "namespaceURI": "http://www.lexml.gov.br/1.0",
+        "localPart": "LexML",
+        "prefix": "",
+        "key": "{http://www.lexml.gov.br/1.0}LexML",
+        "string": "{http://www.lexml.gov.br/1.0}LexML"
+    },
+    "value": {
+        "TYPE_NAME": "br_gov_lexml__1.LexML",
+        "metadado": {
+            "TYPE_NAME": "br_gov_lexml__1.Metadado",
+            "identificacao": {
+                "TYPE_NAME": "br_gov_lexml__1.Identificacao",
+                "urn": "urn:lex:br:senado.federal:projeto.lei:2026;123"
+            },
+            "metadadoProprietario": [
+                {
+                    "TYPE_NAME": "br_gov_lexml__1.MetadadoProprietario",
+                    "fonte": "http://www.lexml.gov.br/lexedit/1.0",
+                    "any": [
+                        {
+                            "name": {
+                                "namespaceURI": "http://www.lexml.gov.br/lexedit/1.0",
+                                "localPart": "Metadado",
+                                "prefix": "lexedit",
+                                "key": "{http://www.lexml.gov.br/lexedit/1.0}Metadado",
+                                "string": "{http://www.lexml.gov.br/lexedit/1.0}lexedit:Metadado"
+                            },
+                            "value": {
+                                "TYPE_NAME": "br_gov_lexml_lexedit__1.Metadado",
+                                "dataUltimaModificacao": "2026-10-07T10:30:00-03:00",
+                                "aplicacao": "LexEdit",
+                                "versaoAplicacao": "1.0.0",
+                                "substitutivo": false,
+                                "local": "Sala das Sessões",
+                                "data": "2026-10-07",
+                                "opcoesImpressao": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.OpcoesImpressao",
+                                    "imprimirBrasao": true,
+                                    "textoCabecalho": "",
+                                    "reduzirEspacoEntreLinhas": false,
+                                    "tamanhoFonte": 14
+                                },
+                                "autoria": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Autoria",
+                                    "tipo": "Parlamentar",
+                                    "imprimirPartidoUF": true,
+                                    "parlamentares": {
+                                        "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentares",
+                                        "parlamentar": [
+                                            {
+                                                "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentar",
+                                                "identificacao": "2222",
+                                                "nome": "Soraya Thronicke",
+                                                "sexo": "F",
+                                                "siglaPartido": "PSB",
+                                                "siglaUF": "MS",
+                                                "siglaCasaLegislativa": "SF",
+                                                "cargo": ""
+                                            }
+                                        ]
+                                    }
+                                },
+                                "comentarios": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Comentarios",
+                                    "sequenciaComentario": [
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml_lexedit__1.SequenciaComentario",
+                                            "refIdElementoComentado": "_tc2001",
+                                            "comentario": [
+                                                {
+                                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Comentario",
+                                                    "refIdUsuario": "sf:fulano",
+                                                    "data": "2026-10-06T15:00:00-03:00",
+                                                    "p": [
+                                                        {
+                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                            "content": [
+                                                                "Confirmar a estimativa de impacto com a consultoria."
+                                                            ]
+                                                        }
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "revisoesTextuais": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.RevisoesTextuais",
+                                    "revisaoTextual": [
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml_lexedit__1.RevisaoTextual",
+                                            "refIdRevisao": "_rt1001",
+                                            "refIdUsuario": "sf:fulano",
+                                            "data": "2026-10-06T14:00:00-03:00"
+                                        },
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml_lexedit__1.RevisaoTextual",
+                                            "refIdRevisao": "_rt1002",
+                                            "refIdUsuario": "sf:fulano",
+                                            "data": "2026-10-06T14:00:00-03:00"
+                                        },
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml_lexedit__1.RevisaoTextual",
+                                            "refIdRevisao": "_rt1003",
+                                            "refIdUsuario": "sf:sicrana",
+                                            "data": "2026-10-06T14:20:00-03:00"
+                                        }
+                                    ]
+                                },
+                                "usuarios": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Usuarios",
+                                    "usuario": [
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml_lexedit__1.Usuario",
+                                            "idUsuario": "sf:fulano",
+                                            "nome": "Fulano de Tal",
+                                            "sigla": "FT"
+                                        },
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml_lexedit__1.Usuario",
+                                            "idUsuario": "sf:sicrana",
+                                            "nome": "Sicrana da Silva",
+                                            "sigla": "SS"
+                                        }
+                                    ]
+                                },
+                                "pendencias": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Pendencias",
+                                    "pendencia": [
+                                        "Remover comentários.",
+                                        "Resolver marcas de revisão de texto."
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "projetoNorma": {
+            "TYPE_NAME": "br_gov_lexml__1.ProjetoNorma",
+            "norma": {
+                "TYPE_NAME": "br_gov_lexml__1.HierarchicalStructure",
+                "parteInicial": {
+                    "TYPE_NAME": "br_gov_lexml__1.ParteInicial",
+                    "epigrafe": {
+                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                        "id": "epigrafe",
+                        "content": [
+                            "PROJETO DE LEI Nº 123, DE 2026"
+                        ]
+                    },
+                    "ementa": {
+                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                        "id": "ementa",
+                        "content": [
+                            "Institui a Política Nacional de Leitura Acessível."
+                        ]
+                    },
+                    "preambulo": {
+                        "TYPE_NAME": "br_gov_lexml__1.TextoType",
+                        "id": "preambulo",
+                        "p": [
+                            {
+                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                "content": [
+                                    "O CONGRESSO NACIONAL decreta:"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                "articulacao": {
+                    "TYPE_NAME": "br_gov_lexml__1.Articulacao",
+                    "lXhier": [
+                        {
+                            "name": {
+                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                "localPart": "Artigo",
+                                "prefix": "",
+                                "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                            },
+                            "value": {
+                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                "id": "art1",
+                                "rotulo": "Art. 1º",
+                                "lXcontainersOmissis": [
+                                    {
+                                        "name": {
+                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                            "localPart": "Caput",
+                                            "prefix": "",
+                                            "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                            "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                        },
+                                        "value": {
+                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                            "id": "art1_cpt",
+                                            "p": [
+                                                {
+                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                    "content": [
+                                                        "Fica instituída a Política Nacional de Leitura Acessível, destinada a ampliar a oferta de livros em formatos acessíveis."
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                "localPart": "Artigo",
+                                "prefix": "",
+                                "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                            },
+                            "value": {
+                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                "id": "art2",
+                                "rotulo": "Art. 2º",
+                                "lXcontainersOmissis": [
+                                    {
+                                        "name": {
+                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                            "localPart": "Caput",
+                                            "prefix": "",
+                                            "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                            "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                        },
+                                        "value": {
+                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                            "id": "art2_cpt",
+                                            "p": [
+                                                {
+                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                    "content": [
+                                                        "Esta Lei entra em vigor na data de sua publicação."
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "parteFinal": {
+                    "TYPE_NAME": "br_gov_lexml__1.ParteFinal",
+                    "localDataFecho": {
+                        "TYPE_NAME": "br_gov_lexml__1.ParsType",
+                        "p": [
+                            {
+                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                "content": [
+                                    "Sala das Sessões, 7 de outubro de 2026."
+                                ]
+                            }
+                        ]
+                    },
+                    "assinaturaTexto": [
+                        {
+                            "TYPE_NAME": "br_gov_lexml__1.ParsType",
+                            "p": [
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "b",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}b",
+                                                "string": "{http://www.lexml.gov.br/1.0}b"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Senadora Soraya Thronicke"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "(PSB - MS)"
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            },
+            "justificacao": [
+                {
+                    "TYPE_NAME": "br_gov_lexml__1.OpenStructure",
+                    "partePrincipal": {
+                        "TYPE_NAME": "br_gov_lexml__1.PartePrincipal",
+                        "agrupamentoHierarquicoOrDivOrAgrupamento": [
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "A presente proposição institui a Política Nacional de Leitura Acessível, com o objetivo de ampliar o acesso das pessoas com deficiência visual a ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "b",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}b",
+                                                "string": "{http://www.lexml.gov.br/1.0}b"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "livros"
+                                                ]
+                                            }
+                                        },
+                                        " ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "i",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}i",
+                                                "string": "{http://www.lexml.gov.br/1.0}i"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "digitais"
+                                                ]
+                                            }
+                                        },
+                                        " ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "u",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}u",
+                                                "string": "{http://www.lexml.gov.br/1.0}u"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "acessíveis"
+                                                ]
+                                            }
+                                        },
+                                        "."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Segundo dados oficiais",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "NotaDeRodape",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}NotaDeRodape",
+                                                "string": "{http://www.lexml.gov.br/1.0}NotaDeRodape"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Fonte: ",
+                                                    {
+                                                        "name": {
+                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                            "localPart": "i",
+                                                            "prefix": "",
+                                                            "key": "{http://www.lexml.gov.br/1.0}i",
+                                                            "string": "{http://www.lexml.gov.br/1.0}i"
+                                                        },
+                                                        "value": {
+                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                            "content": [
+                                                                "Pesquisa Nacional de Saúde"
+                                                            ]
+                                                        }
+                                                    },
+                                                    ", IBGE, 2019."
+                                                ]
+                                            }
+                                        },
+                                        ", cerca de 3,4% da população declara ter deficiência visual. A medida dialoga com a ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "span",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}span",
+                                                "string": "{http://www.lexml.gov.br/1.0}span"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "href": "urn:lex:br:federal:lei:2015-07-06;13146",
+                                                "content": [
+                                                    "Lei nº 13.146, de 6 de julho de 2015"
+                                                ]
+                                            }
+                                        },
+                                        " (Estatuto da Pessoa com Deficiência)."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Os padrões técnicos de acessibilidade exigem a leitura correta de fórmulas, como H",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "sub",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}sub",
+                                                "string": "{http://www.lexml.gov.br/1.0}sub"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "2"
+                                                ]
+                                            }
+                                        },
+                                        "O, e de unidades, como m",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "sup",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}sup",
+                                                "string": "{http://www.lexml.gov.br/1.0}sup"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "2"
+                                                ]
+                                            }
+                                        },
+                                        ", pelos leitores de tela."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "O ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "a",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}a",
+                                                "string": "{http://www.lexml.gov.br/1.0}a"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "href": "https://www.gov.br/mec",
+                                                "content": [
+                                                    "Ministério da Educação"
+                                                ]
+                                            }
+                                        },
+                                        " será responsável pela ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "del",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}del",
+                                                "string": "{http://www.lexml.gov.br/1.0}del"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "id": "_rt1001",
+                                                "content": [
+                                                    "fiscalização"
+                                                ]
+                                            }
+                                        },
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "ins",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}ins",
+                                                "string": "{http://www.lexml.gov.br/1.0}ins"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "id": "_rt1002",
+                                                "content": [
+                                                    "coordenação"
+                                                ]
+                                            }
+                                        },
+                                        " da política",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "del",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}del",
+                                                "string": "{http://www.lexml.gov.br/1.0}del"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "id": "_rt1003",
+                                                "content": [
+                                                    ", conforme regulamento",
+                                                    {
+                                                        "name": {
+                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                            "localPart": "NotaDeRodape",
+                                                            "prefix": "",
+                                                            "key": "{http://www.lexml.gov.br/1.0}NotaDeRodape",
+                                                            "string": "{http://www.lexml.gov.br/1.0}NotaDeRodape"
+                                                        },
+                                                        "value": {
+                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                            "content": [
+                                                                "Nota excluída na revisão."
+                                                            ]
+                                                        }
+                                                    }
+                                                ]
+                                            }
+                                        },
+                                        ", nos termos do ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "Remissao",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
+                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "href": "art1",
+                                                "content": [
+                                                    "art. 1º"
+                                                ]
+                                            }
+                                        },
+                                        " desta proposição."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "span",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}span",
+                                                "string": "{http://www.lexml.gov.br/1.0}span"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "id": "_tc2001",
+                                                "content": [
+                                                    "O impacto orçamentário é reduzido"
+                                                ]
+                                            }
+                                        },
+                                        ", pois a política utiliza a estrutura existente",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "NotaDeRodape",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}NotaDeRodape",
+                                                "string": "{http://www.lexml.gov.br/1.0}NotaDeRodape"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Ver a ",
+                                                    {
+                                                        "name": {
+                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                            "localPart": "b",
+                                                            "prefix": "",
+                                                            "key": "{http://www.lexml.gov.br/1.0}b",
+                                                            "string": "{http://www.lexml.gov.br/1.0}b"
+                                                        },
+                                                        "value": {
+                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                            "content": [
+                                                                "estimativa"
+                                                            ]
+                                                        }
+                                                    },
+                                                    " de impacto, elaborada nos termos da ",
+                                                    {
+                                                        "name": {
+                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                            "localPart": "span",
+                                                            "prefix": "",
+                                                            "key": "{http://www.lexml.gov.br/1.0}span",
+                                                            "string": "{http://www.lexml.gov.br/1.0}span"
+                                                        },
+                                                        "value": {
+                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                            "href": "urn:lex:br:federal:lei.complementar:2000-05-04;101",
+                                                            "content": [
+                                                                "Lei de Responsabilidade Fiscal"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "."
+                                                ]
+                                            }
+                                        },
+                                        "."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "clazz": "ql-align-center",
+                                    "content": [
+                                        "Parágrafo centralizado."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "clazz": "ql-align-right",
+                                    "content": [
+                                        "Parágrafo alinhado à direita."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "clazz": "ql-align-justify",
+                                    "content": [
+                                        "Parágrafo justificado: a política prevê a produção, a distribuição e a catalogação de obras em formatos acessíveis, em cooperação com bibliotecas públicas, escolas e instituições de ensino superior",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "NotaDeRodape",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}NotaDeRodape",
+                                                "string": "{http://www.lexml.gov.br/1.0}NotaDeRodape"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Nota simples."
+                                                ]
+                                            }
+                                        },
+                                        "."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "clazz": "ql-text-indent-0px ql-margin-bottom-0px",
+                                    "content": [
+                                        "Parágrafo sem recuo e sem espaço depois."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "clazz": "estilo-ementa",
+                                    "content": [
+                                        "Parágrafo com estilo de ementa, recuado à esquerda como a ementa de uma norma."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "clazz": "estilo-norma-alterada",
+                                    "content": [
+                                        "Parágrafo com estilo de norma alterada, recuado como a citação de um dispositivo."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline"
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Mais informações estão disponíveis em ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "a",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}a",
+                                                "string": "{http://www.lexml.gov.br/1.0}a"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "endereço não informado"
+                                                ]
+                                            }
+                                        },
+                                        "."
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "ul",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}ul",
+                                    "string": "{http://www.lexml.gov.br/1.0}ul"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.HTMLlist",
+                                    "li": [
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml__1.Li",
+                                            "content": [
+                                                "Item de lista, ainda não impresso."
+                                            ]
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "table",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}table",
+                                    "string": "{http://www.lexml.gov.br/1.0}table"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.Table",
+                                    "id": "_tabela1",
+                                    "tr": [
+                                        {
+                                            "TYPE_NAME": "br_gov_lexml__1.Tr",
+                                            "tableCellElement": [
+                                                {
+                                                    "name": {
+                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                        "localPart": "td",
+                                                        "prefix": "",
+                                                        "key": "{http://www.lexml.gov.br/1.0}td",
+                                                        "string": "{http://www.lexml.gov.br/1.0}td"
+                                                    },
+                                                    "value": {
+                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                        "content": [
+                                                            "Indicador"
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "name": {
+                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                        "localPart": "td",
+                                                        "prefix": "",
+                                                        "key": "{http://www.lexml.gov.br/1.0}td",
+                                                        "string": "{http://www.lexml.gov.br/1.0}td"
+                                                    },
+                                                    "value": {
+                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                        "content": [
+                                                            "Meta"
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Imagem ainda não impressa: ",
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "img",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}img",
+                                                "string": "{http://www.lexml.gov.br/1.0}img"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.Img",
+                                                "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+                                                "width": 100
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "p",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}p",
+                                    "string": "{http://www.lexml.gov.br/1.0}p"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Pelas razões expostas, contamos com o apoio dos nobres Pares para a aprovação desta proposição."
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
