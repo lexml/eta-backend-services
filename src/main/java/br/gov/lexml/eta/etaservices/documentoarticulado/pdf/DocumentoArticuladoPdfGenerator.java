@@ -18,7 +18,8 @@ import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 /**
  * Gera o PDF/A-3B de uma proposição a partir do documento-articulado.json, embutindo o
  * documento-articulado.xml (LexML) como anexo. O texto impresso é gerado a partir desse XML pela XSLT
- * do conteúdo; nesta etapa, apenas a parte inicial (epígrafe, ementa e preâmbulo).
+ * do conteúdo: parte inicial (epígrafe, ementa e preâmbulo) e articulação. Justificação, local e data e
+ * assinaturas ainda não são impressos.
  */
 public class DocumentoArticuladoPdfGenerator {
 

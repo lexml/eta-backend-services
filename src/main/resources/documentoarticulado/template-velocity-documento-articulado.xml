@@ -215,7 +215,7 @@
 	
 *#
 		<fo:flow flow-name="xsl-region-body" font-size="${tamanhoFonte}pt">
-			## Parte inicial (epígrafe, ementa e preâmbulo), gerada pela XSLT. O fragmento tem sempre um
+			## Parte inicial (epígrafe, ementa e preâmbulo) e articulação, geradas pela XSLT. O fragmento tem sempre um
 			## fo:block raiz, que o FOP exige no fluxo. Os blocos abaixo com epígrafe e comando de emenda
 			## continuam apenas como referência; a formatação equivalente está na XSLT.
 			$conteudoFo

@@ -18,7 +18,7 @@ import javax.xml.transform.stream.StreamSource;
 import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 
 /**
- * Gera o fragmento XSL-FO do conteúdo impresso (parte inicial, nesta etapa) aplicando
+ * Gera o fragmento XSL-FO do conteúdo impresso (parte inicial e articulação) aplicando
  * {@code documento-articulado-conteudo.xsl} ao documento-articulado.xml.
  */
 class DocumentoArticuladoConteudoTransformer {
