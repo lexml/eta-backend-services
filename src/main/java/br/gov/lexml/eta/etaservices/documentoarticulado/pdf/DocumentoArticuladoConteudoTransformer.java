@@ -40,6 +40,7 @@ class DocumentoArticuladoConteudoTransformer {
         try {
             Transformer transformer = Compilada.INSTANCIA.newTransformer();
             transformer.setErrorListener(new ErroComoExcecao());
+            transformer.setParameter("tamanhoFonte", parametros.getTamanhoFonte() + "pt");
             transformer.setParameter("maxTamanhoFonte", parametros.getMaxTamanhoFonte());
             transformer.setParameter("lineHeight", parametros.getLineHeight());
             transformer.setParameter("pMarginBottom", parametros.getPMarginBottom());

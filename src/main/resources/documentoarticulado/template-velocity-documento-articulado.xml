@@ -206,14 +206,12 @@
 			</fo:block>
 		</fo:static-content>
 		*#
-#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
-		<fo:static-content flow-name="xsl-footnote-separator">                  
-			<fo:block text-align-last="justify">                         
-				<fo:leader leader-length="50%" rule-thickness="0.5pt" leader-pattern="rule"/>                       
+		## Separador das notas de rodapé da justificação (issue #75), copiado do template da emenda.
+		<fo:static-content flow-name="xsl-footnote-separator">
+			<fo:block text-align-last="justify">
+				<fo:leader leader-length="50%" rule-thickness="0.5pt" leader-pattern="rule"/>
 			</fo:block>
-		</fo:static-content>      
-	
-*#
+		</fo:static-content>
 		<fo:flow flow-name="xsl-region-body" font-size="${tamanhoFonte}pt">
 			## Parte inicial (epígrafe, ementa e preâmbulo) e articulação, geradas pela XSLT. O fragmento tem sempre um
 			## fo:block raiz, que o FOP exige no fluxo. Os blocos abaixo com epígrafe e comando de emenda
