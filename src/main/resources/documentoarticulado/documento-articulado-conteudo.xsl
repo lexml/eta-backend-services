@@ -62,15 +62,23 @@
 	  Justificação (issue #75), depois da articulação. Emenda: bloco "JUSTIFICAÇÃO" (text-align="center",
 	  font-weight="bold", font-size="$maxTamanhoFonte", space-before="$spacing3" = 26pt) seguido do bloco
 	  role="Justificativa" (space-before="$spacing1" = 14pt, line-height="$lineHeight", text-indent="2.5cm", sem
-	  text-align: alinhado à esquerda, como no editor). Só é impressa se houver texto em parágrafo fora de
-	  exclusões; havendo mais de uma Justificacao, um único título e os conteúdos na ordem do documento.
+	  text-align: alinhado à esquerda, como no editor). Só é impressa se houver texto fora de exclusões (em
+	  parágrafo, item de lista ou célula de tabela); havendo mais de uma Justificacao, um único título e os
+	  conteúdos na ordem do documento.
 	-->
 	<xsl:template name="justificacao">
 		<xsl:param name="partes"/>
-		<xsl:if test="$partes/lx:p//text()[not(ancestor::lx:del)][normalize-space()]">
+		<xsl:if test="$partes//text()[not(ancestor::lx:del)][normalize-space()]
+			or $partes//lx:img[starts-with(normalize-space(@src), 'data:image/')][not(ancestor::lx:del)]">
 			<fo:block text-align="center" font-weight="bold" font-size="{$maxTamanhoFonte}" space-before="26pt"
 				keep-with-next.within-page="always">JUSTIFICAÇÃO</fo:block>
-			<fo:block space-before="14pt" line-height="{$lineHeight}" text-indent="2.5cm">
+			<!--
+			  line-height-shift-adjustment="disregard-shifts" (diferença em relação à emenda, decidida na parte B):
+			  sobrescrito e subscrito (número de nota de rodapé, m², H₂O) não aumentam a altura da linha. Sem isso, a
+			  linha com o número da nota fica mais baixa que as vizinhas e, numa célula, desalinha da célula ao lado.
+			-->
+			<fo:block space-before="14pt" line-height="{$lineHeight}" text-indent="2.5cm"
+				line-height-shift-adjustment="disregard-shifts">
 				<xsl:apply-templates select="$partes/*" mode="justificacao"/>
 			</fo:block>
 		</xsl:if>
@@ -83,8 +91,18 @@
 	<xsl:template match="lx:p" mode="justificacao">
 		<fo:block margin-bottom="{$pMarginBottom}">
 			<xsl:call-template name="estilo-paragrafo"/>
+			<!--
+			  Parágrafo que começa com imagem: centralizado e sem recuo. Emenda: html2foTextoLivre troca <p...><img
+			  por <p... class="align-center"><img; aqui vale para todo parágrafo cujo primeiro conteúdo é imagem.
+			-->
+			<!-- not(self::text()) e não self::*: no XSLT do JDK, [self::* or normalize-space(.)] dá falso para elemento sem texto (ex.: img). -->
+			<xsl:if test="node()[not(self::text()) or normalize-space(.)][1][self::lx:img and starts-with(normalize-space(@src), 'data:image/')]">
+				<xsl:attribute name="text-align">center</xsl:attribute>
+				<xsl:attribute name="text-indent">0</xsl:attribute>
+			</xsl:if>
 			<xsl:choose>
-				<xsl:when test=".//text()[not(ancestor::lx:del)][normalize-space()]">
+				<xsl:when test=".//text()[not(ancestor::lx:del)][normalize-space()]
+					or .//lx:img[starts-with(normalize-space(@src), 'data:image/')][not(ancestor::lx:del)]">
 					<xsl:apply-templates mode="inline"/>
 				</xsl:when>
 				<xsl:otherwise>&#160;</xsl:otherwise>
@@ -92,7 +110,195 @@
 		</fo:block>
 	</xsl:template>
 
-	<!-- Listas, tabelas e demais blocos da justificação: ainda não impressos (issue #75, parte B). -->
+	<!--
+	  Listas da justificação (issue #75, parte B). Emenda: xhtml2fo.xsl, templates ol, ol/li, ul e ul/li
+	  (list-block com margin-left 2.5cm e text-indent 0; provisional-label-separation 1em;
+	  provisional-distance-between-starts de (algarismos do nº de itens) * 0.9 + 0.6 em na numerada e 1em na de
+	  marcadores; rótulo "N." ou "•" alinhado à direita) e html2foTextoLivre (margin-bottom: $pMarginBottom em
+	  ol e ul). Uma lista dentro de um item é impressa pelo mesmo template, recuada a partir do corpo do item. O
+	  recuo plano do editor (li class="indent-N") é ignorado, como na emenda.
+	-->
+	<xsl:template match="lx:ol | lx:ul" mode="justificacao">
+		<xsl:call-template name="lista"/>
+	</xsl:template>
+
+	<xsl:template name="lista">
+		<fo:list-block margin-left="2.5cm" text-indent="0" margin-bottom="{$pMarginBottom}"
+			provisional-label-separation="1em">
+			<xsl:attribute name="provisional-distance-between-starts">
+				<xsl:choose>
+					<xsl:when test="self::lx:ol">
+						<xsl:value-of select="string-length(string(count(lx:li))) * 0.9 + 0.6"/>
+						<xsl:text>em</xsl:text>
+					</xsl:when>
+					<xsl:otherwise>1em</xsl:otherwise>
+				</xsl:choose>
+			</xsl:attribute>
+			<xsl:apply-templates select="lx:li" mode="lista"/>
+		</fo:list-block>
+	</xsl:template>
+
+	<!--
+	  Item de lista: rótulo e corpo. No corpo, cada trecho de texto e elementos inline vira um bloco, cada p um
+	  bloco próprio e cada ol/ul uma lista aninhada, na ordem do item.
+	-->
+	<xsl:template match="lx:li" mode="lista">
+		<fo:list-item>
+			<fo:list-item-label end-indent="label-end()">
+				<fo:block text-align="end">
+					<xsl:choose>
+						<xsl:when test="parent::lx:ol"><xsl:number count="lx:li"/>.</xsl:when>
+						<xsl:otherwise>•</xsl:otherwise>
+					</xsl:choose>
+				</fo:block>
+			</fo:list-item-label>
+			<fo:list-item-body start-indent="body-start()">
+				<xsl:apply-templates select="node()" mode="item-de-lista"/>
+				<xsl:if test="not(node())">
+					<fo:block/>
+				</xsl:if>
+			</fo:list-item-body>
+		</fo:list-item>
+	</xsl:template>
+
+	<xsl:template match="lx:p" mode="item-de-lista">
+		<fo:block>
+			<xsl:apply-templates mode="inline"/>
+		</fo:block>
+	</xsl:template>
+
+	<xsl:template match="lx:ol | lx:ul" mode="item-de-lista">
+		<xsl:call-template name="lista"/>
+	</xsl:template>
+
+	<!--
+	  Texto e elementos inline do item: o primeiro nó de cada trecho (sem bloco antes dele) abre um bloco com ele
+	  e os irmãos inline seguintes do mesmo trecho; os demais nós do trecho já foram impressos.
+	-->
+	<xsl:template match="node()" mode="item-de-lista">
+		<xsl:variable name="blocosAntes" select="count(preceding-sibling::*[self::lx:p or self::lx:ol or self::lx:ul])"/>
+		<xsl:variable name="anterior" select="preceding-sibling::node()[1]"/>
+		<xsl:if test="not($anterior) or $anterior[self::lx:p or self::lx:ol or self::lx:ul]">
+			<xsl:variable name="trecho" select=". | following-sibling::node()[not(self::lx:p or self::lx:ol or self::lx:ul)]
+				[count(preceding-sibling::*[self::lx:p or self::lx:ol or self::lx:ul]) = $blocosAntes]"/>
+			<!-- not(self::text()) e não self::*: no XSLT do JDK, [self::* or normalize-space(.)] dá falso para elemento sem texto (ex.: img). -->
+			<xsl:if test="$trecho[not(self::text()) or normalize-space(.)]">
+				<fo:block>
+					<xsl:apply-templates select="$trecho" mode="inline"/>
+				</fo:block>
+			</xsl:if>
+		</xsl:if>
+	</xsl:template>
+
+	<!--
+	  Tabelas da justificação (issue #75, parte B). Emenda: xhtml2fo.xsl, templates table (tabela externa de três
+	  colunas só para centralizar; a do meio tem a largura da tabela, ou 100%), table-common-atts (borda 1pt
+	  solid, ou nenhuma com border="0"; border-collapse collapse; table-layout fixed), column-width (colunas
+	  proporcionais), td e th (padding .2em; borda na célula só com border diferente de 0; bloco com font-size 80%
+	  e line-height 140%; th em negrito e centralizado na vertical). O width inteiro do LexML é tomado como
+	  porcentagem, a unidade do editor. O LexML não guarda a largura das células: colunas de mesma largura.
+	-->
+	<xsl:template match="lx:table" mode="justificacao">
+		<fo:table table-layout="fixed" width="100%">
+			<fo:table-column column-width="proportional-column-width(1)"/>
+			<fo:table-column>
+				<xsl:attribute name="column-width">
+					<xsl:call-template name="porcentagem">
+						<xsl:with-param name="valor" select="@width"/>
+					</xsl:call-template>
+				</xsl:attribute>
+			</fo:table-column>
+			<fo:table-column column-width="proportional-column-width(1)"/>
+			<fo:table-body>
+				<fo:table-row>
+					<fo:table-cell column-number="2">
+						<fo:block text-indent="0">
+							<fo:table width="100%" table-layout="fixed" border-collapse="collapse">
+								<xsl:choose>
+									<xsl:when test="@border = 0">
+										<xsl:attribute name="border-style">none</xsl:attribute>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:attribute name="border">1pt solid</xsl:attribute>
+									</xsl:otherwise>
+								</xsl:choose>
+								<xsl:call-template name="colunas">
+									<xsl:with-param name="quantidade">
+										<xsl:call-template name="quantidade-de-colunas"/>
+									</xsl:with-param>
+								</xsl:call-template>
+								<fo:table-body>
+									<xsl:apply-templates select="lx:tr" mode="tabela"/>
+								</fo:table-body>
+							</fo:table>
+						</fo:block>
+					</fo:table-cell>
+				</fo:table-row>
+			</fo:table-body>
+		</fo:table>
+	</xsl:template>
+
+	<!-- Maior número de colunas entre as linhas, contando os colspan. -->
+	<xsl:template name="quantidade-de-colunas">
+		<xsl:for-each select="lx:tr">
+			<xsl:sort select="count(lx:td | lx:th) - count((lx:td | lx:th)[@colspan]) + sum((lx:td | lx:th)/@colspan)"
+				data-type="number" order="descending"/>
+			<xsl:if test="position() = 1">
+				<xsl:value-of select="count(lx:td | lx:th) - count((lx:td | lx:th)[@colspan]) + sum((lx:td | lx:th)/@colspan)"/>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:template>
+
+	<xsl:template name="colunas">
+		<xsl:param name="quantidade"/>
+		<xsl:if test="$quantidade &gt; 0">
+			<fo:table-column column-width="proportional-column-width(1)"/>
+			<xsl:call-template name="colunas">
+				<xsl:with-param name="quantidade" select="$quantidade - 1"/>
+			</xsl:call-template>
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match="lx:tr" mode="tabela">
+		<fo:table-row>
+			<xsl:apply-templates select="lx:td | lx:th" mode="tabela"/>
+		</fo:table-row>
+	</xsl:template>
+
+	<xsl:template match="lx:td | lx:th" mode="tabela">
+		<fo:table-cell padding=".2em">
+			<xsl:if test="self::lx:th">
+				<xsl:attribute name="font-weight">bold</xsl:attribute>
+				<xsl:attribute name="display-align">center</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="ancestor::lx:table[1][@border and @border != 0]">
+				<xsl:attribute name="border">1pt solid</xsl:attribute>
+			</xsl:if>
+			<xsl:if test="@colspan &gt; 1">
+				<xsl:attribute name="number-columns-spanned"><xsl:value-of select="@colspan"/></xsl:attribute>
+			</xsl:if>
+			<xsl:if test="@rowspan &gt; 1">
+				<xsl:attribute name="number-rows-spanned"><xsl:value-of select="@rowspan"/></xsl:attribute>
+			</xsl:if>
+			<fo:block font-size="80%" line-height="140%">
+				<xsl:apply-templates mode="inline"/>
+			</fo:block>
+		</fo:table-cell>
+	</xsl:template>
+
+	<!-- Largura em porcentagem a partir do inteiro do LexML (1 a 100); sem valor válido, 100%. -->
+	<xsl:template name="porcentagem">
+		<xsl:param name="valor"/>
+		<xsl:choose>
+			<xsl:when test="number($valor) &gt; 0 and number($valor) &lt;= 100">
+				<xsl:value-of select="number($valor)"/>
+				<xsl:text>%</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>100%</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!-- Demais blocos da justificação (ex.: div, Bloco): não impressos. -->
 	<xsl:template match="*" mode="justificacao" priority="-1"/>
 
 	<!--
@@ -114,16 +320,17 @@
 			<xsl:attribute name="margin-left">3cm</xsl:attribute>
 			<xsl:attribute name="text-indent">1.5cm</xsl:attribute>
 		</xsl:if>
+		<!-- Alinhamento com e sem o prefixo ql-: o editor grava sem ele (ajustaHtmlFromEditor do lexml-eta). -->
 		<xsl:choose>
-			<xsl:when test="contains($classes, ' ql-align-center ')">
+			<xsl:when test="contains($classes, ' ql-align-center ') or contains($classes, ' align-center ')">
 				<xsl:attribute name="text-align">center</xsl:attribute>
 				<xsl:attribute name="text-indent">0</xsl:attribute>
 			</xsl:when>
-			<xsl:when test="contains($classes, ' ql-align-right ')">
+			<xsl:when test="contains($classes, ' ql-align-right ') or contains($classes, ' align-right ')">
 				<xsl:attribute name="text-align">right</xsl:attribute>
 				<xsl:attribute name="text-indent">0</xsl:attribute>
 			</xsl:when>
-			<xsl:when test="contains($classes, ' ql-align-justify ')">
+			<xsl:when test="contains($classes, ' ql-align-justify ') or contains($classes, ' align-justify ')">
 				<xsl:attribute name="text-align">justify</xsl:attribute>
 			</xsl:when>
 		</xsl:choose>
@@ -528,6 +735,29 @@
 				<xsl:apply-templates mode="inline"/>
 			</xsl:otherwise>
 		</xsl:choose>
+	</xsl:template>
+
+	<!--
+	  Imagem (issue #75, parte B). Emenda: xhtml2fo.xsl, template img (bloco próprio com fo:external-graphic,
+	  content-width="scale-to-fit", scaling="uniform", width do img ou 100%). Diferenças: o data URI vai direto
+	  para o FOP, sem a gravação em arquivo temporário e a conversão para JPEG de VelocityExtension.trataImagens;
+	  só src "data:image/..." é usado (outros endereços fariam o FOP acessar rede ou disco); o bloco tem
+	  text-indent 0, para a imagem em largura total não passar da margem direita; o width inteiro do LexML é
+	  tomado como porcentagem. Imagem que o FOP não consegue ler: ele registra o erro e segue sem ela.
+	-->
+	<xsl:template match="lx:img" mode="inline">
+		<xsl:variable name="src" select="normalize-space(@src)"/>
+		<xsl:if test="starts-with($src, 'data:image/')">
+			<fo:block text-indent="0">
+				<fo:external-graphic src="url('{$src}')" content-width="scale-to-fit" scaling="uniform">
+					<xsl:attribute name="width">
+						<xsl:call-template name="porcentagem">
+							<xsl:with-param name="valor" select="@width"/>
+						</xsl:call-template>
+					</xsl:attribute>
+				</fo:external-graphic>
+			</fo:block>
+		</xsl:if>
 	</xsl:template>
 
 	<!--
