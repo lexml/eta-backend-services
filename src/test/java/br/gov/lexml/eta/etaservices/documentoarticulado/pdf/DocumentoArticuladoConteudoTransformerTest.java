@@ -381,9 +381,24 @@ class DocumentoArticuladoConteudoTransformerTest {
     void remissaoInternaComAlvoAusenteSemLink() throws Exception {
         Document fo = transformar(recurso(XML_EXEMPLO));
 
-        assertThat(fo.selectNodes("//*[local-name()='basic-link']")).isEmpty();
-        assertThat(texto(fo.getRootElement())).contains("observado o disposto no art. 4º desta Lei");
-        assertThat(fo.selectNodes("//@id")).isEmpty();
+        // O art. 7º foi excluído: a remissão fica como texto, sem link e sem destino
+        assertThat(texto(fo.getRootElement())).contains("observado o disposto no art. 7º desta Lei");
+        assertThat(fo.selectNodes("//*[local-name()='basic-link'][contains(., '7º')]")).isEmpty();
+        assertThat(fo.selectNodes("//*[@internal-destination='art7' or @id='art7']")).isEmpty();
+
+        // As demais remissões internas do exemplo são válidas: link e destino (artigo, parágrafo, inciso,
+        // capítulo e subseção), e nenhum outro id
+        List<String> internos = new ArrayList<>();
+        for (Node link : fo.selectNodes("//*[local-name()='basic-link'][@internal-destination]")) {
+            internos.add(((Element) link).attributeValue("internal-destination"));
+        }
+        assertThat(internos).containsExactlyInAnyOrder("art1_par1", "art1_par1_inc2", "tit1_cap1", "art1",
+                "tit2_cap2_sec1_sub2");
+        List<String> ids = new ArrayList<>();
+        for (Node id : fo.selectNodes("//@id")) {
+            ids.add(id.getText());
+        }
+        assertThat(ids).containsExactlyInAnyOrderElementsOf(internos);
     }
 
     @Test

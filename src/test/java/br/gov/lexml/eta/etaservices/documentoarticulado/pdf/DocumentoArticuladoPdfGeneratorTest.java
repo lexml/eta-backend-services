@@ -103,8 +103,17 @@ class DocumentoArticuladoPdfGeneratorTest {
     }
 
     @Test
-    void remissaoInvalidaSemLinkNoPdf() throws Exception {
-        assertThat(links(pdfExemplo)).isEmpty();
+    void exemploComLinksExternosEInternos() throws Exception {
+        List<String> links = links(pdfExemplo);
+
+        // Ementa, § 2º do Art. 1º e Art. 5º: links para o portal; Art. 2º: remissões internas válidas (a do
+        // art. 7º, excluído, é coberta no DocumentoArticuladoConteudoTransformerTest). Um link quebrado em duas
+        // linhas gera duas anotações.
+        assertThat(links).filteredOn(l -> l.startsWith("uri:")).isNotEmpty()
+                .allMatch(l -> l.startsWith("uri:https://normas.leg.br/?urn=urn:lex:"))
+                .contains("uri:https://normas.leg.br/?urn=urn:lex:br:federal:lei:2021-04-01;14133!art5",
+                        "uri:https://normas.leg.br/?urn=urn:lex:br:federal:decreto.lei:1940-12-07;2848!art327");
+        assertThat(links).filteredOn(l -> l.startsWith("interno:")).hasSizeGreaterThanOrEqualTo(5);
     }
 
     @Test

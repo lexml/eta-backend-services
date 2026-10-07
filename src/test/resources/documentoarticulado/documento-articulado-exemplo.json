@@ -113,7 +113,7 @@
                                                         {
                                                             "TYPE_NAME": "br_gov_lexml__1.GenInline",
                                                             "content": [
-                                                                "Já está definido no art. 1º. A remissão ao art. 4º ficou inválida depois que ele foi excluído; ajustar o texto."
+                                                                "Já está definido no art. 1º. A remissão ao art. 7º ficou inválida depois que ele foi excluído; ajustar o texto."
                                                             ]
                                                         }
                                                     ]
@@ -132,7 +132,7 @@
                                                         {
                                                             "TYPE_NAME": "br_gov_lexml__1.GenInline",
                                                             "content": [
-                                                                "Essa remissão ao art. 1º continua correta depois da exclusão do art. 4º?"
+                                                                "Essa remissão ao art. 1º continua correta depois da exclusão do art. 7º?"
                                                             ]
                                                         }
                                                     ]
@@ -175,14 +175,6 @@
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.RemissoesInternasInvalidas",
                                     "refIdsRemissoesInternas": "_ri13481093417"
                                 },
-                                "pendencias": {
-                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Pendencias",
-                                    "pendencia": [
-                                        "Corrigir remissões internas inválidas.",
-                                        "Remover comentários.",
-                                        "Resolver marcas de revisão."
-                                    ]
-                                },
                                 "revisoesArticulacao": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.RevisoesArticulacao",
                                     "revisaoArticulacao": [
@@ -193,8 +185,8 @@
                                             "data": "2026-05-12T09:05:00-03:00",
                                             "artigo": {
                                                 "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                                "id": "_art4-exc1",
-                                                "rotulo": "Art. 4º",
+                                                "id": "_art7-exc1",
+                                                "rotulo": "Art. 7º",
                                                 "lXcontainersOmissis": [
                                                     {
                                                         "name": {
@@ -206,7 +198,7 @@
                                                         },
                                                         "value": {
                                                             "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                                            "id": "_art4-exc1_cpt",
+                                                            "id": "_art7-exc1_cpt",
                                                             "p": [
                                                                 {
                                                                     "TYPE_NAME": "br_gov_lexml__1.GenInline",
@@ -238,6 +230,14 @@
                                             "sigla": "SS"
                                         }
                                     ]
+                                },
+                                "pendencias": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Pendencias",
+                                    "pendencia": [
+                                        "Corrigir remissões internas inválidas.",
+                                        "Remover comentários.",
+                                        "Resolver marcas de revisão."
+                                    ]
                                 }
                             }
                         }
@@ -262,7 +262,24 @@
                         "TYPE_NAME": "br_gov_lexml__1.GenInline",
                         "id": "ementa",
                         "content": [
-                            "\r\n          Institui o Programa de Modernização da Gestão Pública\r\n        "
+                            "\r\n          Institui o Programa de Modernização da Gestão Pública e altera o ",
+                            {
+                                "name": {
+                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                    "localPart": "span",
+                                    "prefix": "",
+                                    "key": "{http://www.lexml.gov.br/1.0}span",
+                                    "string": "{http://www.lexml.gov.br/1.0}span"
+                                },
+                                "value": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "href": "urn:lex:br:federal:decreto.lei:1940-12-07;2848",
+                                    "content": [
+                                        "Decreto-Lei nº 2.848, de 7 de dezembro de 1940"
+                                    ]
+                                }
+                            },
+                            " (Código Penal).\r\n        "
                         ]
                     },
                     "preambulo": {
@@ -284,88 +301,325 @@
                         {
                             "name": {
                                 "namespaceURI": "http://www.lexml.gov.br/1.0",
-                                "localPart": "Artigo",
+                                "localPart": "Titulo",
                                 "prefix": "",
-                                "key": "{http://www.lexml.gov.br/1.0}Artigo",
-                                "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                "key": "{http://www.lexml.gov.br/1.0}Titulo",
+                                "string": "{http://www.lexml.gov.br/1.0}Titulo"
                             },
                             "value": {
-                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                "id": "art1",
-                                "rotulo": "Art. 1º",
-                                "lXcontainersOmissis": [
+                                "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                "id": "tit1",
+                                "rotulo": "Título I",
+                                "nomeAgrupador": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Disposições Preliminares"
+                                    ]
+                                },
+                                "lXhier": [
                                     {
                                         "name": {
                                             "namespaceURI": "http://www.lexml.gov.br/1.0",
-                                            "localPart": "Caput",
+                                            "localPart": "Capitulo",
                                             "prefix": "",
-                                            "key": "{http://www.lexml.gov.br/1.0}Caput",
-                                            "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                            "key": "{http://www.lexml.gov.br/1.0}Capitulo",
+                                            "string": "{http://www.lexml.gov.br/1.0}Capitulo"
                                         },
                                         "value": {
-                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                            "id": "art1_cpt",
-                                            "p": [
+                                            "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                            "id": "tit1_cap1",
+                                            "rotulo": "Capítulo I",
+                                            "nomeAgrupador": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Do Programa"
+                                                ]
+                                            },
+                                            "lXhier": [
                                                 {
-                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
-                                                    "content": [
-                                                        "Fica instituído o Programa de Modernização da Gestão Pública, de que trata esta Lei."
-                                                    ]
-                                                }
-                                            ]
-                                        }
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            "name": {
-                                "namespaceURI": "http://www.lexml.gov.br/1.0",
-                                "localPart": "Artigo",
-                                "prefix": "",
-                                "key": "{http://www.lexml.gov.br/1.0}Artigo",
-                                "string": "{http://www.lexml.gov.br/1.0}Artigo"
-                            },
-                            "value": {
-                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                "id": "art2",
-                                "rotulo": "Art. 2º",
-                                "lXcontainersOmissis": [
-                                    {
-                                        "name": {
-                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
-                                            "localPart": "Caput",
-                                            "prefix": "",
-                                            "key": "{http://www.lexml.gov.br/1.0}Caput",
-                                            "string": "{http://www.lexml.gov.br/1.0}Caput"
-                                        },
-                                        "value": {
-                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                            "id": "art2_cpt",
-                                            "p": [
-                                                {
-                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
-                                                    "content": [
-                                                        "Compete ao órgão gestor do Programa, observado o disposto no ",
-                                                        {
-                                                            "name": {
-                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
-                                                                "localPart": "Remissao",
-                                                                "prefix": "",
-                                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
-                                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                                    "name": {
+                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                        "localPart": "Artigo",
+                                                        "prefix": "",
+                                                        "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                                        "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                                    },
+                                                    "value": {
+                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                        "id": "art1",
+                                                        "rotulo": "Art. 1º",
+                                                        "lXcontainersOmissis": [
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Caput",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                    "id": "art1_cpt",
+                                                                    "p": [
+                                                                        {
+                                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                            "content": [
+                                                                                "Fica instituído o Programa de Modernização da Gestão Pública, de que trata esta Lei."
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
                                                             },
-                                                            "value": {
-                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
-                                                                "href": "art4",
-                                                                "id": "_ri13481093417",
-                                                                "content": [
-                                                                    "art. 4º"
-                                                                ]
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Paragrafo",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Paragrafo",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Paragrafo"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                    "id": "art1_par1",
+                                                                    "rotulo": "§ 1º",
+                                                                    "p": [
+                                                                        {
+                                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                            "content": [
+                                                                                "São objetivos do Programa:"
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "lXcontainersOmissis": [
+                                                                        {
+                                                                            "name": {
+                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                "localPart": "Inciso",
+                                                                                "prefix": "",
+                                                                                "key": "{http://www.lexml.gov.br/1.0}Inciso",
+                                                                                "string": "{http://www.lexml.gov.br/1.0}Inciso"
+                                                                            },
+                                                                            "value": {
+                                                                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                "id": "art1_par1_inc1",
+                                                                                "rotulo": "I –",
+                                                                                "p": [
+                                                                                    {
+                                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                        "content": [
+                                                                                            "simplificar os ",
+                                                                                            {
+                                                                                                "name": {
+                                                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                    "localPart": "i",
+                                                                                                    "prefix": "",
+                                                                                                    "key": "{http://www.lexml.gov.br/1.0}i",
+                                                                                                    "string": "{http://www.lexml.gov.br/1.0}i"
+                                                                                                },
+                                                                                                "value": {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "procedimentos administrativos"
+                                                                                                    ]
+                                                                                                }
+                                                                                            },
+                                                                                            " dos órgãos e entidades da administração pública federal;"
+                                                                                        ]
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "name": {
+                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                "localPart": "Inciso",
+                                                                                "prefix": "",
+                                                                                "key": "{http://www.lexml.gov.br/1.0}Inciso",
+                                                                                "string": "{http://www.lexml.gov.br/1.0}Inciso"
+                                                                            },
+                                                                            "value": {
+                                                                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                "id": "art1_par1_inc2",
+                                                                                "rotulo": "II –",
+                                                                                "p": [
+                                                                                    {
+                                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                        "content": [
+                                                                                            "ampliar a ",
+                                                                                            {
+                                                                                                "name": {
+                                                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                    "localPart": "b",
+                                                                                                    "prefix": "",
+                                                                                                    "key": "{http://www.lexml.gov.br/1.0}b",
+                                                                                                    "string": "{http://www.lexml.gov.br/1.0}b"
+                                                                                                },
+                                                                                                "value": {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "transparência"
+                                                                                                    ]
+                                                                                                }
+                                                                                            },
+                                                                                            " da gestão, por meio de:"
+                                                                                        ]
+                                                                                    }
+                                                                                ],
+                                                                                "lXcontainersOmissis": [
+                                                                                    {
+                                                                                        "name": {
+                                                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                            "localPart": "Alinea",
+                                                                                            "prefix": "",
+                                                                                            "key": "{http://www.lexml.gov.br/1.0}Alinea",
+                                                                                            "string": "{http://www.lexml.gov.br/1.0}Alinea"
+                                                                                        },
+                                                                                        "value": {
+                                                                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                            "id": "art1_par1_inc2_ali1",
+                                                                                            "rotulo": "a)",
+                                                                                            "p": [
+                                                                                                {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "publicação de dados abertos; e"
+                                                                                                    ]
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    },
+                                                                                    {
+                                                                                        "name": {
+                                                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                            "localPart": "Alinea",
+                                                                                            "prefix": "",
+                                                                                            "key": "{http://www.lexml.gov.br/1.0}Alinea",
+                                                                                            "string": "{http://www.lexml.gov.br/1.0}Alinea"
+                                                                                        },
+                                                                                        "value": {
+                                                                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                            "id": "art1_par1_inc2_ali2",
+                                                                                            "rotulo": "b)",
+                                                                                            "p": [
+                                                                                                {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "painéis de acompanhamento que contenham:"
+                                                                                                    ]
+                                                                                                }
+                                                                                            ],
+                                                                                            "lXcontainersOmissis": [
+                                                                                                {
+                                                                                                    "name": {
+                                                                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                        "localPart": "Item",
+                                                                                                        "prefix": "",
+                                                                                                        "key": "{http://www.lexml.gov.br/1.0}Item",
+                                                                                                        "string": "{http://www.lexml.gov.br/1.0}Item"
+                                                                                                    },
+                                                                                                    "value": {
+                                                                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                                        "id": "art1_par1_inc2_ali2_ite1",
+                                                                                                        "rotulo": "1.",
+                                                                                                        "p": [
+                                                                                                            {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "content": [
+                                                                                                                    "indicadores de desempenho;"
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                },
+                                                                                                {
+                                                                                                    "name": {
+                                                                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                        "localPart": "Item",
+                                                                                                        "prefix": "",
+                                                                                                        "key": "{http://www.lexml.gov.br/1.0}Item",
+                                                                                                        "string": "{http://www.lexml.gov.br/1.0}Item"
+                                                                                                    },
+                                                                                                    "value": {
+                                                                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                                        "id": "art1_par1_inc2_ali2_ite2",
+                                                                                                        "rotulo": "2.",
+                                                                                                        "p": [
+                                                                                                            {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "content": [
+                                                                                                                    "metas anuais."
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        ]
+                                                                                                    }
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Paragrafo",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Paragrafo",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Paragrafo"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                    "id": "art1_par2",
+                                                                    "rotulo": "§ 2º",
+                                                                    "p": [
+                                                                        {
+                                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                            "content": [
+                                                                                "As contratações do Programa observarão o disposto na ",
+                                                                                {
+                                                                                    "name": {
+                                                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                        "localPart": "span",
+                                                                                        "prefix": "",
+                                                                                        "key": "{http://www.lexml.gov.br/1.0}span",
+                                                                                        "string": "{http://www.lexml.gov.br/1.0}span"
+                                                                                    },
+                                                                                    "value": {
+                                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                        "href": "urn:lex:br:federal:lei:2021-04-01;14133",
+                                                                                        "content": [
+                                                                                            "Lei nº 14.133, de 1º de abril de 2021"
+                                                                                        ]
+                                                                                    }
+                                                                                },
+                                                                                ", em especial os princípios previstos no seu ",
+                                                                                {
+                                                                                    "name": {
+                                                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                        "localPart": "span",
+                                                                                        "prefix": "",
+                                                                                        "key": "{http://www.lexml.gov.br/1.0}span",
+                                                                                        "string": "{http://www.lexml.gov.br/1.0}span"
+                                                                                    },
+                                                                                    "value": {
+                                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                        "href": "urn:lex:br:federal:lei:2021-04-01;14133!art5",
+                                                                                        "content": [
+                                                                                            "art. 5º"
+                                                                                        ]
+                                                                                    }
+                                                                                },
+                                                                                "."
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
                                                             }
-                                                        },
-                                                        " desta Lei, editar os atos complementares necessários à sua execução."
-                                                    ]
+                                                        ]
+                                                    }
                                                 }
                                             ]
                                         }
@@ -376,33 +630,653 @@
                         {
                             "name": {
                                 "namespaceURI": "http://www.lexml.gov.br/1.0",
-                                "localPart": "Artigo",
+                                "localPart": "Titulo",
                                 "prefix": "",
-                                "key": "{http://www.lexml.gov.br/1.0}Artigo",
-                                "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                "key": "{http://www.lexml.gov.br/1.0}Titulo",
+                                "string": "{http://www.lexml.gov.br/1.0}Titulo"
                             },
                             "value": {
-                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                "id": "art3",
-                                "rotulo": "Art. 3º",
-                                "lXcontainersOmissis": [
+                                "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                "id": "tit2",
+                                "rotulo": "Título II",
+                                "nomeAgrupador": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Da Gestão e das Infrações"
+                                    ]
+                                },
+                                "lXhier": [
                                     {
                                         "name": {
                                             "namespaceURI": "http://www.lexml.gov.br/1.0",
-                                            "localPart": "Caput",
+                                            "localPart": "Capitulo",
                                             "prefix": "",
-                                            "key": "{http://www.lexml.gov.br/1.0}Caput",
-                                            "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                            "key": "{http://www.lexml.gov.br/1.0}Capitulo",
+                                            "string": "{http://www.lexml.gov.br/1.0}Capitulo"
                                         },
                                         "value": {
-                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
-                                            "id": "art3_cpt",
-                                            "p": [
+                                            "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                            "id": "tit2_cap2",
+                                            "rotulo": "Capítulo II",
+                                            "nomeAgrupador": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Da Gestão"
+                                                ]
+                                            },
+                                            "lXhier": [
                                                 {
-                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
-                                                    "content": [
-                                                        "Esta Lei entra em vigor na data de sua publicação."
-                                                    ]
+                                                    "name": {
+                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                        "localPart": "Secao",
+                                                        "prefix": "",
+                                                        "key": "{http://www.lexml.gov.br/1.0}Secao",
+                                                        "string": "{http://www.lexml.gov.br/1.0}Secao"
+                                                    },
+                                                    "value": {
+                                                        "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                                        "id": "tit2_cap2_sec1",
+                                                        "rotulo": "Seção I",
+                                                        "nomeAgrupador": {
+                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                            "content": [
+                                                                "Do Órgão Gestor"
+                                                            ]
+                                                        },
+                                                        "lXhier": [
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Subsecao",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Subsecao",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Subsecao"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                                                    "id": "tit2_cap2_sec1_sub1",
+                                                                    "rotulo": "Subseção I",
+                                                                    "nomeAgrupador": {
+                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                        "content": [
+                                                                            "Das Competências"
+                                                                        ]
+                                                                    },
+                                                                    "lXhier": [
+                                                                        {
+                                                                            "name": {
+                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                "localPart": "Artigo",
+                                                                                "prefix": "",
+                                                                                "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                                                                "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                                                            },
+                                                                            "value": {
+                                                                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                "id": "art2",
+                                                                                "rotulo": "Art. 2º",
+                                                                                "lXcontainersOmissis": [
+                                                                                    {
+                                                                                        "name": {
+                                                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                            "localPart": "Caput",
+                                                                                            "prefix": "",
+                                                                                            "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                                                                            "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                                                                        },
+                                                                                        "value": {
+                                                                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                            "id": "art2_cpt",
+                                                                                            "p": [
+                                                                                                {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "Compete ao órgão gestor do Programa, observado o disposto no ",
+                                                                                                        {
+                                                                                                            "name": {
+                                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                                "localPart": "Remissao",
+                                                                                                                "prefix": "",
+                                                                                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
+                                                                                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                                                                                            },
+                                                                                                            "value": {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "href": "art7",
+                                                                                                                "id": "_ri13481093417",
+                                                                                                                "content": [
+                                                                                                                    "art. 7º"
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        },
+                                                                                                        " desta Lei, editar os atos complementares necessários à sua execução."
+                                                                                                    ]
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    },
+                                                                                    {
+                                                                                        "name": {
+                                                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                            "localPart": "Paragrafo",
+                                                                                            "prefix": "",
+                                                                                            "key": "{http://www.lexml.gov.br/1.0}Paragrafo",
+                                                                                            "string": "{http://www.lexml.gov.br/1.0}Paragrafo"
+                                                                                        },
+                                                                                        "value": {
+                                                                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                            "id": "art2_par1",
+                                                                                            "rotulo": "§ 1º",
+                                                                                            "p": [
+                                                                                                {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "Os atos de que trata o caput observarão os objetivos previstos no ",
+                                                                                                        {
+                                                                                                            "name": {
+                                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                                "localPart": "Remissao",
+                                                                                                                "prefix": "",
+                                                                                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
+                                                                                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                                                                                            },
+                                                                                                            "value": {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "href": "art1_par1",
+                                                                                                                "content": [
+                                                                                                                    "§ 1º do art. 1º"
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        },
+                                                                                                        ", em especial o ",
+                                                                                                        {
+                                                                                                            "name": {
+                                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                                "localPart": "Remissao",
+                                                                                                                "prefix": "",
+                                                                                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
+                                                                                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                                                                                            },
+                                                                                                            "value": {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "href": "art1_par1_inc2",
+                                                                                                                "content": [
+                                                                                                                    "inciso II do § 1º do art. 1º"
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        },
+                                                                                                        ", e as disposições do ",
+                                                                                                        {
+                                                                                                            "name": {
+                                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                                "localPart": "Remissao",
+                                                                                                                "prefix": "",
+                                                                                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
+                                                                                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                                                                                            },
+                                                                                                            "value": {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "href": "tit1_cap1",
+                                                                                                                "content": [
+                                                                                                                    "Capítulo I"
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        },
+                                                                                                        "."
+                                                                                                    ]
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    },
+                                                                                    {
+                                                                                        "name": {
+                                                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                            "localPart": "Paragrafo",
+                                                                                            "prefix": "",
+                                                                                            "key": "{http://www.lexml.gov.br/1.0}Paragrafo",
+                                                                                            "string": "{http://www.lexml.gov.br/1.0}Paragrafo"
+                                                                                        },
+                                                                                        "value": {
+                                                                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                            "id": "art2_par2",
+                                                                                            "rotulo": "§ 2º",
+                                                                                            "p": [
+                                                                                                {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "Aplica-se ao órgão gestor o disposto no ",
+                                                                                                        {
+                                                                                                            "name": {
+                                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                                "localPart": "Remissao",
+                                                                                                                "prefix": "",
+                                                                                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
+                                                                                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                                                                                            },
+                                                                                                            "value": {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "href": "art1",
+                                                                                                                "content": [
+                                                                                                                    "art. 1º"
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        },
+                                                                                                        " e na ",
+                                                                                                        {
+                                                                                                            "name": {
+                                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                                "localPart": "Remissao",
+                                                                                                                "prefix": "",
+                                                                                                                "key": "{http://www.lexml.gov.br/1.0}Remissao",
+                                                                                                                "string": "{http://www.lexml.gov.br/1.0}Remissao"
+                                                                                                            },
+                                                                                                            "value": {
+                                                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                                "href": "tit2_cap2_sec1_sub2",
+                                                                                                                "content": [
+                                                                                                                    "Subseção II"
+                                                                                                                ]
+                                                                                                            }
+                                                                                                        },
+                                                                                                        " desta Seção."
+                                                                                                    ]
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Subsecao",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Subsecao",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Subsecao"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                                                    "id": "tit2_cap2_sec1_sub2",
+                                                                    "rotulo": "Subseção II",
+                                                                    "nomeAgrupador": {
+                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                        "content": [
+                                                                            "Do Controle"
+                                                                        ]
+                                                                    },
+                                                                    "lXhier": [
+                                                                        {
+                                                                            "name": {
+                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                "localPart": "Artigo",
+                                                                                "prefix": "",
+                                                                                "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                                                                "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                                                            },
+                                                                            "value": {
+                                                                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                "id": "art3",
+                                                                                "rotulo": "Art. 3º",
+                                                                                "lXcontainersOmissis": [
+                                                                                    {
+                                                                                        "name": {
+                                                                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                            "localPart": "Caput",
+                                                                                            "prefix": "",
+                                                                                            "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                                                                            "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                                                                        },
+                                                                                        "value": {
+                                                                                            "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                            "id": "art3_cpt",
+                                                                                            "p": [
+                                                                                                {
+                                                                                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                    "content": [
+                                                                                                        "O órgão gestor publicará, anualmente, relatório de execução do Programa."
+                                                                                                    ]
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    }
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "name": {
+                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                            "localPart": "Capitulo",
+                                            "prefix": "",
+                                            "key": "{http://www.lexml.gov.br/1.0}Capitulo",
+                                            "string": "{http://www.lexml.gov.br/1.0}Capitulo"
+                                        },
+                                        "value": {
+                                            "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                            "id": "tit2_cap3",
+                                            "rotulo": "Capítulo III",
+                                            "nomeAgrupador": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Das Infrações Penais"
+                                                ]
+                                            },
+                                            "lXhier": [
+                                                {
+                                                    "name": {
+                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                        "localPart": "Artigo",
+                                                        "prefix": "",
+                                                        "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                                        "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                                    },
+                                                    "value": {
+                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                        "id": "art4",
+                                                        "tituloDispositivo": {
+                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                            "content": [
+                                                                "Desvio de recursos do Programa"
+                                                            ]
+                                                        },
+                                                        "rotulo": "Art. 4º",
+                                                        "lXcontainersOmissis": [
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Caput",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                    "id": "art4_cpt",
+                                                                    "p": [
+                                                                        {
+                                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                            "content": [
+                                                                                "Desviar, em proveito próprio ou alheio, recursos destinados ao Programa:"
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "pena": {
+                                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                        "id": "art4_cpt_pena",
+                                                                        "rotulo": "Pena –",
+                                                                        "p": [
+                                                                            {
+                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                "content": [
+                                                                                    "reclusão, de 2 (dois) a 8 (oito) anos, e multa."
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Paragrafo",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Paragrafo",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Paragrafo"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                    "id": "art4_par1u",
+                                                                    "rotulo": "Parágrafo único.",
+                                                                    "p": [
+                                                                        {
+                                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                            "content": [
+                                                                                "Se o crime é culposo:"
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "pena": {
+                                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                        "id": "art4_par1u_pena",
+                                                                        "rotulo": "Pena –",
+                                                                        "p": [
+                                                                            {
+                                                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                "content": [
+                                                                                    "detenção, de 6 (seis) meses a 2 (dois) anos."
+                                                                                ]
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                "localPart": "Titulo",
+                                "prefix": "",
+                                "key": "{http://www.lexml.gov.br/1.0}Titulo",
+                                "string": "{http://www.lexml.gov.br/1.0}Titulo"
+                            },
+                            "value": {
+                                "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                "id": "tit3",
+                                "rotulo": "Título III",
+                                "nomeAgrupador": {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Disposições Finais"
+                                    ]
+                                },
+                                "lXhier": [
+                                    {
+                                        "name": {
+                                            "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                            "localPart": "Capitulo",
+                                            "prefix": "",
+                                            "key": "{http://www.lexml.gov.br/1.0}Capitulo",
+                                            "string": "{http://www.lexml.gov.br/1.0}Capitulo"
+                                        },
+                                        "value": {
+                                            "TYPE_NAME": "br_gov_lexml__1.Hierarchy",
+                                            "id": "tit3_cap4",
+                                            "rotulo": "Capítulo IV",
+                                            "nomeAgrupador": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Das Alterações na Legislação"
+                                                ]
+                                            },
+                                            "lXhier": [
+                                                {
+                                                    "name": {
+                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                        "localPart": "Artigo",
+                                                        "prefix": "",
+                                                        "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                                        "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                                    },
+                                                    "value": {
+                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                        "id": "art5",
+                                                        "rotulo": "Art. 5º",
+                                                        "lXcontainersOmissis": [
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Caput",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                    "id": "art5_cpt",
+                                                                    "p": [
+                                                                        {
+                                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                            "content": [
+                                                                                "O ",
+                                                                                {
+                                                                                    "name": {
+                                                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                        "localPart": "span",
+                                                                                        "prefix": "",
+                                                                                        "key": "{http://www.lexml.gov.br/1.0}span",
+                                                                                        "string": "{http://www.lexml.gov.br/1.0}span"
+                                                                                    },
+                                                                                    "value": {
+                                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                        "href": "urn:lex:br:federal:decreto.lei:1940-12-07;2848!art327",
+                                                                                        "content": [
+                                                                                            "art. 327 do Decreto-Lei nº 2.848, de 7 de dezembro de 1940"
+                                                                                        ]
+                                                                                    }
+                                                                                },
+                                                                                " (Código Penal), passa a vigorar acrescido do seguinte § 3º:"
+                                                                            ]
+                                                                        }
+                                                                    ],
+                                                                    "alteracao": {
+                                                                        "TYPE_NAME": "br_gov_lexml__1.Alteracao",
+                                                                        "base": "urn:lex:br:federal:decreto.lei:1940-12-07;2848",
+                                                                        "id": "art5_cpt_alt1",
+                                                                        "content": [
+                                                                            {
+                                                                                "name": {
+                                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                    "localPart": "Artigo",
+                                                                                    "prefix": "",
+                                                                                    "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                                                                    "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                                                                },
+                                                                                "value": {
+                                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                    "href": "art327",
+                                                                                    "id": "art5_cpt_alt1_art327",
+                                                                                    "abreAspas": "s",
+                                                                                    "rotulo": "Art. 327.",
+                                                                                    "lXcontainersOmissis": [
+                                                                                        {
+                                                                                            "name": {
+                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                "localPart": "Caput",
+                                                                                                "prefix": "",
+                                                                                                "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                                                                                "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                                                                            },
+                                                                                            "value": {
+                                                                                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                                "textoOmitido": "s",
+                                                                                                "href": "art327_cpt",
+                                                                                                "id": "art5_cpt_alt1_art327_cpt"
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            "name": {
+                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                "localPart": "Omissis",
+                                                                                                "prefix": "",
+                                                                                                "key": "{http://www.lexml.gov.br/1.0}Omissis",
+                                                                                                "string": "{http://www.lexml.gov.br/1.0}Omissis"
+                                                                                            },
+                                                                                            "value": {
+                                                                                                "TYPE_NAME": "br_gov_lexml__1.Omissis",
+                                                                                                "id": "art5_cpt_alt1_art327_omi1"
+                                                                                            }
+                                                                                        },
+                                                                                        {
+                                                                                            "name": {
+                                                                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                                                "localPart": "Paragrafo",
+                                                                                                "prefix": "",
+                                                                                                "key": "{http://www.lexml.gov.br/1.0}Paragrafo",
+                                                                                                "string": "{http://www.lexml.gov.br/1.0}Paragrafo"
+                                                                                            },
+                                                                                            "value": {
+                                                                                                "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                                                "href": "art327_par3",
+                                                                                                "id": "art5_cpt_alt1_art327_par3",
+                                                                                                "fechaAspas": "s",
+                                                                                                "notaAlteracao": "NR",
+                                                                                                "rotulo": "§ 3º",
+                                                                                                "p": [
+                                                                                                    {
+                                                                                                        "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                                                        "content": [
+                                                                                                            "A pena será aumentada da metade se o crime for praticado contra o Programa de Modernização da Gestão Pública."
+                                                                                                        ]
+                                                                                                    }
+                                                                                                ]
+                                                                                            }
+                                                                                        }
+                                                                                    ]
+                                                                                }
+                                                                            }
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                },
+                                                {
+                                                    "name": {
+                                                        "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                        "localPart": "Artigo",
+                                                        "prefix": "",
+                                                        "key": "{http://www.lexml.gov.br/1.0}Artigo",
+                                                        "string": "{http://www.lexml.gov.br/1.0}Artigo"
+                                                    },
+                                                    "value": {
+                                                        "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                        "id": "art6",
+                                                        "rotulo": "Art. 6º",
+                                                        "lXcontainersOmissis": [
+                                                            {
+                                                                "name": {
+                                                                    "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                                    "localPart": "Caput",
+                                                                    "prefix": "",
+                                                                    "key": "{http://www.lexml.gov.br/1.0}Caput",
+                                                                    "string": "{http://www.lexml.gov.br/1.0}Caput"
+                                                                },
+                                                                "value": {
+                                                                    "TYPE_NAME": "br_gov_lexml__1.DispositivoType",
+                                                                    "id": "art6_cpt",
+                                                                    "p": [
+                                                                        {
+                                                                            "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                                            "content": [
+                                                                                "Esta Lei entra em vigor na data de sua publicação."
+                                                                            ]
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
                                                 }
                                             ]
                                         }
