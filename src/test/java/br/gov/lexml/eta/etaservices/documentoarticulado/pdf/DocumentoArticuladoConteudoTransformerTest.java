@@ -21,6 +21,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import br.gov.lexml.eta.etaservices.util.EtaBackendException;
@@ -388,14 +389,14 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(fo.selectNodes("//*[@internal-destination='art7' or @id='art7']")).isEmpty();
 
         // As demais remissões internas do exemplo são válidas: link e destino (artigo, parágrafo, inciso,
-        // capítulo e subseção); o art. 1º é alvo de uma remissão da articulação e de outra da justificação.
-        // Um id por alvo e nenhum outro id
+        // capítulo e subseção); o art. 1º é alvo de uma remissão da articulação e de duas da justificação (uma
+        // em parágrafo, outra em item de lista). Um id por alvo e nenhum outro id
         List<String> internos = new ArrayList<>();
         for (Node link : fo.selectNodes("//*[local-name()='basic-link'][@internal-destination]")) {
             internos.add(((Element) link).attributeValue("internal-destination"));
         }
         assertThat(internos).containsExactlyInAnyOrder("art1_par1", "art1_par1_inc2", "tit1_cap1", "art1",
-                "tit2_cap2_sec1_sub2", "art1");
+                "tit2_cap2_sec1_sub2", "art1", "art1");
         List<String> ids = new ArrayList<>();
         for (Node id : fo.selectNodes("//@id")) {
             ids.add(id.getText());
@@ -524,6 +525,8 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(corpo.attributeValue("line-height")).isEqualTo("150%");
         assertThat(corpo.attributeValue("text-indent")).isEqualTo("2.5cm");
         assertThat(corpo.attributeValue("text-align")).isNull();
+        // Sobrescrito e subscrito não mudam a altura da linha
+        assertThat(corpo.attributeValue("line-height-shift-adjustment")).isEqualTo("disregard-shifts");
         // Um bloco por parágrafo, com o espaço após o parágrafo dos parâmetros de impressão
         Element primeiro = (Element) corpo.elements().get(0);
         assertThat(texto(primeiro)).startsWith("A presente proposição");
@@ -652,13 +655,198 @@ class DocumentoArticuladoConteudoTransformerTest {
     }
 
     @Test
-    void listasTabelasEImagensAindaNaoImpressas() throws Exception {
-        Document fo = transformar(xml(JUSTIFICACAO));
+    void tabelaSimplesCentralizadaComColunasIguais() throws Exception {
+        Element externa = tabelasDaJustificacao().get(0);
 
-        assertThat(texto(fo.getRootElement())).doesNotContain("Item de lista").doesNotContain("Indicador")
-                .contains("Imagem ainda não impressa:");
-        assertThat(fo.selectNodes("//*[local-name()='external-graphic' or local-name()='table' or local-name()='list-block']"))
-                .isEmpty();
+        // Tabela externa só para centralizar (valores do xhtml2fo.xsl): coluna do meio com a largura da tabela
+        assertThat(externa.attributeValue("table-layout")).isEqualTo("fixed");
+        assertThat(externa.attributeValue("width")).isEqualTo("100%");
+        assertThat(larguraDasColunas(externa)).containsExactly("proportional-column-width(1)", "100%",
+                "proportional-column-width(1)");
+        Element interna = tabelaInterna(externa);
+        assertThat(((Element) interna.getParent()).attributeValue("text-indent")).isEqualTo("0");
+        assertThat(interna.attributeValue("border")).isEqualTo("1pt solid");
+        assertThat(interna.attributeValue("border-collapse")).isEqualTo("collapse");
+        assertThat(larguraDasColunas(interna)).containsExactly("proportional-column-width(1)", "proportional-column-width(1)");
+        // Células: padding .2em, bloco a 80% e 140%, com borda (border="1", como o editor grava)
+        List<Node> celulas = interna.selectNodes(".//*[local-name()='table-cell']");
+        assertThat(celulas).extracting(c -> texto((Element) c)).containsExactly("Indicador", "Meta", "Livros convertidos", "10.000");
+        Element celula = (Element) celulas.get(0);
+        assertThat(celula.attributeValue("padding")).isEqualTo(".2em");
+        assertThat(celula.attributeValue("border")).isEqualTo("1pt solid");
+        Element bloco = (Element) celula.elements().get(0);
+        assertThat(bloco.attributeValue("font-size")).isEqualTo("80%");
+        assertThat(bloco.attributeValue("line-height")).isEqualTo("140%");
+    }
+
+    @Test
+    void tabelaComLarguraBordaCabecalhoECelulasMescladas() throws Exception {
+        Element externa = tabelasDaJustificacao().get(1);
+        Element interna = tabelaInterna(externa);
+
+        assertThat(larguraDasColunas(externa).get(1)).isEqualTo("60%");
+        // 3 colunas: a linha de cabeçalho tem 3 células; a seguinte tem colspan 2 + 1
+        assertThat(larguraDasColunas(interna)).hasSize(3);
+        List<Node> cabecalho = interna.selectNodes(".//*[local-name()='table-row'][1]/*");
+        assertThat(cabecalho).hasSize(3).allMatch(c -> "bold".equals(((Element) c).attributeValue("font-weight"))
+                && "center".equals(((Element) c).attributeValue("display-align")));
+        // border="1": borda também nas células
+        assertThat(interna.selectNodes(".//*[local-name()='table-cell'][not(@border='1pt solid')]")).isEmpty();
+        Element mesclada = (Element) interna.selectSingleNode(".//*[local-name()='table-cell'][@number-columns-spanned]");
+        assertThat(mesclada.attributeValue("number-columns-spanned")).isEqualTo("2");
+        assertThat(texto(mesclada)).isEqualTo("Diagnóstico e planejamento");
+        Element vertical = (Element) interna.selectSingleNode(".//*[local-name()='table-cell'][@number-rows-spanned]");
+        assertThat(vertical.attributeValue("number-rows-spanned")).isEqualTo("2");
+        assertThat(texto(vertical)).isEqualTo("Órgão gestor");
+        // Formatação e nota de rodapé na célula
+        assertThat(interna.selectNodes(".//*[@font-style='italic' and text()='Produção']")).hasSize(1);
+        assertThat(interna.selectNodes(".//*[local-name()='footnote']")).hasSize(1);
+    }
+
+    @Test
+    void tabelaSemAtributoBordaSoComMoldura() throws Exception {
+        // Regra da emenda: sem border, borda só em volta da tabela (o editor sempre grava border="1")
+        Element interna = tabelaInterna((Element) corpoDaJustificacao(documentoComJustificacao(
+                "<p>Tabela:</p><table id=\"_tabela1\"><tr><td>a</td><td>b</td></tr></table>"))
+                .selectSingleNode("*[local-name()='table']"));
+
+        assertThat(interna.attributeValue("border")).isEqualTo("1pt solid");
+        assertThat(interna.selectNodes(".//*[local-name()='table-cell'][@border]")).isEmpty();
+    }
+
+    @Test
+    void tabelaComBordaZeroSemBordas() throws Exception {
+        Element interna = tabelaInterna((Element) corpoDaJustificacao(documentoComJustificacao(
+                "<p>Tabela:</p><table id=\"_tabela1\" border=\"0\"><tr><td>a</td></tr></table>"))
+                .selectSingleNode("*[local-name()='table']"));
+
+        assertThat(interna.attributeValue("border-style")).isEqualTo("none");
+        assertThat(interna.attributeValue("border")).isNull();
+        assertThat(interna.selectNodes(".//*[local-name()='table-cell'][@border]")).isEmpty();
+    }
+
+    @Test
+    void imagensComLarguraEmPorcentagemEmBlocoProprio() throws Exception {
+        Element sozinha = paragrafoComImagem(0);
+        Element depoisDoTexto = paragrafoComImagem(1);
+        Element semLargura = paragrafoComImagem(2);
+
+        assertThat(imagem(sozinha).attributeValue("width")).isEqualTo("40%");
+        assertThat(imagem(depoisDoTexto).attributeValue("width")).isEqualTo("20%");
+        assertThat(imagem(semLargura).attributeValue("width")).isEqualTo("100%");
+        Element imagem = imagem(sozinha);
+        assertThat(imagem.attributeValue("src")).startsWith("url('data:image/png;base64,").endsWith("')");
+        assertThat(imagem.attributeValue("content-width")).isEqualTo("scale-to-fit");
+        assertThat(imagem.attributeValue("scaling")).isEqualTo("uniform");
+        assertThat(imagem(semLargura).attributeValue("src")).startsWith("url('data:image/jpeg;base64,");
+        // Bloco próprio, sem recuo
+        assertThat(((Element) imagem.getParent()).attributeValue("text-indent")).isEqualTo("0");
+        // Parágrafo que começa com imagem: centralizado; com texto antes: alinhamento normal, texto e imagem abaixo
+        assertThat(sozinha.attributeValue("text-align")).isEqualTo("center");
+        assertThat(sozinha.attributeValue("text-indent")).isEqualTo("0");
+        assertThat(depoisDoTexto.attributeValue("text-align")).isNull();
+        assertThat(texto(depoisDoTexto)).isEqualTo("Logotipo do Programa:");
+    }
+
+    @Test
+    void imagemExternaNaoECarregada() throws Exception {
+        Element paragrafo = paragrafoDaJustificacao("Imagem externa, não carregada:");
+
+        assertThat(paragrafo.selectNodes(".//*[local-name()='external-graphic']")).isEmpty();
+        assertThat(transformar(xml(JUSTIFICACAO)).selectNodes("//@src[contains(., 'gov.br')]")).isEmpty();
+    }
+
+    @Test
+    void paragrafoSoComImagemNaoELinhaEmBranco() throws Exception {
+        Element paragrafo = paragrafoComImagem(0);
+
+        assertThat(paragrafo.getText()).doesNotContain(NBSP);
+        assertThat(paragrafo.elements()).hasSize(1);
+    }
+
+    @Test
+    void justificacaoSoComListaOuTabelaTemTitulo() throws Exception {
+        assertThat(corpoDaJustificacao(documentoComJustificacao("<ul><li>Item.</li></ul>")).elements()).hasSize(1);
+        assertThat(corpoDaJustificacao(documentoComJustificacao("<table id=\"_tabela1\"><tr><td>a</td></tr></table>"))
+                .elements()).hasSize(1);
+    }
+
+    // Alinhamento e listas (issue #75, parte B) -----------------------------------------------------------------
+
+    @ParameterizedTest
+    @CsvSource({ "'Parágrafo centralizado, com a classe gravada pelo editor.',center,0",
+            "'Parágrafo alinhado à direita, com a classe gravada pelo editor.',right,0",
+            "Parágrafo justificado com a classe gravada pelo editor,justify," })
+    void alinhamentoComAsClassesGravadasPeloEditor(String inicio, String alinhamento, String recuo) throws Exception {
+        Element paragrafo = paragrafoDaJustificacao(inicio);
+
+        // O lexml-eta grava align-* (sem ql-); os dois formatos são aceitos
+        assertThat(paragrafo.attributeValue("text-align")).isEqualTo(alinhamento);
+        assertThat(paragrafo.attributeValue("text-indent")).isEqualTo(recuo);
+    }
+
+    @Test
+    void listaNumeradaComOsValoresDaEmenda() throws Exception {
+        Element lista = listasDaJustificacao().get(0);
+
+        assertThat(lista.attributeValue("margin-left")).isEqualTo("2.5cm");
+        assertThat(lista.attributeValue("text-indent")).isEqualTo("0");
+        assertThat(lista.attributeValue("margin-bottom")).isEqualTo("0.6em");
+        assertThat(lista.attributeValue("provisional-label-separation")).isEqualTo("1em");
+        // 4 itens: 1 algarismo * 0.9 + 0.6
+        assertThat(lista.attributeValue("provisional-distance-between-starts")).isEqualTo("1.5em");
+        assertThat(rotulos(lista)).containsExactly("1.", "2.", "3.", "4.");
+        Element rotulo = (Element) lista.selectSingleNode("*[1]/*[local-name()='list-item-label']/*");
+        assertThat(rotulo.attributeValue("text-align")).isEqualTo("end");
+        assertThat(textosDosItens(lista)).containsExactly("Diagnóstico das bibliotecas públicas.",
+                "Distribuição às bibliotecas participantes.", "Item com recuo do editor, impresso no mesmo nível.");
+    }
+
+    @Test
+    void listaAninhadaComNumeracaoPropria() throws Exception {
+        Element externa = listasDaJustificacao().get(0);
+        Element corpoDoItem2 = (Element) externa.selectSingleNode("*[2]/*[local-name()='list-item-body']");
+        Element interna = (Element) corpoDoItem2.selectSingleNode("*[local-name()='list-block']");
+
+        assertThat(interna).as("lista dentro do item 2").isNotNull();
+        assertThat(interna.attributeValue("margin-left")).isEqualTo("2.5cm");
+        assertThat(rotulos(interna)).containsExactly("1.", "2.");
+        assertThat(textosDosItens(interna)).containsExactly("obras didáticas;", "obras literárias.");
+        // A lista externa continua depois da interna; o item com indent-1 fica no mesmo nível
+        assertThat(rotulos(externa)).hasSize(4);
+        assertThat(externa.selectNodes(".//*[local-name()='list-block']")).hasSize(1);
+    }
+
+    @Test
+    void listaComMarcadoresEItemComParagrafo() throws Exception {
+        Element lista = listasDaJustificacao().get(1);
+
+        assertThat(lista.attributeValue("provisional-distance-between-starts")).isEqualTo("1em");
+        assertThat(rotulos(lista)).containsExactly("•", "•");
+        assertThat(textosDosItens(lista)).containsExactly("Bibliotecas públicas estaduais.",
+                "Bibliotecas escolares, com parágrafo próprio no item.");
+    }
+
+    @Test
+    void formatacaoRemissaoENotaDentroDoItem() throws Exception {
+        Element corpo = (Element) listasDaJustificacao().get(0).selectSingleNode("*[2]/*[local-name()='list-item-body']");
+        Element texto = (Element) corpo.elements().get(0);
+
+        assertThat(inlineComTexto(texto, "audiodescrição").attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(unicoLink(texto).attributeValue("external-destination"))
+                .isEqualTo("url('https://normas.leg.br/?urn=urn:lex:br:federal:lei:2015-07-06;13146')");
+        Element nota = (Element) texto.selectSingleNode("*[local-name()='footnote']");
+        assertThat(texto((Element) nota.selectSingleNode("*[local-name()='footnote-body']")))
+                .isEqualTo("4 Nota de rodapé em item de lista.");
+    }
+
+    @Test
+    void itemSemConteudoTemBlocoVazio() throws Exception {
+        Element lista = (Element) corpoDaJustificacao(documentoComJustificacao("<p>Lista:</p><ul><li/></ul>"))
+                .selectSingleNode("*[local-name()='list-block']");
+
+        Element corpo = (Element) lista.selectSingleNode(".//*[local-name()='list-item-body']");
+        assertThat(corpo.elements()).extracting(Element::getName).containsExactly("block");
     }
 
     @ParameterizedTest
@@ -703,8 +891,8 @@ class DocumentoArticuladoConteudoTransformerTest {
         Document fo = transformar(xml(JUSTIFICACAO));
         List<Node> notas = fo.selectNodes("//*[local-name()='footnote']");
 
-        // Quatro NotaDeRodape no documento; a que está dentro de <del> não é impressa nem numerada
-        assertThat(notas).hasSize(3);
+        // Três notas em parágrafos, uma em item de lista e uma em célula; a que está dentro de <del> não é impressa nem numerada
+        assertThat(notas).hasSize(5);
         List<String> numeros = new ArrayList<>();
         List<String> corpos = new ArrayList<>();
         for (Node nota : notas) {
@@ -715,9 +903,10 @@ class DocumentoArticuladoConteudoTransformerTest {
             numeros.add(referencia.getText());
             corpos.add(texto((Element) ((Element) nota).selectSingleNode("*[local-name()='footnote-body']")));
         }
-        assertThat(numeros).containsExactly("1", "2", "3");
+        assertThat(numeros).containsExactly("1", "2", "3", "4", "5");
         assertThat(corpos).containsExactly("1 Fonte: Pesquisa Nacional de Saúde, IBGE, 2019.",
-                "2 Ver a estimativa de impacto, elaborada nos termos da Lei de Responsabilidade Fiscal.", "3 Nota simples.");
+                "2 Ver a estimativa de impacto, elaborada nos termos da Lei de Responsabilidade Fiscal.", "3 Nota simples.",
+                "4 Nota de rodapé em item de lista.", "5 Nota de rodapé em célula de tabela.");
         assertThat(texto(fo.getRootElement())).doesNotContain("Nota excluída na revisão");
     }
 
@@ -896,6 +1085,74 @@ class DocumentoArticuladoConteudoTransformerTest {
             }
         }
         throw new AssertionError("Parágrafo da justificação não encontrado: " + inicio);
+    }
+
+    /** Listas de primeiro nível da justificação do documento-com-justificacao, na ordem. */
+    private List<Element> listasDaJustificacao() throws DocumentException {
+        List<Element> listas = new ArrayList<>();
+        for (Element filho : corpoDaJustificacao(xml(JUSTIFICACAO)).elements()) {
+            if ("list-block".equals(filho.getName())) {
+                listas.add(filho);
+            }
+        }
+        return listas;
+    }
+
+    /** Tabelas externas (centralizadoras) da justificação do documento-com-justificacao, na ordem. */
+    private List<Element> tabelasDaJustificacao() throws DocumentException {
+        List<Element> tabelas = new ArrayList<>();
+        for (Element filho : corpoDaJustificacao(xml(JUSTIFICACAO)).elements()) {
+            if ("table".equals(filho.getName())) {
+                tabelas.add(filho);
+            }
+        }
+        return tabelas;
+    }
+
+    /** A tabela com o conteúdo, dentro da célula do meio da tabela externa. */
+    private static Element tabelaInterna(Element externa) {
+        return (Element) externa.selectSingleNode(".//*[local-name()='table-cell'][@column-number='2']/*/*[local-name()='table']");
+    }
+
+    private static List<String> larguraDasColunas(Element tabela) {
+        List<String> larguras = new ArrayList<>();
+        for (Node coluna : tabela.selectNodes("*[local-name()='table-column']")) {
+            larguras.add(((Element) coluna).attributeValue("column-width"));
+        }
+        return larguras;
+    }
+
+    /** O n-ésimo (0-based) parágrafo da justificação do documento-com-justificacao que tem imagem. */
+    private Element paragrafoComImagem(int indice) throws DocumentException {
+        List<Element> paragrafos = new ArrayList<>();
+        for (Element filho : corpoDaJustificacao(xml(JUSTIFICACAO)).elements()) {
+            if ("block".equals(filho.getName()) && !filho.selectNodes(".//*[local-name()='external-graphic']").isEmpty()) {
+                paragrafos.add(filho);
+            }
+        }
+        return paragrafos.get(indice);
+    }
+
+    private static Element imagem(Element paragrafo) {
+        return (Element) paragrafo.selectSingleNode(".//*[local-name()='external-graphic']");
+    }
+
+    /** Rótulos dos itens da lista (só do nível da lista). */
+    private static List<String> rotulos(Element lista) {
+        List<String> rotulos = new ArrayList<>();
+        for (Node rotulo : lista.selectNodes("*/*[local-name()='list-item-label']")) {
+            rotulos.add(texto((Element) rotulo));
+        }
+        return rotulos;
+    }
+
+    /** Texto dos itens da lista que não têm lista interna (só do nível da lista). */
+    private static List<String> textosDosItens(Element lista) {
+        List<String> textos = new ArrayList<>();
+        for (Node corpo : lista.selectNodes("*/*[local-name()='list-item-body'][not(*[local-name()='list-block'])]")) {
+            textos.add(texto((Element) corpo));
+        }
+        return textos;
     }
 
     /** O fo:inline filho do bloco cujo texto é o informado. */

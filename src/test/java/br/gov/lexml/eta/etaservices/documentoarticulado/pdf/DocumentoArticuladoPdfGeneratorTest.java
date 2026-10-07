@@ -11,6 +11,7 @@ import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocument
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.recurso;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.data.Offset.offset;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,6 +22,17 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.contentstream.PDFStreamEngine;
+import org.apache.pdfbox.contentstream.operator.DrawObject;
+import org.apache.pdfbox.contentstream.operator.Operator;
+import org.apache.pdfbox.contentstream.operator.state.Concatenate;
+import org.apache.pdfbox.contentstream.operator.state.Restore;
+import org.apache.pdfbox.contentstream.operator.state.Save;
+import org.apache.pdfbox.contentstream.operator.state.SetMatrix;
+import org.apache.pdfbox.cos.COSBase;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.util.Matrix;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDDocumentNameDictionary;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -218,9 +230,9 @@ class DocumentoArticuladoPdfGeneratorTest {
                 "Art. 2º Esta Lei entra em vigor", "JUSTIFICAÇÃO", "A presente proposição institui",
                 "a livros digitais acessíveis.", "pela coordenação da política, nos termos do art. 1º desta proposição.",
                 "Pelas razões expostas");
-        // Exclusões não impressas; listas, tabelas, local e data e assinaturas ainda não
+        // Exclusões não impressas; local e data e assinaturas ainda não
         assertThat(texto).doesNotContain("fiscalização").doesNotContain("conforme regulamento")
-                .doesNotContain("Nota excluída").doesNotContain("Item de lista").doesNotContain("Indicador")
+                .doesNotContain("Nota excluída")
                 .doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke");
     }
 
@@ -254,7 +266,9 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertNotaNaPaginaDaReferencia(linhas, 1, "oficiais1", "Fonte: Pesquisa Nacional de Saúde");
         assertNotaNaPaginaDaReferencia(linhas, 2, "existente2", "Ver a estimativa de impacto");
         assertNotaNaPaginaDaReferencia(linhas, 3, "superior3", "Nota simples.");
-        assertThat(linhas).filteredOn(l -> l.texto.startsWith("4 ")).isEmpty();
+        assertNotaNaPaginaDaReferencia(linhas, 4, "especial4", "Nota de rodapé em item de lista.");
+        assertNotaNaPaginaDaReferencia(linhas, 5, "meses5", "Nota de rodapé em célula de tabela.");
+        assertThat(linhas).filteredOn(l -> l.tamanho < 11 && l.texto.startsWith("6 ")).isEmpty();
     }
 
     @Test
@@ -272,6 +286,74 @@ class DocumentoArticuladoPdfGeneratorTest {
         try (PDDocument documento = PDDocument.load(pdf)) {
             assertThat(documento.getNumberOfPages()).isGreaterThanOrEqualTo(3);
         }
+    }
+
+    // Listas, tabelas e imagens (issue #75, parte B) ------------------------------------------------------------
+
+    /** Largura da área do texto: A4 (595,275pt) menos as margens de 2,5cm e 2,1cm. */
+    private static final float LARGURA_DO_TEXTO = 595.275f - (2.5f + 2.1f) * 72 / 2.54f;
+    private static final float MARGEM_ESQUERDA = 2.5f * 72 / 2.54f;
+
+    @Test
+    void listasNoPdfComRotulosERecuos() throws Exception {
+        byte[] pdf = gerarPdf(JUSTIFICACAO);
+        String texto = textoNormalizado(pdf);
+        List<Linha> linhas = linhas(pdf);
+
+        assertThat(texto).containsSubsequence("1. Diagnóstico das bibliotecas públicas.", "2. Produção de obras com audiodescrição",
+                "1. obras didáticas;", "2. obras literárias.", "3. Distribuição às bibliotecas participantes.",
+                "4. Item com recuo do editor", "• Bibliotecas públicas estaduais.", "• Bibliotecas escolares");
+        // Lista interna mais recuada que a externa; o item com indent-1 no mesmo nível dos demais
+        float itemExterno = linhaQueContem(linhas, "Diagnóstico das bibliotecas públicas.").xDoTexto("Diagnóstico");
+        assertThat(linhaQueContem(linhas, "obras didáticas;").xDoTexto("obras")).isGreaterThan(itemExterno + 50);
+        assertThat(linhaQueContem(linhas, "Item com recuo do editor").xDoTexto("Item")).isEqualTo(itemExterno);
+    }
+
+    @Test
+    void tabelasNoPdfComTextoMenorECabecalhoEmNegrito() throws Exception {
+        List<Linha> linhas = linhas(gerarPdf(JUSTIFICACAO));
+
+        Linha celula = linhaQueContem(linhas, "Livros convertidos");
+        assertThat(celula.tamanho).isLessThan(12f);
+        assertThat(linhaQueContem(linhas, "Etapa").fonteDe("Etapa")).containsIgnoringCase("bold");
+        assertThat(linhaQueContem(linhas, "Diagnóstico e planejamento").fonteDe("Diagnóstico"))
+                .doesNotContainIgnoringCase("bold");
+        // A tabela de 60% fica centralizada: começa depois da tabela de largura total
+        assertThat(linhaQueContem(linhas, "Etapa").xDoTexto("Etapa")).isGreaterThan(celula.xDoTexto("Livros") + 60);
+    }
+
+    @Test
+    void sobrescritoNaoMudaAAlturaDaLinha() throws Exception {
+        List<Linha> linhas = linhas(gerarPdf(JUSTIFICACAO));
+
+        // Células da mesma linha da tabela alinhadas, mesmo com o número da nota de rodapé em uma delas
+        Linha celulaProducao = linhas.stream().filter(l -> l.texto.trim().equals("Produção")).findFirst()
+                .orElseThrow(AssertionError::new);
+        assertThat(linhaQueContem(linhas, "12 meses").y).isEqualTo(celulaProducao.y);
+        // Linha com m² e H₂O à mesma distância da anterior que as demais (entrelinha de 150% de 14pt = 21pt)
+        Linha anterior = linhaQueContem(linhas, "Os padrões técnicos de acessibilidade");
+        assertThat(linhaQueContem(linhas, "fórmulas, como H").y - anterior.y).isCloseTo(21f, offset(0.5f));
+    }
+
+    @Test
+    void imagensNoPdfComLarguraEmPorcentagemDaLarguraDoTexto() throws Exception {
+        List<float[]> imagens = imagensDesenhadas(gerarPdf(JUSTIFICACAO));
+
+        // 40% (parágrafo só com a imagem: centralizada), 20% (depois de texto) e sem width (largura total);
+        // a imagem com endereço externo não é desenhada
+        assertThat(imagens).hasSize(3);
+        assertThat(imagens.get(0)[1]).isCloseTo(LARGURA_DO_TEXTO * 0.4f, offset(1f));
+        assertThat(imagens.get(0)[0]).isCloseTo(MARGEM_ESQUERDA + LARGURA_DO_TEXTO * 0.3f, offset(1f));
+        assertThat(imagens.get(1)[1]).isCloseTo(LARGURA_DO_TEXTO * 0.2f, offset(1f));
+        assertThat(imagens.get(1)[0]).isCloseTo(MARGEM_ESQUERDA, offset(1f));
+        assertThat(imagens.get(2)[1]).isCloseTo(LARGURA_DO_TEXTO, offset(1f));
+    }
+
+    @Test
+    void pdfGeradoComImagemExternaSemCarregaLa() throws Exception {
+        String texto = textoNormalizado(gerarPdf(JUSTIFICACAO));
+
+        assertThat(texto).contains("Imagem externa, não carregada:").contains("Pelas razões expostas");
     }
 
     @Test
@@ -383,6 +465,7 @@ class DocumentoArticuladoPdfGeneratorTest {
         final float tamanho;
         final String texto;
         final List<String> fontes = new ArrayList<>();
+        final List<Float> xs = new ArrayList<>();
 
         Linha(int pagina, String texto, List<TextPosition> posicoes) {
             this.pagina = pagina;
@@ -391,7 +474,15 @@ class DocumentoArticuladoPdfGeneratorTest {
             this.tamanho = posicoes.get(0).getFontSizeInPt();
             for (TextPosition posicao : posicoes) {
                 fontes.add(posicao.getFont().getName());
+                xs.add(posicao.getXDirAdj());
             }
+        }
+
+        /** Posição horizontal (pt) do primeiro caractere da palavra na linha. */
+        float xDoTexto(String palavra) {
+            int indice = texto.indexOf(palavra);
+            assertThat(indice).as("'%s' na linha '%s'", palavra, texto).isNotNegative();
+            return xs.get(Math.min(indice, xs.size() - 1));
         }
 
         /** Fonte do primeiro caractere da palavra na linha. */
@@ -420,6 +511,39 @@ class DocumentoArticuladoPdfGeneratorTest {
             stripper.getText(documento);
         }
         return linhas;
+    }
+
+    /**
+     * Imagens desenhadas no PDF, na ordem das páginas: {x, largura} em pontos, a partir da matriz de transformação
+     * vigente no operador "Do" de cada imagem.
+     */
+    private static List<float[]> imagensDesenhadas(byte[] pdf) throws IOException {
+        List<float[]> imagens = new ArrayList<>();
+        PDFStreamEngine motor = new PDFStreamEngine() {
+            {
+                addOperator(new Concatenate());
+                addOperator(new DrawObject());
+                addOperator(new Save());
+                addOperator(new Restore());
+                addOperator(new SetMatrix());
+            }
+
+            @Override
+            protected void processOperator(Operator operador, List<COSBase> operandos) throws IOException {
+                if ("Do".equals(operador.getName())
+                        && getResources().getXObject((COSName) operandos.get(0)) instanceof PDImageXObject) {
+                    Matrix matriz = getGraphicsState().getCurrentTransformationMatrix();
+                    imagens.add(new float[] { matriz.getTranslateX(), matriz.getScalingFactorX() });
+                }
+                super.processOperator(operador, operandos);
+            }
+        };
+        try (PDDocument documento = PDDocument.load(pdf)) {
+            for (PDPage pagina : documento.getPages()) {
+                motor.processPage(pagina);
+            }
+        }
+        return imagens;
     }
 
     private static Linha linhaQueContem(List<Linha> linhas, String trecho) {
