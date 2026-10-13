@@ -37,8 +37,8 @@
                                 "data": "2026-10-07",
                                 "opcoesImpressao": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.OpcoesImpressao",
-                                    "imprimirBrasao": true,
-                                    "textoCabecalho": "",
+                                    "imprimirBrasao": false,
+                                    "textoCabecalho": "Comissão de Desenvolvimento Regional e Turismo",
                                     "reduzirEspacoEntreLinhas": false,
                                     "tamanhoFonte": 14
                                 },

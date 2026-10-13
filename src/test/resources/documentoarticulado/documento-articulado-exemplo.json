@@ -38,7 +38,7 @@
                                 "opcoesImpressao": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.OpcoesImpressao",
                                     "imprimirBrasao": true,
-                                    "textoCabecalho": "",
+                                    "textoCabecalho": "Gabinete do Senador Davi Alcolumbre",
                                     "reduzirEspacoEntreLinhas": false,
                                     "tamanhoFonte": 14
                                 },

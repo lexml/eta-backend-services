@@ -337,7 +337,9 @@ class DocumentoArticuladoPdfGeneratorTest {
 
     @Test
     void imagensNoPdfComLarguraEmPorcentagemDaLarguraDoTexto() throws Exception {
-        List<float[]> imagens = imagensDesenhadas(gerarPdf(JUSTIFICACAO));
+        List<float[]> desenhadas = imagensDesenhadas(gerarPdf(JUSTIFICACAO));
+        // A primeira imagem é o brasão do cabeçalho (conferido em cabecalhoComBrasaoCasaETexto)
+        List<float[]> imagens = desenhadas.subList(1, desenhadas.size());
 
         // 40% (parágrafo só com a imagem: centralizada), 20% (depois de texto) e sem width (largura total);
         // a imagem com endereço externo não é desenhada
@@ -347,6 +349,65 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(imagens.get(1)[1]).isCloseTo(LARGURA_DO_TEXTO * 0.2f, offset(1f));
         assertThat(imagens.get(1)[0]).isCloseTo(MARGEM_ESQUERDA, offset(1f));
         assertThat(imagens.get(2)[1]).isCloseTo(LARGURA_DO_TEXTO, offset(1f));
+    }
+
+    // Cabeçalho (issue #74) -------------------------------------------------------------------------------------
+
+    /** Largura do brasão no cabeçalho da emenda (149 px do brasao.jpg), medida num PDF de emenda: 53,6pt (1,89cm). */
+    private static final float LARGURA_DO_BRASAO = 53.64f;
+
+    @Test
+    void cabecalhoComBrasaoCasaETexto() throws Exception {
+        byte[] pdf = pdfExemplo;
+        List<Linha> linhas = linhas(pdf);
+        float[] brasao = imagensDesenhadas(pdf).get(0);
+
+        // Brasão na primeira página, centralizado e com o tamanho da emenda
+        assertThat(brasao[2]).isEqualTo(1f);
+        assertThat(brasao[1]).isCloseTo(LARGURA_DO_BRASAO, offset(0.5f));
+        assertThat(brasao[0]).isCloseTo(MARGEM_ESQUERDA + (LARGURA_DO_TEXTO - LARGURA_DO_BRASAO) / 2, offset(0.5f));
+        // Casa legislativa em ITC Stone Sans 11pt e texto do cabeçalho, acima da epígrafe
+        Linha casa = linhaQueContem(linhas, "SENADO FEDERAL");
+        Linha texto = linhaQueContem(linhas, "Gabinete do Senador Davi Alcolumbre");
+        Linha epigrafe = linhaQueContem(linhas, "PROJETO DE LEI");
+        assertThat(casa.pagina).isEqualTo(1);
+        assertThat(casa.fonteDe("SENADO")).containsIgnoringCase("StoneSans");
+        assertThat(casa.tamanho).isEqualTo(11f);
+        assertThat(casa.y).isLessThan(texto.y);
+        assertThat(texto.y).isLessThan(epigrafe.y);
+        // Corpo a 4cm do topo da área (1cm sem cabeçalho): epígrafe ~3cm mais abaixo que sem cabeçalho (y = 113)
+        assertThat(epigrafe.y).isCloseTo(113f + 3 * 72 / 2.54f, offset(1f));
+    }
+
+    @Test
+    void cabecalhoSoNaPrimeiraPagina() throws Exception {
+        byte[] pdf = pdfExemplo;
+
+        assertThat(imagensDesenhadas(pdf)).filteredOn(i -> Math.abs(i[1] - LARGURA_DO_BRASAO) < 0.5f)
+                .extracting(i -> i[2]).containsExactly(1f);
+        assertThat(linhas(pdf)).filteredOn(l -> l.texto.contains("SENADO FEDERAL")).extracting(l -> l.pagina).containsExactly(1);
+    }
+
+    @Test
+    void cabecalhoSoComTextoSemBrasao() throws Exception {
+        byte[] pdf = gerarPdf(JUSTIFICACAO_LONGA);
+        List<Linha> linhas = linhas(pdf);
+
+        assertThat(imagensDesenhadas(pdf)).isEmpty();
+        Linha texto = linhaQueContem(linhas, "Comissão de Desenvolvimento Regional e Turismo");
+        assertThat(texto.pagina).isEqualTo(1);
+        assertThat(texto.y).isLessThan(linhaQueContem(linhas, "PROJETO DE LEI").y);
+        assertThat(linhas).noneMatch(l -> l.texto.contains("SENADO FEDERAL"));
+    }
+
+    @Test
+    void cabecalhoDaMedidaProvisoriaSoComBrasao() throws Exception {
+        byte[] pdf = gerarPdf(CAPITULO_E_SECAO);
+
+        // Documento sem OpcoesImpressao (padrão: com brasão) e autoridade federal (sem casa legislativa)
+        assertThat(imagensDesenhadas(pdf)).hasSize(1).allMatch(i -> i[2] == 1f);
+        assertThat(textoNormalizado(pdf)).startsWith("MEDIDA PROVISÓRIA").doesNotContain("SENADO FEDERAL")
+                .doesNotContain("CONGRESSO NACIONAL").doesNotContain("CÂMARA DOS DEPUTADOS");
     }
 
     @Test
@@ -514,11 +575,12 @@ class DocumentoArticuladoPdfGeneratorTest {
     }
 
     /**
-     * Imagens desenhadas no PDF, na ordem das páginas: {x, largura} em pontos, a partir da matriz de transformação
-     * vigente no operador "Do" de cada imagem.
+     * Imagens desenhadas no PDF, na ordem das páginas: {x, largura, página (1-based), y} em pontos, a partir da
+     * matriz de transformação vigente no operador "Do" de cada imagem (y a partir da base da página).
      */
     private static List<float[]> imagensDesenhadas(byte[] pdf) throws IOException {
         List<float[]> imagens = new ArrayList<>();
+        int[] pagina = { 0 };
         PDFStreamEngine motor = new PDFStreamEngine() {
             {
                 addOperator(new Concatenate());
@@ -533,14 +595,15 @@ class DocumentoArticuladoPdfGeneratorTest {
                 if ("Do".equals(operador.getName())
                         && getResources().getXObject((COSName) operandos.get(0)) instanceof PDImageXObject) {
                     Matrix matriz = getGraphicsState().getCurrentTransformationMatrix();
-                    imagens.add(new float[] { matriz.getTranslateX(), matriz.getScalingFactorX() });
+                    imagens.add(new float[] { matriz.getTranslateX(), matriz.getScalingFactorX(), pagina[0], matriz.getTranslateY() });
                 }
                 super.processOperator(operador, operandos);
             }
         };
         try (PDDocument documento = PDDocument.load(pdf)) {
-            for (PDPage pagina : documento.getPages()) {
-                motor.processPage(pagina);
+            for (PDPage pagina1 : documento.getPages()) {
+                pagina[0]++;
+                motor.processPage(pagina1);
             }
         }
         return imagens;

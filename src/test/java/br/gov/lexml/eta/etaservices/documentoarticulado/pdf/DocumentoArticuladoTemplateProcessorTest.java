@@ -11,6 +11,8 @@ import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,9 +62,9 @@ class DocumentoArticuladoTemplateProcessorTest {
         Element sequencia = (Element) xml.selectSingleNode("//*[local-name()='page-sequence']");
         java.util.List<Element> filhos = sequencia.elements();
 
-        // Traço de 50% e 0,5pt, como na emenda; o XSL-FO exige o static-content antes do flow
-        assertThat(filhos).extracting(Element::getName).containsExactly("static-content", "flow");
-        Element separador = filhos.get(0);
+        // Traço de 50% e 0,5pt, como na emenda; o XSL-FO exige os static-content (cabeçalho e separador) antes do flow
+        assertThat(filhos).extracting(Element::getName).containsExactly("static-content", "static-content", "flow");
+        Element separador = (Element) sequencia.selectSingleNode("*[@flow-name='xsl-footnote-separator']");
         assertThat(separador.attributeValue("flow-name")).isEqualTo("xsl-footnote-separator");
         Element traco = (Element) separador.selectSingleNode(".//*[local-name()='leader']");
         assertThat(traco.attributeValue("leader-pattern")).isEqualTo("rule");
@@ -114,6 +116,131 @@ class DocumentoArticuladoTemplateProcessorTest {
                 .doesNotContain("Fica instituído")
                 .doesNotContain("Esta Lei entra em vigor")
                 .doesNotContain("Institui o Programa");
+    }
+
+    // Cabeçalho (issue #74) ---------------------------------------------------------------------------------------
+
+    @Test
+    void cabecalhoComBrasaoCasaETextoNaPrimeiraPagina() throws Exception {
+        Document xml = new SAXReader().read(new StringReader(processar()));
+
+        // Primeira página: region-before de 3cm e corpo a 4cm (valores da emenda); demais páginas sem cabeçalho
+        Element primeira = (Element) xml.selectSingleNode("//*[local-name()='simple-page-master'][@master-name='firstPage']");
+        assertThat(atributo(primeira, "region-body", "margin-top")).isEqualTo("4cm");
+        assertThat(atributo(primeira, "region-before", "extent")).isEqualTo("3cm");
+        assertThat(atributo(primeira, "region-before", "region-name")).isEqualTo("header-principal");
+        Element demais = (Element) xml.selectSingleNode("//*[local-name()='simple-page-master'][@master-name='restPage']");
+        assertThat(demais.selectNodes("*[local-name()='region-before']")).isEmpty();
+
+        Element cabecalho = cabecalho(xml);
+        Element brasao = (Element) cabecalho.selectSingleNode(".//*[local-name()='external-graphic']");
+        assertThat(brasao.attributeValue("src")).startsWith("url('data:image/jpeg;base64,/9j/").endsWith("')");
+        Element blocoDoBrasao = (Element) brasao.getParent();
+        assertThat(blocoDoBrasao.attributeValue("text-align")).isEqualTo("center");
+        assertThat(blocoDoBrasao.attributeValue("margin-bottom")).isEqualTo("2pt");
+        Element casa = (Element) blocoDoBrasao.selectSingleNode("*[local-name()='block']");
+        assertThat(casa.getText()).isEqualTo("SENADO FEDERAL");
+        assertThat(casa.attributeValue("font-family")).isEqualTo("ITC-StoneSansStd");
+        assertThat(casa.attributeValue("font-size")).isEqualTo("11pt");
+        assertThat(casa.attributeValue("margin-top")).isEqualTo("3pt");
+        // Texto do cabeçalho centralizado, depois do brasão
+        Element texto = (Element) cabecalho.elements().get(1);
+        assertThat(texto.getText()).isEqualTo("Gabinete do Senador Davi Alcolumbre");
+        assertThat(texto.attributeValue("text-align")).isEqualTo("center");
+    }
+
+    @ParameterizedTest
+    @CsvSource({ "urn:lex:br:senado.federal:projeto.lei:2026;1,SENADO FEDERAL",
+            "urn:lex:br:camara.deputados:projeto.lei:2026;1,CÂMARA DOS DEPUTADOS",
+            "urn:lex:br:congresso.nacional:projeto.decreto.legislativo:2026;1,CONGRESSO NACIONAL",
+            "urn:lex:br:federal:medida.provisoria:2026;999,", "'',", "urn:lex:br,", "urn:lex:br:senado.federal,SENADO FEDERAL" })
+    void casaLegislativaPelaAutoridadeDaUrn(String urn, String casa) {
+        assertThat(DocumentoArticuladoTemplateProcessor.casaLegislativa(urn)).isEqualTo(casa == null ? "" : casa);
+    }
+
+    @Test
+    void autoridadeSemCasaImprimeSoOBrasao() throws Exception {
+        identificacao().put("urn", "urn:lex:br:federal:medida.provisoria:2026;999");
+
+        Element cabecalho = cabecalho(new SAXReader().read(new StringReader(processar())));
+        Element blocoDoBrasao = (Element) cabecalho.elements().get(0);
+        assertThat(blocoDoBrasao.selectNodes(".//*[local-name()='external-graphic']")).hasSize(1);
+        assertThat(blocoDoBrasao.selectNodes("*[local-name()='block']")).isEmpty();
+    }
+
+    @Test
+    void soOTextoSemBrasao() throws Exception {
+        opcoesImpressao().put("imprimirBrasao", false);
+
+        Element cabecalho = cabecalho(new SAXReader().read(new StringReader(processar())));
+        assertThat(cabecalho.selectNodes(".//*[local-name()='external-graphic']")).isEmpty();
+        assertThat(cabecalho.elements()).extracting(Element::getText).containsExactly("Gabinete do Senador Davi Alcolumbre");
+        assertThat(cabecalho.getStringValue()).doesNotContain("SENADO FEDERAL");
+    }
+
+    @Test
+    void semBrasaoESemTextoNaoHaCabecalho() throws Exception {
+        opcoesImpressao().put("imprimirBrasao", false).put("textoCabecalho", "  ");
+
+        Document xml = new SAXReader().read(new StringReader(processar()));
+        Element primeira = (Element) xml.selectSingleNode("//*[local-name()='simple-page-master'][@master-name='firstPage']");
+        assertThat(atributo(primeira, "region-body", "margin-top")).isEqualTo("1cm");
+        assertThat(primeira.selectNodes("*[local-name()='region-before']")).isEmpty();
+        assertThat(xml.selectNodes("//*[@flow-name='header-principal']")).isEmpty();
+    }
+
+    @Test
+    void textoDoCabecalhoEscapado() throws Exception {
+        opcoesImpressao().put("textoCabecalho", "Gabinete \"A\" & <B>");
+
+        String fo = processar();
+        new SAXReader().read(new StringReader(fo));
+        assertThat(fo).contains("Gabinete &quot;A&quot; &amp; &lt;B&gt;");
+    }
+
+    @Test
+    void opcoesAusentesValemOPadraoDoEditor() throws Exception {
+        // Sem OpcoesImpressao: com brasão e sem texto
+        ((ObjectNode) metadadoLexedit()).remove("opcoesImpressao");
+
+        Element cabecalho = cabecalho(new SAXReader().read(new StringReader(processar())));
+        assertThat(cabecalho.selectNodes(".//*[local-name()='external-graphic']")).hasSize(1);
+        assertThat(cabecalho.elements()).hasSize(1);
+        assertThat(cabecalho.getStringValue().trim()).isEqualTo("SENADO FEDERAL");
+    }
+
+    @Test
+    void atributosAusentesValemOPadraoDoEditor() throws Exception {
+        opcoesImpressao().remove("imprimirBrasao");
+        opcoesImpressao().remove("textoCabecalho");
+
+        Element cabecalho = cabecalho(new SAXReader().read(new StringReader(processar())));
+        assertThat(cabecalho.selectNodes(".//*[local-name()='external-graphic']")).hasSize(1);
+        assertThat(cabecalho.elements()).hasSize(1);
+    }
+
+    private static Element cabecalho(Document xml) {
+        Element cabecalho = (Element) xml.selectSingleNode("//*[local-name()='static-content'][@flow-name='header-principal']");
+        assertThat(cabecalho).as("static-content do cabeçalho").isNotNull();
+        return cabecalho;
+    }
+
+    private static String atributo(Element pai, String filho, String atributo) {
+        Element elemento = (Element) pai.selectSingleNode("*[local-name()='" + filho + "']");
+        assertThat(elemento).as(filho).isNotNull();
+        return elemento.attributeValue(atributo);
+    }
+
+    private JsonNode metadadoLexedit() {
+        return documento.path("value").path("metadado").path("metadadoProprietario").path(0).path("any").path(0).path("value");
+    }
+
+    private ObjectNode opcoesImpressao() {
+        return (ObjectNode) metadadoLexedit().path("opcoesImpressao");
+    }
+
+    private ObjectNode identificacao() {
+        return (ObjectNode) documento.path("value").path("metadado").path("identificacao");
     }
 
     private String processar() {
