@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 ## Template XSL-FO do documento articulado, derivado de template-velocity-emenda.xml.
 ## O conteúdo impresso é gerado pela XSLT documento-articulado-conteudo.xsl a partir do
-## documento-articulado.xml e chega pronto em $conteudoFo; este template cuida da página e dos metadados.
-## A impressão herdada da emenda que ainda não foi adaptada está preservada em comentários de bloco do
+## documento-articulado.xml e chega pronto em $conteudoFo; este template cuida da página, do cabeçalho e dos
+## metadados. A impressão herdada da emenda que ainda não foi adaptada está preservada em comentários de bloco do
 ## Velocity marcados "NÃO RETIRAR", para aproveitamento posterior. Como esses comentários não podem ser
 ## aninhados, os comentários originais da emenda ficam entre os blocos.
-## Contexto: $documento (documento-articulado.json como Map), $titulo e $aplicacao (já escapados para
-## XML), $dataIso (data e hora da geração, ISO-8601), $tamanhoFonte (pontos) e $conteudoFo (fragmento
-## XSL-FO, inserido sem ser reinterpretado pelo Velocity).
+## Contexto (DocumentoArticuladoTemplateProcessor): $titulo e $aplicacao (já escapados para XML), $dataIso (data e
+## hora da geração, ISO-8601), $tamanhoFonte (pontos), $conteudoFo (fragmento XSL-FO, inserido sem ser
+## reinterpretado pelo Velocity) e, para o cabeçalho, $temCabecalho, $imprimirBrasao, $brasao (JPEG em base64),
+## $casaLegislativa (pela autoridade da URN; vazio fora das três casas) e $textoCabecalho (já escapado).
 <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
 	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
@@ -18,16 +19,13 @@
 		<fo:simple-page-master margin-bottom="2cm"
 			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
 			master-name="firstPage" page-height="29.7cm" page-width="21cm">
-			<fo:region-body margin-top="1cm"/>
-			#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
-			#if($emenda.opcoesImpressao.imprimirBrasao || !$ve.isEmpty($emenda.opcoesImpressao.textoCabecalho))
-				#set($temCabecalhoPrincipal = true)
-				<fo:region-body margin-top="4cm" />
-				<fo:region-before extent="3cm" region-name="header-principal" />
+			## Cabeçalho só na primeira página (issue #74). Emenda: region-before de 3cm e corpo a 4cm com cabeçalho.
+			#if($temCabecalho)
+			<fo:region-body margin-top="4cm"/>
+			<fo:region-before extent="3cm" region-name="header-principal"/>
 			#else
-				<fo:region-body margin-top="1cm"/>
+			<fo:region-body margin-top="1cm"/>
 			#end
-			*#
 		</fo:simple-page-master>
 		<fo:simple-page-master margin-bottom="2cm"
 			margin-left="2.5cm" margin-right="2.1cm" margin-top="2.5cm"
@@ -172,31 +170,23 @@
 #end
 *#
 	<fo:page-sequence master-reference="document">
-#* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
-## Brasão e texto do cabeçalho -------------------------------------------------------------------------
-		#if ($temCabecalhoPrincipal)
+## Brasão, casa legislativa e texto do cabeçalho (issue #74), com os valores do template da emenda. A casa vem da
+## autoridade da URN e só é impressa com o brasão; sem casa, não há bloco vazio.
+		#if($temCabecalho)
 		<fo:static-content flow-name="header-principal">
-			#if($emenda.opcoesImpressao.imprimirBrasao)
+			#if($imprimirBrasao)
 			<fo:block text-align="center" margin-bottom="2pt">
-				<fo:external-graphic src="url('data:image/jpeg;base64, $brasao')"/>
-				<fo:block font-size="11pt" font-family="ITC-StoneSansStd" margin-top="3pt">
-				#if ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'SF')
-					<fo:block>SENADO FEDERAL</fo:block>
-				#elseif ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'CD')
-					<fo:block>CÂMARA DOS DEPUTADOS</fo:block>
-				#elseif ($emenda.colegiadoApreciador.siglaCasaLegislativa == 'CN')
-					<fo:block>CONGRESSO NACIONAL</fo:block>
+				<fo:external-graphic src="url('data:image/jpeg;base64,$brasao')"/>
+				#if($casaLegislativa != '')
+				<fo:block font-size="11pt" font-family="ITC-StoneSansStd" margin-top="3pt">$casaLegislativa</fo:block>
 				#end
-				</fo:block>
 			</fo:block>
-			
 			#end
-			#if(!$ve.isEmpty($emenda.opcoesImpressao.textoCabecalho))
-			<fo:block text-align="center">$ve.escapeXml($emenda.opcoesImpressao.textoCabecalho)</fo:block>
+			#if($textoCabecalho != '')
+			<fo:block text-align="center">$textoCabecalho</fo:block>
 			#end
 		</fo:static-content>
 		#end
-*#
 		#* NÃO RETIRAR. Pode voltar a ser utilizado.
 		<fo:static-content flow-name="header-assinaturas">
 			<fo:block>

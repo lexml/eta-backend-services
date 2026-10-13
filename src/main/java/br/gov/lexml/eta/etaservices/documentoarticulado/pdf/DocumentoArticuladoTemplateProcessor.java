@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
+import java.util.Base64;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -16,16 +16,14 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.log.CommonsLogLogChute;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 
 /**
  * Aplica o template Velocity do documento articulado, produzindo o XSL-FO do PDF. Derivado de
- * {@code printing.pdf.VelocityTemplateProcessor}, sem classes de domínio: o template recebe o
- * documento-articulado.json como {@code Map}.
+ * {@code printing.pdf.VelocityTemplateProcessor}, sem classes de domínio: os dados que o template usa (metadados
+ * do PDF e cabeçalho) são lidos do documento-articulado.json aqui e passados como valores simples.
  */
 class DocumentoArticuladoTemplateProcessor {
 
@@ -33,8 +31,10 @@ class DocumentoArticuladoTemplateProcessor {
 
     private static final String APLICACAO_PADRAO = "LexEdit";
     private static final ZoneOffset FUSO_BRASILIA = ZoneOffset.ofHours(-3);
+    static final String BRASAO = "/static/img/brasao.jpg";
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    /** Brasão da República em base64, lido do classpath na primeira vez em que é usado. */
+    private static String brasao;
 
     /**
      * @param documento documento-articulado.json
@@ -44,12 +44,21 @@ class DocumentoArticuladoTemplateProcessor {
      */
     String processar(JsonNode documento, ParametrosImpressaoDocumentoArticulado parametros, String conteudoFo) {
         VelocityContext ctx = new VelocityContext();
-        ctx.put("documento", mapper.convertValue(documento, new TypeReference<Map<String, Object>>() {}));
         ctx.put("titulo", StringEscapeUtils.escapeXml10(titulo(documento)));
         ctx.put("aplicacao", StringEscapeUtils.escapeXml10(aplicacao(documento)));
         ctx.put("dataIso", OffsetDateTime.now(FUSO_BRASILIA).truncatedTo(ChronoUnit.SECONDS).toString());
         ctx.put("tamanhoFonte", parametros.getTamanhoFonte());
         ctx.put("conteudoFo", conteudoFo);
+
+        // Cabeçalho da primeira página (issue #74): opções de impressão do documento, com os padrões do editor
+        JsonNode opcoes = opcoesImpressao(documento);
+        boolean imprimirBrasao = !opcoes.path("imprimirBrasao").isBoolean() || opcoes.path("imprimirBrasao").booleanValue();
+        String textoCabecalho = opcoes.path("textoCabecalho").isTextual() ? opcoes.path("textoCabecalho").textValue().trim() : "";
+        ctx.put("imprimirBrasao", imprimirBrasao);
+        ctx.put("brasao", imprimirBrasao ? brasao() : "");
+        ctx.put("casaLegislativa", casaLegislativa(documento.path("value").path("metadado").path("identificacao").path("urn").asText("")));
+        ctx.put("textoCabecalho", StringEscapeUtils.escapeXml10(textoCabecalho));
+        ctx.put("temCabecalho", imprimirBrasao || !textoCabecalho.isEmpty());
 
         StringWriter resultado = new StringWriter();
         criarVelocityEngine().evaluate(ctx, resultado, "documentoArticulado", carregarTemplate());
@@ -87,6 +96,61 @@ class DocumentoArticuladoTemplateProcessor {
             }
         }
         return APLICACAO_PADRAO;
+    }
+
+    /**
+     * Opções de impressão do {@code lexedit:Metadado} (especificação 02 do lexml-eta); nó ausente quando o documento
+     * não as tem. Os atributos ausentes valem o padrão do editor: com brasão e sem texto de cabeçalho.
+     */
+    private static JsonNode opcoesImpressao(JsonNode documento) {
+        for (JsonNode proprietario : documento.path("value").path("metadado").path("metadadoProprietario")) {
+            for (JsonNode metadado : proprietario.path("any")) {
+                JsonNode opcoes = metadado.path("value").path("opcoesImpressao");
+                if (opcoes.isObject()) {
+                    return opcoes;
+                }
+            }
+        }
+        return documento.path("ausente");
+    }
+
+    /**
+     * Nome da casa legislativa pela autoridade da URN ({@code urn:lex:br:<autoridade>:...}); vazio quando a
+     * autoridade não é uma das casas (ex.: {@code federal}, das medidas provisórias). Emenda: o nome vem de
+     * {@code colegiadoApreciador.siglaCasaLegislativa} (SF, CD, CN).
+     */
+    static String casaLegislativa(String urn) {
+        String[] partes = urn.trim().split(":");
+        String autoridade = partes.length > 3 ? partes[3] : "";
+        switch (autoridade) {
+            case "senado.federal":
+                return "SENADO FEDERAL";
+            case "camara.deputados":
+                return "CÂMARA DOS DEPUTADOS";
+            case "congresso.nacional":
+                return "CONGRESSO NACIONAL";
+            default:
+                return "";
+        }
+    }
+
+    private static synchronized String brasao() {
+        if (brasao == null) {
+            brasao = carregarBrasao();
+        }
+        return brasao;
+    }
+
+    /** Brasão de {@code /static/img/} (compartilhado com a emenda). Faltar no classpath é erro de empacotamento. */
+    private static String carregarBrasao() {
+        try (InputStream in = DocumentoArticuladoTemplateProcessor.class.getResourceAsStream(BRASAO)) {
+            if (in == null) {
+                throw new EtaBackendException("Imagem do brasão não encontrada: " + BRASAO);
+            }
+            return Base64.getEncoder().encodeToString(IOUtils.toByteArray(in));
+        } catch (IOException e) {
+            throw new EtaBackendException("Não foi possível ler a imagem do brasão " + BRASAO, e);
+        }
     }
 
     private static String carregarTemplate() {
