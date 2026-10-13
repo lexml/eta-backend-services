@@ -970,6 +970,42 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(corpos).containsExactly("1 A.", "2 B.");
     }
 
+    // Opções de impressão (issue #74, parte B) ------------------------------------------------------------------
+
+    @Test
+    void fonte18EReduzirEspacoEntreLinhasComOsValoresDaEmenda() throws Exception {
+        ParametrosImpressaoDocumentoArticulado parametros = ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado
+                .de(ParametrosImpressaoDocumentoArticuladoTest.documento("\"tamanhoFonte\":18,\"reduzirEspacoEntreLinhas\":true")));
+        Document fo = DocumentHelper.parseText(transformer.transformar(xml(JUSTIFICACAO), parametros));
+        List<Element> blocos = fo.getRootElement().elements();
+        Element titulo = blocos.get(blocos.size() - 2);
+        Element corpo = blocos.get(blocos.size() - 1);
+
+        // Epígrafe no tamanho de destaque da fonte 18
+        assertThat(blocos.get(0).attributeValue("font-size")).isEqualTo("18pt");
+        // Ementa e preâmbulo com a entrelinha reduzida; 48pt e 72pt são fixos (issue #72)
+        assertThat(blocos.get(1).attributeValue("space-before")).isEqualTo("48pt");
+        assertThat(blocos.get(1).attributeValue("line-height")).isEqualTo("120%");
+        assertThat(blocos.get(2).attributeValue("space-before")).isEqualTo("72pt");
+        assertThat(blocos.get(2).attributeValue("line-height")).isEqualTo("120%");
+        assertThat(((Element) blocos.get(2).elements().get(0)).attributeValue("margin-bottom")).isEqualTo("0.45em");
+        // Articulação
+        assertThat(blocos.get(3).attributeValue("line-height")).isEqualTo("120%");
+        // Justificação: espaços antes do título e do corpo reduzidos ($spacing3 e $spacing1 da emenda)
+        assertThat(titulo.getText()).isEqualTo("JUSTIFICAÇÃO");
+        assertThat(titulo.attributeValue("font-size")).isEqualTo("18pt");
+        assertThat(titulo.attributeValue("space-before")).isEqualTo("22pt");
+        assertThat(corpo.attributeValue("space-before")).isEqualTo("10pt");
+        assertThat(corpo.attributeValue("line-height")).isEqualTo("120%");
+        assertThat(((Element) corpo.elements().get(0)).attributeValue("margin-bottom")).isEqualTo("0.45em");
+        // Notas de rodapé no tamanho da fonte do documento
+        assertThat(fo.selectNodes("//*[local-name()='footnote-body']/*[local-name()='block']"))
+                .isNotEmpty().allSatisfy(n -> assertThat(((Element) n).attributeValue("font-size")).isEqualTo("18pt"));
+        // Nenhum valor padrão sobrou
+        assertThat(fo.asXML()).doesNotContain("\"150%\"").doesNotContain("\"0.6em\"").doesNotContain("\"26pt\"")
+                .doesNotContain("\"14pt\"").doesNotContain("\"16pt\"");
+    }
+
     @Test
     void xmlInvalido() {
         assertThatThrownBy(() -> transformer.transformar("<LexML><sem-fechamento>", ParametrosImpressaoDocumentoArticulado.padrao()))

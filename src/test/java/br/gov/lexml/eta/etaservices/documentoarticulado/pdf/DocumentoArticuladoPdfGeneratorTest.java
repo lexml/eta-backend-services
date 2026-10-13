@@ -375,8 +375,9 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(casa.tamanho).isEqualTo(11f);
         assertThat(casa.y).isLessThan(texto.y);
         assertThat(texto.y).isLessThan(epigrafe.y);
-        // Corpo a 4cm do topo da área (1cm sem cabeçalho): epígrafe ~3cm mais abaixo que sem cabeçalho (y = 113)
-        assertThat(epigrafe.y).isCloseTo(113f + 3 * 72 / 2.54f, offset(1f));
+        // Corpo a 4cm do topo da área (1cm sem cabeçalho): epígrafe 3cm mais abaixo que no exemplo sem cabeçalho
+        Linha epigrafeSemCabecalho = linhaQueContem(linhas(pdfDoExemploCom("false", "", "true", "18")), "PROJETO DE LEI");
+        assertThat(epigrafe.y - epigrafeSemCabecalho.y).isCloseTo(3 * 72 / 2.54f, offset(0.5f));
     }
 
     @Test
@@ -408,6 +409,78 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(imagensDesenhadas(pdf)).hasSize(1).allMatch(i -> i[2] == 1f);
         assertThat(textoNormalizado(pdf)).startsWith("MEDIDA PROVISÓRIA").doesNotContain("SENADO FEDERAL")
                 .doesNotContain("CONGRESSO NACIONAL").doesNotContain("CÂMARA DOS DEPUTADOS");
+    }
+
+    // Tamanho da fonte e "reduzir espaço entre linhas" (issue #74, parte B) ------------------------------------
+
+    @Test
+    void exemploEmFonte18ComEspacoEntreLinhasReduzido() throws Exception {
+        List<Linha> linhas = linhas(pdfExemplo);
+
+        assertTamanhosEEntrelinha(linhas, 18f, 18f, 1.2f);
+        // Notas de rodapé (0.7em) e células de tabela (80%) proporcionais à fonte do documento
+        assertThat(linhas.stream().filter(l -> l.texto.startsWith("1 Anexo I")).findFirst().orElseThrow(AssertionError::new)
+                .tamanho).isCloseTo(18f * 0.7f, offset(0.05f));
+        assertThat(linhaQueContem(linhas, "Processos digitalizados").tamanho).isCloseTo(18f * 0.8f, offset(0.05f));
+        // O cabeçalho não muda com a fonte do documento
+        assertThat(linhaQueContem(linhas, "SENADO FEDERAL").tamanho).isEqualTo(11f);
+    }
+
+    /** Valores da emenda: destaque de 16pt (18pt com fonte 18) e entrelinha de 150% (120% com "reduzir"). */
+    @ParameterizedTest
+    @CsvSource({ "16,false,16,1.5", "14,true,16,1.2", "14,false,16,1.5" })
+    void tamanhoDaFonteEEspacoEntreLinhasDasOpcoesDeImpressao(String fonte, String reduzir, float destaque, float entrelinha)
+            throws Exception {
+        assertTamanhosEEntrelinha(linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", reduzir, fonte)),
+                Float.parseFloat(fonte), destaque, entrelinha);
+    }
+
+    @Test
+    void espacosFixosDaParteInicialNaoMudamComReduzir() throws Exception {
+        // Mesmo tamanho de fonte: só a entrelinha muda; o espaço de 48pt entre epígrafe e ementa, não
+        List<Linha> normal = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "false", "18"));
+        List<Linha> reduzido = linhas(pdfExemplo);
+        float distanciaNormal = linhaQueContem(normal, "Institui o Programa").y - linhaQueContem(normal, "PROJETO DE LEI").y;
+        float distanciaReduzida = linhaQueContem(reduzido, "Institui o Programa").y - linhaQueContem(reduzido, "PROJETO DE LEI").y;
+
+        // A primeira linha da ementa desce metade da diferença de entrelinha (meio espaçamento acima do texto)
+        assertThat(distanciaNormal - distanciaReduzida).isCloseTo(18f * (1.5f - 1.2f) / 2, offset(0.5f));
+    }
+
+    /**
+     * Epígrafe e título da justificação no tamanho de destaque; caput e parágrafos da justificação no tamanho da
+     * fonte, com a distância entre linhas de um mesmo parágrafo igual a fonte x entrelinha.
+     */
+    private static void assertTamanhosEEntrelinha(List<Linha> linhas, float fonte, float destaque, float entrelinha) {
+        assertThat(linhaQueContem(linhas, "PROJETO DE LEI").tamanho).isEqualTo(destaque);
+        assertThat(linhas.stream().filter(l -> l.texto.trim().equals("JUSTIFICAÇÃO")).findFirst()
+                .orElseThrow(AssertionError::new).tamanho).isEqualTo(destaque);
+        assertThat(linhaQueContem(linhas, "Fica instituído o Programa").tamanho).isEqualTo(fonte);
+        int indice = linhas.indexOf(linhaQueContem(linhas, "As metas serão revistas anualmente"));
+        Linha primeira = linhas.get(indice);
+        Linha segunda = linhas.get(indice + 1);
+        assertThat(primeira.tamanho).isEqualTo(fonte);
+        assertThat(segunda.pagina).isEqualTo(primeira.pagina);
+        assertThat(segunda.y - primeira.y).isCloseTo(fonte * entrelinha, offset(0.1f));
+    }
+
+    /** PDF do exemplo com outras opções de impressão (no JSON e no XML, registrados no conversor falso). */
+    private static byte[] pdfDoExemploCom(String imprimirBrasao, String textoCabecalho, String reduzir, String tamanhoFonte)
+            throws IOException {
+        String json = recurso(JSON_EXEMPLO).replaceFirst(
+                "\"imprimirBrasao\": true,(\\s*)\"textoCabecalho\": \"[^\"]*\",(\\s*)\"reduzirEspacoEntreLinhas\": true,(\\s*)\"tamanhoFonte\": 18",
+                "\"imprimirBrasao\": " + imprimirBrasao + ",$1\"textoCabecalho\": \"" + textoCabecalho
+                        + "\",$2\"reduzirEspacoEntreLinhas\": " + reduzir + ",$3\"tamanhoFonte\": " + tamanhoFonte);
+        String xml = recurso(XML_EXEMPLO).replace(
+                "imprimirBrasao=\"true\" textoCabecalho=\"Gabinete do Senador Davi Alcolumbre\" reduzirEspacoEntreLinhas=\"true\" tamanhoFonte=\"18\"",
+                "imprimirBrasao=\"" + imprimirBrasao + "\" textoCabecalho=\"" + textoCabecalho + "\" reduzirEspacoEntreLinhas=\""
+                        + reduzir + "\" tamanhoFonte=\"" + tamanhoFonte + "\"");
+        assertThat(json).as("opções no JSON do exemplo").contains("\"tamanhoFonte\": " + tamanhoFonte)
+                .contains("\"reduzirEspacoEntreLinhas\": " + reduzir);
+        assertThat(xml).as("opções no XML do exemplo").contains("tamanhoFonte=\"" + tamanhoFonte + "\"");
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        new DocumentoArticuladoPdfGenerator(new ConversorDocumentoArticuladoFake().registrar(json, xml)).generate(json, out);
+        return out.toByteArray();
     }
 
     @Test
@@ -532,7 +605,8 @@ class DocumentoArticuladoPdfGeneratorTest {
             this.pagina = pagina;
             this.texto = texto.replace(' ', ' ');
             this.y = posicoes.get(0).getYDirAdj();
-            this.tamanho = posicoes.get(0).getFontSizeInPt();
+            // Pela matriz do texto: getFontSizeInPt() trunca para inteiro (12,6pt viraria 12pt)
+            this.tamanho = Math.round(posicoes.get(0).getTextMatrix().getScalingFactorX() * 100) / 100f;
             for (TextPosition posicao : posicoes) {
                 fontes.add(posicao.getFont().getName());
                 xs.add(posicao.getXDirAdj());
