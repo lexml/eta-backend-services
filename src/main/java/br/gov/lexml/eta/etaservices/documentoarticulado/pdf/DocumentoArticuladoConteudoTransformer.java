@@ -44,6 +44,8 @@ class DocumentoArticuladoConteudoTransformer {
             transformer.setParameter("maxTamanhoFonte", parametros.getMaxTamanhoFonte());
             transformer.setParameter("lineHeight", parametros.getLineHeight());
             transformer.setParameter("pMarginBottom", parametros.getPMarginBottom());
+            transformer.setParameter("espacoAntesTituloJustificacao", parametros.getEspacoAntesTituloJustificacao());
+            transformer.setParameter("espacoAntesCorpoJustificacao", parametros.getEspacoAntesCorpoJustificacao());
 
             StringWriter fo = new StringWriter();
             transformer.transform(new StreamSource(new StringReader(xml)), new StreamResult(fo));

@@ -51,9 +51,9 @@ class DocumentoArticuladoTemplateProcessor {
         ctx.put("conteudoFo", conteudoFo);
 
         // Cabeçalho da primeira página (issue #74): opções de impressão do documento, com os padrões do editor
-        JsonNode opcoes = opcoesImpressao(documento);
-        boolean imprimirBrasao = !opcoes.path("imprimirBrasao").isBoolean() || opcoes.path("imprimirBrasao").booleanValue();
-        String textoCabecalho = opcoes.path("textoCabecalho").isTextual() ? opcoes.path("textoCabecalho").textValue().trim() : "";
+        OpcoesImpressaoDocumentoArticulado opcoes = OpcoesImpressaoDocumentoArticulado.de(documento);
+        boolean imprimirBrasao = opcoes.isImprimirBrasao();
+        String textoCabecalho = opcoes.getTextoCabecalho();
         ctx.put("imprimirBrasao", imprimirBrasao);
         ctx.put("brasao", imprimirBrasao ? brasao() : "");
         ctx.put("casaLegislativa", casaLegislativa(documento.path("value").path("metadado").path("identificacao").path("urn").asText("")));
@@ -96,22 +96,6 @@ class DocumentoArticuladoTemplateProcessor {
             }
         }
         return APLICACAO_PADRAO;
-    }
-
-    /**
-     * Opções de impressão do {@code lexedit:Metadado} (especificação 02 do lexml-eta); nó ausente quando o documento
-     * não as tem. Os atributos ausentes valem o padrão do editor: com brasão e sem texto de cabeçalho.
-     */
-    private static JsonNode opcoesImpressao(JsonNode documento) {
-        for (JsonNode proprietario : documento.path("value").path("metadado").path("metadadoProprietario")) {
-            for (JsonNode metadado : proprietario.path("any")) {
-                JsonNode opcoes = metadado.path("value").path("opcoesImpressao");
-                if (opcoes.isObject()) {
-                    return opcoes;
-                }
-            }
-        }
-        return documento.path("ausente");
     }
 
     /**

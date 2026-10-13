@@ -28,6 +28,9 @@
 	<xsl:param name="maxTamanhoFonte" select="'16pt'"/>
 	<xsl:param name="lineHeight" select="'150%'"/>
 	<xsl:param name="pMarginBottom" select="'0.6em'"/>
+	<!-- Espaços da justificação, que variam com "reduzir espaço entre linhas" (emenda: $spacing3 e $spacing1) -->
+	<xsl:param name="espacoAntesTituloJustificacao" select="'26pt'"/>
+	<xsl:param name="espacoAntesCorpoJustificacao" select="'14pt'"/>
 
 	<!--
 	  Remissões (issue #72, parte 5). Dispositivos impressos que podem ser destino de link interno: só os
@@ -60,8 +63,8 @@
 
 	<!--
 	  Justificação (issue #75), depois da articulação. Emenda: bloco "JUSTIFICAÇÃO" (text-align="center",
-	  font-weight="bold", font-size="$maxTamanhoFonte", space-before="$spacing3" = 26pt) seguido do bloco
-	  role="Justificativa" (space-before="$spacing1" = 14pt, line-height="$lineHeight", text-indent="2.5cm", sem
+	  font-weight="bold", font-size="$maxTamanhoFonte", space-before="$spacing3" = 26pt, ou 22pt com "reduzir espaço entre linhas") seguido do bloco
+	  role="Justificativa" (space-before="$spacing1" = 14pt, ou 10pt com "reduzir", line-height="$lineHeight", text-indent="2.5cm", sem
 	  text-align: alinhado à esquerda, como no editor). Só é impressa se houver texto fora de exclusões (em
 	  parágrafo, item de lista ou célula de tabela); havendo mais de uma Justificacao, um único título e os
 	  conteúdos na ordem do documento.
@@ -70,14 +73,14 @@
 		<xsl:param name="partes"/>
 		<xsl:if test="$partes//text()[not(ancestor::lx:del)][normalize-space()]
 			or $partes//lx:img[starts-with(normalize-space(@src), 'data:image/')][not(ancestor::lx:del)]">
-			<fo:block text-align="center" font-weight="bold" font-size="{$maxTamanhoFonte}" space-before="26pt"
+			<fo:block text-align="center" font-weight="bold" font-size="{$maxTamanhoFonte}" space-before="{$espacoAntesTituloJustificacao}"
 				keep-with-next.within-page="always">JUSTIFICAÇÃO</fo:block>
 			<!--
 			  line-height-shift-adjustment="disregard-shifts" (diferença em relação à emenda, decidida na parte B):
 			  sobrescrito e subscrito (número de nota de rodapé, m², H₂O) não aumentam a altura da linha. Sem isso, a
 			  linha com o número da nota fica mais baixa que as vizinhas e, numa célula, desalinha da célula ao lado.
 			-->
-			<fo:block space-before="14pt" line-height="{$lineHeight}" text-indent="2.5cm"
+			<fo:block space-before="{$espacoAntesCorpoJustificacao}" line-height="{$lineHeight}" text-indent="2.5cm"
 				line-height-shift-adjustment="disregard-shifts">
 				<xsl:apply-templates select="$partes/*" mode="justificacao"/>
 			</fo:block>
@@ -686,7 +689,7 @@
 	<!--
 	  Ementa. Recuo: emenda, html2foTextoLivre (estilo-ementa: margin-left 6.5cm, text-indent 0) e
 	  citacao2html (margin-left 40% da área útil de 16,4cm). Justificação e entrelinha: bloco do comando
-	  de emenda, onde a citação é impressa. Espaço de 48pt após a epígrafe: issue #72.
+	  de emenda, onde a citação é impressa. Espaço de 48pt após a epígrafe: issue #72 (fixo; não varia com as opções de impressão).
 	  Os espaços são colapsados pelo próprio XSL-FO (white-space-collapse e linefeed-treatment padrão).
 	-->
 	<xsl:template match="lx:Ementa">
@@ -835,7 +838,7 @@
 	<!--
 	  Preâmbulo, no lugar do comando de emenda. Emenda: bloco "Comando de emenda"
 	  (line-height="$lineHeight", text-align="justify", text-indent="2.5cm") com parágrafos de
-	  margin-bottom="$pMarginBottom". Espaço de 72pt após a ementa: issue #72.
+	  margin-bottom="$pMarginBottom". Espaço de 72pt após a ementa: issue #72 (fixo; não varia com as opções de impressão).
 	  Somente texto: a formatação inline é descartada.
 	-->
 	<xsl:template match="lx:Preambulo">

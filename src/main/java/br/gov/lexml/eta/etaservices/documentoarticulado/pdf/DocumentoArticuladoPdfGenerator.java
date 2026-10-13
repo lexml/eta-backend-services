@@ -48,7 +48,8 @@ public class DocumentoArticuladoPdfGenerator {
     public void generate(String json, OutputStream outputStream) throws IOException {
         JsonNode documento = validar(json);
         String xml = conversor.jsonParaXml(json);
-        ParametrosImpressaoDocumentoArticulado parametros = ParametrosImpressaoDocumentoArticulado.padrao();
+        ParametrosImpressaoDocumentoArticulado parametros =
+                ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado.de(documento));
         String conteudoFo = conteudoTransformer.transformar(xml, parametros);
         String xslFo = templateProcessor.processar(documento, parametros, conteudoFo);
         byte[] pdf = fopProcessor.gerarPdf(xslFo, xml);
