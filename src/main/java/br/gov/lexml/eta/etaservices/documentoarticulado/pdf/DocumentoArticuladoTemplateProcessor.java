@@ -7,7 +7,11 @@ import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringEscapeUtils;
@@ -23,7 +27,7 @@ import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 /**
  * Aplica o template Velocity do documento articulado, produzindo o XSL-FO do PDF. Derivado de
  * {@code printing.pdf.VelocityTemplateProcessor}, sem classes de domínio: os dados que o template usa (metadados
- * do PDF e cabeçalho) são lidos do documento-articulado.json aqui e passados como valores simples.
+ * do PDF, cabeçalho, local e data e assinaturas) são lidos do documento-articulado.json aqui e passados como valores simples.
  */
 class DocumentoArticuladoTemplateProcessor {
 
@@ -60,9 +64,41 @@ class DocumentoArticuladoTemplateProcessor {
         ctx.put("textoCabecalho", StringEscapeUtils.escapeXml10(textoCabecalho));
         ctx.put("temCabecalho", imprimirBrasao || !textoCabecalho.isEmpty());
 
+        // Local e data e assinaturas (issue #76), depois do conteúdo
+        FechoDocumentoArticulado fecho = FechoDocumentoArticulado.de(documento);
+        ctx.put("local", StringEscapeUtils.escapeXml10(fecho.getLocal()));
+        ctx.put("dataPorExtenso", StringEscapeUtils.escapeXml10(fecho.getData()));
+        ctx.put("espacoAntesFecho", parametros.getEspacoAntesFecho());
+        ctx.put("assinaturas", paresDeAssinaturas(fecho.getAssinaturas()));
+
         StringWriter resultado = new StringWriter();
         criarVelocityEngine().evaluate(ctx, resultado, "documentoArticulado", carregarTemplate());
         return resultado.toString();
+    }
+
+    /**
+     * Assinaturas em pares, uma linha da tabela de duas colunas por par (a última sozinha quando o número é ímpar),
+     * como {@code Autoria.getParlamentaresPair()} da emenda. Mapas, e não as próprias assinaturas, porque o Velocity
+     * só chama métodos públicos de classes públicas; os textos vão escapados para XML.
+     */
+    static List<List<Map<String, String>>> paresDeAssinaturas(List<FechoDocumentoArticulado.Assinatura> assinaturas) {
+        List<List<Map<String, String>>> pares = new ArrayList<>();
+        for (int i = 0; i < assinaturas.size(); i += 2) {
+            List<Map<String, String>> par = new ArrayList<>();
+            for (FechoDocumentoArticulado.Assinatura assinatura : assinaturas.subList(i, Math.min(i + 2, assinaturas.size()))) {
+                par.add(assinatura(assinatura));
+            }
+            pares.add(par);
+        }
+        return pares;
+    }
+
+    private static Map<String, String> assinatura(FechoDocumentoArticulado.Assinatura assinatura) {
+        Map<String, String> valores = new LinkedHashMap<>();
+        valores.put("nome", StringEscapeUtils.escapeXml10(assinatura.getNome()));
+        valores.put("partidoUF", StringEscapeUtils.escapeXml10(assinatura.getPartidoUF()));
+        valores.put("cargo", StringEscapeUtils.escapeXml10(assinatura.getCargo()));
+        return valores;
     }
 
     /** Texto da epígrafe com espaços normalizados ou, na falta dela, a URN de identificação. */

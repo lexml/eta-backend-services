@@ -8,7 +8,9 @@
 ## Contexto (DocumentoArticuladoTemplateProcessor): $titulo e $aplicacao (já escapados para XML), $dataIso (data e
 ## hora da geração, ISO-8601), $tamanhoFonte (pontos), $conteudoFo (fragmento XSL-FO, inserido sem ser
 ## reinterpretado pelo Velocity) e, para o cabeçalho, $temCabecalho, $imprimirBrasao, $brasao (JPEG em base64),
-## $casaLegislativa (pela autoridade da URN; vazio fora das três casas) e $textoCabecalho (já escapado).
+## $casaLegislativa (pela autoridade da URN; vazio fora das três casas) e $textoCabecalho (já escapado); para o fecho
+## e as assinaturas, $local, $dataPorExtenso (vazia sem data válida), $espacoAntesFecho e $assinaturas (lista de
+## pares, cada assinatura um mapa com nome, partidoUF e cargo, vazios quando não impressos; tudo já escapado).
 <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
 	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
@@ -203,10 +205,53 @@
 			</fo:block>
 		</fo:static-content>
 		<fo:flow flow-name="xsl-region-body" font-size="${tamanhoFonte}pt">
-			## Parte inicial (epígrafe, ementa e preâmbulo) e articulação, geradas pela XSLT. O fragmento tem sempre um
-			## fo:block raiz, que o FOP exige no fluxo. Os blocos abaixo com epígrafe e comando de emenda
+			## Parte inicial (epígrafe, ementa e preâmbulo), articulação e justificação, geradas pela XSLT. O fragmento
+			## tem sempre um fo:block raiz, que o FOP exige no fluxo. Os blocos abaixo com epígrafe e comando de emenda
 			## continuam apenas como referência; a formatação equivalente está na XSLT.
 			$conteudoFo
+			## Local e data e assinaturas (issue #76), depois de todo o conteúdo: blocos "Local e data" e "Assinaturas"
+			## da emenda (preservados abaixo, comentados), com os dados do lexedit:Metadado em vez do modelo da emenda.
+			## Sem as assinaturas adicionais (linhas em branco) e sem assinatura de comissão. Sem data, o fecho sai com
+			## espaços para preencher o dia, o mês e o ano, como na emenda.
+			#if($local != "" || !$assinaturas.isEmpty())
+			<fo:block-container>
+				#if($local != "")
+				<fo:block keep-with-next.within-page="always"
+					keep-with-previous="10" role="fecho"
+					space-after="0pt" space-before="$espacoAntesFecho" text-align="justify"
+					text-indent="2.5cm" white-space-collapse="false">#if($dataPorExtenso != "")$local, ${dataPorExtenso}.#{else}$local, &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.#{end}</fo:block>
+				#end
+				#if(!$assinaturas.isEmpty())
+				<fo:block font-weight="bold">
+					<fo:table role="Signatários"
+						table-layout="fixed" width="100%">
+						<fo:table-column
+							column-width="proportional-column-width(50)" />
+						<fo:table-column
+							column-width="proportional-column-width(50)" />
+						<fo:table-body>
+							## Pares de assinaturas; com número ímpar, a última ocupa as duas colunas
+							#foreach($par in $assinaturas)
+							<fo:table-row>
+								#foreach($assinatura in $par)
+								<fo:table-cell #if($par.size() == 1)number-columns-spanned="2" #{end}text-align="center">
+									<fo:block margin-top="30pt">$assinatura.nome</fo:block>
+									#if($assinatura.partidoUF != "")
+									<fo:block keep-with-previous="always">$assinatura.partidoUF</fo:block>
+									#end
+									#if($assinatura.cargo != "")
+									<fo:block keep-with-previous="always">$assinatura.cargo</fo:block>
+									#end
+								</fo:table-cell>
+								#end
+							</fo:table-row>
+							#end
+						</fo:table-body>
+					</fo:table>
+				</fo:block>
+				#end
+			</fo:block-container>
+			#end
 #* NÃO RETIRAR: impressão herdada do template da emenda, a adaptar ao documento articulado.
 		<fo:flow flow-name="xsl-region-body" font-size="${emenda.opcoesImpressao.tamanhoFonte}pt">
 			#set($tamanhoFonte = $emenda.opcoesImpressao.tamanhoFonte)

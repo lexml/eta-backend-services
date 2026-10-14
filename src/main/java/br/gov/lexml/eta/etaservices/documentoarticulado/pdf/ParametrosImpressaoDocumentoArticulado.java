@@ -11,7 +11,8 @@ package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
  * <li>{@code lineHeight}: 120% se "reduzir espaço entre linhas"; senão 150%;</li>
  * <li>{@code pMarginBottom}: 0.45em se "reduzir espaço entre linhas"; senão 0.6em;</li>
  * <li>espaço antes do título da justificação ({@code $spacing3}): 22pt se "reduzir"; senão 26pt;</li>
- * <li>espaço antes do corpo da justificação ({@code $spacing1}): 10pt se "reduzir"; senão 14pt.</li>
+ * <li>espaço antes do corpo da justificação ({@code $spacing1}): 10pt se "reduzir"; senão 14pt;</li>
+ * <li>espaço antes do local e data ({@code $spacing4}): 26pt se "reduzir"; senão 34pt.</li>
  * </ul>
  */
 final class ParametrosImpressaoDocumentoArticulado {
@@ -24,6 +25,7 @@ final class ParametrosImpressaoDocumentoArticulado {
     private final String pMarginBottom;
     private final String espacoAntesTituloJustificacao;
     private final String espacoAntesCorpoJustificacao;
+    private final String espacoAntesFecho;
 
     private ParametrosImpressaoDocumentoArticulado(int tamanhoFonte, boolean reduzirEspacoEntreLinhas) {
         this.tamanhoFonte = tamanhoFonte;
@@ -32,6 +34,7 @@ final class ParametrosImpressaoDocumentoArticulado {
         this.pMarginBottom = reduzirEspacoEntreLinhas ? "0.45em" : "0.6em";
         this.espacoAntesTituloJustificacao = reduzirEspacoEntreLinhas ? "22pt" : "26pt";
         this.espacoAntesCorpoJustificacao = reduzirEspacoEntreLinhas ? "10pt" : "14pt";
+        this.espacoAntesFecho = reduzirEspacoEntreLinhas ? "26pt" : "34pt";
     }
 
     /** Parâmetros das opções de impressão do documento. */
@@ -39,7 +42,7 @@ final class ParametrosImpressaoDocumentoArticulado {
         return new ParametrosImpressaoDocumentoArticulado(opcoes.getTamanhoFonte(), opcoes.isReduzirEspacoEntreLinhas());
     }
 
-    /** Valores padrão: fonte 14, destaque 16pt, entrelinha 150%, espaço entre parágrafos 0.6em, 26pt e 14pt. */
+    /** Valores padrão: fonte 14, destaque 16pt, entrelinha 150%, espaço entre parágrafos 0.6em, 26pt, 14pt e 34pt. */
     static ParametrosImpressaoDocumentoArticulado padrao() {
         return PADRAO;
     }
@@ -72,6 +75,11 @@ final class ParametrosImpressaoDocumentoArticulado {
     /** Espaço antes do corpo da justificação, com unidade. */
     String getEspacoAntesCorpoJustificacao() {
         return espacoAntesCorpoJustificacao;
+    }
+
+    /** Espaço antes do local e data (fecho), com unidade. */
+    String getEspacoAntesFecho() {
+        return espacoAntesFecho;
     }
 
 }
