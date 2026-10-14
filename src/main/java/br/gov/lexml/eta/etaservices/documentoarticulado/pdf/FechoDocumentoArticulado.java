@@ -18,6 +18,9 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Só a autoria de parlamentares ({@code tipo="Parlamentar"}) gera assinaturas; a de comissão, não. Regras da emenda
  * ({@code ParlamentarPojo}): casa {@code CD} -> Deputado/Deputada, senão Senador/Senadora; sexo {@code M} ->
  * masculino, senão feminino.
+ * <p>
+ * Em anexo de parecer ({@code anexoParecer} verdadeiro, issue #80), o fecho é vazio: nem local e data nem assinaturas
+ * são impressos, como na emenda.
  */
 final class FechoDocumentoArticulado {
 
@@ -36,8 +39,11 @@ final class FechoDocumentoArticulado {
         this.assinaturas = Collections.unmodifiableList(assinaturas);
     }
 
-    /** Local, data e assinaturas do documento; vazios quando o documento não os tem. */
+    /** Local, data e assinaturas do documento; vazios quando o documento não os tem ou é anexo de parecer. */
     static FechoDocumentoArticulado de(JsonNode documento) {
+        if (anexoParecer(documento)) {
+            return new FechoDocumentoArticulado("", "", new ArrayList<>());
+        }
         JsonNode metadado = metadadoLexedit(documento);
         return new FechoDocumentoArticulado(texto(metadado.path("local")), dataPorExtenso(texto(metadado.path("data"))),
                 assinaturas(metadado.path("autoria")));
@@ -57,6 +63,15 @@ final class FechoDocumentoArticulado {
             }
         }
         return documento.path("ausente");
+    }
+
+    /**
+     * Se o documento é anexo de parecer ({@code lexedit:Metadado/@anexoParecer}, especificação 13 do lexml-eta): só o
+     * booleano {@code true}; ausente (que indica falso, pela issue #80), falso ou de outro tipo vale falso.
+     */
+    static boolean anexoParecer(JsonNode documento) {
+        JsonNode anexoParecer = metadadoLexedit(documento).path("anexoParecer");
+        return anexoParecer.isBoolean() && anexoParecer.booleanValue();
     }
 
     private static String texto(JsonNode no) {

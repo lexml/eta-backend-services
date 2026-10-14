@@ -50,7 +50,8 @@ public class DocumentoArticuladoPdfGenerator {
         String xml = conversor.jsonParaXml(json);
         ParametrosImpressaoDocumentoArticulado parametros =
                 ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado.de(documento));
-        String conteudoFo = conteudoTransformer.transformar(xml, parametros);
+        // Anexo de parecer (issue #80): sem justificação; o fecho e as assinaturas o FechoDocumentoArticulado já omite
+        String conteudoFo = conteudoTransformer.transformar(xml, parametros, !FechoDocumentoArticulado.anexoParecer(documento));
         String xslFo = templateProcessor.processar(documento, parametros, conteudoFo);
         byte[] pdf = fopProcessor.gerarPdf(xslFo, xml);
         inserirHash(pdf);

@@ -30,13 +30,19 @@ class DocumentoArticuladoConteudoTransformer {
         static final Templates INSTANCIA = compilar();
     }
 
+    /** Como {@link #transformar(String, ParametrosImpressaoDocumentoArticulado, boolean)}, com a justificação. */
+    String transformar(String xml, ParametrosImpressaoDocumentoArticulado parametros) {
+        return transformar(xml, parametros, true);
+    }
+
     /**
      * @param xml conteúdo do documento-articulado.xml
      * @param parametros tamanhos de fonte e espaçamentos
+     * @param imprimirJustificacao falso em anexo de parecer (issue #80): sem a justificação nem as notas dela
      * @return fragmento XSL-FO com um único {@code fo:block} raiz
      * @throws EtaBackendException se o XML não puder ser transformado
      */
-    String transformar(String xml, ParametrosImpressaoDocumentoArticulado parametros) {
+    String transformar(String xml, ParametrosImpressaoDocumentoArticulado parametros, boolean imprimirJustificacao) {
         try {
             Transformer transformer = Compilada.INSTANCIA.newTransformer();
             transformer.setErrorListener(new ErroComoExcecao());
@@ -46,6 +52,7 @@ class DocumentoArticuladoConteudoTransformer {
             transformer.setParameter("pMarginBottom", parametros.getPMarginBottom());
             transformer.setParameter("espacoAntesTituloJustificacao", parametros.getEspacoAntesTituloJustificacao());
             transformer.setParameter("espacoAntesCorpoJustificacao", parametros.getEspacoAntesCorpoJustificacao());
+            transformer.setParameter("imprimirJustificacao", String.valueOf(imprimirJustificacao));
 
             StringWriter fo = new StringWriter();
             transformer.transform(new StreamSource(new StringReader(xml)), new StreamResult(fo));

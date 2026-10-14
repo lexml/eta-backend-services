@@ -31,6 +31,8 @@
 	<!-- Espaços da justificação, que variam com "reduzir espaço entre linhas" (emenda: $spacing3 e $spacing1) -->
 	<xsl:param name="espacoAntesTituloJustificacao" select="'26pt'"/>
 	<xsl:param name="espacoAntesCorpoJustificacao" select="'14pt'"/>
+	<!-- 'false' em anexo de parecer (issue #80): sem justificação nem as notas de rodapé dela, como na emenda -->
+	<xsl:param name="imprimirJustificacao" select="'true'"/>
 
 	<!--
 	  Remissões (issue #72, parte 5). Dispositivos impressos que podem ser destino de link interno: só os
@@ -55,9 +57,11 @@
 	<xsl:template match="/">
 		<fo:block>
 			<xsl:apply-templates select="lx:LexML/lx:ProjetoNorma/lx:Norma"/>
-			<xsl:call-template name="justificacao">
-				<xsl:with-param name="partes" select="lx:LexML/lx:ProjetoNorma/lx:Justificacao/lx:PartePrincipal"/>
-			</xsl:call-template>
+			<xsl:if test="$imprimirJustificacao = 'true'">
+				<xsl:call-template name="justificacao">
+					<xsl:with-param name="partes" select="lx:LexML/lx:ProjetoNorma/lx:Justificacao/lx:PartePrincipal"/>
+				</xsl:call-template>
+			</xsl:if>
 		</fo:block>
 	</xsl:template>
 
