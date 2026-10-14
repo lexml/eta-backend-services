@@ -301,9 +301,11 @@
                                 "pendencias": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.Pendencias",
                                     "pendencia": [
+                                        "Não foi informado um texto de justificação.",
                                         "Corrigir remissões internas inválidas.",
                                         "Remover comentários.",
-                                        "Resolver marcas de revisão."
+                                        "Resolver marcas de revisão de texto.",
+                                        "Resolver marcas de revisão na articulação."
                                     ]
                                 }
                             }

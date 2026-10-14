@@ -223,6 +223,111 @@ class DocumentoArticuladoTemplateProcessorTest {
         assertThat(cabecalho.elements()).hasSize(1);
     }
 
+    // Alertas e pendências (issue #79) ----------------------------------------------------------------------------
+
+    private static final String AVISO_REVISAO = "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.";
+    private static final String AVISO_COMENTARIOS = "Este documento contém comentários e não deve ser protocolado até que sejam removidos.";
+    private static final String AVISO_PENDENCIAS =
+            "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:";
+
+    @Test
+    void tresCaixasAntesDoConteudoComOsValoresDaEmenda() throws Exception {
+        pendencias("Não foi informado um texto de justificação.", "Remover comentários.");
+
+        List<Element> filhos = fluxo(processar()).elements();
+        Element revisao = filhos.get(0);
+        Element comentarios = filhos.get(1);
+        Element pendencias = filhos.get(2);
+        assertThat(filhos.get(3).getText()).isEqualTo("Conteúdo gerado");
+        assertThat(revisao.getTextTrim()).isEqualTo(AVISO_REVISAO);
+        assertThat(comentarios.getTextTrim()).isEqualTo(AVISO_COMENTARIOS);
+        assertThat(pendencias.getTextTrim()).isEqualTo(AVISO_PENDENCIAS);
+        for (Element caixa : new Element[] { revisao, comentarios, pendencias }) {
+            assertThat(caixa.attributeValue("background-color")).isEqualTo("yellow");
+            assertThat(caixa.attributeValue("color")).isEqualTo("red");
+            assertThat(caixa.attributeValue("font-size")).isEqualTo("12pt");
+            assertThat(caixa.attributeValue("font-weight")).isEqualTo("bold");
+            assertThat(caixa.attributeValue("padding")).isEqualTo(".1cm");
+            assertThat(caixa.attributeValue("space-after")).isEqualTo(".3cm");
+        }
+        assertThat(revisao.attributeValue("text-align")).isEqualTo("center");
+        assertThat(comentarios.attributeValue("text-align")).isEqualTo("center");
+        assertThat(pendencias.attributeValue("text-align")).isEqualTo("left");
+        assertThat(pendencias.attributeValue("padding-left")).isEqualTo(".25cm");
+        // Lista sem negrito, com marcador, um item por pendência como registrada (mesmo repetindo a caixa de comentários)
+        Element lista = (Element) pendencias.selectSingleNode("*[local-name()='list-block']");
+        assertThat(lista.attributeValue("font-weight")).isEqualTo("normal");
+        assertThat(lista.attributeValue("margin-left")).isEqualTo(".5cm");
+        assertThat(lista.selectNodes(".//*[local-name()='list-item-label']/*")).extracting(n -> ((Element) n).getText())
+                .containsExactly("•", "•");
+        assertThat(lista.selectNodes(".//*[local-name()='list-item-body']/*")).extracting(n -> ((Element) n).getText())
+                .containsExactly("Não foi informado um texto de justificação.", "Remover comentários.");
+    }
+
+    @Test
+    void semDadosNenhumaCaixa() throws Exception {
+        metadadoLexedit().remove("revisoesTextuais");
+        metadadoLexedit().remove("revisoesArticulacao");
+        metadadoLexedit().remove("comentarios");
+        metadadoLexedit().remove("pendencias");
+
+        String fo = processar();
+        assertThat(fluxo(fo).elements().get(0).getText()).isEqualTo("Conteúdo gerado");
+        assertThat(fo).doesNotContain("background-color=\"yellow\"").doesNotContain("não deve ser protocolado");
+    }
+
+    @Test
+    void soPendencias() throws Exception {
+        metadadoLexedit().remove("revisoesTextuais");
+        metadadoLexedit().remove("revisoesArticulacao");
+        metadadoLexedit().remove("comentarios");
+        pendencias("Não foi informado um texto de justificação.");
+
+        List<Element> filhos = fluxo(processar()).elements();
+        assertThat(filhos.get(0).getTextTrim()).isEqualTo(AVISO_PENDENCIAS);
+        assertThat(filhos.get(1).getText()).isEqualTo("Conteúdo gerado");
+    }
+
+    @Test
+    void soRevisaoDaArticulacao() throws Exception {
+        metadadoLexedit().remove("revisoesTextuais");
+        metadadoLexedit().remove("comentarios");
+        metadadoLexedit().remove("pendencias");
+
+        List<Element> filhos = fluxo(processar()).elements();
+        assertThat(filhos.get(0).getTextTrim()).isEqualTo(AVISO_REVISAO);
+        assertThat(filhos.get(1).getText()).isEqualTo("Conteúdo gerado");
+    }
+
+    @Test
+    void caixasEm12ptMesmoComFonte18() throws Exception {
+        opcoesImpressao().put("tamanhoFonte", 18);
+        ParametrosImpressaoDocumentoArticulado parametros = ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado.de(documento));
+
+        Element fluxo = fluxo(processor.processar(documento, parametros, CONTEUDO_FO));
+        assertThat(fluxo.attributeValue("font-size")).isEqualTo("18pt");
+        assertThat(fluxo.elements().get(0).attributeValue("font-size")).isEqualTo("12pt");
+    }
+
+    @Test
+    void pendenciaEscapada() throws Exception {
+        pendencias("Revisar \"A\" & <B>.");
+
+        Document xml = new SAXReader().read(new StringReader(processar()));
+        assertThat(xml.selectSingleNode("//*[local-name()='list-item-body']/*").getText()).isEqualTo("Revisar \"A\" & <B>.");
+    }
+
+    private void pendencias(String... textos) {
+        ArrayNode lista = metadadoLexedit().putObject("pendencias").putArray("pendencia");
+        for (String texto : textos) {
+            lista.add(texto);
+        }
+    }
+
+    private static Element fluxo(String fo) throws Exception {
+        return (Element) new SAXReader().read(new StringReader(fo)).selectSingleNode("//*[local-name()='flow']");
+    }
+
     // Local e data e assinaturas (issue #76) ----------------------------------------------------------------------
 
     @Test
@@ -230,9 +335,11 @@ class DocumentoArticuladoTemplateProcessorTest {
         Document xml = new SAXReader().read(new StringReader(processar()));
         Element fluxo = (Element) xml.selectSingleNode("//*[local-name()='flow']");
 
-        // Depois do fragmento do conteúdo, um block-container com o fecho e as assinaturas
-        assertThat(((Element) fluxo.elements().get(0)).getText()).isEqualTo("Conteúdo gerado");
-        Element container = (Element) fluxo.elements().get(1);
+        // Depois do fragmento do conteúdo (o último antes dele, depois dos alertas), um block-container com o fecho e
+        // as assinaturas
+        List<Element> filhos = fluxo.elements();
+        Element container = filhos.get(filhos.size() - 1);
+        assertThat(filhos.get(filhos.size() - 2).getText()).isEqualTo("Conteúdo gerado");
         assertThat(container.getName()).isEqualTo("block-container");
         Element fecho = fecho(xml);
         assertThat(fecho.getParent()).isSameAs(container);

@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -492,6 +493,73 @@ class DocumentoArticuladoPdfGeneratorTest {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         new DocumentoArticuladoPdfGenerator(new ConversorDocumentoArticuladoFake().registrar(json, xml)).generate(json, out);
         return out.toByteArray();
+    }
+
+    // Alertas e pendências (issue #79) ----------------------------------------------------------------------
+
+    private static final String AVISO_REVISAO = "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.";
+    private static final String AVISO_COMENTARIOS = "Este documento contém comentários e não deve ser protocolado até que sejam removidos.";
+    private static final String AVISO_PENDENCIAS =
+            "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:";
+
+    @Test
+    void alertasEPendenciasDoExemploAntesDaEpigrafe() throws Exception {
+        String texto = textoNormalizado(pdfExemplo);
+        List<Linha> linhas = linhas(pdfExemplo);
+
+        // Depois do cabeçalho, as três caixas e as cinco pendências da especificação 13, como registradas
+        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_REVISAO, AVISO_COMENTARIOS, AVISO_PENDENCIAS,
+                "• Não foi informado um texto de justificação.", "• Corrigir remissões internas inválidas.", "• Remover comentários.",
+                "• Resolver marcas de revisão de texto.", "• Resolver marcas de revisão na articulação.", "PROJETO DE LEI");
+        // Caixas em negrito e pendências sem negrito, em 12pt, na primeira página, acima da epígrafe
+        Linha epigrafe = linhaQueContem(linhas, "PROJETO DE LEI");
+        Linha aviso = linhaQueContem(linhas, "Este documento contém marcas de revisão");
+        Linha pendencia = linhaQueContem(linhas, "Resolver marcas de revisão na articulação.");
+        assertThat(aviso.pagina).isEqualTo(1);
+        assertThat(aviso.tamanho).isEqualTo(12f);
+        assertThat(aviso.fonteDe("documento")).containsIgnoringCase("bold");
+        assertThat(pendencia.tamanho).isEqualTo(12f);
+        assertThat(pendencia.fonteDe("Resolver")).doesNotContainIgnoringCase("bold");
+        assertThat(pendencia.y).isLessThan(epigrafe.y);
+        assertThat(epigrafe.pagina).isEqualTo(1);
+    }
+
+    @Test
+    void alertasDasFixturesDaJustificacao() throws Exception {
+        String justificacao = textoNormalizado(gerarPdf(JUSTIFICACAO));
+        String longa = textoNormalizado(gerarPdf(JUSTIFICACAO_LONGA));
+
+        // Revisões e comentários; a lista repete os avisos como o editor registrou
+        assertThat(justificacao).containsSubsequence(AVISO_REVISAO, AVISO_COMENTARIOS, AVISO_PENDENCIAS, "• Remover comentários.",
+                "• Resolver marcas de revisão de texto.", "PROJETO DE LEI");
+        // Só revisões (sem comentários)
+        assertThat(longa).containsSubsequence(AVISO_REVISAO, AVISO_PENDENCIAS, "• Resolver marcas de revisão de texto.", "PROJETO DE LEI");
+        assertThat(longa).doesNotContain(AVISO_COMENTARIOS);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS })
+    void documentosSemAlertas(String nome) throws Exception {
+        assertThat(textoNormalizado(gerarPdf(nome))).doesNotContain("não deve ser protocolado");
+    }
+
+    @Test
+    void soPendencias() throws Exception {
+        String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.remove(
+                Arrays.asList("revisoesTextuais", "revisoesArticulacao", "comentarios"))));
+
+        assertThat(texto).doesNotContain(AVISO_REVISAO).doesNotContain(AVISO_COMENTARIOS);
+        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_PENDENCIAS,
+                "• Não foi informado um texto de justificação.", "PROJETO DE LEI");
+    }
+
+    @Test
+    void alertasEm12ptComFonte18() throws Exception {
+        List<Linha> linhas = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "true", "18"));
+
+        assertThat(linhaQueContem(linhas, "PROJETO DE LEI").tamanho).isEqualTo(18f);
+        assertThat(linhaQueContem(linhas, "Este documento contém marcas de revisão").tamanho).isEqualTo(12f);
+        assertThat(linhaQueContem(linhas, "Corrigir remissões internas inválidas.").tamanho).isEqualTo(12f);
     }
 
     // Local e data e assinaturas (issue #76) -----------------------------------------------------------------
