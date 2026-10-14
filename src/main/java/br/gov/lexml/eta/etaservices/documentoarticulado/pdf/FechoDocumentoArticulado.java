@@ -43,8 +43,11 @@ final class FechoDocumentoArticulado {
                 assinaturas(metadado.path("autoria")));
     }
 
-    /** Valor do {@code lexedit:Metadado}; nó ausente quando o documento não o tem. */
-    private static JsonNode metadadoLexedit(JsonNode documento) {
+    /**
+     * Valor do {@code lexedit:Metadado}, localizado pelo nome e namespace do elemento; nó ausente quando o documento
+     * não o tem. Também usado por {@link AlertasDocumentoArticulado}.
+     */
+    static JsonNode metadadoLexedit(JsonNode documento) {
         for (JsonNode proprietario : documento.path("value").path("metadado").path("metadadoProprietario")) {
             for (JsonNode metadado : proprietario.path("any")) {
                 JsonNode nome = metadado.path("name");

@@ -27,7 +27,7 @@ import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 /**
  * Aplica o template Velocity do documento articulado, produzindo o XSL-FO do PDF. Derivado de
  * {@code printing.pdf.VelocityTemplateProcessor}, sem classes de domínio: os dados que o template usa (metadados
- * do PDF, cabeçalho, local e data e assinaturas) são lidos do documento-articulado.json aqui e passados como valores simples.
+ * do PDF, cabeçalho, alertas, local e data e assinaturas) são lidos do documento-articulado.json aqui e passados como valores simples.
  */
 class DocumentoArticuladoTemplateProcessor {
 
@@ -63,6 +63,16 @@ class DocumentoArticuladoTemplateProcessor {
         ctx.put("casaLegislativa", casaLegislativa(documento.path("value").path("metadado").path("identificacao").path("urn").asText("")));
         ctx.put("textoCabecalho", StringEscapeUtils.escapeXml10(textoCabecalho));
         ctx.put("temCabecalho", imprimirBrasao || !textoCabecalho.isEmpty());
+
+        // Alertas e pendências (issue #79), antes do conteúdo
+        AlertasDocumentoArticulado alertas = AlertasDocumentoArticulado.de(documento);
+        ctx.put("possuiRevisoes", alertas.isPossuiRevisoes());
+        ctx.put("possuiComentarios", alertas.isPossuiComentarios());
+        List<String> pendencias = new ArrayList<>();
+        for (String pendencia : alertas.getPendencias()) {
+            pendencias.add(StringEscapeUtils.escapeXml10(pendencia));
+        }
+        ctx.put("pendencias", pendencias);
 
         // Local e data e assinaturas (issue #76), depois do conteúdo
         FechoDocumentoArticulado fecho = FechoDocumentoArticulado.de(documento);

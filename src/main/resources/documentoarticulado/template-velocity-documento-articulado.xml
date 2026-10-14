@@ -10,7 +10,8 @@
 ## reinterpretado pelo Velocity) e, para o cabeçalho, $temCabecalho, $imprimirBrasao, $brasao (JPEG em base64),
 ## $casaLegislativa (pela autoridade da URN; vazio fora das três casas) e $textoCabecalho (já escapado); para o fecho
 ## e as assinaturas, $local, $dataPorExtenso (vazia sem data válida), $espacoAntesFecho e $assinaturas (lista de
-## pares, cada assinatura um mapa com nome, partidoUF e cargo, vazios quando não impressos; tudo já escapado).
+## pares, cada assinatura um mapa com nome, partidoUF e cargo, vazios quando não impressos; tudo já escapado); para os
+## alertas, $possuiRevisoes, $possuiComentarios e $pendencias (lista de textos já escapados, como registrados).
 <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
 	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
@@ -205,6 +206,43 @@
 			</fo:block>
 		</fo:static-content>
 		<fo:flow flow-name="xsl-region-body" font-size="${tamanhoFonte}pt">
+			## Alertas e pendências (issue #79), antes da epígrafe: blocos "Alertas" e "Pendências de Preenchimento" da
+			## emenda (preservados abaixo, comentados), com os mesmos textos e estilo e os dados do lexedit:Metadado. As
+			## pendências saem como registradas pelo editor, mesmo quando repetem o aviso de revisões ou de comentários.
+## Alertas -------------------------------------------------------------------------
+			#if($possuiRevisoes)
+			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+				text-align="center" padding=".1cm" space-after=".3cm">
+				Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.
+			</fo:block>
+			#end
+			#if($possuiComentarios)
+			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+				text-align="center" padding=".1cm" space-after=".3cm">
+				Este documento contém comentários e não deve ser protocolado até que sejam removidos.
+			</fo:block>
+			#end
+## Pendências de Preenchimento -----------------------------------------------------
+			#if(!$pendencias.isEmpty())
+			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+					  text-align="left" padding=".1cm" space-after=".3cm" padding-left=".25cm" padding-right=".25cm">
+				Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:
+				<fo:list-block font-weight="normal"
+					provisional-label-separation="1em" provisional-distance-between-starts="1em"
+					margin-left=".5cm">
+					#foreach ($pendencia in $pendencias)
+					<fo:list-item space-before=".3em">
+					  <fo:list-item-label end-indent="label-end()">
+					    <fo:block>&#8226;</fo:block>
+					  </fo:list-item-label>
+					  <fo:list-item-body start-indent="body-start()">
+					    <fo:block>$pendencia</fo:block>
+					  </fo:list-item-body>
+					</fo:list-item>
+					#end
+				</fo:list-block>
+			</fo:block>
+			#end
 			## Parte inicial (epígrafe, ementa e preâmbulo), articulação e justificação, geradas pela XSLT. O fragmento
 			## tem sempre um fo:block raiz, que o FOP exige no fluxo. Os blocos abaixo com epígrafe e comando de emenda
 			## continuam apenas como referência; a formatação equivalente está na XSLT.
