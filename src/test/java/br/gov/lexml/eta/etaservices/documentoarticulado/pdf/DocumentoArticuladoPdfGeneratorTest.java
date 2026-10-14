@@ -1,5 +1,6 @@
 package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
 
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ANEXO_PARECER;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JSON_EXEMPLO;
@@ -560,6 +561,44 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(linhaQueContem(linhas, "PROJETO DE LEI").tamanho).isEqualTo(18f);
         assertThat(linhaQueContem(linhas, "Este documento contém marcas de revisão").tamanho).isEqualTo(12f);
         assertThat(linhaQueContem(linhas, "Corrigir remissões internas inválidas.").tamanho).isEqualTo(12f);
+    }
+
+    // Anexo de parecer (issue #80) ---------------------------------------------------------------------------
+
+    @Test
+    void anexoDeParecerTerminaNaArticulacao() throws Exception {
+        byte[] pdf = gerarPdf(ANEXO_PARECER);
+        String texto = textoNormalizado(pdf);
+
+        // Cabeçalho, alertas, parte inicial e articulação como nos demais documentos
+        assertThat(texto).containsSubsequence("SENADO FEDERAL", "Comissão de Assuntos Econômicos", AVISO_PENDENCIAS,
+                "• Corrigir remissões internas inválidas.", "PROJETO DE LEI Nº 789, DE 2026", "Dispõe sobre a transparência",
+                "O CONGRESSO NACIONAL decreta:", "Art. 1º", "II – com a contrapartida assumida pelo beneficiário.");
+        // Sem justificação (nem a nota dela), local e data ou assinaturas: termina no último artigo
+        assertThat(texto).endsWith("Art. 3º Esta Lei entra em vigor na data de sua publicação.");
+        assertThat(texto).doesNotContain("JUSTIFICAÇÃO").doesNotContain("Texto da justificação")
+                .doesNotContain("Nota da justificação").doesNotContain("Sala das Sessões");
+        // O anexo do PDF é o documento convertido, com o atributo
+        assertThat(new String(anexos(pdf).get("documento-articulado.xml").conteudo, StandardCharsets.UTF_8))
+                .isEqualTo(ConversorDocumentoArticuladoFake.xml(ANEXO_PARECER)).contains("anexoParecer=\"true\"");
+    }
+
+    @Test
+    void exemploComoAnexoDeParecerSemFechoNemAssinaturasMesmoPreenchidos() throws Exception {
+        String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.put("anexoParecer", true)));
+
+        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_REVISAO, AVISO_PENDENCIAS, "PROJETO DE LEI");
+        assertThat(texto).endsWith("Art. 6º Esta Lei entra em vigor na data de sua publicação.");
+        assertThat(texto).doesNotContain("JUSTIFICAÇÃO").doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke")
+                .doesNotContain("Deputado João da Silva");
+    }
+
+    @Test
+    void anexoParecerFalsoImprimeTudo() throws Exception {
+        String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.put("anexoParecer", false)));
+
+        assertThat(texto).containsSubsequence("Art. 6º Esta Lei entra em vigor", "JUSTIFICAÇÃO", "Pelas razões expostas",
+                "Sala das Sessões, 24 de abril de 2026.", "Senador Pedro Alves");
     }
 
     // Local e data e assinaturas (issue #76) -----------------------------------------------------------------

@@ -115,6 +115,32 @@ class FechoDocumentoArticuladoTest {
                 .getAssinaturas()).extracting(Assinatura::getNome).containsExactly("Senadora Soraya Thronicke");
     }
 
+    // Anexo de parecer (issue #80) -------------------------------------------------------------------------------
+
+    @Test
+    void anexoDeParecerSemFechoNemAssinaturasMesmoPreenchidos() throws Exception {
+        JsonNode documento = documento("\"anexoParecer\":true,\"local\":\"Sala das Sessões\",\"data\":\"2026-04-24\"," + autoria(true, SENADOR, DEPUTADA));
+
+        assertThat(FechoDocumentoArticulado.anexoParecer(documento)).isTrue();
+        FechoDocumentoArticulado fecho = FechoDocumentoArticulado.de(documento);
+        assertThat(fecho.getLocal()).isEmpty();
+        assertThat(fecho.getData()).isEmpty();
+        assertThat(fecho.getAssinaturas()).isEmpty();
+    }
+
+    /** Ausente indica falso (issue #80); só o booleano verdadeiro conta. */
+    @ParameterizedTest
+    @ValueSource(strings = { "\"anexoParecer\":false,", "", "\"anexoParecer\":\"true\",", "\"anexoParecer\":1," })
+    void naoEhAnexoDeParecer(String atributo) throws Exception {
+        JsonNode documento = documento(atributo + "\"local\":\"Sala das Sessões\",\"data\":\"2026-04-24\"," + autoria(true, SENADOR));
+
+        assertThat(FechoDocumentoArticulado.anexoParecer(documento)).isFalse();
+        FechoDocumentoArticulado fecho = FechoDocumentoArticulado.de(documento);
+        assertThat(fecho.getLocal()).isEqualTo("Sala das Sessões");
+        assertThat(fecho.getData()).isEqualTo("24 de abril de 2026");
+        assertThat(fecho.getAssinaturas()).extracting(Assinatura::getNome).containsExactly("Senador Davi Alcolumbre");
+    }
+
     @Test
     void exemplo() {
         FechoDocumentoArticulado fecho = FechoDocumentoArticulado.de(json(ConversorDocumentoArticuladoFake.JSON_EXEMPLO));

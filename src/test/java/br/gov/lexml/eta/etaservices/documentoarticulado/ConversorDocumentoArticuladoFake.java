@@ -37,6 +37,11 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
     public static final String JUSTIFICACAO = "documento-com-justificacao";
     /** Justificação longa, com notas de rodapé em páginas diferentes (issue #75, parte A). */
     public static final String JUSTIFICACAO_LONGA = "documento-com-justificacao-longa";
+    /**
+     * Anexo de parecer (issue #80): {@code anexoParecer="true"}, com justificação e nota de rodapé e sem local, data,
+     * autoria e ParteFinal, como o editor grava nesse modo.
+     */
+    public static final String ANEXO_PARECER = "documento-anexo-parecer";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -51,11 +56,11 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
         return fake;
     }
 
-    /** Conversor com o par de exemplo, os documentos das issues #72 e #75 registrados. */
+    /** Conversor com o par de exemplo e os documentos das issues #72, #75 e #80 registrados. */
     public static ConversorDocumentoArticuladoFake comDocumentosDeTeste() {
         ConversorDocumentoArticuladoFake fake = comExemplo();
         for (String nome : new String[] { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS,
-                JUSTIFICACAO, JUSTIFICACAO_LONGA }) {
+                JUSTIFICACAO, JUSTIFICACAO_LONGA, ANEXO_PARECER }) {
             fake.registrar(json(nome), xml(nome));
         }
         return fake;

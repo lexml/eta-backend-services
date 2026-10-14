@@ -1006,6 +1006,32 @@ class DocumentoArticuladoConteudoTransformerTest {
                 .doesNotContain("\"14pt\"").doesNotContain("\"16pt\"");
     }
 
+    // Anexo de parecer (issue #80) -------------------------------------------------------------------------------
+
+    @Test
+    void anexoDeParecerSemJustificacaoNemNotas() throws Exception {
+        Document comJustificacao = DocumentHelper.parseText(transformer.transformar(xml(JUSTIFICACAO), ParametrosImpressaoDocumentoArticulado.padrao(), true));
+        Document semJustificacao = DocumentHelper.parseText(transformer.transformar(xml(JUSTIFICACAO), ParametrosImpressaoDocumentoArticulado.padrao(), false));
+        List<Element> blocos = semJustificacao.getRootElement().elements();
+
+        // Só a parte inicial e a articulação: os blocos da justificação (título e corpo) saem
+        assertThat(blocos).hasSize(comJustificacao.getRootElement().elements().size() - 2);
+        assertThat(texto(blocos.get(blocos.size() - 1))).startsWith("Art. 1º").doesNotContain("JUSTIFICAÇÃO");
+        assertThat(semJustificacao.asXML()).doesNotContain("JUSTIFICAÇÃO").doesNotContain("A presente proposição")
+                .doesNotContain("footnote");
+        assertThat(comJustificacao.asXML()).contains("JUSTIFICAÇÃO").contains("footnote");
+        // Parte inicial e articulação iguais
+        for (int i = 0; i < blocos.size(); i++) {
+            assertThat(blocos.get(i).asXML()).isEqualTo(((Element) comJustificacao.getRootElement().elements().get(i)).asXML());
+        }
+    }
+
+    @Test
+    void semInformarAJustificacaoEhImpressa() throws Exception {
+        assertThat(transformer.transformar(xml(JUSTIFICACAO), ParametrosImpressaoDocumentoArticulado.padrao()))
+                .isEqualTo(transformer.transformar(xml(JUSTIFICACAO), ParametrosImpressaoDocumentoArticulado.padrao(), true));
+    }
+
     @Test
     void xmlInvalido() {
         assertThatThrownBy(() -> transformer.transformar("<LexML><sem-fechamento>", ParametrosImpressaoDocumentoArticulado.padrao()))
