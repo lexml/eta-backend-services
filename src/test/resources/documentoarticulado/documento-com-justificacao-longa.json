@@ -34,7 +34,7 @@
                                 "versaoAplicacao": "1.0.0",
                                 "substitutivo": false,
                                 "local": "Sala das Sessões",
-                                "data": "2026-10-07",
+                                "data": "",
                                 "opcoesImpressao": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.OpcoesImpressao",
                                     "imprimirBrasao": false,
@@ -45,7 +45,7 @@
                                 "autoria": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.Autoria",
                                     "tipo": "Parlamentar",
-                                    "imprimirPartidoUF": true,
+                                    "imprimirPartidoUF": false,
                                     "parlamentares": {
                                         "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentares",
                                         "parlamentar": [
@@ -276,7 +276,7 @@
                             {
                                 "TYPE_NAME": "br_gov_lexml__1.GenInline",
                                 "content": [
-                                    "Sala das Sessões, 7 de outubro de 2026."
+                                    "Sala das Sessões,"
                                 ]
                             }
                         ]
@@ -303,12 +303,6 @@
                                                 ]
                                             }
                                         }
-                                    ]
-                                },
-                                {
-                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
-                                    "content": [
-                                        "(UNIÃO - AP)"
                                     ]
                                 }
                             ]

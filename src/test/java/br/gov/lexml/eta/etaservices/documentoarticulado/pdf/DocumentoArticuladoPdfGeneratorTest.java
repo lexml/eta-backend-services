@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.pdfbox.contentstream.PDFStreamEngine;
@@ -54,6 +56,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake;
 import br.gov.lexml.eta.etaservices.util.EtaBackendException;
@@ -139,8 +145,9 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(texto).containsSubsequence("Art. 6º Esta Lei entra em vigor", "JUSTIFICAÇÃO",
                 "Esta proposição promove a modernização da gestão pública");
         assertThat(texto).doesNotContain("promove a reforma");
-        // Local e data e assinaturas ainda não impressos
-        assertThat(texto).doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke");
+        // Depois da justificação, o local e data e as assinaturas
+        assertThat(texto).containsSubsequence("JUSTIFICAÇÃO", "Pelas razões expostas", "Sala das Sessões, 24 de abril de 2026.",
+                "Senadora Soraya Thronicke");
     }
 
     @Test
@@ -230,10 +237,13 @@ class DocumentoArticuladoPdfGeneratorTest {
                 "Art. 2º Esta Lei entra em vigor", "JUSTIFICAÇÃO", "A presente proposição institui",
                 "a livros digitais acessíveis.", "pela coordenação da política, nos termos do art. 1º desta proposição.",
                 "Pelas razões expostas");
-        // Exclusões não impressas; local e data e assinaturas ainda não
+        // Exclusões não impressas; no fim, o local e data e a assinatura (uma só: célula nas duas colunas)
         assertThat(texto).doesNotContain("fiscalização").doesNotContain("conforme regulamento")
-                .doesNotContain("Nota excluída")
-                .doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke");
+                .doesNotContain("Nota excluída");
+        assertThat(texto).containsSubsequence("Pelas razões expostas", "Sala das Sessões, 7 de outubro de 2026.",
+                "Senadora Soraya Thronicke");
+        Linha assinatura = linhaQueContem(linhas(gerarPdf(JUSTIFICACAO)), "Senadora Soraya Thronicke");
+        assertThat(assinatura.centroDe("Senadora Soraya Thronicke")).isCloseTo(MARGEM_ESQUERDA + LARGURA_DO_TEXTO / 2, offset(1f));
     }
 
     @Test
@@ -376,7 +386,7 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(casa.y).isLessThan(texto.y);
         assertThat(texto.y).isLessThan(epigrafe.y);
         // Corpo a 4cm do topo da área (1cm sem cabeçalho): epígrafe 3cm mais abaixo que no exemplo sem cabeçalho
-        Linha epigrafeSemCabecalho = linhaQueContem(linhas(pdfDoExemploCom("false", "", "true", "18")), "PROJETO DE LEI");
+        Linha epigrafeSemCabecalho = linhaQueContem(linhas(pdfDoExemploCom("false", "", "true", "14")), "PROJETO DE LEI");
         assertThat(epigrafe.y - epigrafeSemCabecalho.y).isCloseTo(3 * 72 / 2.54f, offset(0.5f));
     }
 
@@ -414,8 +424,8 @@ class DocumentoArticuladoPdfGeneratorTest {
     // Tamanho da fonte e "reduzir espaço entre linhas" (issue #74, parte B) ------------------------------------
 
     @Test
-    void exemploEmFonte18ComEspacoEntreLinhasReduzido() throws Exception {
-        List<Linha> linhas = linhas(pdfExemplo);
+    void fonte18ComEspacoEntreLinhasReduzido() throws Exception {
+        List<Linha> linhas = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "true", "18"));
 
         assertTamanhosEEntrelinha(linhas, 18f, 18f, 1.2f);
         // Notas de rodapé (0.7em) e células de tabela (80%) proporcionais à fonte do documento
@@ -437,14 +447,15 @@ class DocumentoArticuladoPdfGeneratorTest {
 
     @Test
     void espacosFixosDaParteInicialNaoMudamComReduzir() throws Exception {
-        // Mesmo tamanho de fonte: só a entrelinha muda; o espaço de 48pt entre epígrafe e ementa, não
-        List<Linha> normal = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "false", "18"));
+        // Mesmo tamanho de fonte (o exemplo tem 14 + reduzir): só a entrelinha muda; o espaço de 48pt entre
+        // epígrafe e ementa, não
+        List<Linha> normal = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "false", "14"));
         List<Linha> reduzido = linhas(pdfExemplo);
         float distanciaNormal = linhaQueContem(normal, "Institui o Programa").y - linhaQueContem(normal, "PROJETO DE LEI").y;
         float distanciaReduzida = linhaQueContem(reduzido, "Institui o Programa").y - linhaQueContem(reduzido, "PROJETO DE LEI").y;
 
         // A primeira linha da ementa desce metade da diferença de entrelinha (meio espaçamento acima do texto)
-        assertThat(distanciaNormal - distanciaReduzida).isCloseTo(18f * (1.5f - 1.2f) / 2, offset(0.5f));
+        assertThat(distanciaNormal - distanciaReduzida).isCloseTo(14f * (1.5f - 1.2f) / 2, offset(0.5f));
     }
 
     /**
@@ -468,11 +479,11 @@ class DocumentoArticuladoPdfGeneratorTest {
     private static byte[] pdfDoExemploCom(String imprimirBrasao, String textoCabecalho, String reduzir, String tamanhoFonte)
             throws IOException {
         String json = recurso(JSON_EXEMPLO).replaceFirst(
-                "\"imprimirBrasao\": true,(\\s*)\"textoCabecalho\": \"[^\"]*\",(\\s*)\"reduzirEspacoEntreLinhas\": true,(\\s*)\"tamanhoFonte\": 18",
-                "\"imprimirBrasao\": " + imprimirBrasao + ",$1\"textoCabecalho\": \"" + textoCabecalho
-                        + "\",$2\"reduzirEspacoEntreLinhas\": " + reduzir + ",$3\"tamanhoFonte\": " + tamanhoFonte);
-        String xml = recurso(XML_EXEMPLO).replace(
-                "imprimirBrasao=\"true\" textoCabecalho=\"Gabinete do Senador Davi Alcolumbre\" reduzirEspacoEntreLinhas=\"true\" tamanhoFonte=\"18\"",
+                "\"imprimirBrasao\": (true|false),(\\s*)\"textoCabecalho\": \"[^\"]*\",(\\s*)\"reduzirEspacoEntreLinhas\": (true|false),(\\s*)\"tamanhoFonte\": \\d+",
+                "\"imprimirBrasao\": " + imprimirBrasao + ",$2\"textoCabecalho\": \"" + textoCabecalho
+                        + "\",$3\"reduzirEspacoEntreLinhas\": " + reduzir + ",$5\"tamanhoFonte\": " + tamanhoFonte);
+        String xml = recurso(XML_EXEMPLO).replaceFirst(
+                "imprimirBrasao=\"(true|false)\" textoCabecalho=\"[^\"]*\" reduzirEspacoEntreLinhas=\"(true|false)\" tamanhoFonte=\"\\d+\"",
                 "imprimirBrasao=\"" + imprimirBrasao + "\" textoCabecalho=\"" + textoCabecalho + "\" reduzirEspacoEntreLinhas=\""
                         + reduzir + "\" tamanhoFonte=\"" + tamanhoFonte + "\"");
         assertThat(json).as("opções no JSON do exemplo").contains("\"tamanhoFonte\": " + tamanhoFonte)
@@ -480,6 +491,101 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(xml).as("opções no XML do exemplo").contains("tamanhoFonte=\"" + tamanhoFonte + "\"");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         new DocumentoArticuladoPdfGenerator(new ConversorDocumentoArticuladoFake().registrar(json, xml)).generate(json, out);
+        return out.toByteArray();
+    }
+
+    // Local e data e assinaturas (issue #76) -----------------------------------------------------------------
+
+    @Test
+    void fechoEAssinaturasDepoisDaJustificacaoUmaUnicaVez() throws Exception {
+        String texto = textoNormalizado(pdfExemplo);
+
+        assertThat(texto).containsSubsequence("JUSTIFICAÇÃO", "Pelas razões expostas", "Sala das Sessões, 24 de abril de 2026.",
+                "Senador Davi Alcolumbre", "(UNIÃO - AP)", "Presidente do Senado Federal", "Senadora Soraya Thronicke", "(PSB - MS)",
+                "Deputado João da Silva", "(PT - SP)", "Líder do Partido dos Trabalhadores", "Deputada Maria Souza", "(PL - RJ)",
+                "Senador Pedro Alves", "(MDB - RS)");
+        // A representação textual do LexML (ParteFinal) não é impressa
+        for (String trecho : new String[] { "Sala das Sessões", "Senadora Soraya Thronicke", "Deputado João da Silva", "Senador Pedro Alves" }) {
+            assertThat(texto.split(Pattern.quote(trecho), -1)).as(trecho).hasSize(2);
+        }
+    }
+
+    @Test
+    void fechoComRecuoEAssinaturasEmDuasColunasCentralizadasEmNegrito() throws Exception {
+        List<Linha> linhas = linhas(pdfExemplo);
+        Linha fecho = linhaQueContem(linhas, "Sala das Sessões, 24 de abril de 2026.");
+        float coluna1 = MARGEM_ESQUERDA + LARGURA_DO_TEXTO / 4;
+        float coluna2 = MARGEM_ESQUERDA + LARGURA_DO_TEXTO * 3 / 4;
+        float meio = MARGEM_ESQUERDA + LARGURA_DO_TEXTO / 2;
+
+        // Fecho com recuo de 2,5cm, na mesma página da primeira assinatura
+        assertThat(fecho.xDoTexto("Sala")).isCloseTo(MARGEM_ESQUERDA + 2.5f * 72 / 2.54f, offset(0.5f));
+        Linha davi = linhaDepoisDe(linhas, fecho, "Senador Davi Alcolumbre");
+        assertThat(davi.pagina).isEqualTo(fecho.pagina);
+        assertThat(davi.y).isGreaterThan(fecho.y);
+        // Pares lado a lado, cada um centralizado na sua coluna; o quinto, sozinho, no meio
+        assertThat(davi.centroDe("Senador Davi Alcolumbre")).isCloseTo(coluna1, offset(1f));
+        assertThat(davi.fonteDe("Davi")).containsIgnoringCase("bold");
+        Linha soraya = linhaDepoisDe(linhas, fecho, "Senadora Soraya Thronicke");
+        assertThat(soraya.y).isEqualTo(davi.y);
+        assertThat(soraya.centroDe("Senadora Soraya Thronicke")).isCloseTo(coluna2, offset(1f));
+        assertThat(linhaDepoisDe(linhas, fecho, "(UNIÃO - AP)").centroDe("(UNIÃO - AP)")).isCloseTo(coluna1, offset(1f));
+        assertThat(linhaDepoisDe(linhas, fecho, "Presidente do Senado Federal").fonteDe("Presidente")).containsIgnoringCase("bold");
+        Linha joao = linhaDepoisDe(linhas, fecho, "Deputado João da Silva");
+        Linha maria = linhaDepoisDe(linhas, fecho, "Deputada Maria Souza");
+        assertThat(joao.y).isEqualTo(maria.y);
+        assertThat(maria.centroDe("Deputada Maria Souza")).isCloseTo(coluna2, offset(1f));
+        Linha pedro = linhaDepoisDe(linhas, fecho, "Senador Pedro Alves");
+        assertThat(pedro.pagina > joao.pagina || pedro.y > joao.y).isTrue();
+        assertThat(pedro.centroDe("Senador Pedro Alves")).isCloseTo(meio, offset(1f));
+    }
+
+    @Test
+    void semDataComEspacosParaPreencherESemPartido() throws Exception {
+        String texto = textoNormalizado(gerarPdf(JUSTIFICACAO_LONGA));
+
+        assertThat(texto).containsSubsequence("Sala das Sessões, de de .", "Senador Davi Alcolumbre");
+        assertThat(texto).doesNotContain("(UNIÃO - AP)");
+    }
+
+    @Test
+    void autoriaPorComissaoSoComOFecho() throws Exception {
+        String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.putObject("autoria").put("tipo", "Comissão")
+                .putObject("colegiadoAutor").put("nome", "Comissão de Assuntos Econômicos").put("sigla", "CAE")));
+
+        assertThat(texto).endsWith("Sala das Sessões, 24 de abril de 2026.");
+        assertThat(texto).doesNotContain("Senadora Soraya Thronicke").doesNotContain("Comissão de Assuntos Econômicos");
+    }
+
+    @Test
+    void semLocalSoAsAssinaturas() throws Exception {
+        String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.remove("local")));
+
+        assertThat(texto).doesNotContain("Sala das Sessões").doesNotContain("24 de abril de 2026");
+        assertThat(texto).containsSubsequence("Pelas razões expostas", "Senador Davi Alcolumbre", "Senador Pedro Alves");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS })
+    void documentosSemLocalNemAutoriaTerminamNoConteudo(String nome) throws Exception {
+        String texto = textoNormalizado(gerarPdf(nome));
+
+        assertThat(texto).doesNotContain("Sala das Sessões").doesNotContain("Senador ").doesNotContain("Deputad");
+    }
+
+    /** Primeira linha depois de {@code referencia} que contém o trecho. */
+    private static Linha linhaDepoisDe(List<Linha> linhas, Linha referencia, String trecho) {
+        return linhas.subList(linhas.indexOf(referencia) + 1, linhas.size()).stream().filter(l -> l.texto.contains(trecho))
+                .findFirst().orElseThrow(() -> new AssertionError("Linha com '" + trecho + "' não encontrada depois de " + referencia));
+    }
+
+    /** PDF do exemplo com o valor do lexedit:Metadado alterado no JSON (o XML é o da fixture: só o JSON é lido aqui). */
+    private static byte[] pdfDoExemploComMetadado(Consumer<ObjectNode> alteracao) throws IOException {
+        ObjectNode documento = (ObjectNode) new ObjectMapper().readTree(recurso(JSON_EXEMPLO));
+        alteracao.accept((ObjectNode) documento.path("value").path("metadado").path("metadadoProprietario").path(0).path("any").path(0).path("value"));
+        String json = documento.toString();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        new DocumentoArticuladoPdfGenerator(new ConversorDocumentoArticuladoFake().registrar(json, recurso(XML_EXEMPLO))).generate(json, out);
         return out.toByteArray();
     }
 
@@ -600,6 +706,7 @@ class DocumentoArticuladoPdfGeneratorTest {
         final String texto;
         final List<String> fontes = new ArrayList<>();
         final List<Float> xs = new ArrayList<>();
+        final List<Float> larguras = new ArrayList<>();
 
         Linha(int pagina, String texto, List<TextPosition> posicoes) {
             this.pagina = pagina;
@@ -610,7 +717,16 @@ class DocumentoArticuladoPdfGeneratorTest {
             for (TextPosition posicao : posicoes) {
                 fontes.add(posicao.getFont().getName());
                 xs.add(posicao.getXDirAdj());
+                larguras.add(posicao.getWidthDirAdj());
             }
+        }
+
+        /** Centro horizontal (pt) do trecho na linha: meio entre o início do primeiro e o fim do último caractere. */
+        float centroDe(String trecho) {
+            int inicio = texto.indexOf(trecho);
+            assertThat(inicio).as("'%s' na linha '%s'", trecho, texto).isNotNegative();
+            int fim = Math.min(inicio + trecho.length() - 1, xs.size() - 1);
+            return (xs.get(inicio) + xs.get(fim) + larguras.get(fim)) / 2;
         }
 
         /** Posição horizontal (pt) do primeiro caractere da palavra na linha. */

@@ -68,6 +68,36 @@
                                                 "siglaUF": "MS",
                                                 "siglaCasaLegislativa": "SF",
                                                 "cargo": ""
+                                            },
+                                            {
+                                                "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentar",
+                                                "identificacao": "3333",
+                                                "nome": "João da Silva",
+                                                "sexo": "M",
+                                                "siglaPartido": "PT",
+                                                "siglaUF": "SP",
+                                                "siglaCasaLegislativa": "CD",
+                                                "cargo": "Líder do Partido dos Trabalhadores"
+                                            },
+                                            {
+                                                "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentar",
+                                                "identificacao": "4444",
+                                                "nome": "Maria Souza",
+                                                "sexo": "F",
+                                                "siglaPartido": "PL",
+                                                "siglaUF": "RJ",
+                                                "siglaCasaLegislativa": "CD",
+                                                "cargo": ""
+                                            },
+                                            {
+                                                "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentar",
+                                                "identificacao": "5555",
+                                                "nome": "Pedro Alves",
+                                                "sexo": "M",
+                                                "siglaPartido": "MDB",
+                                                "siglaUF": "RS",
+                                                "siglaCasaLegislativa": "SF",
+                                                "cargo": ""
                                             }
                                         ]
                                     }
@@ -1401,6 +1431,105 @@
                                     "TYPE_NAME": "br_gov_lexml__1.GenInline",
                                     "content": [
                                         "(PSB - MS)"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "TYPE_NAME": "br_gov_lexml__1.ParsType",
+                            "p": [
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "b",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}b",
+                                                "string": "{http://www.lexml.gov.br/1.0}b"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Deputado João da Silva"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "(PT - SP)"
+                                    ]
+                                },
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "Líder do Partido dos Trabalhadores"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "TYPE_NAME": "br_gov_lexml__1.ParsType",
+                            "p": [
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "b",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}b",
+                                                "string": "{http://www.lexml.gov.br/1.0}b"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Deputada Maria Souza"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "(PL - RJ)"
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "TYPE_NAME": "br_gov_lexml__1.ParsType",
+                            "p": [
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "b",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}b",
+                                                "string": "{http://www.lexml.gov.br/1.0}b"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Senador Pedro Alves"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "(MDB - RS)"
                                     ]
                                 }
                             ]

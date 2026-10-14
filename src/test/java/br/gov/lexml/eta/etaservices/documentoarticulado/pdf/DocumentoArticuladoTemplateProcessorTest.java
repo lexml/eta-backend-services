@@ -5,9 +5,13 @@ import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocument
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -219,6 +223,137 @@ class DocumentoArticuladoTemplateProcessorTest {
         assertThat(cabecalho.elements()).hasSize(1);
     }
 
+    // Local e data e assinaturas (issue #76) ----------------------------------------------------------------------
+
+    @Test
+    void fechoDepoisDoConteudoComOsValoresDaEmenda() throws Exception {
+        Document xml = new SAXReader().read(new StringReader(processar()));
+        Element fluxo = (Element) xml.selectSingleNode("//*[local-name()='flow']");
+
+        // Depois do fragmento do conteúdo, um block-container com o fecho e as assinaturas
+        assertThat(((Element) fluxo.elements().get(0)).getText()).isEqualTo("Conteúdo gerado");
+        Element container = (Element) fluxo.elements().get(1);
+        assertThat(container.getName()).isEqualTo("block-container");
+        Element fecho = fecho(xml);
+        assertThat(fecho.getParent()).isSameAs(container);
+        assertThat(fecho.getText()).isEqualTo("Sala das Sessões, 24 de abril de 2026.");
+        assertThat(fecho.attributeValue("space-before")).isEqualTo("34pt");
+        assertThat(fecho.attributeValue("text-indent")).isEqualTo("2.5cm");
+        assertThat(fecho.attributeValue("keep-with-next.within-page")).isEqualTo("always");
+        assertThat(fecho.attributeValue("keep-with-previous")).isEqualTo("10");
+    }
+
+    @Test
+    void espacoAntesDoFechoComReduzir() throws Exception {
+        opcoesImpressao().put("reduzirEspacoEntreLinhas", true);
+        ParametrosImpressaoDocumentoArticulado parametros = ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado.de(documento));
+
+        Document xml = new SAXReader().read(new StringReader(processor.processar(documento, parametros, CONTEUDO_FO)));
+        assertThat(fecho(xml).attributeValue("space-before")).isEqualTo("26pt");
+    }
+
+    @Test
+    void dataVaziaOuAusenteComEspacosParaPreencher() throws Exception {
+        String esperado = "Sala das Sessões, " + espacos(8) + " de " + espacos(40) + " de " + espacos(16) + ".";
+
+        metadadoLexedit().put("data", "");
+        assertThat(fecho(new SAXReader().read(new StringReader(processar()))).getText()).isEqualTo(esperado);
+        metadadoLexedit().remove("data");
+        assertThat(fecho(new SAXReader().read(new StringReader(processar()))).getText()).isEqualTo(esperado);
+    }
+
+    @Test
+    void assinaturasEmDuasColunasComAUltimaSozinha() throws Exception {
+        parlamentares().removeAll().add(parlamentar("Davi Alcolumbre", "M", "UNIÃO", "AP", "SF", "Presidente do Senado Federal"))
+                .add(parlamentar("Soraya Thronicke", "F", "PSB", "MS", "SF", ""))
+                .add(parlamentar("Maria Souza", "F", "PL", "RJ", "CD", ""));
+
+        Element tabela = (Element) new SAXReader().read(new StringReader(processar()))
+                .selectSingleNode("//*[local-name()='table'][@role='Signatários']");
+        assertThat(tabela.getParent().attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(tabela.selectNodes("*[local-name()='table-column']")).extracting(c -> ((Element) c).attributeValue("column-width"))
+                .containsExactly("proportional-column-width(50)", "proportional-column-width(50)");
+        List<Node> linhas = tabela.selectNodes(".//*[local-name()='table-row']");
+        assertThat(linhas).hasSize(2);
+        List<Node> primeira = ((Element) linhas.get(0)).selectNodes("*[local-name()='table-cell']");
+        assertThat(primeira).hasSize(2).allSatisfy(c -> {
+            assertThat(((Element) c).attributeValue("text-align")).isEqualTo("center");
+            assertThat(((Element) c).attributeValue("number-columns-spanned")).isNull();
+        });
+        assertThat(blocos((Element) primeira.get(0))).containsExactly("Senador Davi Alcolumbre", "(UNIÃO - AP)", "Presidente do Senado Federal");
+        assertThat(blocos((Element) primeira.get(1))).containsExactly("Senadora Soraya Thronicke", "(PSB - MS)");
+        assertThat(((Element) ((Element) primeira.get(0)).elements().get(0)).attributeValue("margin-top")).isEqualTo("30pt");
+        Element ultima = (Element) ((Element) linhas.get(1)).selectSingleNode("*[local-name()='table-cell']");
+        assertThat(ultima.attributeValue("number-columns-spanned")).isEqualTo("2");
+        assertThat(blocos(ultima)).containsExactly("Deputada Maria Souza", "(PL - RJ)");
+    }
+
+    @Test
+    void semPartidoEUfQuandoNaoImprimir() throws Exception {
+        ((ObjectNode) metadadoLexedit().path("autoria")).put("imprimirPartidoUF", false);
+
+        assertThat(processar()).contains("Senador Davi Alcolumbre").doesNotContain("(UNIÃO - AP)").doesNotContain("(PSB - MS)");
+    }
+
+    @Test
+    void semLocalNemAutoriaNadaImpresso() throws Exception {
+        metadadoLexedit().remove("local");
+        metadadoLexedit().remove("autoria");
+
+        String fo = processar();
+        new SAXReader().read(new StringReader(fo));
+        assertThat(fo).doesNotContain("Sala das Sessões").doesNotContain("Signatários").doesNotContain("role=\"fecho\"")
+                .doesNotContain("block-container");
+    }
+
+    @Test
+    void autoriaPorComissaoSoOFecho() throws Exception {
+        ObjectNode autoria = metadadoLexedit().putObject("autoria");
+        autoria.put("tipo", "Comissão").putObject("colegiadoAutor").put("nome", "Comissão de Assuntos Econômicos").put("sigla", "CAE");
+
+        String fo = processar();
+        assertThat(fecho(new SAXReader().read(new StringReader(fo))).getText()).isEqualTo("Sala das Sessões, 24 de abril de 2026.");
+        assertThat(fo).doesNotContain("Signatários").doesNotContain("Comissão de Assuntos Econômicos");
+    }
+
+    @Test
+    void localENomesEscapados() throws Exception {
+        metadadoLexedit().put("local", "Sala \"A\" & <B>");
+        parlamentares().removeAll().add(parlamentar("Fulano & <Cia>", "M", "P&P", "UF", "SF", "Líder \"X\""));
+
+        Document xml = new SAXReader().read(new StringReader(processar()));
+        assertThat(fecho(xml).getText()).isEqualTo("Sala \"A\" & <B>, 24 de abril de 2026.");
+        assertThat(xml.getRootElement().getStringValue()).contains("Senador Fulano & <Cia>").contains("(P&P - UF)").contains("Líder \"X\"");
+    }
+
+    private static Element fecho(Document xml) {
+        Element fecho = (Element) xml.selectSingleNode("//*[local-name()='block'][@role='fecho']");
+        assertThat(fecho).as("bloco do fecho").isNotNull();
+        return fecho;
+    }
+
+    /** Textos dos blocos de uma célula de assinatura. */
+    private static List<String> blocos(Element celula) {
+        List<String> textos = new ArrayList<>();
+        for (Element bloco : celula.elements()) {
+            textos.add(bloco.getText());
+        }
+        return textos;
+    }
+
+    private static String espacos(int quantidade) {
+        return String.join("", Collections.nCopies(quantidade, " "));
+    }
+
+    private ArrayNode parlamentares() {
+        return (ArrayNode) metadadoLexedit().path("autoria").path("parlamentares").path("parlamentar");
+    }
+
+    private static ObjectNode parlamentar(String nome, String sexo, String partido, String uf, String casa, String cargo) {
+        return new ObjectMapper().createObjectNode().put("nome", nome).put("sexo", sexo).put("siglaPartido", partido)
+                .put("siglaUF", uf).put("siglaCasaLegislativa", casa).put("cargo", cargo);
+    }
+
     private static Element cabecalho(Document xml) {
         Element cabecalho = (Element) xml.selectSingleNode("//*[local-name()='static-content'][@flow-name='header-principal']");
         assertThat(cabecalho).as("static-content do cabeçalho").isNotNull();
@@ -231,8 +366,8 @@ class DocumentoArticuladoTemplateProcessorTest {
         return elemento.attributeValue(atributo);
     }
 
-    private JsonNode metadadoLexedit() {
-        return documento.path("value").path("metadado").path("metadadoProprietario").path(0).path("any").path(0).path("value");
+    private ObjectNode metadadoLexedit() {
+        return (ObjectNode) documento.path("value").path("metadado").path("metadadoProprietario").path(0).path("any").path(0).path("value");
     }
 
     private ObjectNode opcoesImpressao() {
