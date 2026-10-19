@@ -580,7 +580,7 @@ class DocumentoArticuladoPdfGeneratorTest {
     // Anexo de parecer (issue #80) ---------------------------------------------------------------------------
 
     @Test
-    void anexoDeParecerTerminaNaArticulacao() throws Exception {
+    void anexoDeParecerSemJustificacaoComFechoDepoisDaArticulacao() throws Exception {
         byte[] pdf = gerarPdf(ANEXO_PARECER);
         String texto = textoNormalizado(pdf);
 
@@ -588,23 +588,37 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(texto).containsSubsequence("SENADO FEDERAL", "Comissão de Assuntos Econômicos", AVISO_PENDENCIAS,
                 "• Corrigir remissões internas inválidas.", "PROJETO DE LEI Nº 789, DE 2026", "Dispõe sobre a transparência",
                 "O CONGRESSO NACIONAL decreta:", "Art. 1º", "II – com a contrapartida assumida pelo beneficiário.");
-        // Sem justificação (nem a nota dela), local e data ou assinaturas: termina no último artigo
-        assertThat(texto).endsWith("Art. 3º Esta Lei entra em vigor na data de sua publicação.");
-        assertThat(texto).doesNotContain("JUSTIFICAÇÃO").doesNotContain("Texto da justificação")
-                .doesNotContain("Nota da justificação").doesNotContain("Sala das Sessões");
+        // Sem justificação (nem a nota dela); local e data e assinatura logo depois do último artigo
+        assertThat(texto).endsWith("Art. 3º Esta Lei entra em vigor na data de sua publicação. Sala das Comissões, 14 de outubro de 2026. "
+                + "Senador Davi Alcolumbre (UNIÃO - AP)");
+        assertThat(texto).doesNotContain("JUSTIFICAÇÃO").doesNotContain("Texto da justificação").doesNotContain("Nota da justificação");
         // O anexo do PDF é o documento convertido, com o atributo
         assertThat(new String(anexos(pdf).get("documento-articulado.xml").conteudo, StandardCharsets.UTF_8))
                 .isEqualTo(ConversorDocumentoArticuladoFake.xml(ANEXO_PARECER)).contains("anexoParecer=\"true\"");
     }
 
     @Test
-    void exemploComoAnexoDeParecerSemFechoNemAssinaturasMesmoPreenchidos() throws Exception {
+    void anexoDeParecerSemLocalNemAutoriaTerminaNaArticulacao() throws Exception {
+        // Como o editor grava hoje no modo anexo de parecer: sem local, data e autoria
+        String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> {
+            metadado.put("anexoParecer", true);
+            metadado.remove(Arrays.asList("local", "data", "autoria"));
+        }));
+
+        assertThat(texto).endsWith("Art. 6º Esta Lei entra em vigor na data de sua publicação.");
+        assertThat(texto).doesNotContain("JUSTIFICAÇÃO").doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke");
+    }
+
+    @Test
+    void exemploComoAnexoDeParecerSemJustificacaoComFechoEAssinaturas() throws Exception {
         String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.put("anexoParecer", true)));
 
-        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_REVISAO, AVISO_PENDENCIAS, "PROJETO DE LEI");
-        assertThat(texto).endsWith("Art. 6º Esta Lei entra em vigor na data de sua publicação.");
-        assertThat(texto).doesNotContain("JUSTIFICAÇÃO").doesNotContain("Sala das Sessões").doesNotContain("Senadora Soraya Thronicke")
-                .doesNotContain("Deputado João da Silva");
+        // Só a justificação sai: logo depois do último artigo vêm o local e data e as cinco assinaturas
+        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_REVISAO, AVISO_PENDENCIAS, "PROJETO DE LEI",
+                "Art. 6º Esta Lei entra em vigor na data de sua publicação. Sala das Sessões, 24 de abril de 2026.",
+                "Senador Davi Alcolumbre", "Senadora Soraya Thronicke", "Deputado João da Silva", "Deputada Maria Souza",
+                "Senador Pedro Alves");
+        assertThat(texto).doesNotContain("JUSTIFICAÇÃO").doesNotContain("Esta proposição promove").doesNotContain("Pelas razões expostas");
     }
 
     @Test

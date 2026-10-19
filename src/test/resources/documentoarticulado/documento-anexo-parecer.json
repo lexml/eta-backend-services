@@ -34,12 +34,34 @@
                                 "versaoAplicacao": "1.0.0",
                                 "substitutivo": false,
                                 "anexoParecer": true,
+                                "local": "Sala das Comissões",
+                                "data": "2026-10-14",
                                 "opcoesImpressao": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.OpcoesImpressao",
                                     "imprimirBrasao": true,
                                     "textoCabecalho": "Comissão de Assuntos Econômicos",
                                     "reduzirEspacoEntreLinhas": false,
                                     "tamanhoFonte": 14
+                                },
+                                "autoria": {
+                                    "TYPE_NAME": "br_gov_lexml_lexedit__1.Autoria",
+                                    "tipo": "Parlamentar",
+                                    "imprimirPartidoUF": true,
+                                    "parlamentares": {
+                                        "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentares",
+                                        "parlamentar": [
+                                            {
+                                                "TYPE_NAME": "br_gov_lexml_lexedit__1.Parlamentar",
+                                                "identificacao": "1111",
+                                                "nome": "Davi Alcolumbre",
+                                                "sexo": "M",
+                                                "siglaPartido": "UNIÃO",
+                                                "siglaUF": "AP",
+                                                "siglaCasaLegislativa": "SF",
+                                                "cargo": ""
+                                            }
+                                        ]
+                                    }
                                 },
                                 "pendencias": {
                                     "TYPE_NAME": "br_gov_lexml_lexedit__1.Pendencias",
@@ -243,6 +265,53 @@
                                     }
                                 ]
                             }
+                        }
+                    ]
+                },
+                "parteFinal": {
+                    "TYPE_NAME": "br_gov_lexml__1.ParteFinal",
+                    "localDataFecho": {
+                        "TYPE_NAME": "br_gov_lexml__1.ParsType",
+                        "p": [
+                            {
+                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                "content": [
+                                    "Sala das Comissões, 14 de outubro de 2026."
+                                ]
+                            }
+                        ]
+                    },
+                    "assinaturaTexto": [
+                        {
+                            "TYPE_NAME": "br_gov_lexml__1.ParsType",
+                            "p": [
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        {
+                                            "name": {
+                                                "namespaceURI": "http://www.lexml.gov.br/1.0",
+                                                "localPart": "b",
+                                                "prefix": "",
+                                                "key": "{http://www.lexml.gov.br/1.0}b",
+                                                "string": "{http://www.lexml.gov.br/1.0}b"
+                                            },
+                                            "value": {
+                                                "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                                "content": [
+                                                    "Senador Davi Alcolumbre"
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "TYPE_NAME": "br_gov_lexml__1.GenInline",
+                                    "content": [
+                                        "(UNIÃO - AP)"
+                                    ]
+                                }
+                            ]
                         }
                     ]
                 }

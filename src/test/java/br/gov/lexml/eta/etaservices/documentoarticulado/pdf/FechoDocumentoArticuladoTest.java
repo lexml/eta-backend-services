@@ -117,15 +117,16 @@ class FechoDocumentoArticuladoTest {
 
     // Anexo de parecer (issue #80) -------------------------------------------------------------------------------
 
+    /** Em anexo de parecer só a justificação deixa de ser impressa: o fecho sai com os dados do documento. */
     @Test
-    void anexoDeParecerSemFechoNemAssinaturasMesmoPreenchidos() throws Exception {
+    void anexoDeParecerComFechoEAssinaturasQuandoPreenchidos() throws Exception {
         JsonNode documento = documento("\"anexoParecer\":true,\"local\":\"Sala das Sessões\",\"data\":\"2026-04-24\"," + autoria(true, SENADOR, DEPUTADA));
 
         assertThat(FechoDocumentoArticulado.anexoParecer(documento)).isTrue();
         FechoDocumentoArticulado fecho = FechoDocumentoArticulado.de(documento);
-        assertThat(fecho.getLocal()).isEmpty();
-        assertThat(fecho.getData()).isEmpty();
-        assertThat(fecho.getAssinaturas()).isEmpty();
+        assertThat(fecho.getLocal()).isEqualTo("Sala das Sessões");
+        assertThat(fecho.getData()).isEqualTo("24 de abril de 2026");
+        assertThat(fecho.getAssinaturas()).extracting(Assinatura::getNome).containsExactly("Senador Davi Alcolumbre", "Deputada Maria Souza");
     }
 
     /** Ausente indica falso (issue #80); só o booleano verdadeiro conta. */

@@ -38,8 +38,8 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
     /** Justificação longa, com notas de rodapé em páginas diferentes (issue #75, parte A). */
     public static final String JUSTIFICACAO_LONGA = "documento-com-justificacao-longa";
     /**
-     * Anexo de parecer (issue #80): {@code anexoParecer="true"}, com justificação e nota de rodapé e sem local, data,
-     * autoria e ParteFinal, como o editor grava nesse modo.
+     * Anexo de parecer (issue #80): {@code anexoParecer="true"}, com justificação e nota de rodapé (não impressas) e
+     * com local, data e a autoria de um senador (impressos logo depois da articulação).
      */
     public static final String ANEXO_PARECER = "documento-anexo-parecer";
 
