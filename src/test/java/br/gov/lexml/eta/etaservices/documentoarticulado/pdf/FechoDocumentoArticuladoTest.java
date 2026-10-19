@@ -68,7 +68,7 @@ class FechoDocumentoArticuladoTest {
                 "Senadora Soraya Thronicke", "Deputado João da Silva", "Deputada Maria Souza");
     }
 
-    /** Regra da emenda: fora da Câmara (inclusive CN ou casa ausente), Senador; sexo diferente de M, feminino. */
+    /** Fora da Câmara (inclusive CN ou casa ausente), Senador; sexo diferente de M, feminino. */
     @ParameterizedTest
     @CsvSource({ "M,CN,Senador", "F,,Senadora", ",SF,Senadora", "M,CD,Deputado", "X,CD,Deputada" })
     void tratamentoNosCasosDeBorda(String sexo, String casa, String tratamento) throws Exception {

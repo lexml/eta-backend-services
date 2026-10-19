@@ -46,7 +46,7 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(blocos.get(0).attributeValue("text-align")).isEqualTo("center");
         assertThat(blocos.get(1).attributeValue("space-before")).isEqualTo("48pt");
         assertThat(blocos.get(2).attributeValue("space-before")).isEqualTo("72pt");
-        // Articulação: formatação da citação de dispositivos da emenda, sem espaço antes (margin-bottom do preâmbulo)
+        // Articulação: recuo de 2,5cm, justificada e com a entrelinha, sem espaço antes (margin-bottom do preâmbulo)
         Element articulacao = blocos.get(3);
         assertThat(articulacao.attributeValue("text-indent")).isEqualTo("2.5cm");
         assertThat(articulacao.attributeValue("text-align")).isEqualTo("justify");
@@ -513,14 +513,14 @@ class DocumentoArticuladoConteudoTransformerTest {
         // Antes do título, o bloco da articulação
         assertThat(blocos.get(blocos.size() - 3).attributeValue("text-align")).isEqualTo("justify");
         assertThat(texto(blocos.get(blocos.size() - 3))).startsWith("Art. 1º Fica instituída");
-        // Título: valores do bloco "JUSTIFICAÇÃO" da emenda
+        // Título: centralizado, em negrito, no tamanho de destaque, 26pt antes
         assertThat(titulo.getText()).isEqualTo("JUSTIFICAÇÃO");
         assertThat(titulo.attributeValue("text-align")).isEqualTo("center");
         assertThat(titulo.attributeValue("font-weight")).isEqualTo("bold");
         assertThat(titulo.attributeValue("font-size")).isEqualTo("16pt");
         assertThat(titulo.attributeValue("space-before")).isEqualTo("26pt");
         assertThat(titulo.attributeValue("keep-with-next.within-page")).isEqualTo("always");
-        // Corpo: bloco role="Justificativa" da emenda, alinhado à esquerda
+        // Corpo: 14pt antes, entrelinha e recuo de 2,5cm, alinhado à esquerda
         assertThat(corpo.attributeValue("space-before")).isEqualTo("14pt");
         assertThat(corpo.attributeValue("line-height")).isEqualTo("150%");
         assertThat(corpo.attributeValue("text-indent")).isEqualTo("2.5cm");
@@ -573,7 +573,7 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(semRecuo.attributeValue("text-indent")).isEqualTo("0");
         assertThat(semRecuo.attributeValue("margin-bottom")).isEqualTo("0");
 
-        // Como na emenda: só margem e recuo, sem forçar o alinhamento
+        // Só margem e recuo, sem forçar o alinhamento
         Element ementa = paragrafoDaJustificacao("Parágrafo com estilo de ementa");
         assertThat(ementa.attributeValue("margin-left")).isEqualTo("6.5cm");
         assertThat(ementa.attributeValue("text-indent")).isEqualTo("0");
@@ -658,7 +658,7 @@ class DocumentoArticuladoConteudoTransformerTest {
     void tabelaSimplesCentralizadaComColunasIguais() throws Exception {
         Element externa = tabelasDaJustificacao().get(0);
 
-        // Tabela externa só para centralizar (valores do xhtml2fo.xsl): coluna do meio com a largura da tabela
+        // Tabela externa só para centralizar: coluna do meio com a largura da tabela
         assertThat(externa.attributeValue("table-layout")).isEqualTo("fixed");
         assertThat(externa.attributeValue("width")).isEqualTo("100%");
         assertThat(larguraDasColunas(externa)).containsExactly("proportional-column-width(1)", "100%",
@@ -705,7 +705,7 @@ class DocumentoArticuladoConteudoTransformerTest {
 
     @Test
     void tabelaSemAtributoBordaSoComMoldura() throws Exception {
-        // Regra da emenda: sem border, borda só em volta da tabela (o editor sempre grava border="1")
+        // Sem border, borda só em volta da tabela (o editor sempre grava border="1")
         Element interna = tabelaInterna((Element) corpoDaJustificacao(documentoComJustificacao(
                 "<p>Tabela:</p><table id=\"_tabela1\"><tr><td>a</td><td>b</td></tr></table>"))
                 .selectSingleNode("*[local-name()='table']"));
@@ -786,7 +786,7 @@ class DocumentoArticuladoConteudoTransformerTest {
     }
 
     @Test
-    void listaNumeradaComOsValoresDaEmenda() throws Exception {
+    void listaNumeradaComRecuoRotuloEEspacos() throws Exception {
         Element lista = listasDaJustificacao().get(0);
 
         assertThat(lista.attributeValue("margin-left")).isEqualTo("2.5cm");
@@ -932,7 +932,7 @@ class DocumentoArticuladoConteudoTransformerTest {
         Element externo = (Element) nota.elements().get(0);
         Element interno = (Element) externo.elements().get(0);
 
-        // Emenda: bloco no tamanho do texto e bloco interno de 0.7em com line-height 1.5em
+        // Bloco no tamanho do texto e bloco interno de 0.7em com line-height 1.5em
         assertThat(externo.attributeValue("font-size")).isEqualTo("14pt");
         assertThat(interno.attributeValue("font-size")).isEqualTo("0.7em");
         assertThat(interno.attributeValue("line-height")).isEqualTo("1.5em");
@@ -973,7 +973,7 @@ class DocumentoArticuladoConteudoTransformerTest {
     // Opções de impressão (issue #74, parte B) ------------------------------------------------------------------
 
     @Test
-    void fonte18EReduzirEspacoEntreLinhasComOsValoresDaEmenda() throws Exception {
+    void fonte18EReduzirEspacoEntreLinhas() throws Exception {
         ParametrosImpressaoDocumentoArticulado parametros = ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado
                 .de(ParametrosImpressaoDocumentoArticuladoTest.documento("\"tamanhoFonte\":18,\"reduzirEspacoEntreLinhas\":true")));
         Document fo = DocumentHelper.parseText(transformer.transformar(xml(JUSTIFICACAO), parametros));
@@ -991,7 +991,7 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(((Element) blocos.get(2).elements().get(0)).attributeValue("margin-bottom")).isEqualTo("0.45em");
         // Articulação
         assertThat(blocos.get(3).attributeValue("line-height")).isEqualTo("120%");
-        // Justificação: espaços antes do título e do corpo reduzidos ($spacing3 e $spacing1 da emenda)
+        // Justificação: espaços antes do título e do corpo reduzidos
         assertThat(titulo.getText()).isEqualTo("JUSTIFICAÇÃO");
         assertThat(titulo.attributeValue("font-size")).isEqualTo("18pt");
         assertThat(titulo.attributeValue("space-before")).isEqualTo("22pt");

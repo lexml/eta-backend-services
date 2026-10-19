@@ -66,7 +66,7 @@ class DocumentoArticuladoTemplateProcessorTest {
         Element sequencia = (Element) xml.selectSingleNode("//*[local-name()='page-sequence']");
         java.util.List<Element> filhos = sequencia.elements();
 
-        // Traço de 50% e 0,5pt, como na emenda; o XSL-FO exige os static-content (cabeçalho e separador) antes do flow
+        // Traço de 50% e 0,5pt; o XSL-FO exige os static-content (cabeçalho e separador) antes do flow
         assertThat(filhos).extracting(Element::getName).containsExactly("static-content", "static-content", "flow");
         Element separador = (Element) sequencia.selectSingleNode("*[@flow-name='xsl-footnote-separator']");
         assertThat(separador.attributeValue("flow-name")).isEqualTo("xsl-footnote-separator");
@@ -128,7 +128,7 @@ class DocumentoArticuladoTemplateProcessorTest {
     void cabecalhoComBrasaoCasaETextoNaPrimeiraPagina() throws Exception {
         Document xml = new SAXReader().read(new StringReader(processar()));
 
-        // Primeira página: region-before de 3cm e corpo a 4cm (valores da emenda); demais páginas sem cabeçalho
+        // Primeira página: region-before de 3cm e corpo a 4cm; demais páginas sem cabeçalho
         Element primeira = (Element) xml.selectSingleNode("//*[local-name()='simple-page-master'][@master-name='firstPage']");
         assertThat(atributo(primeira, "region-body", "margin-top")).isEqualTo("4cm");
         assertThat(atributo(primeira, "region-before", "extent")).isEqualTo("3cm");
@@ -231,7 +231,7 @@ class DocumentoArticuladoTemplateProcessorTest {
             "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:";
 
     @Test
-    void tresCaixasAntesDoConteudoComOsValoresDaEmenda() throws Exception {
+    void tresCaixasAntesDoConteudoNaOrdemEComOEstiloDosAlertas() throws Exception {
         pendencias("Não foi informado um texto de justificação.", "Remover comentários.");
 
         List<Element> filhos = fluxo(processar()).elements();
@@ -331,7 +331,7 @@ class DocumentoArticuladoTemplateProcessorTest {
     // Local e data e assinaturas (issue #76) ----------------------------------------------------------------------
 
     @Test
-    void fechoDepoisDoConteudoComOsValoresDaEmenda() throws Exception {
+    void fechoDepoisDoConteudoComRecuoEEspacoAntes() throws Exception {
         Document xml = new SAXReader().read(new StringReader(processar()));
         Element fluxo = (Element) xml.selectSingleNode("//*[local-name()='flow']");
 
@@ -359,7 +359,7 @@ class DocumentoArticuladoTemplateProcessorTest {
         assertThat(fecho(xml).attributeValue("space-before")).isEqualTo("26pt");
     }
 
-    /** Sem data válida, só o local seguido de vírgula (issue #81), sem os espaços para preencher da emenda. */
+    /** Sem data válida, só o local seguido de vírgula (issue #81), sem espaços para preencher. */
     @ParameterizedTest
     @ValueSource(strings = { "", "24/04/2026", "ausente" })
     void dataVaziaAusenteOuInvalidaSoComOLocal(String data) throws Exception {

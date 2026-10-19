@@ -24,7 +24,7 @@ class ParametrosImpressaoDocumentoArticuladoTest {
         assertThat(parametros.getEspacoAntesFecho()).isEqualTo("34pt");
     }
 
-    /** Valores da emenda (template-velocity-emenda.xml) para cada combinação de fonte e "reduzir espaço". */
+    /** Valores de cada combinação de fonte e "reduzir espaço entre linhas". */
     @ParameterizedTest
     @CsvSource({ "14,false,14,16pt,150%,0.6em,26pt,14pt,34pt", "16,false,16,16pt,150%,0.6em,26pt,14pt,34pt",
             "18,false,18,18pt,150%,0.6em,26pt,14pt,34pt", "14,true,14,16pt,120%,0.45em,22pt,10pt,26pt",

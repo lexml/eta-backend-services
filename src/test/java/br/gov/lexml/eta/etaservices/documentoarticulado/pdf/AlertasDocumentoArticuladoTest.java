@@ -39,7 +39,7 @@ class AlertasDocumentoArticuladoTest {
     }
 
     @Test
-    void comentariosComoNaEmenda() throws Exception {
+    void comentariosQuandoAlgumaSequenciaTemComentario() throws Exception {
         assertThat(AlertasDocumentoArticulado.de(documento(COMENTARIO)).isPossuiComentarios()).isTrue();
         // Sequência sem comentário não conta
         assertThat(AlertasDocumentoArticulado.de(documento("\"comentarios\":{\"sequenciaComentario\":[{\"refIdElementoComentado\":\"art1\","

@@ -365,7 +365,7 @@ class DocumentoArticuladoPdfGeneratorTest {
 
     // Cabeçalho (issue #74) -------------------------------------------------------------------------------------
 
-    /** Largura do brasão no cabeçalho da emenda (149 px do brasao.jpg), medida num PDF de emenda: 53,6pt (1,89cm). */
+    /** Largura do brasão no cabeçalho (149 px do brasao.jpg): 53,6pt (1,89cm). */
     private static final float LARGURA_DO_BRASAO = 53.64f;
 
     @Test
@@ -374,7 +374,7 @@ class DocumentoArticuladoPdfGeneratorTest {
         List<Linha> linhas = linhas(pdf);
         float[] brasao = imagensDesenhadas(pdf).get(0);
 
-        // Brasão na primeira página, centralizado e com o tamanho da emenda
+        // Brasão na primeira página, centralizado e com 53,6pt de largura
         assertThat(brasao[2]).isEqualTo(1f);
         assertThat(brasao[1]).isCloseTo(LARGURA_DO_BRASAO, offset(0.5f));
         assertThat(brasao[0]).isCloseTo(MARGEM_ESQUERDA + (LARGURA_DO_TEXTO - LARGURA_DO_BRASAO) / 2, offset(0.5f));
@@ -438,7 +438,7 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(linhaQueContem(linhas, "SENADO FEDERAL").tamanho).isEqualTo(11f);
     }
 
-    /** Valores da emenda: destaque de 16pt (18pt com fonte 18) e entrelinha de 150% (120% com "reduzir"). */
+    /** Destaque de 16pt (18pt com fonte 18) e entrelinha de 150% (120% com "reduzir"). */
     @ParameterizedTest
     @CsvSource({ "16,false,16,1.5", "14,true,16,1.2", "14,false,16,1.5" })
     void tamanhoDaFonteEEspacoEntreLinhasDasOpcoesDeImpressao(String fonte, String reduzir, float destaque, float entrelinha)
