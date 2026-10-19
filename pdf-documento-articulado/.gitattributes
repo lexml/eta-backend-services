@@ -1,0 +1,3 @@
+# Temporário: some junto com esta pasta. Os PDFs gerados não podem passar pela conversão de fim de linha
+# (core.autocrlf), que os corromperia ao serem extraídos no Windows.
+*.pdf binary
