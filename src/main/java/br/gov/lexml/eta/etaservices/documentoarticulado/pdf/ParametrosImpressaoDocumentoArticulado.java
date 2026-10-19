@@ -5,14 +5,14 @@ package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
  * Velocity e à XSLT do conteúdo, a partir das opções de impressão do documento ({@code tamanhoFonte} e
  * {@code reduzirEspacoEntreLinhas}).
  * <p>
- * Regras de cálculo copiadas do template da emenda ({@code template-velocity-emenda.xml}):
+ * Regras de cálculo:
  * <ul>
  * <li>{@code maxTamanhoFonte}: 18pt se {@code tamanhoFonte} = 18; senão 16pt;</li>
  * <li>{@code lineHeight}: 120% se "reduzir espaço entre linhas"; senão 150%;</li>
  * <li>{@code pMarginBottom}: 0.45em se "reduzir espaço entre linhas"; senão 0.6em;</li>
- * <li>espaço antes do título da justificação ({@code $spacing3}): 22pt se "reduzir"; senão 26pt;</li>
- * <li>espaço antes do corpo da justificação ({@code $spacing1}): 10pt se "reduzir"; senão 14pt;</li>
- * <li>espaço antes do local e data ({@code $spacing4}): 26pt se "reduzir"; senão 34pt.</li>
+ * <li>espaço antes do título da justificação: 22pt se "reduzir"; senão 26pt;</li>
+ * <li>espaço antes do corpo da justificação: 10pt se "reduzir"; senão 14pt;</li>
+ * <li>espaço antes do local e data: 26pt se "reduzir"; senão 34pt.</li>
  * </ul>
  */
 final class ParametrosImpressaoDocumentoArticulado {

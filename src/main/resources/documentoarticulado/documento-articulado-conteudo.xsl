@@ -3,8 +3,7 @@
   Conteúdo impresso no PDF do documento articulado: transforma o documento-articulado.xml (LexML) em um
   fragmento XSL-FO, inserido no fo:flow do template-velocity-documento-articulado.xml.
 
-  Fluxo isolado da emenda: esta XSLT não importa nem referencia xhtml2fo.xsl ou outros recursos da emenda.
-  Os valores de formatação foram copiados da emenda e têm a origem indicada em comentário.
+  Fluxo próprio do documento articulado: esta XSLT não importa nem referencia outras folhas de estilo do projeto.
 
   Imprime a parte inicial (epígrafe, ementa e preâmbulo; issue #72, parte 1) e a articulação básica
   (artigo, caput, parágrafo, inciso, alínea e item; parte 2), com os agrupadores (parte 3), a pena e o
@@ -28,10 +27,10 @@
 	<xsl:param name="maxTamanhoFonte" select="'16pt'"/>
 	<xsl:param name="lineHeight" select="'150%'"/>
 	<xsl:param name="pMarginBottom" select="'0.6em'"/>
-	<!-- Espaços da justificação, que variam com "reduzir espaço entre linhas" (emenda: $spacing3 e $spacing1) -->
+	<!-- Espaços antes do título e do corpo da justificação, que diminuem com "reduzir espaço entre linhas" -->
 	<xsl:param name="espacoAntesTituloJustificacao" select="'26pt'"/>
 	<xsl:param name="espacoAntesCorpoJustificacao" select="'14pt'"/>
-	<!-- 'false' em anexo de parecer (issue #80): sem justificação nem as notas de rodapé dela, como na emenda -->
+	<!-- 'false' em anexo de parecer (issue #80): sem justificação nem as notas de rodapé dela -->
 	<xsl:param name="imprimirJustificacao" select="'true'"/>
 
 	<!--
@@ -66,10 +65,10 @@
 	</xsl:template>
 
 	<!--
-	  Justificação (issue #75), depois da articulação. Emenda: bloco "JUSTIFICAÇÃO" (text-align="center",
-	  font-weight="bold", font-size="$maxTamanhoFonte", space-before="$spacing3" = 26pt, ou 22pt com "reduzir espaço entre linhas") seguido do bloco
-	  role="Justificativa" (space-before="$spacing1" = 14pt, ou 10pt com "reduzir", line-height="$lineHeight", text-indent="2.5cm", sem
-	  text-align: alinhado à esquerda, como no editor). Só é impressa se houver texto fora de exclusões (em
+	  Justificação (issue #75), depois da articulação: título "JUSTIFICAÇÃO" centralizado, em negrito, no tamanho
+	  de destaque, com $espacoAntesTituloJustificacao antes (26pt, ou 22pt com "reduzir espaço entre linhas"),
+	  seguido do corpo com $espacoAntesCorpoJustificacao antes (14pt, ou 10pt com "reduzir"), a entrelinha e o
+	  recuo de 2,5cm, alinhado à esquerda, como no editor. Só é impressa se houver texto fora de exclusões (em
 	  parágrafo, item de lista ou célula de tabela); havendo mais de uma Justificacao, um único título e os
 	  conteúdos na ordem do documento.
 	-->
@@ -80,8 +79,7 @@
 			<fo:block text-align="center" font-weight="bold" font-size="{$maxTamanhoFonte}" space-before="{$espacoAntesTituloJustificacao}"
 				keep-with-next.within-page="always">JUSTIFICAÇÃO</fo:block>
 			<!--
-			  line-height-shift-adjustment="disregard-shifts" (diferença em relação à emenda, decidida na parte B):
-			  sobrescrito e subscrito (número de nota de rodapé, m², H₂O) não aumentam a altura da linha. Sem isso, a
+			  line-height-shift-adjustment="disregard-shifts" (issue #75, parte B): sobrescrito e subscrito (número de nota de rodapé, m², H₂O) não aumentam a altura da linha. Sem isso, a
 			  linha com o número da nota fica mais baixa que as vizinhas e, numa célula, desalinha da célula ao lado.
 			-->
 			<fo:block space-before="{$espacoAntesCorpoJustificacao}" line-height="{$lineHeight}" text-indent="2.5cm"
@@ -92,15 +90,14 @@
 	</xsl:template>
 
 	<!--
-	  Parágrafo da justificação. Emenda: html2foTextoLivre põe margin-bottom: $pMarginBottom em cada p. Um
-	  parágrafo sem texto é uma linha em branco do editor (na emenda, <p><br></p>): sai como linha em branco.
+	  Parágrafo da justificação, com o espaço após o parágrafo ($pMarginBottom). Um parágrafo sem texto é uma
+	  linha em branco do editor: sai como linha em branco.
 	-->
 	<xsl:template match="lx:p" mode="justificacao">
 		<fo:block margin-bottom="{$pMarginBottom}">
 			<xsl:call-template name="estilo-paragrafo"/>
 			<!--
-			  Parágrafo que começa com imagem: centralizado e sem recuo. Emenda: html2foTextoLivre troca <p...><img
-			  por <p... class="align-center"><img; aqui vale para todo parágrafo cujo primeiro conteúdo é imagem.
+			  Parágrafo cujo primeiro conteúdo é imagem: centralizado e sem recuo.
 			-->
 			<!-- not(self::text()) e não self::*: no XSLT do JDK, [self::* or normalize-space(.)] dá falso para elemento sem texto (ex.: img). -->
 			<xsl:if test="node()[not(self::text()) or normalize-space(.)][1][self::lx:img and starts-with(normalize-space(@src), 'data:image/')]">
@@ -118,12 +115,11 @@
 	</xsl:template>
 
 	<!--
-	  Listas da justificação (issue #75, parte B). Emenda: xhtml2fo.xsl, templates ol, ol/li, ul e ul/li
-	  (list-block com margin-left 2.5cm e text-indent 0; provisional-label-separation 1em;
-	  provisional-distance-between-starts de (algarismos do nº de itens) * 0.9 + 0.6 em na numerada e 1em na de
-	  marcadores; rótulo "N." ou "•" alinhado à direita) e html2foTextoLivre (margin-bottom: $pMarginBottom em
-	  ol e ul). Uma lista dentro de um item é impressa pelo mesmo template, recuada a partir do corpo do item. O
-	  recuo plano do editor (li class="indent-N") é ignorado, como na emenda.
+	  Listas da justificação (issue #75, parte B): list-block com margin-left 2.5cm, text-indent 0 e o espaço após
+	  o parágrafo; provisional-label-separation 1em; provisional-distance-between-starts de (algarismos do nº de
+	  itens) * 0.9 + 0.6 em na numerada e 1em na de marcadores; rótulo "N." ou "•" alinhado à direita. Uma lista
+	  dentro de um item é impressa pelo mesmo template, recuada a partir do corpo do item. O recuo plano do editor
+	  (li class="indent-N") é ignorado.
 	-->
 	<xsl:template match="lx:ol | lx:ul" mode="justificacao">
 		<xsl:call-template name="lista"/>
@@ -198,11 +194,11 @@
 	</xsl:template>
 
 	<!--
-	  Tabelas da justificação (issue #75, parte B). Emenda: xhtml2fo.xsl, templates table (tabela externa de três
-	  colunas só para centralizar; a do meio tem a largura da tabela, ou 100%), table-common-atts (borda 1pt
-	  solid, ou nenhuma com border="0"; border-collapse collapse; table-layout fixed), column-width (colunas
-	  proporcionais), td e th (padding .2em; borda na célula só com border diferente de 0; bloco com font-size 80%
-	  e line-height 140%; th em negrito e centralizado na vertical). O width inteiro do LexML é tomado como
+	  Tabelas da justificação (issue #75, parte B): tabela externa de três colunas só para centralizar (a do meio
+	  tem a largura da tabela, ou 100%); tabela interna com borda 1pt solid, ou nenhuma com border="0",
+	  border-collapse collapse, table-layout fixed e colunas proporcionais; células com padding .2em, borda só
+	  com border diferente de 0 e bloco com font-size 80% e line-height 140%; th em negrito e centralizado na
+	  vertical. O width inteiro do LexML é tomado como
 	  porcentagem, a unidade do editor. O LexML não guarda a largura das células: colunas de mesma largura.
 	-->
 	<xsl:template match="lx:table" mode="justificacao">
@@ -309,11 +305,9 @@
 	<xsl:template match="*" mode="justificacao" priority="-1"/>
 
 	<!--
-	  Estilos de parágrafo do editor (classes do Quill), lidos por token. Valores da emenda:
-	  html2foTextoLivre (estilo-ementa: margin-left 6.5cm, text-indent 0; estilo-norma-alterada: margin-left
-	  3cm, text-indent 1.5cm; ql-text-indent-0px; ql-margin-bottom-0px) e
-	  HTML2FOConverter.trataAlinhamentoDePragrafo (ql-align-*: text-align, e text-indent 0 em center e right).
-	  Ordem: estilos, alinhamento e, por último,
+	  Estilos de parágrafo do editor (classes do Quill), lidos por token: estilo-ementa (margin-left 6.5cm,
+	  text-indent 0), estilo-norma-alterada (margin-left 3cm, text-indent 1.5cm), ql-text-indent-0px,
+	  ql-margin-bottom-0px e align-*/ql-align-* (text-align, e text-indent 0 em center e right). Ordem: estilos, alinhamento e, por último,
 	  as escolhas explícitas de recuo e espaço; um atributo repetido substitui o anterior. Classes
 	  desconhecidas são ignoradas.
 	-->
@@ -355,14 +349,13 @@
 
 	<!-- Demais partes da norma ainda não impressas -->
 	<xsl:template match="lx:Norma/*" priority="-1"/>
-	<!-- Local, data e assinaturas: continuam comentados no template -->
+	<!-- Local, data e assinaturas: impressos pelo template a partir do lexedit:Metadado (issue #76) -->
 	<xsl:template match="lx:ParteFinal"/>
 
 	<!--
-	  Articulação, no lugar da citação com dispositivos da emenda. Emenda: a citação fica dentro do bloco
-	  "Comando de emenda" (line-height="$lineHeight", text-align="justify", text-indent="2.5cm") e, no
-	  xhtml2fo.xsl, cada p vira um fo:block sem margens próprias: não há espaço extra entre dispositivos.
-	  O espaço antes do primeiro dispositivo é o margin-bottom do preâmbulo. Sem as aspas da citação.
+	  Articulação: bloco com a entrelinha, justificado e com recuo de 2,5cm; cada p vira um fo:block sem margens
+	  próprias, sem espaço extra entre dispositivos. O espaço antes do primeiro dispositivo é o margin-bottom do
+	  preâmbulo.
 	  A estrutura é percorrida no modo "dispositivo"; o texto de cada p, no modo "inline".
 	-->
 	<xsl:template match="lx:Articulacao">
@@ -398,9 +391,9 @@
 	</xsl:template>
 
 	<!--
-	  Título do agrupador: rótulo e nome em linhas próprias, somente texto. Emenda: citacao2html troca
-	  class="agrupador" por align="center" text-indent="0" (sem o text-indent o bloco herdaria o recuo de
-	  2,5cm da articulação) e seção/subseção por font-weight="bold"; rótulo em strong. Sem espaço extra
+	  Título do agrupador: rótulo e nome em linhas próprias, somente texto, centralizados e com text-indent 0
+	  (sem ele o bloco herdaria o recuo de 2,5cm da articulação); seção e subseção em negrito; rótulo em
+	  negrito. Sem espaço extra
 	  antes ou depois. keep-together mantém rótulo e nome na mesma página, e keep-with-next mantém o
 	  título com o conteúdo seguinte (evita o título sozinho no fim da página).
 	-->
@@ -520,7 +513,7 @@
 
 	<!--
 	  Bloco de um dispositivo: título de dispositivo do próprio dispositivo (se houver), aspas de abertura
-	  (abreAspas), rótulo (em negrito, exceto na pena; emenda: citacao2html troca Rotulo por strong),
+	  (abreAspas), rótulo (em negrito, exceto na pena),
 	  espaço e o primeiro p, ou a linha pontilhada quando textoOmitido="s"; os p seguintes em blocos
 	  próprios; o fechamento das aspas e a nota de alteração (fechaAspas, notaAlteracao) no último bloco de
 	  texto; depois os dispositivos subordinados, na ordem do documento. Os espaços do início do p são
@@ -585,11 +578,10 @@
 	</xsl:template>
 
 	<!--
-	  Bloco de alteração de norma vigente (issue #72, parte 4). Emenda: citacao2html troca <Alteracao> por
-	  margin-left="3cm" text-indent="1.5cm" (os mesmos valores de estilo-norma-alterada); os dispositivos
-	  de dentro herdam o recuo e usam os templates da articulação. Sem espaço extra. As aspas e a nota de
-	  alteração vêm dos atributos abreAspas, fechaAspas e notaAlteracao; nenhuma aspa é gerada por conta
-	  própria (as aspas da citação da emenda não existem aqui).
+	  Bloco de alteração de norma vigente (issue #72, parte 4): margin-left 3cm e text-indent 1.5cm (os mesmos
+	  valores de estilo-norma-alterada); os dispositivos de dentro herdam o recuo e usam os templates da
+	  articulação. Sem espaço extra. As aspas e a nota de alteração vêm dos atributos abreAspas, fechaAspas e
+	  notaAlteracao; nenhuma aspa é gerada por conta própria.
 	-->
 	<xsl:template match="lx:Alteracao" mode="dispositivo">
 		<fo:block margin-left="3cm" text-indent="1.5cm">
@@ -613,7 +605,7 @@
 	</xsl:template>
 
 	<!--
-	  Linha pontilhada até a margem direita. Emenda: xhtml2fo.xsl (span class="omissis"). O comprimento
+	  Linha pontilhada até a margem direita (omissis e texto omitido). O comprimento
 	  mínimo padrão (0) deixa a linha encolher para caber o fechamento das aspas no fim da mesma linha.
 	-->
 	<xsl:template name="linha-pontilhada">
@@ -655,7 +647,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<!-- Aspas fora do negrito do rótulo, como na emenda. -->
+	<!-- Aspas fora do negrito do rótulo. -->
 	<xsl:template name="abre-aspas">
 		<xsl:text>“</xsl:text>
 	</xsl:template>
@@ -678,8 +670,8 @@
 	</xsl:template>
 
 	<!--
-	  Epígrafe. Emenda: bloco da epígrafe (text-align="center", font-weight="bold",
-	  font-size="$maxTamanhoFonte", espaços trocados por &#160;). O bloco do complemento não é usado.
+	  Epígrafe: centralizada, em negrito, no tamanho de destaque ($maxTamanhoFonte), com os espaços trocados por
+	  &#160; para sair em uma linha.
 	-->
 	<xsl:template match="lx:Epigrafe">
 		<xsl:variable name="texto" select="normalize-space(.)"/>
@@ -691,9 +683,8 @@
 	</xsl:template>
 
 	<!--
-	  Ementa. Recuo: emenda, html2foTextoLivre (estilo-ementa: margin-left 6.5cm, text-indent 0) e
-	  citacao2html (margin-left 40% da área útil de 16,4cm). Justificação e entrelinha: bloco do comando
-	  de emenda, onde a citação é impressa. Espaço de 48pt após a epígrafe: issue #72 (fixo; não varia com as opções de impressão).
+	  Ementa: margin-left 6.5cm (cerca de 40% da área útil de 16,4cm) e text-indent 0, justificada, com a
+	  entrelinha. Espaço de 48pt após a epígrafe: issue #72 (fixo; não varia com as opções de impressão).
 	  Os espaços são colapsados pelo próprio XSL-FO (white-space-collapse e linefeed-treatment padrão).
 	-->
 	<xsl:template match="lx:Ementa">
@@ -713,7 +704,7 @@
 		<fo:inline font-style="italic"><xsl:apply-templates mode="inline"/></fo:inline>
 	</xsl:template>
 
-	<!-- Sublinhado, subscrito e sobrescrito (issue #75). Emenda: xhtml2fo.xsl (u; sub e sup com 0.7em). -->
+	<!-- Sublinhado, subscrito e sobrescrito (issue #75; sub e sup com 0.7em). -->
 	<xsl:template match="lx:u" mode="inline">
 		<fo:inline text-decoration="underline"><xsl:apply-templates mode="inline"/></fo:inline>
 	</xsl:template>
@@ -745,10 +736,9 @@
 	</xsl:template>
 
 	<!--
-	  Imagem (issue #75, parte B). Emenda: xhtml2fo.xsl, template img (bloco próprio com fo:external-graphic,
-	  content-width="scale-to-fit", scaling="uniform", width do img ou 100%). Diferenças: o data URI vai direto
-	  para o FOP, sem a gravação em arquivo temporário e a conversão para JPEG de VelocityExtension.trataImagens;
-	  só src "data:image/..." é usado (outros endereços fariam o FOP acessar rede ou disco); o bloco tem
+	  Imagem (issue #75, parte B): bloco próprio com fo:external-graphic, content-width="scale-to-fit",
+	  scaling="uniform" e largura do width do img, ou 100%. O data URI vai direto para o FOP, sem arquivo
+	  temporário; só src "data:image/..." é usado (outros endereços fariam o FOP acessar rede ou disco); o bloco tem
 	  text-indent 0, para a imagem em largura total não passar da margem direita; o width inteiro do LexML é
 	  tomado como porcentagem. Imagem que o FOP não consegue ler: ele registra o erro e segue sem ela.
 	-->
@@ -775,9 +765,8 @@
 
 	<!--
 	  Nota de rodapé (issue #75; especificação 07 do lexml-eta: texto inline, numeração calculada na
-	  impressão). Emenda: xhtml2fo.xsl, template nota-rodape (número sobrescrito em 0.7em no texto; corpo com
-	  font-size="$tamanhoFonte" e bloco interno de 0.7em e line-height 1.5em) e VelocityTemplateProcessor (número
-	  e espaço antes do texto da nota). A numeração conta só as notas impressas: as de dentro de exclusões (del)
+	  impressão): número sobrescrito em 0.7em no texto; corpo com font-size="$tamanhoFonte" e bloco interno de
+	  0.7em e line-height 1.5em, com o número e um espaço antes do texto da nota. A numeração conta só as notas impressas: as de dentro de exclusões (del)
 	  nem chegam aqui. O corpo herda as propriedades do parágrafo onde a nota está; as herdáveis que mudariam a
 	  nota (recuos, alinhamento, peso, estilo, decoração) são zeradas.
 	-->
@@ -840,8 +829,7 @@
 	</xsl:template>
 
 	<!--
-	  Preâmbulo, no lugar do comando de emenda. Emenda: bloco "Comando de emenda"
-	  (line-height="$lineHeight", text-align="justify", text-indent="2.5cm") com parágrafos de
+	  Preâmbulo: bloco com a entrelinha, justificado e com recuo de 2,5cm, com parágrafos de
 	  margin-bottom="$pMarginBottom". Espaço de 72pt após a ementa: issue #72 (fixo; não varia com as opções de impressão).
 	  Somente texto: a formatação inline é descartada.
 	-->

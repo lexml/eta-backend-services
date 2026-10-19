@@ -25,8 +25,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 
 /**
- * Aplica o template Velocity do documento articulado, produzindo o XSL-FO do PDF. Derivado de
- * {@code printing.pdf.VelocityTemplateProcessor}, sem classes de domínio: os dados que o template usa (metadados
+ * Aplica o template Velocity do documento articulado, produzindo o XSL-FO do PDF. Sem classes de domínio: os dados
+ * que o template usa (metadados
  * do PDF, cabeçalho, alertas, local e data e assinaturas) são lidos do documento-articulado.json aqui e passados como valores simples.
  */
 class DocumentoArticuladoTemplateProcessor {
@@ -88,7 +88,7 @@ class DocumentoArticuladoTemplateProcessor {
 
     /**
      * Assinaturas em pares, uma linha da tabela de duas colunas por par (a última sozinha quando o número é ímpar),
-     * como {@code Autoria.getParlamentaresPair()} da emenda. Mapas, e não as próprias assinaturas, porque o Velocity
+     * Mapas, e não as próprias assinaturas, porque o Velocity
      * só chama métodos públicos de classes públicas; os textos vão escapados para XML.
      */
     static List<List<Map<String, String>>> paresDeAssinaturas(List<FechoDocumentoArticulado.Assinatura> assinaturas) {
@@ -146,8 +146,7 @@ class DocumentoArticuladoTemplateProcessor {
 
     /**
      * Nome da casa legislativa pela autoridade da URN ({@code urn:lex:br:<autoridade>:...}); vazio quando a
-     * autoridade não é uma das casas (ex.: {@code federal}, das medidas provisórias). Emenda: o nome vem de
-     * {@code colegiadoApreciador.siglaCasaLegislativa} (SF, CD, CN).
+     * autoridade não é uma das casas (ex.: {@code federal}, das medidas provisórias).
      */
     static String casaLegislativa(String urn) {
         String[] partes = urn.trim().split(":");
@@ -171,7 +170,7 @@ class DocumentoArticuladoTemplateProcessor {
         return brasao;
     }
 
-    /** Brasão de {@code /static/img/} (compartilhado com a emenda). Faltar no classpath é erro de empacotamento. */
+    /** Brasão de {@code /static/img/}. Faltar no classpath é erro de empacotamento. */
     private static String carregarBrasao() {
         try (InputStream in = DocumentoArticuladoTemplateProcessor.class.getResourceAsStream(BRASAO)) {
             if (in == null) {

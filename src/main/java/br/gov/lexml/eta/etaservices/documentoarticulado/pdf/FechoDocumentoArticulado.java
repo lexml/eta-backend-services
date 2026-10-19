@@ -12,21 +12,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Local, data e assinaturas do documento (issue #76), lidos do {@code lexedit:Metadado} do
- * documento-articulado.json (especificações 03 e 04 do lexml-eta), como a emenda faz com os seus dados
- * estruturados. A representação textual do LexML ({@code ParteFinal}) não é usada.
+ * documento-articulado.json (especificações 03 e 04 do lexml-eta). A representação textual do LexML
+ * ({@code ParteFinal}) não é usada.
  * <p>
- * Só a autoria de parlamentares ({@code tipo="Parlamentar"}) gera assinaturas; a de comissão, não. Regras da emenda
- * ({@code ParlamentarPojo}): casa {@code CD} -> Deputado/Deputada, senão Senador/Senadora; sexo {@code M} ->
- * masculino, senão feminino.
+ * Só a autoria de parlamentares ({@code tipo="Parlamentar"}) gera assinaturas; a de comissão, não. Tratamento: casa
+ * {@code CD} -> Deputado/Deputada, senão Senador/Senadora; sexo {@code M} -> masculino, senão feminino.
  * <p>
  * Em anexo de parecer ({@code anexoParecer} verdadeiro, issue #80), o fecho é vazio: nem local e data nem assinaturas
- * são impressos, como na emenda.
+ * são impressos.
  */
 final class FechoDocumentoArticulado {
 
     private static final String NAMESPACE_LEXEDIT = "http://www.lexml.gov.br/lexedit/1.0";
 
-    /** Data por extenso em português, independente da localidade da JVM (a emenda usa a localidade padrão). */
+    /** Data por extenso em português, com localidade fixa (não depende da localidade padrão da JVM). */
     private static final DateTimeFormatter DATA_POR_EXTENSO = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("pt", "BR"));
 
     private final String local;

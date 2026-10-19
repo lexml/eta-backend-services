@@ -98,7 +98,7 @@ O PDF SHALL imprimir os dispositivos Artigo, Caput, Parágrafo, Inciso, Alínea,
 - **THEN** o PDF apresenta o rótulo e o nome do capítulo, depois os da seção e em seguida os artigos com seus dispositivos
 
 ### Requirement: Formatação dos dispositivos
-Os dispositivos SHALL ser impressos com a formatação da citação de dispositivos da emenda: texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. O rótulo MUST ser impresso em negrito, exceto o rótulo da pena, que MUST ser impresso em fonte regular. No texto, negrito e itálico MUST ser preservados, e as referências com `xlink:href` MUST ser impressas como links, conforme o requisito "Remissões e links". A articulação MUST NOT ser envolvida por aspas.
+Os dispositivos SHALL ser impressos com texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. O rótulo MUST ser impresso em negrito, exceto o rótulo da pena, que MUST ser impresso em fonte regular. No texto, negrito e itálico MUST ser preservados, e as referências com `xlink:href` MUST ser impressas como links, conforme o requisito "Remissões e links". A articulação MUST NOT ser envolvida por aspas.
 
 #### Scenario: Rótulo em negrito
 - **WHEN** o PDF de um documento com o artigo "Art. 1º Esta Lei tipifica os crimes ..." é gerado
@@ -240,7 +240,7 @@ Quando o documento tiver justificação com texto, o PDF SHALL imprimi-la depois
 - **THEN** o PDF não apresenta o título "JUSTIFICAÇÃO"
 
 ### Requirement: Estilos de parágrafo da justificação
-Os estilos de parágrafo aplicados no editor e registrados como classes no parágrafo SHALL ser impressos com os valores da justificação da emenda. As classes de alinhamento MUST ser reconhecidas com e sem o prefixo `ql-` (o editor grava sem ele): `align-center`/`ql-align-center`, `align-right`/`ql-align-right` e `align-justify`/`ql-align-justify` MUST alinhar o parágrafo ao centro, à direita e justificado, e o centralizado e o alinhado à direita MUST ficar sem recuo de primeira linha; `ql-text-indent-0px` MUST retirar o recuo de primeira linha; `ql-margin-bottom-0px` MUST retirar o espaço após o parágrafo; `estilo-ementa` MUST imprimir o parágrafo com recuo à esquerda de 6,5cm e sem recuo de primeira linha; `estilo-norma-alterada` MUST imprimir o parágrafo com recuo à esquerda de 3cm e recuo de primeira linha de 1,5cm. Classes desconhecidas MUST ser ignoradas.
+Os estilos de parágrafo aplicados no editor e registrados como classes no parágrafo SHALL ser impressos conforme as classes. As classes de alinhamento MUST ser reconhecidas com e sem o prefixo `ql-` (o editor grava sem ele): `align-center`/`ql-align-center`, `align-right`/`ql-align-right` e `align-justify`/`ql-align-justify` MUST alinhar o parágrafo ao centro, à direita e justificado, e o centralizado e o alinhado à direita MUST ficar sem recuo de primeira linha; `ql-text-indent-0px` MUST retirar o recuo de primeira linha; `ql-margin-bottom-0px` MUST retirar o espaço após o parágrafo; `estilo-ementa` MUST imprimir o parágrafo com recuo à esquerda de 6,5cm e sem recuo de primeira linha; `estilo-norma-alterada` MUST imprimir o parágrafo com recuo à esquerda de 3cm e recuo de primeira linha de 1,5cm. Classes desconhecidas MUST ser ignoradas.
 
 #### Scenario: Parágrafo centralizado
 - **WHEN** um parágrafo da justificação tem a classe `align-center` (ou `ql-align-center`)
@@ -285,7 +285,7 @@ Cada nota de rodapé da justificação (`NotaDeRodape`) SHALL ser impressa com u
 - **THEN** o texto de cada nota é impresso no rodapé da página onde está a sua referência, e a numeração continua de uma página para a outra
 
 ### Requirement: Listas da justificação
-As listas da justificação SHALL ser impressas com a formatação de listas da emenda: recuadas 2,5cm em relação ao bloco em que estão, sem recuo de primeira linha, com o espaço após a lista dos parâmetros de impressão. Cada item de lista numerada (`ol`) MUST ter o rótulo "N." com a sua posição na lista, alinhado à direita; cada item de lista com marcadores (`ul`) MUST ter o rótulo "•". Uma lista dentro de um item MUST ser impressa aninhada, recuada em relação ao item, com numeração própria. A classe de recuo do editor no item (`indent-N`) MUST ser ignorada. A formatação inline, as remissões e as notas de rodapé do texto do item MUST ser preservadas.
+As listas da justificação SHALL ser impressas recuadas 2,5cm em relação ao bloco em que estão, sem recuo de primeira linha, com o espaço após a lista dos parâmetros de impressão. Cada item de lista numerada (`ol`) MUST ter o rótulo "N." com a sua posição na lista, alinhado à direita; cada item de lista com marcadores (`ul`) MUST ter o rótulo "•". Uma lista dentro de um item MUST ser impressa aninhada, recuada em relação ao item, com numeração própria. A classe de recuo do editor no item (`indent-N`) MUST ser ignorada. A formatação inline, as remissões e as notas de rodapé do texto do item MUST ser preservadas.
 
 #### Scenario: Lista numerada
 - **WHEN** a justificação contém `<ol><li>Primeira etapa.</li><li>Segunda etapa.</li></ol>`
@@ -304,7 +304,7 @@ As listas da justificação SHALL ser impressas com a formatação de listas da 
 - **THEN** o item é impresso no mesmo nível dos demais itens da lista
 
 ### Requirement: Tabelas da justificação
-As tabelas da justificação SHALL ser impressas com a formatação de tabelas da emenda: centralizadas, na largura indicada pelo atributo `width` da tabela, em porcentagem da largura do texto, ou na largura total quando não houver; com borda externa, exceto quando o atributo `border` for 0, e bordas nas células quando `border` for informado e diferente de 0; com colunas de mesma largura; com o texto das células em fonte menor que a do texto da justificação e sem recuo de primeira linha. Células de cabeçalho (`th`) MUST ser impressas em negrito. A mesclagem de células (`colspan` e `rowspan`) MUST ser respeitada. A formatação inline, as remissões e as notas de rodapé do texto das células MUST ser preservadas.
+As tabelas da justificação SHALL ser impressas centralizadas, na largura indicada pelo atributo `width` da tabela, em porcentagem da largura do texto, ou na largura total quando não houver; com borda externa, exceto quando o atributo `border` for 0, e bordas nas células quando `border` for informado e diferente de 0; com colunas de mesma largura; com o texto das células em fonte menor que a do texto da justificação e sem recuo de primeira linha. Células de cabeçalho (`th`) MUST ser impressas em negrito. A mesclagem de células (`colspan` e `rowspan`) MUST ser respeitada. A formatação inline, as remissões e as notas de rodapé do texto das células MUST ser preservadas.
 
 #### Scenario: Tabela simples
 - **WHEN** a justificação contém uma tabela com as linhas "Indicador | Meta" e "Processos digitalizados | 80%"
@@ -338,7 +338,7 @@ As imagens da justificação (`img`) cujo `src` é uma imagem embutida (data URI
 - **THEN** a imagem não é carregada nem impressa, e o PDF é gerado com o restante do texto
 
 ### Requirement: Local e data
-Quando o documento tiver `local` preenchido, o PDF SHALL imprimir, depois da justificação (ou da articulação, se não houver justificação), o fecho "`<local>`, `<data>`." com recuo de primeira linha de 2,5cm, mantido na mesma página das assinaturas, com 34pt de espaço antes (26pt com "reduzir espaço entre linhas"), como na emenda. A data MUST sair por extenso em português (ex.: "24 de abril de 2026"). Quando a data estiver vazia, ausente ou inválida, o fecho MUST ser apenas o local seguido de vírgula ("`<local>`,"), sem espaços para preenchimento e sem ponto final (issue #81, especificação 03 do lexml-eta). Sem `local`, o fecho MUST NOT ser impresso.
+Quando o documento tiver `local` preenchido, o PDF SHALL imprimir, depois da justificação (ou da articulação, se não houver justificação), o fecho "`<local>`, `<data>`." com recuo de primeira linha de 2,5cm, mantido na mesma página das assinaturas, com 34pt de espaço antes (26pt com "reduzir espaço entre linhas"). A data MUST sair por extenso em português (ex.: "24 de abril de 2026"). Quando a data estiver vazia, ausente ou inválida, o fecho MUST ser apenas o local seguido de vírgula ("`<local>`,"), sem espaços para preenchimento e sem ponto final (issue #81, especificação 03 do lexml-eta). Sem `local`, o fecho MUST NOT ser impresso.
 
 #### Scenario: Local e data preenchidos
 - **WHEN** o documento tem `local="Sala das Sessões"` e `data="2026-04-24"`
@@ -357,7 +357,7 @@ Quando o documento tiver `local` preenchido, o PDF SHALL imprimir, depois da jus
 - **THEN** o PDF termina no último elemento do conteúdo, sem fecho nem assinaturas
 
 ### Requirement: Assinaturas
-Quando a autoria do documento for de parlamentares (`tipo="Parlamentar"`) com ao menos um `Parlamentar`, o PDF SHALL imprimir, depois do local e data, uma assinatura por parlamentar, na ordem do documento, em duas colunas de mesma largura, centralizadas, em negrito, com 30pt de espaço antes de cada assinatura, como na emenda; com número ímpar de parlamentares, a última assinatura MUST ocupar as duas colunas. Cada assinatura MUST ter: o tratamento seguido do nome ("Senador"/"Senadora" quando a casa do parlamentar não for a Câmara dos Deputados, "Deputado"/"Deputada" quando for, conforme o sexo, como na emenda); "(`<partido>` - `<UF>`)" quando `imprimirPartidoUF` for verdadeiro; e o cargo, quando preenchido. Assinaturas adicionais (linhas em branco para assinatura manual) e assinatura de comissão MUST NOT ser impressas.
+Quando a autoria do documento for de parlamentares (`tipo="Parlamentar"`) com ao menos um `Parlamentar`, o PDF SHALL imprimir, depois do local e data, uma assinatura por parlamentar, na ordem do documento, em duas colunas de mesma largura, centralizadas, em negrito, com 30pt de espaço antes de cada assinatura; com número ímpar de parlamentares, a última assinatura MUST ocupar as duas colunas. Cada assinatura MUST ter: o tratamento seguido do nome ("Senador"/"Senadora" quando a casa do parlamentar não for a Câmara dos Deputados, "Deputado"/"Deputada" quando for, conforme o sexo); "(`<partido>` - `<UF>`)" quando `imprimirPartidoUF` for verdadeiro; e o cargo, quando preenchido. Assinaturas adicionais (linhas em branco para assinatura manual) e assinatura de comissão MUST NOT ser impressas.
 
 #### Scenario: Senadores e deputados
 - **WHEN** o documento tem como autores um senador, uma senadora, um deputado e uma deputada
@@ -384,7 +384,7 @@ Quando a autoria do documento for de parlamentares (`tipo="Parlamentar"`) com ao
 - **THEN** nenhuma assinatura é impressa; o fecho é impresso se houver local
 
 ### Requirement: Alertas e pendências
-O PDF SHALL apresentar, na primeira página, depois do cabeçalho e antes da epígrafe, os alertas da emenda conforme os dados do documento (`lexedit:Metadado`), nesta ordem e cada um em uma caixa de fundo amarelo, texto vermelho em negrito e 12pt (independente do tamanho da fonte do documento): (1) "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.", centralizado, quando houver ao menos uma revisão de texto ou da articulação; (2) "Este documento contém comentários e não deve ser protocolado até que sejam removidos.", centralizado, quando houver ao menos um comentário; (3) "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:", alinhado à esquerda e seguido de uma lista com marcadores ("•", sem negrito) com cada pendência do documento, na ordem e com o texto em que foi registrada, quando houver ao menos uma pendência. A lista MUST NOT ser filtrada nem reescrita, mesmo que um item repita o aviso de outra caixa. Sem nenhum desses dados, nenhuma caixa MUST ser impressa.
+O PDF SHALL apresentar, na primeira página, depois do cabeçalho e antes da epígrafe, os alertas conforme os dados do documento (`lexedit:Metadado`), nesta ordem e cada um em uma caixa de fundo amarelo, texto vermelho em negrito e 12pt (independente do tamanho da fonte do documento): (1) "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.", centralizado, quando houver ao menos uma revisão de texto ou da articulação; (2) "Este documento contém comentários e não deve ser protocolado até que sejam removidos.", centralizado, quando houver ao menos um comentário; (3) "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:", alinhado à esquerda e seguido de uma lista com marcadores ("•", sem negrito) com cada pendência do documento, na ordem e com o texto em que foi registrada, quando houver ao menos uma pendência. A lista MUST NOT ser filtrada nem reescrita, mesmo que um item repita o aviso de outra caixa. Sem nenhum desses dados, nenhuma caixa MUST ser impressa.
 
 #### Scenario: Marcas de revisão
 - **WHEN** o documento tem revisões de texto ou revisões da articulação registradas
@@ -411,7 +411,7 @@ O PDF SHALL apresentar, na primeira página, depois do cabeçalho e antes da ep�
 - **THEN** o texto das caixas continua em 12pt
 
 ### Requirement: Anexo de parecer
-Quando o `lexedit:Metadado` do documento tiver `anexoParecer` verdadeiro, o PDF MUST NOT imprimir a justificação (título "JUSTIFICAÇÃO", corpo e as notas de rodapé dela), o local e data e as assinaturas, mesmo que o documento os tenha, como na emenda. O cabeçalho, os alertas e pendências, a parte inicial e a articulação SHALL continuar impressos como nos demais documentos. Com o atributo ausente, falso ou com valor que não seja verdadeiro, o PDF SHALL ser o mesmo de um documento sem o atributo.
+Quando o `lexedit:Metadado` do documento tiver `anexoParecer` verdadeiro, o PDF MUST NOT imprimir a justificação (título "JUSTIFICAÇÃO", corpo e as notas de rodapé dela), o local e data e as assinaturas, mesmo que o documento os tenha. O cabeçalho, os alertas e pendências, a parte inicial e a articulação SHALL continuar impressos como nos demais documentos. Com o atributo ausente, falso ou com valor que não seja verdadeiro, o PDF SHALL ser o mesmo de um documento sem o atributo.
 
 #### Scenario: Anexo de parecer sem justificação, fecho e assinaturas
 - **WHEN** o documento tem `anexoParecer="true"`, articulação e justificação com nota de rodapé
@@ -430,7 +430,7 @@ Quando o `lexedit:Metadado` do documento tiver `anexoParecer` verdadeiro, o PDF 
 - **THEN** a justificação, o local e data e as assinaturas são impressos normalmente
 
 ### Requirement: Epígrafe
-A epígrafe SHALL ser impressa centralizada, em negrito, no tamanho de fonte de destaque, em uma única linha (espaços não quebráveis) e com os espaços excedentes do texto removidos. O complemento da epígrafe usado na emenda MUST NOT ser impresso.
+A epígrafe SHALL ser impressa centralizada, em negrito, no tamanho de fonte de destaque, em uma única linha (espaços não quebráveis) e com os espaços excedentes do texto removidos. Nenhum texto de complemento MUST ser impresso abaixo da epígrafe.
 
 #### Scenario: Epígrafe formatada
 - **WHEN** o documento possui a epígrafe "MEDIDA PROVISÓRIA Nº 999, DE 2026 " (com espaço sobrando)
@@ -455,7 +455,7 @@ O preâmbulo SHALL ser impresso 72pt abaixo da ementa, justificado e com recuo d
 - **THEN** o PDF apresenta o texto do preâmbulo sem negrito, com recuo de primeira linha de 2,5cm
 
 ### Requirement: Parâmetros de impressão
-O tamanho de fonte do texto, o tamanho de fonte de destaque, a entrelinha e os espaços entre parágrafos SHALL seguir as opções de impressão do documento (`lexedit:OpcoesImpressao`), com os valores da emenda. O tamanho da fonte do texto MUST ser o `tamanhoFonte` do documento quando for 14, 16 ou 18, e 14 quando ausente ou com outro valor; o tamanho de destaque (epígrafe e título da justificação) MUST ser 18pt quando a fonte for 18 e 16pt nos demais casos. Quando `reduzirEspacoEntreLinhas` for verdadeiro, a entrelinha MUST ser 120%, o espaço após parágrafo 0.45em e, na justificação, o espaço antes do título 22pt e antes do corpo 10pt; caso contrário (inclusive quando ausente), 150%, 0.6em, 26pt e 14pt. Os espaços antes da ementa (48pt) e do preâmbulo (72pt) e o cabeçalho MUST NOT variar com essas opções. Elementos dimensionados em relação ao texto (notas de rodapé, células de tabela, sobrescrito e subscrito) MUST acompanhar o tamanho da fonte.
+O tamanho de fonte do texto, o tamanho de fonte de destaque, a entrelinha e os espaços entre parágrafos SHALL seguir as opções de impressão do documento (`lexedit:OpcoesImpressao`). O tamanho da fonte do texto MUST ser o `tamanhoFonte` do documento quando for 14, 16 ou 18, e 14 quando ausente ou com outro valor; o tamanho de destaque (epígrafe e título da justificação) MUST ser 18pt quando a fonte for 18 e 16pt nos demais casos. Quando `reduzirEspacoEntreLinhas` for verdadeiro, a entrelinha MUST ser 120%, o espaço após parágrafo 0.45em e, na justificação, o espaço antes do título 22pt e antes do corpo 10pt; caso contrário (inclusive quando ausente), 150%, 0.6em, 26pt e 14pt. Os espaços antes da ementa (48pt) e do preâmbulo (72pt) e o cabeçalho MUST NOT variar com essas opções. Elementos dimensionados em relação ao texto (notas de rodapé, células de tabela, sobrescrito e subscrito) MUST acompanhar o tamanho da fonte.
 
 #### Scenario: Valores padrão
 - **WHEN** um documento sem `lexedit:OpcoesImpressao`, ou com `tamanhoFonte="14"` e `reduzirEspacoEntreLinhas="false"`, é convertido em PDF

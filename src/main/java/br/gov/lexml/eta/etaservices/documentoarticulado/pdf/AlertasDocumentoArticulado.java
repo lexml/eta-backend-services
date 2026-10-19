@@ -8,8 +8,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * Dados dos alertas impressos no início do PDF (issue #79), lidos do {@code lexedit:Metadado} do
- * documento-articulado.json (especificações 08, 09, 11 e 13 do lexml-eta), com as condições da emenda
- * ({@code Emenda.isPossuiMarcasRevisao()}, {@code Emenda.isPossuiComentarios()} e as pendências de preenchimento).
+ * documento-articulado.json (especificações 08, 09, 11 e 13 do lexml-eta): caixa de marcas de revisão quando há
+ * revisões de texto ou da articulação, caixa de comentários quando há algum comentário e caixa de pendências de
+ * preenchimento quando há pendências.
  * <p>
  * As pendências são impressas como foram registradas pelo editor, sem filtro nem reescrita, mesmo quando repetem o
  * aviso de revisões ou de comentários.
@@ -39,7 +40,7 @@ final class AlertasDocumentoArticulado {
         return lista.isArray() && lista.size() > 0;
     }
 
-    /** Como na emenda: alguma sequência com ao menos um comentário. */
+    /** Alguma sequência com ao menos um comentário (sequência vazia não conta). */
     private static boolean possuiComentarios(JsonNode sequencias) {
         if (sequencias.isArray()) {
             for (JsonNode sequencia : sequencias) {
