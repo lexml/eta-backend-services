@@ -648,10 +648,12 @@ class DocumentoArticuladoPdfGeneratorTest {
     }
 
     @Test
-    void semDataComEspacosParaPreencherESemPartido() throws Exception {
+    void semDataSoOLocalESemPartido() throws Exception {
         String texto = textoNormalizado(gerarPdf(JUSTIFICACAO_LONGA));
 
-        assertThat(texto).containsSubsequence("Sala das Sessões, de de .", "Senador Davi Alcolumbre");
+        // Sem data, só o local seguido de vírgula (issue #81), logo antes da assinatura
+        assertThat(texto).contains("Sala das Sessões, Senador Davi Alcolumbre");
+        assertThat(texto).doesNotContain("Sala das Sessões, de").doesNotContain("Sala das Sessões,.");
         assertThat(texto).doesNotContain("(UNIÃO - AP)");
     }
 

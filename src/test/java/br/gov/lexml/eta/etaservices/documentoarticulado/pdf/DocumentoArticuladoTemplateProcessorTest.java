@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.dom4j.Document;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -359,14 +359,17 @@ class DocumentoArticuladoTemplateProcessorTest {
         assertThat(fecho(xml).attributeValue("space-before")).isEqualTo("26pt");
     }
 
-    @Test
-    void dataVaziaOuAusenteComEspacosParaPreencher() throws Exception {
-        String esperado = "Sala das Sessões, " + espacos(8) + " de " + espacos(40) + " de " + espacos(16) + ".";
+    /** Sem data válida, só o local seguido de vírgula (issue #81), sem os espaços para preencher da emenda. */
+    @ParameterizedTest
+    @ValueSource(strings = { "", "24/04/2026", "ausente" })
+    void dataVaziaAusenteOuInvalidaSoComOLocal(String data) throws Exception {
+        if ("ausente".equals(data)) {
+            metadadoLexedit().remove("data");
+        } else {
+            metadadoLexedit().put("data", data);
+        }
 
-        metadadoLexedit().put("data", "");
-        assertThat(fecho(new SAXReader().read(new StringReader(processar()))).getText()).isEqualTo(esperado);
-        metadadoLexedit().remove("data");
-        assertThat(fecho(new SAXReader().read(new StringReader(processar()))).getText()).isEqualTo(esperado);
+        assertThat(fecho(new SAXReader().read(new StringReader(processar()))).getText()).isEqualTo("Sala das Sessões,");
     }
 
     @Test
@@ -446,10 +449,6 @@ class DocumentoArticuladoTemplateProcessorTest {
             textos.add(bloco.getText());
         }
         return textos;
-    }
-
-    private static String espacos(int quantidade) {
-        return String.join("", Collections.nCopies(quantidade, " "));
     }
 
     private ArrayNode parlamentares() {
