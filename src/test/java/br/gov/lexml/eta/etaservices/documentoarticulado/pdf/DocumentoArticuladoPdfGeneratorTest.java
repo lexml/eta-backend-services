@@ -449,10 +449,10 @@ class DocumentoArticuladoPdfGeneratorTest {
 
     @Test
     void espacosFixosDaParteInicialNaoMudamComReduzir() throws Exception {
-        // Mesmo tamanho de fonte (o exemplo tem 14 + reduzir): só a entrelinha muda; o espaço de 48pt entre
+        // Mesmo tamanho de fonte (o exemplo tem 14 sem "reduzir"): só a entrelinha muda; o espaço de 48pt entre
         // epígrafe e ementa, não
-        List<Linha> normal = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "false", "14"));
-        List<Linha> reduzido = linhas(pdfExemplo);
+        List<Linha> normal = linhas(pdfExemplo);
+        List<Linha> reduzido = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "true", "14"));
         float distanciaNormal = linhaQueContem(normal, "Institui o Programa").y - linhaQueContem(normal, "PROJETO DE LEI").y;
         float distanciaReduzida = linhaQueContem(reduzido, "Institui o Programa").y - linhaQueContem(reduzido, "PROJETO DE LEI").y;
 
@@ -561,6 +561,20 @@ class DocumentoArticuladoPdfGeneratorTest {
         assertThat(linhaQueContem(linhas, "PROJETO DE LEI").tamanho).isEqualTo(18f);
         assertThat(linhaQueContem(linhas, "Este documento contém marcas de revisão").tamanho).isEqualTo(12f);
         assertThat(linhaQueContem(linhas, "Corrigir remissões internas inválidas.").tamanho).isEqualTo(12f);
+    }
+
+    @Test
+    void espacoDepoisDaArticulacaoAntesDaJustificacao() throws Exception {
+        List<Linha> linhas = linhas(gerarPdf(JUSTIFICACAO));
+        Linha artigo1 = linhaQueContem(linhas, "Art. 1º Fica instituída");
+        Linha ultimo = linhaQueContem(linhas, "Art. 2º Esta Lei entra em vigor");
+        Linha titulo = linhas.stream().filter(l -> l.texto.trim().equals("JUSTIFICAÇÃO")).findFirst().orElseThrow(AssertionError::new);
+
+        // Fonte 14, sem "reduzir": 8,4pt (0.6em) depois da articulação + 26pt antes do título + entrelinhas = 55pt
+        assertThat(titulo.pagina).isEqualTo(ultimo.pagina);
+        assertThat(titulo.y - ultimo.y).isCloseTo(55f, offset(0.5f));
+        // Entre dispositivos, nenhum espaço adicional: o art. 1º ocupa duas linhas de 21pt
+        assertThat(ultimo.y - artigo1.y).isCloseTo(2 * 21f, offset(0.5f));
     }
 
     // Anexo de parecer (issue #80) ---------------------------------------------------------------------------

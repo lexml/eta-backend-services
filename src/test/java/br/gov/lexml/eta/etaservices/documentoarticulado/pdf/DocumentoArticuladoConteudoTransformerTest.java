@@ -52,6 +52,11 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(articulacao.attributeValue("text-align")).isEqualTo("justify");
         assertThat(articulacao.attributeValue("line-height")).isEqualTo("150%");
         assertThat(articulacao.attributeValue("space-before")).isNull();
+        // Depois do último dispositivo, o espaço após o parágrafo; entre dispositivos, nenhuma margem própria
+        assertThat(articulacao.attributeValue("padding-bottom")).isEqualTo("0.6em");
+        for (Node dispositivo : articulacao.selectNodes(".//*[local-name()='block']")) {
+            assertThat(((Element) dispositivo).attributeValue("margin-bottom")).isNull();
+        }
     }
 
     @Test
@@ -989,8 +994,9 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(blocos.get(2).attributeValue("space-before")).isEqualTo("72pt");
         assertThat(blocos.get(2).attributeValue("line-height")).isEqualTo("120%");
         assertThat(((Element) blocos.get(2).elements().get(0)).attributeValue("margin-bottom")).isEqualTo("0.45em");
-        // Articulação
+        // Articulação, com o espaço após o parágrafo reduzido no fim
         assertThat(blocos.get(3).attributeValue("line-height")).isEqualTo("120%");
+        assertThat(blocos.get(3).attributeValue("padding-bottom")).isEqualTo("0.45em");
         // Justificação: espaços antes do título e do corpo reduzidos
         assertThat(titulo.getText()).isEqualTo("JUSTIFICAÇÃO");
         assertThat(titulo.attributeValue("font-size")).isEqualTo("18pt");
