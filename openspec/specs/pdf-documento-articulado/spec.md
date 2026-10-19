@@ -338,15 +338,15 @@ As imagens da justificação (`img`) cujo `src` é uma imagem embutida (data URI
 - **THEN** a imagem não é carregada nem impressa, e o PDF é gerado com o restante do texto
 
 ### Requirement: Local e data
-Quando o documento tiver `local` preenchido, o PDF SHALL imprimir, depois da justificação (ou da articulação, se não houver justificação), o fecho "`<local>`, `<data>`." com recuo de primeira linha de 2,5cm, mantido na mesma página das assinaturas, com 34pt de espaço antes (26pt com "reduzir espaço entre linhas"), como na emenda. A data MUST sair por extenso em português (ex.: "24 de abril de 2026"). Quando a data estiver vazia, ausente ou inválida, o fecho MUST sair com espaços para preenchimento manual do dia, do mês e do ano ("`<local>`, ___ de ___ de ___."), como na emenda. Sem `local`, o fecho MUST NOT ser impresso.
+Quando o documento tiver `local` preenchido, o PDF SHALL imprimir, depois da justificação (ou da articulação, se não houver justificação), o fecho "`<local>`, `<data>`." com recuo de primeira linha de 2,5cm, mantido na mesma página das assinaturas, com 34pt de espaço antes (26pt com "reduzir espaço entre linhas"), como na emenda. A data MUST sair por extenso em português (ex.: "24 de abril de 2026"). Quando a data estiver vazia, ausente ou inválida, o fecho MUST ser apenas o local seguido de vírgula ("`<local>`,"), sem espaços para preenchimento e sem ponto final (issue #81, especificação 03 do lexml-eta). Sem `local`, o fecho MUST NOT ser impresso.
 
 #### Scenario: Local e data preenchidos
 - **WHEN** o documento tem `local="Sala das Sessões"` e `data="2026-04-24"`
 - **THEN** o PDF contém "Sala das Sessões, 24 de abril de 2026." depois da justificação, com recuo de 2,5cm
 
 #### Scenario: Data vazia
-- **WHEN** o documento tem `local="Sala das Sessões"` e `data` vazia ou ausente
-- **THEN** o PDF contém "Sala das Sessões," seguido de espaços em branco para o dia, "de", espaços para o mês, "de", espaços para o ano e ponto final
+- **WHEN** o documento tem `local="Sala das Sessões"` e `data` vazia, ausente ou inválida
+- **THEN** o fecho é "Sala das Sessões,", sem espaços para preencher, "de" nem ponto final
 
 #### Scenario: Espaço antes conforme as opções de impressão
 - **WHEN** o documento tem `reduzirEspacoEntreLinhas="true"`
