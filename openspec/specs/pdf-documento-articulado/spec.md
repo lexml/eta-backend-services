@@ -415,15 +415,15 @@ O PDF SHALL apresentar, na primeira página, depois do cabeçalho e antes da ep�
 - **THEN** o texto das caixas continua em 12pt
 
 ### Requirement: Anexo de parecer
-Quando o `lexedit:Metadado` do documento tiver `anexoParecer` verdadeiro, o PDF MUST NOT imprimir a justificação (título "JUSTIFICAÇÃO", corpo e as notas de rodapé dela), o local e data e as assinaturas, mesmo que o documento os tenha. O cabeçalho, os alertas e pendências, a parte inicial e a articulação SHALL continuar impressos como nos demais documentos. Com o atributo ausente, falso ou com valor que não seja verdadeiro, o PDF SHALL ser o mesmo de um documento sem o atributo.
+Quando o `lexedit:Metadado` do documento tiver `anexoParecer` verdadeiro, o PDF MUST NOT imprimir a justificação (título "JUSTIFICAÇÃO", corpo e as notas de rodapé dela), mesmo que o documento a tenha. O local e data e as assinaturas SHALL ser impressos quando o documento os tiver, conforme os requisitos "Local e data" e "Assinaturas", logo depois da articulação. O cabeçalho, os alertas e pendências, a parte inicial e a articulação SHALL continuar impressos como nos demais documentos. Com o atributo ausente, falso ou com valor que não seja verdadeiro, o PDF SHALL ser o mesmo de um documento sem o atributo.
 
 #### Scenario: Anexo de parecer sem justificação, fecho e assinaturas
-- **WHEN** o documento tem `anexoParecer="true"`, articulação e justificação com nota de rodapé
+- **WHEN** o documento tem `anexoParecer="true"`, articulação e justificação com nota de rodapé, e não tem local nem autoria
 - **THEN** o PDF termina no último dispositivo da articulação, sem o título "JUSTIFICAÇÃO", sem o texto e as notas da justificação, sem local e data e sem assinaturas
 
 #### Scenario: Local e autoria preenchidos
-- **WHEN** o documento tem `anexoParecer="true"` e também `local`, `data` e autoria de parlamentares
-- **THEN** nem o local e data nem as assinaturas são impressos
+- **WHEN** o documento tem `anexoParecer="true"`, justificação e também `local`, `data` e autoria de parlamentares
+- **THEN** a justificação não é impressa, e o local e data e as assinaturas são impressos logo depois da articulação
 
 #### Scenario: Demais partes mantidas
 - **WHEN** o documento tem `anexoParecer="true"`, cabeçalho e pendências
