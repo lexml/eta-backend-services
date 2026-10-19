@@ -249,15 +249,16 @@
 			$conteudoFo
 			## Local e data e assinaturas (issue #76), depois de todo o conteúdo: blocos "Local e data" e "Assinaturas"
 			## da emenda (preservados abaixo, comentados), com os dados do lexedit:Metadado em vez do modelo da emenda.
-			## Sem as assinaturas adicionais (linhas em branco) e sem assinatura de comissão. Sem data, o fecho sai com
-			## espaços para preencher o dia, o mês e o ano, como na emenda.
+			## Sem as assinaturas adicionais (linhas em branco) e sem assinatura de comissão. Sem data (vazia, ausente ou
+			## inválida), o fecho é só o local seguido de vírgula (issue #81, especificação 03 do lexml-eta), e não os
+			## espaços para preencher da emenda.
 			#if($local != "" || !$assinaturas.isEmpty())
 			<fo:block-container>
 				#if($local != "")
 				<fo:block keep-with-next.within-page="always"
 					keep-with-previous="10" role="fecho"
 					space-after="0pt" space-before="$espacoAntesFecho" text-align="justify"
-					text-indent="2.5cm" white-space-collapse="false">#if($dataPorExtenso != "")$local, ${dataPorExtenso}.#{else}$local, &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160; de &#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;.#{end}</fo:block>
+					text-indent="2.5cm" white-space-collapse="false">#if($dataPorExtenso != "")$local, ${dataPorExtenso}.#{else}$local,#{end}</fo:block>
 				#end
 				#if(!$assinaturas.isEmpty())
 				<fo:block font-weight="bold">
