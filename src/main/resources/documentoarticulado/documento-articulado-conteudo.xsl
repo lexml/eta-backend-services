@@ -355,11 +355,13 @@
 	<!--
 	  Articulação: bloco com a entrelinha, justificado e com recuo de 2,5cm; cada p vira um fo:block sem margens
 	  próprias, sem espaço extra entre dispositivos. O espaço antes do primeiro dispositivo é o margin-bottom do
-	  preâmbulo.
+	  preâmbulo; depois do último, o espaço após o parágrafo ($pMarginBottom), antes da justificação ou do local e
+	  data. Esse espaço é padding-bottom, e não margin-bottom: no FOP, a margem vira space-after e se funde com o
+	  space-before do bloco seguinte (vale o maior), enquanto o padding sempre soma.
 	  A estrutura é percorrida no modo "dispositivo"; o texto de cada p, no modo "inline".
 	-->
 	<xsl:template match="lx:Articulacao">
-		<fo:block line-height="{$lineHeight}" text-align="justify" text-indent="2.5cm">
+		<fo:block line-height="{$lineHeight}" text-align="justify" text-indent="2.5cm" padding-bottom="{$pMarginBottom}">
 			<xsl:apply-templates select="*" mode="dispositivo"/>
 		</fo:block>
 	</xsl:template>
