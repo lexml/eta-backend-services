@@ -98,7 +98,7 @@ O PDF SHALL imprimir os dispositivos Artigo, Caput, Parágrafo, Inciso, Alínea,
 - **THEN** o PDF apresenta o rótulo e o nome do capítulo, depois os da seção e em seguida os artigos com seus dispositivos
 
 ### Requirement: Formatação dos dispositivos
-Os dispositivos SHALL ser impressos com texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. O rótulo MUST ser impresso em negrito, exceto o rótulo da pena, que MUST ser impresso em fonte regular. No texto, negrito e itálico MUST ser preservados, e as referências com `xlink:href` MUST ser impressas como links, conforme o requisito "Remissões e links". A articulação MUST NOT ser envolvida por aspas.
+Os dispositivos SHALL ser impressos com texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. Depois do último dispositivo, a articulação MUST terminar com o espaço após o parágrafo dos parâmetros de impressão (0.6em; 0.45em com "reduzir espaço entre linhas"), antes do que vier a seguir (justificação ou local e data). O rótulo MUST ser impresso em negrito, exceto o rótulo da pena, que MUST ser impresso em fonte regular. No texto, negrito e itálico MUST ser preservados, e as referências com `xlink:href` MUST ser impressas como links, conforme o requisito "Remissões e links". A articulação MUST NOT ser envolvida por aspas.
 
 #### Scenario: Rótulo em negrito
 - **WHEN** o PDF de um documento com o artigo "Art. 1º Esta Lei tipifica os crimes ..." é gerado
@@ -115,6 +115,10 @@ Os dispositivos SHALL ser impressos com texto justificado, recuo de primeira lin
 #### Scenario: Itálico no texto do dispositivo
 - **WHEN** o texto de um parágrafo contém um trecho em itálico
 - **THEN** o trecho é impresso em itálico
+
+#### Scenario: Espaço depois da articulação
+- **WHEN** um documento em fonte 14, sem "reduzir espaço entre linhas", tem justificação depois da articulação
+- **THEN** a distância entre a linha de base do último dispositivo e a do título "JUSTIFICAÇÃO" é de 55pt (8,4pt do espaço após a articulação somados aos 26pt antes do título e às entrelinhas), e entre dois dispositivos continua sem espaço adicional
 
 ### Requirement: Agrupadores
 O PDF SHALL imprimir o rótulo e o nome de cada agrupador de artigos (Parte, Livro, Título, Capítulo, Seção e Subseção) antes do seu conteúdo, cada um em uma linha própria, centralizados, sem recuo de primeira linha e sem espaço adicional antes ou depois. Em Parte, Livro, Título e Capítulo, o rótulo e o nome MUST ser impressos em letras maiúsculas, com o rótulo em negrito e o nome em fonte regular. Em Seção e Subseção, o rótulo e o nome MUST ser impressos em negrito, com a capitalização do documento. O nome MUST ser impresso somente como texto, sem a formatação inline que contiver. Rótulo ou nome vazio MUST NOT gerar linha em branco. O título do agrupador MUST ser mantido na mesma página do conteúdo que o segue.
