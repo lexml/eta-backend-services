@@ -18,8 +18,8 @@ import com.fasterxml.jackson.databind.JsonNode;
  * Só a autoria de parlamentares ({@code tipo="Parlamentar"}) gera assinaturas; a de comissão, não. Tratamento: casa
  * {@code CD} -> Deputado/Deputada, senão Senador/Senadora; sexo {@code M} -> masculino, senão feminino.
  * <p>
- * Em anexo de parecer ({@code anexoParecer} verdadeiro, issue #80), o fecho é vazio: nem local e data nem assinaturas
- * são impressos.
+ * Em anexo de parecer ({@code anexoParecer} verdadeiro, issue #80), o fecho é o mesmo de qualquer documento: só a
+ * justificação deixa de ser impressa ({@link #anexoParecer(JsonNode)}, usado pelo gerador).
  */
 final class FechoDocumentoArticulado {
 
@@ -38,11 +38,8 @@ final class FechoDocumentoArticulado {
         this.assinaturas = Collections.unmodifiableList(assinaturas);
     }
 
-    /** Local, data e assinaturas do documento; vazios quando o documento não os tem ou é anexo de parecer. */
+    /** Local, data e assinaturas do documento; vazios quando o documento não os tem. */
     static FechoDocumentoArticulado de(JsonNode documento) {
-        if (anexoParecer(documento)) {
-            return new FechoDocumentoArticulado("", "", new ArrayList<>());
-        }
         JsonNode metadado = metadadoLexedit(documento);
         return new FechoDocumentoArticulado(texto(metadado.path("local")), dataPorExtenso(texto(metadado.path("data"))),
                 assinaturas(metadado.path("autoria")));
