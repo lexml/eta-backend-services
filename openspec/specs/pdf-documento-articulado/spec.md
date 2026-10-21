@@ -98,11 +98,15 @@ O PDF SHALL imprimir os dispositivos Artigo, Caput, Parágrafo, Inciso, Alínea,
 - **THEN** o PDF apresenta o rótulo e o nome do capítulo, depois os da seção e em seguida os artigos com seus dispositivos
 
 ### Requirement: Formatação dos dispositivos
-Os dispositivos SHALL ser impressos com texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. Depois do último dispositivo, a articulação MUST terminar com o espaço após o parágrafo dos parâmetros de impressão (0.6em; 0.45em com "reduzir espaço entre linhas"), antes do que vier a seguir (justificação ou local e data). O rótulo MUST ser impresso em negrito, exceto o rótulo da pena, que MUST ser impresso em fonte regular. No texto, negrito e itálico MUST ser preservados, e as referências com `xlink:href` MUST ser impressas como links, conforme o requisito "Remissões e links". A articulação MUST NOT ser envolvida por aspas.
+Os dispositivos SHALL ser impressos com texto justificado, recuo de primeira linha de 2,5cm, a entrelinha dos parâmetros de impressão e nenhum espaço adicional entre um dispositivo e o seguinte. Depois do último dispositivo, a articulação MUST terminar com o espaço após o parágrafo dos parâmetros de impressão (0.6em; 0.45em com "reduzir espaço entre linhas"), antes do que vier a seguir (justificação ou local e data). O rótulo MUST ser impresso em negrito, exceto o rótulo da pena, que MUST ser impresso em fonte regular. O rótulo MUST ser tratado como uma palavra só na justificação: os espaços internos dele (ex.: entre "Art." e "15.", entre "§" e "1º") MUST NOT ser esticados, ficando com a mesma largura em todas as linhas; o espaço entre o rótulo e o texto continua ajustável como os demais espaços da linha. No texto, negrito e itálico MUST ser preservados, e as referências com `xlink:href` MUST ser impressas como links, conforme o requisito "Remissões e links". A articulação MUST NOT ser envolvida por aspas.
 
 #### Scenario: Rótulo em negrito
 - **WHEN** o PDF de um documento com o artigo "Art. 1º Esta Lei tipifica os crimes ..." é gerado
 - **THEN** "Art. 1º" é impresso em negrito e o texto do caput em fonte regular, no mesmo bloco
+
+#### Scenario: Rótulo como uma palavra só
+- **WHEN** o PDF apresenta dois artigos, "Art. 15." e "Art. 16.", cujas primeiras linhas são justificadas com folgas diferentes
+- **THEN** a distância entre "Art." e o número é a mesma nos dois rótulos, e só os espaços fora do rótulo absorvem a folga da linha
 
 #### Scenario: Mesmo recuo em todos os níveis
 - **WHEN** o PDF apresenta um artigo, um parágrafo, um inciso e uma alínea
@@ -387,32 +391,28 @@ Quando a autoria do documento for de parlamentares (`tipo="Parlamentar"`) com ao
 - **WHEN** a autoria do documento é de uma comissão (`tipo="Comissão"`)
 - **THEN** nenhuma assinatura é impressa; o fecho é impresso se houver local
 
-### Requirement: Alertas e pendências
-O PDF SHALL apresentar, na primeira página, depois do cabeçalho e antes da epígrafe, os alertas conforme os dados do documento (`lexedit:Metadado`), nesta ordem e cada um em uma caixa de fundo amarelo, texto vermelho em negrito e 12pt (independente do tamanho da fonte do documento): (1) "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.", centralizado, quando houver ao menos uma revisão de texto ou da articulação; (2) "Este documento contém comentários e não deve ser protocolado até que sejam removidos.", centralizado, quando houver ao menos um comentário; (3) "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:", alinhado à esquerda e seguido de uma lista com marcadores ("•", sem negrito) com cada pendência do documento, na ordem e com o texto em que foi registrada, quando houver ao menos uma pendência. A lista MUST NOT ser filtrada nem reescrita, mesmo que um item repita o aviso de outra caixa. Sem nenhum desses dados, nenhuma caixa MUST ser impressa.
-
-#### Scenario: Marcas de revisão
-- **WHEN** o documento tem revisões de texto ou revisões da articulação registradas
-- **THEN** a primeira página apresenta, antes da epígrafe, a caixa "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas."
-
-#### Scenario: Comentários
-- **WHEN** o documento tem ao menos um comentário
-- **THEN** a primeira página apresenta a caixa "Este documento contém comentários e não deve ser protocolado até que sejam removidos.", depois da caixa de revisão quando ela existir
+### Requirement: Caixa de pendências
+O PDF SHALL apresentar, na primeira página, depois do cabeçalho e antes da epígrafe, quando o documento (`lexedit:Metadado`) tiver ao menos uma pendência, uma caixa de fundo amarelo e texto vermelho em negrito com o cabeçalho "Este documento contém pendências e não deve ser protocolado até que sejam resolvidas:", alinhado à esquerda e seguido de uma lista com marcadores ("•", sem negrito) com cada pendência do documento, na ordem e com o texto em que foi registrada. O texto da caixa MUST ter o tamanho dos alertas definido nos parâmetros de impressão. A lista MUST NOT ser filtrada nem reescrita. Revisões e comentários MUST NOT gerar caixas próprias: o aviso deles é o da pendência registrada pelo editor. Sem pendências, nenhuma caixa MUST ser impressa.
 
 #### Scenario: Pendências como registradas
 - **WHEN** o documento tem as pendências "Não foi informado um texto de justificação." e "Remover comentários."
-- **THEN** a caixa de pendências de preenchimento lista os dois itens, nessa ordem e com esse texto, mesmo que a caixa de comentários também seja impressa
+- **THEN** a caixa de pendências lista os dois itens, nessa ordem e com esse texto, abaixo do cabeçalho "Este documento contém pendências e não deve ser protocolado até que sejam resolvidas:"
 
-#### Scenario: Só pendências
-- **WHEN** o documento tem pendências, mas nenhuma revisão nem comentário
-- **THEN** só a caixa de pendências de preenchimento é impressa
+#### Scenario: Revisões e comentários sem caixa própria
+- **WHEN** o documento tem revisões de texto, revisões da articulação e comentários, além de pendências
+- **THEN** só a caixa de pendências é impressa, sem os avisos "Este documento contém marcas de revisão ..." e "Este documento contém comentários ..."
+
+#### Scenario: Revisões e comentários sem pendências
+- **WHEN** o documento tem revisões ou comentários, mas nenhuma pendência registrada
+- **THEN** nenhuma caixa é impressa
 
 #### Scenario: Sem alertas
-- **WHEN** o documento não tem revisões, comentários nem pendências (ex.: os documentos da issue #72)
+- **WHEN** o documento não tem pendências (ex.: os documentos da issue #72)
 - **THEN** nenhuma caixa é impressa e a primeira página começa pela epígrafe, na mesma posição de hoje
 
-#### Scenario: Tamanho fixo
+#### Scenario: Tamanho acompanha a fonte
 - **WHEN** o documento tem `tamanhoFonte="18"`
-- **THEN** o texto das caixas continua em 12pt
+- **THEN** o texto da caixa de pendências é impresso em 16pt
 
 ### Requirement: Anexo de parecer
 Quando o `lexedit:Metadado` do documento tiver `anexoParecer` verdadeiro, o PDF MUST NOT imprimir a justificação (título "JUSTIFICAÇÃO", corpo e as notas de rodapé dela), mesmo que o documento a tenha. O local e data e as assinaturas SHALL ser impressos quando o documento os tiver, conforme os requisitos "Local e data" e "Assinaturas", logo depois da articulação. O cabeçalho, os alertas e pendências, a parte inicial e a articulação SHALL continuar impressos como nos demais documentos. Com o atributo ausente, falso ou com valor que não seja verdadeiro, o PDF SHALL ser o mesmo de um documento sem o atributo.
@@ -434,11 +434,27 @@ Quando o `lexedit:Metadado` do documento tiver `anexoParecer` verdadeiro, o PDF 
 - **THEN** a justificação, o local e data e as assinaturas são impressos normalmente
 
 ### Requirement: Epígrafe
-A epígrafe SHALL ser impressa centralizada, em negrito, no tamanho de fonte de destaque, em uma única linha (espaços não quebráveis) e com os espaços excedentes do texto removidos. Nenhum texto de complemento MUST ser impresso abaixo da epígrafe.
+A epígrafe SHALL ser impressa centralizada, em negrito, no tamanho de fonte de destaque e em uma única linha (espaços não quebráveis). Os espaços, quebras de linha e tabulações do início e do fim do texto MUST ser removidos; os espaços internos MUST ser preservados, sem serem colapsados (quebras de linha e tabulações internas valem como espaço). Quando, depois de "Nº" (ou "N°"), houver só espaços até a vírgula seguinte (projeto não numerado), esse vão MUST ser impresso com os espaços gravados no documento, com no mínimo 8: um vão menor (inclusive vazio) MUST ser impresso com 8 espaços. Nenhum texto de complemento MUST ser impresso abaixo da epígrafe. A epígrafe MUST NOT alterar a posição do conteúdo que vem depois dela.
 
 #### Scenario: Epígrafe formatada
 - **WHEN** o documento possui a epígrafe "MEDIDA PROVISÓRIA Nº 999, DE 2026 " (com espaço sobrando)
 - **THEN** o PDF apresenta "MEDIDA PROVISÓRIA Nº 999, DE 2026" centralizada, em negrito e no tamanho de destaque, sem outro texto de complemento abaixo
+
+#### Scenario: Projeto não numerado
+- **WHEN** o documento possui a epígrafe "PROJETO DE LEI Nº     , DE" (cinco espaços no lugar do número), ou "PROJETO DE LEI Nº , DE" (um só espaço)
+- **THEN** o PDF apresenta "PROJETO DE LEI Nº" seguido de um vão de 8 espaços e de ", DE", em uma linha
+
+#### Scenario: Vão maior gravado pelo editor
+- **WHEN** o documento possui a epígrafe "PROJETO DE LEI Nº" seguida de 15 espaços e de ", DE"
+- **THEN** o PDF apresenta o vão com os 15 espaços, em uma linha
+
+#### Scenario: Espaços internos preservados
+- **WHEN** o documento possui uma epígrafe com dois espaços seguidos fora do vão do número e com espaços e quebras de linha nas pontas
+- **THEN** o PDF mantém os dois espaços internos e não imprime os espaços das pontas
+
+#### Scenario: Restante do documento inalterado
+- **WHEN** o mesmo documento é gerado antes e depois do ajuste da epígrafe
+- **THEN** todas as linhas do PDF, exceto a da epígrafe, ficam com o mesmo texto e na mesma posição
 
 ### Requirement: Ementa
 A ementa SHALL ser impressa 48pt abaixo da epígrafe, justificada, com recuo à esquerda de 6,5cm e sem recuo de primeira linha, preservando negrito e itálico. As referências com `xlink:href` MUST ser impressas como links, conforme o requisito "Remissões e links". A ementa MUST NOT ser envolvida por aspas.
@@ -459,23 +475,23 @@ O preâmbulo SHALL ser impresso 72pt abaixo da ementa, justificado e com recuo d
 - **THEN** o PDF apresenta o texto do preâmbulo sem negrito, com recuo de primeira linha de 2,5cm
 
 ### Requirement: Parâmetros de impressão
-O tamanho de fonte do texto, o tamanho de fonte de destaque, a entrelinha e os espaços entre parágrafos SHALL seguir as opções de impressão do documento (`lexedit:OpcoesImpressao`). O tamanho da fonte do texto MUST ser o `tamanhoFonte` do documento quando for 14, 16 ou 18, e 14 quando ausente ou com outro valor; o tamanho de destaque (epígrafe e título da justificação) MUST ser 18pt quando a fonte for 18 e 16pt nos demais casos. Quando `reduzirEspacoEntreLinhas` for verdadeiro, a entrelinha MUST ser 120%, o espaço após parágrafo 0.45em e, na justificação, o espaço antes do título 22pt e antes do corpo 10pt; caso contrário (inclusive quando ausente), 150%, 0.6em, 26pt e 14pt. Os espaços antes da ementa (48pt) e do preâmbulo (72pt) e o cabeçalho MUST NOT variar com essas opções. Elementos dimensionados em relação ao texto (notas de rodapé, células de tabela, sobrescrito e subscrito) MUST acompanhar o tamanho da fonte.
+O tamanho de fonte do texto, o tamanho de fonte de destaque, o tamanho dos alertas, a entrelinha e os espaços entre parágrafos SHALL seguir as opções de impressão do documento (`lexedit:OpcoesImpressao`). O tamanho da fonte do texto MUST ser o `tamanhoFonte` do documento quando for 14, 16 ou 18, e 14 quando ausente ou com outro valor; o tamanho de destaque (epígrafe e título da justificação) MUST ser 18pt quando a fonte for 18 e 16pt nos demais casos; o tamanho dos alertas MUST ser 2pt menor que o da fonte do texto (12pt, 14pt e 16pt). Quando `reduzirEspacoEntreLinhas` for verdadeiro, a entrelinha MUST ser 120%, o espaço após parágrafo 0.45em e, na justificação, o espaço antes do título 22pt e antes do corpo 10pt; caso contrário (inclusive quando ausente), 150%, 0.6em, 26pt e 14pt. Os espaços antes da ementa (48pt) e do preâmbulo (72pt) e o cabeçalho MUST NOT variar com essas opções. Elementos dimensionados em relação ao texto (notas de rodapé, células de tabela, sobrescrito e subscrito) MUST acompanhar o tamanho da fonte.
 
 #### Scenario: Valores padrão
 - **WHEN** um documento sem `lexedit:OpcoesImpressao`, ou com `tamanhoFonte="14"` e `reduzirEspacoEntreLinhas="false"`, é convertido em PDF
-- **THEN** o texto é impresso em 14pt com entrelinha de 150%, e a epígrafe em 16pt
+- **THEN** o texto é impresso em 14pt com entrelinha de 150%, a epígrafe em 16pt e os alertas em 12pt
 
 #### Scenario: Fonte 16
 - **WHEN** o documento tem `tamanhoFonte="16"`
-- **THEN** o texto e a epígrafe são impressos em 16pt
+- **THEN** o texto e a epígrafe são impressos em 16pt, e os alertas em 14pt
 
 #### Scenario: Fonte 18
 - **WHEN** o documento tem `tamanhoFonte="18"`
-- **THEN** o texto e a epígrafe são impressos em 18pt, e as notas de rodapé e o texto das células de tabela ficam maiores na mesma proporção
+- **THEN** o texto e a epígrafe são impressos em 18pt, os alertas em 16pt, e as notas de rodapé e o texto das células de tabela ficam maiores na mesma proporção
 
 #### Scenario: Tamanho fora dos valores do editor
 - **WHEN** o documento tem `tamanhoFonte="11"`
-- **THEN** o texto é impresso em 14pt
+- **THEN** o texto é impresso em 14pt e os alertas em 12pt
 
 #### Scenario: Reduzir espaço entre linhas
 - **WHEN** o documento tem `reduzirEspacoEntreLinhas="true"`
