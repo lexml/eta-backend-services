@@ -8,6 +8,7 @@ package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
  * Regras de cálculo:
  * <ul>
  * <li>{@code maxTamanhoFonte}: 18pt se {@code tamanhoFonte} = 18; senão 16pt;</li>
+ * <li>tamanho dos alertas: {@code tamanhoFonte} - 2 (12pt, 14pt ou 16pt);</li>
  * <li>{@code lineHeight}: 120% se "reduzir espaço entre linhas"; senão 150%;</li>
  * <li>{@code pMarginBottom}: 0.45em se "reduzir espaço entre linhas"; senão 0.6em;</li>
  * <li>espaço antes do título da justificação: 22pt se "reduzir"; senão 26pt;</li>
@@ -21,6 +22,7 @@ final class ParametrosImpressaoDocumentoArticulado {
 
     private final int tamanhoFonte;
     private final String maxTamanhoFonte;
+    private final String tamanhoFonteAlerta;
     private final String lineHeight;
     private final String pMarginBottom;
     private final String espacoAntesTituloJustificacao;
@@ -30,6 +32,7 @@ final class ParametrosImpressaoDocumentoArticulado {
     private ParametrosImpressaoDocumentoArticulado(int tamanhoFonte, boolean reduzirEspacoEntreLinhas) {
         this.tamanhoFonte = tamanhoFonte;
         this.maxTamanhoFonte = tamanhoFonte == 18 ? "18pt" : "16pt";
+        this.tamanhoFonteAlerta = (tamanhoFonte - 2) + "pt";
         this.lineHeight = reduzirEspacoEntreLinhas ? "120%" : "150%";
         this.pMarginBottom = reduzirEspacoEntreLinhas ? "0.45em" : "0.6em";
         this.espacoAntesTituloJustificacao = reduzirEspacoEntreLinhas ? "22pt" : "26pt";
@@ -42,7 +45,7 @@ final class ParametrosImpressaoDocumentoArticulado {
         return new ParametrosImpressaoDocumentoArticulado(opcoes.getTamanhoFonte(), opcoes.isReduzirEspacoEntreLinhas());
     }
 
-    /** Valores padrão: fonte 14, destaque 16pt, entrelinha 150%, espaço entre parágrafos 0.6em, 26pt, 14pt e 34pt. */
+    /** Valores padrão: fonte 14, destaque 16pt, alertas 12pt, entrelinha 150%, espaço entre parágrafos 0.6em, 26pt, 14pt e 34pt. */
     static ParametrosImpressaoDocumentoArticulado padrao() {
         return PADRAO;
     }
@@ -55,6 +58,11 @@ final class ParametrosImpressaoDocumentoArticulado {
     /** Tamanho da fonte de destaque (epígrafe e título da justificação), com unidade. */
     String getMaxTamanhoFonte() {
         return maxTamanhoFonte;
+    }
+
+    /** Tamanho da fonte dos alertas (caixa de pendências), com unidade: 2pt menor que o texto. */
+    String getTamanhoFonteAlerta() {
+        return tamanhoFonteAlerta;
     }
 
     /** Entrelinha, com unidade. */

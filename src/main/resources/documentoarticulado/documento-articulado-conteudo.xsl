@@ -515,7 +515,8 @@
 
 	<!--
 	  Bloco de um dispositivo: título de dispositivo do próprio dispositivo (se houver), aspas de abertura
-	  (abreAspas), rótulo (em negrito, exceto na pena),
+	  (abreAspas), rótulo (em negrito, exceto na pena, e com word-spacing fixo: os espaços internos, como em
+	  "Art. 15.", não esticam na justificação; &#160; não serviria, porque o FOP também o ajusta),
 	  espaço e o primeiro p, ou a linha pontilhada quando textoOmitido="s"; os p seguintes em blocos
 	  próprios; o fechamento das aspas e a nota de alteração (fechaAspas, notaAlteracao) no último bloco de
 	  texto; depois os dispositivos subordinados, na ordem do documento. Os espaços do início do p são
@@ -540,7 +541,7 @@
 					<xsl:call-template name="abre-aspas"/>
 				</xsl:if>
 				<xsl:if test="$textoRotulo != ''">
-					<fo:inline>
+					<fo:inline word-spacing="0pt">
 						<xsl:if test="$idRotulo != ''">
 							<xsl:attribute name="id"><xsl:value-of select="$idRotulo"/></xsl:attribute>
 						</xsl:if>
@@ -673,15 +674,81 @@
 
 	<!--
 	  Epígrafe: centralizada, em negrito, no tamanho de destaque ($maxTamanhoFonte), com os espaços trocados por
-	  &#160; para sair em uma linha.
+	  &#160; para sair em uma linha. Só as pontas são aparadas: os espaços internos ficam como vieram (quebras de
+	  linha e tabulações valem como espaço), e o vão de um projeto não numerado ("Nº     , DE") sai com no
+	  mínimo 8 espaços (vao-do-numero). Como a epígrafe é centralizada, o &#160; ajustável do FOP não tem efeito.
 	-->
 	<xsl:template match="lx:Epigrafe">
-		<xsl:variable name="texto" select="normalize-space(.)"/>
-		<xsl:if test="$texto != ''">
+		<xsl:if test="normalize-space(.) != ''">
+			<xsl:variable name="semPontaFinal">
+				<xsl:call-template name="aparar-fim">
+					<xsl:with-param name="texto" select="translate(., '&#9;&#10;&#13;', '   ')"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:variable name="aparado">
+				<xsl:call-template name="aparar-inicio">
+					<xsl:with-param name="texto" select="$semPontaFinal"/>
+				</xsl:call-template>
+			</xsl:variable>
+			<xsl:variable name="texto">
+				<xsl:call-template name="vao-do-numero">
+					<xsl:with-param name="texto" select="$aparado"/>
+				</xsl:call-template>
+			</xsl:variable>
 			<fo:block text-align="center" font-weight="bold" font-size="{$maxTamanhoFonte}">
 				<xsl:value-of select="translate($texto, ' ', '&#160;')"/>
 			</fo:block>
 		</xsl:if>
+	</xsl:template>
+
+	<!-- Remove espaços do início do texto (as quebras de linha e tabulações já viraram espaço). -->
+	<xsl:template name="aparar-inicio">
+		<xsl:param name="texto"/>
+		<xsl:choose>
+			<xsl:when test="starts-with($texto, ' ')">
+				<xsl:call-template name="aparar-inicio">
+					<xsl:with-param name="texto" select="substring($texto, 2)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$texto"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<!--
+	  Projeto não numerado: quando, depois do primeiro "Nº" (ou "N°", com o sinal de grau), só há espaços até a
+	  vírgula, esse vão fica com os espaços gravados pelo editor, com no mínimo 8 (menos que isso, inclusive
+	  nenhum, vira 8). Com número, o texto fica como está.
+	-->
+	<xsl:template name="vao-do-numero">
+		<xsl:param name="texto"/>
+		<xsl:variable name="marca">
+			<xsl:choose>
+				<xsl:when test="contains($texto, 'Nº')">Nº</xsl:when>
+				<xsl:when test="contains($texto, 'N°')">N°</xsl:when>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="depois" select="substring-after($texto, $marca)"/>
+		<xsl:choose>
+			<xsl:when test="$marca != '' and contains($depois, ',') and normalize-space(substring-before($depois, ',')) = ''">
+				<xsl:variable name="vao" select="substring-before($depois, ',')"/>
+				<xsl:value-of select="substring-before($texto, $marca)"/>
+				<xsl:value-of select="$marca"/>
+				<xsl:choose>
+					<xsl:when test="string-length($vao) &gt;= 8">
+						<xsl:value-of select="$vao"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>        </xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				<xsl:value-of select="concat(',', substring-after($depois, ','))"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$texto"/>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 
 	<!--

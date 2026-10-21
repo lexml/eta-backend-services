@@ -8,7 +8,7 @@
 ## $casaLegislativa (pela autoridade da URN; vazio fora das três casas) e $textoCabecalho (já escapado); para o fecho
 ## e as assinaturas, $local, $dataPorExtenso (vazia sem data válida), $espacoAntesFecho e $assinaturas (lista de
 ## pares, cada assinatura um mapa com nome, partidoUF e cargo, vazios quando não impressos; tudo já escapado); para os
-## alertas, $possuiRevisoes, $possuiComentarios e $pendencias (lista de textos já escapados, como registrados).
+## alertas, $tamanhoFonteAlerta (com unidade) e $pendencias (lista de textos já escapados, como registrados).
 <fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:madoc="http://www.lexml.gov.br/madoc/2.0"
 	xmlns:sf="http://www.senado.gov.br/requerimento/modelo/metadado"
@@ -165,27 +165,14 @@
 			</fo:block>
 		</fo:static-content>
 		<fo:flow flow-name="xsl-region-body" font-size="${tamanhoFonte}pt">
-			## Alertas e pendências (issue #79), antes da epígrafe, com os dados do lexedit:Metadado: caixa de marcas de
-			## revisão, caixa de comentários e caixa de pendências de preenchimento, em 12pt fixo. As pendências saem como
-			## registradas pelo editor, mesmo quando repetem o aviso de revisões ou de comentários.
-## Alertas -------------------------------------------------------------------------
-			#if($possuiRevisoes)
-			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
-				text-align="center" padding=".1cm" space-after=".3cm">
-				Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.
-			</fo:block>
-			#end
-			#if($possuiComentarios)
-			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
-				text-align="center" padding=".1cm" space-after=".3cm">
-				Este documento contém comentários e não deve ser protocolado até que sejam removidos.
-			</fo:block>
-			#end
-## Pendências de Preenchimento -----------------------------------------------------
+			## Caixa de pendências (issue #79), antes da epígrafe, com as pendências do lexedit:Metadado como registradas pelo
+			## editor. Revisões e comentários não têm caixa própria: o aviso deles é a pendência registrada (avaliação da
+			## chefia). Texto em $tamanhoFonteAlerta, 2pt menor que o do documento.
+## Pendências --------------------------------------------------------------------
 			#if(!$pendencias.isEmpty())
-			<fo:block background-color="yellow" color="red" font-size="12pt" font-weight="bold"
+			<fo:block background-color="yellow" color="red" font-size="$tamanhoFonteAlerta" font-weight="bold"
 					  text-align="left" padding=".1cm" space-after=".3cm" padding-left=".25cm" padding-right=".25cm">
-				Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:
+				Este documento contém pendências e não deve ser protocolado até que sejam resolvidas:
 				<fo:list-block font-weight="normal"
 					provisional-label-separation="1em" provisional-distance-between-starts="1em"
 					margin-left=".5cm">

@@ -64,10 +64,9 @@ class DocumentoArticuladoTemplateProcessor {
         ctx.put("textoCabecalho", StringEscapeUtils.escapeXml10(textoCabecalho));
         ctx.put("temCabecalho", imprimirBrasao || !textoCabecalho.isEmpty());
 
-        // Alertas e pendências (issue #79), antes do conteúdo
+        // Caixa de pendências (issue #79), antes do conteúdo, no tamanho dos alertas
         AlertasDocumentoArticulado alertas = AlertasDocumentoArticulado.de(documento);
-        ctx.put("possuiRevisoes", alertas.isPossuiRevisoes());
-        ctx.put("possuiComentarios", alertas.isPossuiComentarios());
+        ctx.put("tamanhoFonteAlerta", parametros.getTamanhoFonteAlerta());
         List<String> pendencias = new ArrayList<>();
         for (String pendencia : alertas.getPendencias()) {
             pendencias.add(StringEscapeUtils.escapeXml10(pendencia));

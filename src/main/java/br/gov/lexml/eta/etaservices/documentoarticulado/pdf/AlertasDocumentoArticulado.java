@@ -7,49 +7,23 @@ import java.util.List;
 import com.fasterxml.jackson.databind.JsonNode;
 
 /**
- * Dados dos alertas impressos no início do PDF (issue #79), lidos do {@code lexedit:Metadado} do
- * documento-articulado.json (especificações 08, 09, 11 e 13 do lexml-eta): caixa de marcas de revisão quando há
- * revisões de texto ou da articulação, caixa de comentários quando há algum comentário e caixa de pendências de
- * preenchimento quando há pendências.
+ * Dados da caixa de pendências impressa no início do PDF (issue #79), lidos do {@code lexedit:Metadado} do
+ * documento-articulado.json (especificação 13 do lexml-eta).
  * <p>
- * As pendências são impressas como foram registradas pelo editor, sem filtro nem reescrita, mesmo quando repetem o
- * aviso de revisões ou de comentários.
+ * As pendências são impressas como foram registradas pelo editor, sem filtro nem reescrita. Revisões e comentários
+ * não têm caixa própria: o aviso deles é a pendência registrada pelo editor (avaliação da chefia).
  */
 final class AlertasDocumentoArticulado {
 
-    private final boolean possuiRevisoes;
-    private final boolean possuiComentarios;
     private final List<String> pendencias;
 
-    private AlertasDocumentoArticulado(boolean possuiRevisoes, boolean possuiComentarios, List<String> pendencias) {
-        this.possuiRevisoes = possuiRevisoes;
-        this.possuiComentarios = possuiComentarios;
+    private AlertasDocumentoArticulado(List<String> pendencias) {
         this.pendencias = Collections.unmodifiableList(pendencias);
     }
 
     /** Alertas do documento; nenhum quando o documento não tem os dados. */
     static AlertasDocumentoArticulado de(JsonNode documento) {
-        JsonNode metadado = FechoDocumentoArticulado.metadadoLexedit(documento);
-        return new AlertasDocumentoArticulado(
-                temItens(metadado.path("revisoesTextuais").path("revisaoTextual"))
-                        || temItens(metadado.path("revisoesArticulacao").path("revisaoArticulacao")),
-                possuiComentarios(metadado.path("comentarios").path("sequenciaComentario")), pendencias(metadado.path("pendencias")));
-    }
-
-    private static boolean temItens(JsonNode lista) {
-        return lista.isArray() && lista.size() > 0;
-    }
-
-    /** Alguma sequência com ao menos um comentário (sequência vazia não conta). */
-    private static boolean possuiComentarios(JsonNode sequencias) {
-        if (sequencias.isArray()) {
-            for (JsonNode sequencia : sequencias) {
-                if (temItens(sequencia.path("comentario"))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return new AlertasDocumentoArticulado(pendencias(FechoDocumentoArticulado.metadadoLexedit(documento).path("pendencias")));
     }
 
     /** Textos das pendências, na ordem e sem alteração; só os itens sem texto são descartados. */
@@ -66,17 +40,7 @@ final class AlertasDocumentoArticulado {
         return textos;
     }
 
-    /** Se há revisões de texto ou da articulação (caixa "marcas de revisão"). */
-    boolean isPossuiRevisoes() {
-        return possuiRevisoes;
-    }
-
-    /** Se há ao menos um comentário (caixa "comentários"). */
-    boolean isPossuiComentarios() {
-        return possuiComentarios;
-    }
-
-    /** Pendências como registradas (caixa "pendências de preenchimento"); vazia sem pendências. */
+    /** Pendências como registradas (caixa de pendências); vazia sem pendências. */
     List<String> getPendencias() {
         return pendencias;
     }
