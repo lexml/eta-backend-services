@@ -24,12 +24,12 @@ Em cada pasta, para cada documento:
 
 | Documento | Recursos |
 |---|---|
-| `documento-articulado-exemplo` | Exemplo completo: cabeçalho (brasão, casa e texto), as três caixas de alerta e as cinco pendências, epígrafe, ementa com link, preâmbulo, agrupadores (Título, Capítulo, Seção, Subseção), pena e título de dispositivo, alteração de norma com aspas e omissis, remissões internas e externas, justificação (formatação inline, estilos de parágrafo, revisões, comentário, notas de rodapé, listas, tabelas e imagens), local e data e cinco assinaturas de senadores e deputados (com e sem cargo, a última sozinha). |
+| `documento-articulado-exemplo` | Exemplo completo: cabeçalho (brasão, casa e texto), caixa com as cinco pendências (o documento tem revisões e comentários, que não ganham caixa própria), epígrafe de projeto não numerado (vão do número), ementa com link, preâmbulo, agrupadores (Título, Capítulo, Seção, Subseção), pena e título de dispositivo, alteração de norma com aspas e omissis, remissões internas e externas, justificação (formatação inline, estilos de parágrafo, revisões, comentário, notas de rodapé, listas, tabelas e imagens), local e data e cinco assinaturas de senadores e deputados (com e sem cargo, a última sozinha). |
 | `documento-com-articulacao-e-alteracao-de-norma` | Articulação com alteração de norma vigente (issue #72). |
 | `documento-com-capitulo-e-secao` | Medida provisória com capítulos e seções; cabeçalho só com o brasão (autoridade federal). |
 | `documento-com-pena-e-titulo-de-dispositivo` | Pena e título de dispositivo. |
 | `documento-com-remissoes-internas` | Remissões internas válidas e inválidas. |
-| `documento-com-justificacao` | Catálogo da justificação: formatação inline, estilos do editor, revisões, comentário, notas (inclusive em trecho excluído), listas aninhadas, tabelas com mesclagem, imagens PNG/JPEG/externa; alertas de revisão e comentários; uma assinatura. |
+| `documento-com-justificacao` | Catálogo da justificação: formatação inline, estilos do editor, revisões, comentário, notas (inclusive em trecho excluído), listas aninhadas, tabelas com mesclagem, imagens PNG/JPEG/externa; caixa de pendências; uma assinatura. |
 | `documento-com-justificacao-longa` | Justificação de várias páginas com notas em páginas diferentes; cabeçalho só com texto; fecho sem data ("Sala das Sessões,"); assinatura sem partido/UF. |
 | `documento-anexo-parecer` | Anexo de parecer (`anexoParecer="true"`): sem a justificação; local, data e assinatura logo depois da articulação. |
 
@@ -37,10 +37,21 @@ Em cada pasta, para cada documento:
 
 - Tamanho do texto e entrelinha medidos com PDFBox em todos os 48 PDFs: 14/16/18pt com 16,8/19,2/21,6pt entre
   linhas (reduzido) e 21/24/27pt (normal). Epígrafe e título "JUSTIFICAÇÃO" em 16pt (18pt com fonte 18); notas de
-  rodapé em 0,7 e células de tabela em 0,8 do tamanho do texto; caixas de alerta em 12pt e cabeçalho em 11pt, fixos.
+  rodapé em 0,7 e células de tabela em 0,8 do tamanho do texto; caixa de pendências 2pt menor que o texto (12/14/16pt);
+  cabeçalho em 11pt, fixo.
 - JSON recuperado igual ao usado em 36 dos 48; nos 12 do exemplo e da justificação, a diferença é só nos espaços
   em branco entre elementos inline, que o conversor `jsonix-lexml` descarta (limitação conhecida).
 - Conformidade PDF/A-3B: os 48 PDFs validados no veraPDF, todos conformes.
 
 Gerado em 19/10/2026 com `DocumentoArticuladoJson2PDF` e o `jsonix-lexml` 2.0.0, a partir da branch
-`feature/PDF-ETA` (commit `76d5ccc`).
+`feature/PDF-ETA` (commit `76d5ccc`). Regerado em 21/10/2026, com os mesmos JSON, depois dos ajustes da avaliação da chefia:
+
+- só a caixa de pendências, com o texto "Este documento contém pendências e não deve ser protocolado até que sejam
+  resolvidas:";
+- rótulo dos dispositivos como uma palavra só (espaço interno fixo; algumas palavras trocam de linha);
+- caixa de pendências proporcional à fonte;
+- epígrafe de projeto não numerado com o vão do número (no mínimo 8 espaços).
+
+Por isso alguns documentos mudaram de número de páginas: os que tinham as caixas de revisão e de comentários
+encurtaram, e o `documento-anexo-parecer` com fonte 18 reduzida passou para duas páginas (a caixa em 16pt empurra a
+assinatura).
