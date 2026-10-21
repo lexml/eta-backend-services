@@ -20,40 +20,22 @@ class AlertasDocumentoArticuladoTest {
 
     @Test
     void semDados() throws Exception {
-        assertSemAlertas(AlertasDocumentoArticulado.de(documento("\"local\":\"Sala das Sessões\"")));
-        assertSemAlertas(AlertasDocumentoArticulado.de(new ObjectMapper().readTree("{\"value\":{\"metadado\":{}}}")));
+        assertThat(AlertasDocumentoArticulado.de(documento("\"local\":\"Sala das Sessões\"")).getPendencias()).isEmpty();
+        assertThat(AlertasDocumentoArticulado.de(new ObjectMapper().readTree("{\"value\":{\"metadado\":{}}}")).getPendencias()).isEmpty();
+    }
+
+    /** Revisões e comentários não geram alerta próprio: só as pendências registradas contam. */
+    @Test
+    void revisoesEComentariosSemPendenciasNaoGeramAlerta() throws Exception {
+        assertThat(AlertasDocumentoArticulado.de(documento(REVISAO_TEXTUAL + "," + REVISAO_ARTICULACAO + "," + COMENTARIO))
+                .getPendencias()).isEmpty();
     }
 
     @Test
-    void revisoesDeTextoOuDaArticulacao() throws Exception {
-        assertThat(AlertasDocumentoArticulado.de(documento(REVISAO_TEXTUAL)).isPossuiRevisoes()).isTrue();
-        assertThat(AlertasDocumentoArticulado.de(documento(REVISAO_ARTICULACAO)).isPossuiRevisoes()).isTrue();
-        assertThat(AlertasDocumentoArticulado.de(documento(REVISAO_TEXTUAL + "," + REVISAO_ARTICULACAO)).isPossuiRevisoes()).isTrue();
-    }
-
-    /** Listas vazias ou de outro tipo não contam. */
-    @ParameterizedTest
-    @ValueSource(strings = { "\"revisoesTextuais\":{\"revisaoTextual\":[]}", "\"revisoesArticulacao\":{}", "\"revisoesTextuais\":\"x\"" })
-    void semRevisoes(String revisoes) throws Exception {
-        assertThat(AlertasDocumentoArticulado.de(documento(revisoes)).isPossuiRevisoes()).isFalse();
-    }
-
-    @Test
-    void comentariosQuandoAlgumaSequenciaTemComentario() throws Exception {
-        assertThat(AlertasDocumentoArticulado.de(documento(COMENTARIO)).isPossuiComentarios()).isTrue();
-        // Sequência sem comentário não conta
-        assertThat(AlertasDocumentoArticulado.de(documento("\"comentarios\":{\"sequenciaComentario\":[{\"refIdElementoComentado\":\"art1\","
-                + "\"comentario\":[]}]}")).isPossuiComentarios()).isFalse();
-        assertThat(AlertasDocumentoArticulado.de(documento("\"comentarios\":{}")).isPossuiComentarios()).isFalse();
-    }
-
-    @Test
-    void pendenciasNaOrdemESemAlteracaoMesmoRepetindoAsCaixas() throws Exception {
+    void pendenciasNaOrdemESemAlteracao() throws Exception {
         AlertasDocumentoArticulado alertas = AlertasDocumentoArticulado.de(documento(REVISAO_TEXTUAL + "," + COMENTARIO + ","
                 + pendencias("Não foi informado um texto de justificação.", "Remover comentários.", "Resolver marcas de revisão de texto.")));
 
-        assertThat(alertas.isPossuiRevisoes()).isTrue();
-        assertThat(alertas.isPossuiComentarios()).isTrue();
         assertThat(alertas.getPendencias()).containsExactly("Não foi informado um texto de justificação.", "Remover comentários.",
                 "Resolver marcas de revisão de texto.");
     }
@@ -65,13 +47,11 @@ class AlertasDocumentoArticuladoTest {
         assertThat(alertas.getPendencias()).containsExactly("  Corrigir remissões internas inválidas. ");
     }
 
-    @Test
-    void soPendencias() throws Exception {
-        AlertasDocumentoArticulado alertas = AlertasDocumentoArticulado.de(documento(pendencias("Não foi informado um texto de justificação.")));
-
-        assertThat(alertas.isPossuiRevisoes()).isFalse();
-        assertThat(alertas.isPossuiComentarios()).isFalse();
-        assertThat(alertas.getPendencias()).containsExactly("Não foi informado um texto de justificação.");
+    /** Lista ausente, vazia ou de outro tipo: nenhuma pendência. */
+    @ParameterizedTest
+    @ValueSource(strings = { "\"pendencias\":{\"pendencia\":[]}", "\"pendencias\":{}", "\"pendencias\":\"x\"", "\"pendencias\":{\"pendencia\":[1]}" })
+    void semPendencias(String pendencias) throws Exception {
+        assertThat(AlertasDocumentoArticulado.de(documento(pendencias)).getPendencias()).isEmpty();
     }
 
     @Test
@@ -79,15 +59,7 @@ class AlertasDocumentoArticuladoTest {
         AlertasDocumentoArticulado alertas = AlertasDocumentoArticulado.de(
                 new ObjectMapper().readTree(ConversorDocumentoArticuladoFake.recurso(ConversorDocumentoArticuladoFake.JSON_EXEMPLO)));
 
-        assertThat(alertas.isPossuiRevisoes()).isTrue();
-        assertThat(alertas.isPossuiComentarios()).isTrue();
-        assertThat(alertas.getPendencias()).isNotEmpty();
-    }
-
-    private static void assertSemAlertas(AlertasDocumentoArticulado alertas) {
-        assertThat(alertas.isPossuiRevisoes()).isFalse();
-        assertThat(alertas.isPossuiComentarios()).isFalse();
-        assertThat(alertas.getPendencias()).isEmpty();
+        assertThat(alertas.getPendencias()).hasSize(5);
     }
 
     private static String pendencias(String... textos) {

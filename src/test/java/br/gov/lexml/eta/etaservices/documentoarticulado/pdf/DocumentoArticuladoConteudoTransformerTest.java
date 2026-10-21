@@ -59,6 +59,19 @@ class DocumentoArticuladoConteudoTransformerTest {
         }
     }
 
+    /** Rótulo como uma palavra só: o inline do rótulo tem word-spacing fixo e o espaço até o texto fica fora dele. */
+    @ParameterizedTest
+    @CsvSource(delimiter = '|', value = { ARTICULACAO_E_ALTERACAO + "|Art. 1º", ARTICULACAO_E_ALTERACAO + "|Art. 12-A.",
+            ARTICULACAO_E_ALTERACAO + "|§ 4º", CAPITULO_E_SECAO + "|§ 1º", CAPITULO_E_SECAO + "|I –",
+            PENA_E_TITULO_DISPOSITIVO + "|Pena –" })
+    void rotuloComoUmaPalavraSo(String nome, String rotulo) throws Exception {
+        Element inline = (Element) articulacao(xml(nome)).selectSingleNode(".//*[local-name()='inline'][. = '" + rotulo + "']");
+
+        assertThat(inline).as(rotulo).isNotNull();
+        assertThat(inline.attributeValue("word-spacing")).isEqualTo("0pt");
+        assertThat(texto(inline.getParent())).contains(rotulo + " ");
+    }
+
     @Test
     void artigoComRotuloEmNegritoNoMesmoBlocoDoCaput() throws Exception {
         List<Element> dispositivos = articulacao(xml(ARTICULACAO_E_ALTERACAO)).elements();
@@ -351,6 +364,40 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(epigrafe.attributeValue("font-size")).isEqualTo("16pt");
         // "PROJETO DE LEI Nº 999, DE 2026 " no documento: sem o espaço final e com espaços não quebráveis
         assertThat(epigrafe.getText()).isEqualTo(String.join(NBSP, "PROJETO", "DE", "LEI", "Nº", "999,", "DE", "2026"));
+    }
+
+    /** Projeto não numerado: o vão só de espaços entre "Nº" e a vírgula fica como gravado, com no mínimo 8 espaços. */
+    @ParameterizedTest
+    @CsvSource(delimiter = '|', value = { "PROJETO DE LEI Nº     , DE|Nº|8", "PROJETO DE LEI Nº , DE|Nº|8", "PROJETO DE LEI Nº, DE|Nº|8",
+            "PROJETO DE LEI Nº        , DE|Nº|8", "PROJETO DE LEI Nº               , DE|Nº|15", "PROJETO DE LEI N°            , DE|N°|12" })
+    void epigrafeSemNumeroComVaoDeNoMinimoOitoEspacos(String texto, String marca, int espacos) throws Exception {
+        assertThat(epigrafe(texto)).isEqualTo(String.join(NBSP, "PROJETO", "DE", "LEI", marca) + NBSP.repeat(espacos) + "," + NBSP + "DE");
+    }
+
+    /** Quebras de linha e tabulações no vão contam como espaço. */
+    @Test
+    void epigrafeSemNumeroComQuebraDeLinhaNoVao() throws Exception {
+        assertThat(epigrafe("PROJETO DE LEI Nº \n\t   \n    , DE")).isEqualTo(String.join(NBSP, "PROJETO", "DE", "LEI", "Nº") + NBSP.repeat(11) + "," + NBSP + "DE");
+    }
+
+    @Test
+    void epigrafeComNumeroSemMudanca() throws Exception {
+        assertThat(epigrafe("PROJETO DE LEI Nº 123, DE 2026")).isEqualTo(String.join(NBSP, "PROJETO", "DE", "LEI", "Nº", "123,", "DE", "2026"));
+    }
+
+    /** Só as pontas são aparadas: espaços internos ficam, e quebras de linha e tabulações valem como espaço. */
+    @Test
+    void epigrafeAparadaSoNasPontasComEspacosInternosPreservados() throws Exception {
+        assertThat(epigrafe("\n\t  PROJETO DE  LEI\nNº 123, DE 2026 \n  "))
+                .isEqualTo("PROJETO" + NBSP + "DE" + NBSP + NBSP + "LEI" + NBSP + "Nº" + NBSP + "123," + NBSP + "DE" + NBSP + "2026");
+    }
+
+    @Test
+    void epigrafeDoExemploSemNumero() throws Exception {
+        Element epigrafe = transformar(recurso(XML_EXEMPLO))
+                .getRootElement().element("block");
+
+        assertThat(epigrafe.getText()).isEqualTo(String.join(NBSP, "PROJETO", "DE", "LEI", "Nº") + NBSP.repeat(8) + "," + NBSP + "DE");
     }
 
     @Test
@@ -1238,6 +1285,11 @@ class DocumentoArticuladoConteudoTransformerTest {
         return documento("", "<Artigo id=\"art1\"><Rotulo>Art. 1º</Rotulo><Caput id=\"art1_cpt\"><p>Texto.</p></Caput></Artigo>")
                 .replace("</Norma></ProjetoNorma>", "</Norma><Justificacao><PartePrincipal>" + partePrincipal
                         + "</PartePrincipal></Justificacao></ProjetoNorma>");
+    }
+
+    /** Texto do bloco da epígrafe gerado para um documento mínimo com a epígrafe informada. */
+    private String epigrafe(String texto) throws DocumentException {
+        return transformar(lexml("<Epigrafe id=\"epigrafe\">" + texto + "</Epigrafe>")).getRootElement().element("block").getText();
     }
 
     /** Documento LexML mínimo com a parte inicial informada e um artigo na articulação. */

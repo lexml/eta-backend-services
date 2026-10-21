@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -193,6 +194,37 @@ class DocumentoArticuladoPdfGeneratorTest {
 
         assertThat(fontes.get("Art")).containsIgnoringCase("bold");
         assertThat(fontes.get("tipifica")).doesNotContainIgnoringCase("bold");
+    }
+
+    /**
+     * Rótulo como uma palavra só: nas primeiras linhas dos artigos, justificadas com folgas diferentes, o espaço
+     * entre "Art." e o número é o mesmo; a folga fica no espaço entre o rótulo e o texto.
+     */
+    @Test
+    void rotuloComoUmaPalavraSo() throws Exception {
+        List<Float> internos = new ArrayList<>();
+        List<Float> depoisDoRotulo = new ArrayList<>();
+        for (Linha linha : linhas(pdfExemplo)) {
+            if (!linha.texto.trim().matches("Art\\. \\d+º .*")) {
+                continue;
+            }
+            int ponto = linha.texto.indexOf("Art.") + 3;
+            int fimDoRotulo = linha.texto.indexOf(' ', ponto + 2);
+            internos.add(linha.xs.get(ponto + 2) - (linha.xs.get(ponto) + linha.larguras.get(ponto)));
+            depoisDoRotulo.add(linha.xs.get(fimDoRotulo + 1) - (linha.xs.get(fimDoRotulo - 1) + linha.larguras.get(fimDoRotulo - 1)));
+        }
+
+        assertThat(internos).hasSizeGreaterThanOrEqualTo(5);
+        assertThat(Collections.max(depoisDoRotulo) - Collections.min(depoisDoRotulo)).isGreaterThan(1f);
+        assertThat(Collections.max(internos) - Collections.min(internos)).isLessThan(0.05f);
+    }
+
+    /** Projeto não numerado (o exemplo grava "Nº     , DE"): o vão sai com o mínimo de 8 espaços, em uma linha. */
+    @Test
+    void epigrafeSemNumeroComVaoDoNumero() throws Exception {
+        Linha epigrafe = linhaQueContem(linhas(pdfExemplo), "PROJETO DE LEI");
+
+        assertThat(epigrafe.texto.trim()).isEqualTo("PROJETO DE LEI Nº" + " ".repeat(8) + ", DE");
     }
 
     @Test
@@ -496,25 +528,25 @@ class DocumentoArticuladoPdfGeneratorTest {
         return out.toByteArray();
     }
 
-    // Alertas e pendências (issue #79) ----------------------------------------------------------------------
+    // Caixa de pendências (issue #79; só pendências desde a avaliação da chefia) -----------------------------
 
-    private static final String AVISO_REVISAO = "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.";
-    private static final String AVISO_COMENTARIOS = "Este documento contém comentários e não deve ser protocolado até que sejam removidos.";
-    private static final String AVISO_PENDENCIAS =
-            "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:";
+    private static final String AVISO_PENDENCIAS = "Este documento contém pendências e não deve ser protocolado até que sejam resolvidas:";
+    private static final String NAO_DEVE = "não deve ser protocolado";
 
     @Test
-    void alertasEPendenciasDoExemploAntesDaEpigrafe() throws Exception {
+    void soCaixaDePendenciasDoExemploAntesDaEpigrafe() throws Exception {
         String texto = textoNormalizado(pdfExemplo);
         List<Linha> linhas = linhas(pdfExemplo);
 
-        // Depois do cabeçalho, as três caixas e as cinco pendências da especificação 13, como registradas
-        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_REVISAO, AVISO_COMENTARIOS, AVISO_PENDENCIAS,
+        // Depois do cabeçalho, só a caixa de pendências (o exemplo tem revisões e comentários) com as cinco
+        // pendências da especificação 13, como registradas
+        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_PENDENCIAS,
                 "• Não foi informado um texto de justificação.", "• Corrigir remissões internas inválidas.", "• Remover comentários.",
                 "• Resolver marcas de revisão de texto.", "• Resolver marcas de revisão na articulação.", "PROJETO DE LEI");
-        // Caixas em negrito e pendências sem negrito, em 12pt, na primeira página, acima da epígrafe
+        assertThat(texto.indexOf(NAO_DEVE)).isEqualTo(texto.lastIndexOf(NAO_DEVE));
+        // Cabeçalho da caixa em negrito e pendências sem negrito, em 12pt, na primeira página, acima da epígrafe
         Linha epigrafe = linhaQueContem(linhas, "PROJETO DE LEI");
-        Linha aviso = linhaQueContem(linhas, "Este documento contém marcas de revisão");
+        Linha aviso = linhaQueContem(linhas, "Este documento contém pendências");
         Linha pendencia = linhaQueContem(linhas, "Resolver marcas de revisão na articulação.");
         assertThat(aviso.pagina).isEqualTo(1);
         assertThat(aviso.tamanho).isEqualTo(12f);
@@ -526,41 +558,44 @@ class DocumentoArticuladoPdfGeneratorTest {
     }
 
     @Test
-    void alertasDasFixturesDaJustificacao() throws Exception {
+    void pendenciasDasFixturesDaJustificacao() throws Exception {
         String justificacao = textoNormalizado(gerarPdf(JUSTIFICACAO));
         String longa = textoNormalizado(gerarPdf(JUSTIFICACAO_LONGA));
 
-        // Revisões e comentários; a lista repete os avisos como o editor registrou
-        assertThat(justificacao).containsSubsequence(AVISO_REVISAO, AVISO_COMENTARIOS, AVISO_PENDENCIAS, "• Remover comentários.",
-                "• Resolver marcas de revisão de texto.", "PROJETO DE LEI");
-        // Só revisões (sem comentários)
-        assertThat(longa).containsSubsequence(AVISO_REVISAO, AVISO_PENDENCIAS, "• Resolver marcas de revisão de texto.", "PROJETO DE LEI");
-        assertThat(longa).doesNotContain(AVISO_COMENTARIOS);
+        // Revisões e comentários só aparecem como as pendências que o editor registrou
+        assertThat(justificacao).containsSubsequence(AVISO_PENDENCIAS, "• Remover comentários.", "• Resolver marcas de revisão de texto.",
+                "PROJETO DE LEI");
+        assertThat(longa).containsSubsequence(AVISO_PENDENCIAS, "• Resolver marcas de revisão de texto.", "PROJETO DE LEI");
+        for (String texto : new String[] { justificacao, longa }) {
+            assertThat(texto.indexOf(NAO_DEVE)).isEqualTo(texto.lastIndexOf(NAO_DEVE));
+        }
     }
 
     @ParameterizedTest
     @ValueSource(strings = { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS })
     void documentosSemAlertas(String nome) throws Exception {
-        assertThat(textoNormalizado(gerarPdf(nome))).doesNotContain("não deve ser protocolado");
+        assertThat(textoNormalizado(gerarPdf(nome))).doesNotContain(NAO_DEVE);
     }
 
     @Test
-    void soPendencias() throws Exception {
-        String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.remove(
-                Arrays.asList("revisoesTextuais", "revisoesArticulacao", "comentarios"))));
+    void revisoesEComentariosSemPendenciasNaoImprimemCaixa() throws Exception {
+        List<Linha> linhas = linhas(pdfDoExemploComMetadado(metadado -> metadado.remove("pendencias")));
 
-        assertThat(texto).doesNotContain(AVISO_REVISAO).doesNotContain(AVISO_COMENTARIOS);
-        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_PENDENCIAS,
-                "• Não foi informado um texto de justificação.", "PROJETO DE LEI");
+        assertThat(linhas.stream().map(l -> l.texto)).noneMatch(t -> t.contains("Este documento contém"));
+        // Sem a caixa, a epígrafe fica onde fica nos documentos sem alertas: logo abaixo do cabeçalho
+        assertThat(linhaQueContem(linhas, "Gabinete do Senador Davi Alcolumbre").y)
+                .isLessThan(linhaQueContem(linhas, "PROJETO DE LEI").y);
     }
 
-    @Test
-    void alertasEm12ptComFonte18() throws Exception {
-        List<Linha> linhas = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "true", "18"));
+    /** A caixa acompanha o tamanho da fonte: 2pt menor que o texto. */
+    @ParameterizedTest
+    @CsvSource({ "14,12", "16,14", "18,16" })
+    void caixaDePendenciasAcompanhaOTamanhoDaFonte(String tamanhoFonte, float tamanhoCaixa) throws Exception {
+        List<Linha> linhas = linhas(pdfDoExemploCom("true", "Gabinete do Senador Davi Alcolumbre", "false", tamanhoFonte));
 
-        assertThat(linhaQueContem(linhas, "PROJETO DE LEI").tamanho).isEqualTo(18f);
-        assertThat(linhaQueContem(linhas, "Este documento contém marcas de revisão").tamanho).isEqualTo(12f);
-        assertThat(linhaQueContem(linhas, "Corrigir remissões internas inválidas.").tamanho).isEqualTo(12f);
+        assertThat(linhaQueContem(linhas, "Art. 1º").tamanho).isEqualTo(Float.parseFloat(tamanhoFonte));
+        assertThat(linhaQueContem(linhas, "Este documento contém pendências").tamanho).isEqualTo(tamanhoCaixa);
+        assertThat(linhaQueContem(linhas, "Corrigir remissões internas inválidas.").tamanho).isEqualTo(tamanhoCaixa);
     }
 
     @Test
@@ -614,7 +649,7 @@ class DocumentoArticuladoPdfGeneratorTest {
         String texto = textoNormalizado(pdfDoExemploComMetadado(metadado -> metadado.put("anexoParecer", true)));
 
         // Só a justificação sai: logo depois do último artigo vêm o local e data e as cinco assinaturas
-        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_REVISAO, AVISO_PENDENCIAS, "PROJETO DE LEI",
+        assertThat(texto).containsSubsequence("Gabinete do Senador Davi Alcolumbre", AVISO_PENDENCIAS, "PROJETO DE LEI",
                 "Art. 6º Esta Lei entra em vigor na data de sua publicação. Sala das Sessões, 24 de abril de 2026.",
                 "Senador Davi Alcolumbre", "Senadora Soraya Thronicke", "Deputado João da Silva", "Deputada Maria Souza",
                 "Senador Pedro Alves");

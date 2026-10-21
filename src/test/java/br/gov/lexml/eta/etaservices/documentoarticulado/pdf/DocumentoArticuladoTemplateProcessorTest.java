@@ -223,38 +223,31 @@ class DocumentoArticuladoTemplateProcessorTest {
         assertThat(cabecalho.elements()).hasSize(1);
     }
 
-    // Alertas e pendências (issue #79) ----------------------------------------------------------------------------
+    // Caixa de pendências (issue #79; só pendências desde a avaliação da chefia) ---------------------------------
 
-    private static final String AVISO_REVISAO = "Este documento contém marcas de revisão e não deve ser protocolado até que estas sejam removidas.";
-    private static final String AVISO_COMENTARIOS = "Este documento contém comentários e não deve ser protocolado até que sejam removidos.";
-    private static final String AVISO_PENDENCIAS =
-            "Este documento contém pendências de preenchimento e não deve ser protocolado até que estas sejam resolvidas:";
+    private static final String AVISO_PENDENCIAS = "Este documento contém pendências e não deve ser protocolado até que sejam resolvidas:";
 
     @Test
-    void tresCaixasAntesDoConteudoNaOrdemEComOEstiloDosAlertas() throws Exception {
+    void soCaixaDePendenciasAntesDoConteudoComOEstiloDosAlertas() throws Exception {
         pendencias("Não foi informado um texto de justificação.", "Remover comentários.");
 
-        List<Element> filhos = fluxo(processar()).elements();
-        Element revisao = filhos.get(0);
-        Element comentarios = filhos.get(1);
-        Element pendencias = filhos.get(2);
-        assertThat(filhos.get(3).getText()).isEqualTo("Conteúdo gerado");
-        assertThat(revisao.getTextTrim()).isEqualTo(AVISO_REVISAO);
-        assertThat(comentarios.getTextTrim()).isEqualTo(AVISO_COMENTARIOS);
+        String fo = processar();
+        List<Element> filhos = fluxo(fo).elements();
+        Element pendencias = filhos.get(0);
+        assertThat(filhos.get(1).getText()).isEqualTo("Conteúdo gerado");
+        // O documento de teste tem revisões e comentários: nenhum aviso próprio para eles
+        assertThat(fo).doesNotContain("marcas de revisão e não deve").doesNotContain("comentários e não deve")
+                .doesNotContain("pendências de preenchimento");
         assertThat(pendencias.getTextTrim()).isEqualTo(AVISO_PENDENCIAS);
-        for (Element caixa : new Element[] { revisao, comentarios, pendencias }) {
-            assertThat(caixa.attributeValue("background-color")).isEqualTo("yellow");
-            assertThat(caixa.attributeValue("color")).isEqualTo("red");
-            assertThat(caixa.attributeValue("font-size")).isEqualTo("12pt");
-            assertThat(caixa.attributeValue("font-weight")).isEqualTo("bold");
-            assertThat(caixa.attributeValue("padding")).isEqualTo(".1cm");
-            assertThat(caixa.attributeValue("space-after")).isEqualTo(".3cm");
-        }
-        assertThat(revisao.attributeValue("text-align")).isEqualTo("center");
-        assertThat(comentarios.attributeValue("text-align")).isEqualTo("center");
+        assertThat(pendencias.attributeValue("background-color")).isEqualTo("yellow");
+        assertThat(pendencias.attributeValue("color")).isEqualTo("red");
+        assertThat(pendencias.attributeValue("font-size")).isEqualTo("12pt");
+        assertThat(pendencias.attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(pendencias.attributeValue("padding")).isEqualTo(".1cm");
+        assertThat(pendencias.attributeValue("space-after")).isEqualTo(".3cm");
         assertThat(pendencias.attributeValue("text-align")).isEqualTo("left");
         assertThat(pendencias.attributeValue("padding-left")).isEqualTo(".25cm");
-        // Lista sem negrito, com marcador, um item por pendência como registrada (mesmo repetindo a caixa de comentários)
+        // Lista sem negrito, com marcador, um item por pendência como registrada
         Element lista = (Element) pendencias.selectSingleNode("*[local-name()='list-block']");
         assertThat(lista.attributeValue("font-weight")).isEqualTo("normal");
         assertThat(lista.attributeValue("margin-left")).isEqualTo(".5cm");
@@ -265,10 +258,7 @@ class DocumentoArticuladoTemplateProcessorTest {
     }
 
     @Test
-    void semDadosNenhumaCaixa() throws Exception {
-        metadadoLexedit().remove("revisoesTextuais");
-        metadadoLexedit().remove("revisoesArticulacao");
-        metadadoLexedit().remove("comentarios");
+    void semPendenciasNenhumaCaixaMesmoComRevisoesEComentarios() throws Exception {
         metadadoLexedit().remove("pendencias");
 
         String fo = processar();
@@ -276,37 +266,17 @@ class DocumentoArticuladoTemplateProcessorTest {
         assertThat(fo).doesNotContain("background-color=\"yellow\"").doesNotContain("não deve ser protocolado");
     }
 
-    @Test
-    void soPendencias() throws Exception {
-        metadadoLexedit().remove("revisoesTextuais");
-        metadadoLexedit().remove("revisoesArticulacao");
-        metadadoLexedit().remove("comentarios");
+    /** Caixa 2pt menor que o texto: 12pt, 14pt e 16pt com fonte 14, 16 e 18. */
+    @ParameterizedTest
+    @CsvSource({ "14,12pt", "16,14pt", "18,16pt" })
+    void caixaAcompanhaOTamanhoDaFonte(int tamanhoFonte, String tamanhoCaixa) throws Exception {
         pendencias("Não foi informado um texto de justificação.");
-
-        List<Element> filhos = fluxo(processar()).elements();
-        assertThat(filhos.get(0).getTextTrim()).isEqualTo(AVISO_PENDENCIAS);
-        assertThat(filhos.get(1).getText()).isEqualTo("Conteúdo gerado");
-    }
-
-    @Test
-    void soRevisaoDaArticulacao() throws Exception {
-        metadadoLexedit().remove("revisoesTextuais");
-        metadadoLexedit().remove("comentarios");
-        metadadoLexedit().remove("pendencias");
-
-        List<Element> filhos = fluxo(processar()).elements();
-        assertThat(filhos.get(0).getTextTrim()).isEqualTo(AVISO_REVISAO);
-        assertThat(filhos.get(1).getText()).isEqualTo("Conteúdo gerado");
-    }
-
-    @Test
-    void caixasEm12ptMesmoComFonte18() throws Exception {
-        opcoesImpressao().put("tamanhoFonte", 18);
+        opcoesImpressao().put("tamanhoFonte", tamanhoFonte);
         ParametrosImpressaoDocumentoArticulado parametros = ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado.de(documento));
 
         Element fluxo = fluxo(processor.processar(documento, parametros, CONTEUDO_FO));
-        assertThat(fluxo.attributeValue("font-size")).isEqualTo("18pt");
-        assertThat(fluxo.elements().get(0).attributeValue("font-size")).isEqualTo("12pt");
+        assertThat(fluxo.attributeValue("font-size")).isEqualTo(tamanhoFonte + "pt");
+        assertThat(fluxo.elements().get(0).attributeValue("font-size")).isEqualTo(tamanhoCaixa);
     }
 
     @Test
