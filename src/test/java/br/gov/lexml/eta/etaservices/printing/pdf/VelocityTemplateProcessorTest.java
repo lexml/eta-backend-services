@@ -47,21 +47,21 @@ class VelocityTemplateProcessorTest {
     private VelocityTemplateProcessor velocityTemplateProcessor;
 
     @Test
-    @DisplayName("Não imprime justificação, local, data ou autoria quando a emenda é anexo de parecer")
-    void naoImprimeDadosSuprimidosNoAnexoParecer() throws Exception {
+    @DisplayName("Omite só a justificação quando a emenda é anexo de parecer")
+    void anexoParecerSoOmiteJustificacao() throws Exception {
         EmendaPojo emendaPojo = (EmendaPojo) emenda;
         emendaPojo.setAnexoParecer(true);
         emendaPojo.setJustificativa("<p>JUSTIFICATIVA_NAO_DEVE_APARECER</p>");
-        emendaPojo.setLocal("LOCAL_NAO_DEVE_APARECER");
+        emendaPojo.setLocal("LOCAL_DEVE_APARECER");
 
         String templateResult = velocityTemplateProcessor.getTemplateResult(emendaPojo);
 
         assertFalse(templateResult.contains("JUSTIFICATIVA_NAO_DEVE_APARECER"));
-        assertFalse(templateResult.contains("LOCAL_NAO_DEVE_APARECER"));
         assertFalse(templateResult.contains("role=\"Justificativa\""));
-        assertFalse(templateResult.contains("role=\"fecho\""));
-        assertFalse(templateResult.contains("role=\"Signatários\""));
-        assertFalse(templateResult.contains("Alessandro Vieira"));
+        assertTrue(templateResult.contains("LOCAL_DEVE_APARECER"));
+        assertTrue(templateResult.contains("role=\"fecho\""));
+        assertTrue(templateResult.contains("role=\"Signatários\""));
+        assertTrue(templateResult.contains("Alessandro Vieira"));
 
         ByteArrayOutputStream pdfOutput = new ByteArrayOutputStream();
         new FOPProcessor().processFOP(pdfOutput, templateResult, convertToXml(emendaPojo), TipoDocumento.EMENDA);
@@ -69,8 +69,9 @@ class VelocityTemplateProcessorTest {
         try (PDDocument pdf = PDDocument.load(new ByteArrayInputStream(pdfOutput.toByteArray()))) {
             String textoPdf = new PDFTextStripper().getText(pdf);
             assertFalse(textoPdf.contains("JUSTIFICATIVA_NAO_DEVE_APARECER"));
-            assertFalse(textoPdf.contains("LOCAL_NAO_DEVE_APARECER"));
-            assertFalse(textoPdf.contains("Alessandro Vieira"));
+            assertFalse(textoPdf.contains("JUSTIFICAÇÃO"));
+            assertTrue(textoPdf.contains("LOCAL_DEVE_APARECER"));
+            assertTrue(textoPdf.contains("Alessandro Vieira"));
         }
     }
 

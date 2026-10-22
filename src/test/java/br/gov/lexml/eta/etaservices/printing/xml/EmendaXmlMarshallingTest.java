@@ -1348,28 +1348,27 @@ class EmendaXmlMarshallingTest {
     }
 
     @Test
-    void deveManterEstruturaSemPreencherDadosNaoAplicaveisAoAnexoParecer() throws Exception {
+    void anexoParecerSoEsvaziaJustificativa() throws Exception {
         EmendaPojo emenda = (EmendaPojo) setupEmenda();
         emenda.setAnexoParecer(true);
+        emenda.setJustificativaAntesRevisao("<p>Justificativa antes da revisão</p>");
+        emenda.setNotasRodape(List.of(new NotaRodapePojo("1", 1, "Nota de Rodapé 1")));
 
         Document document = DocumentHelper.parseText(marshaller.toXml(emenda));
         Element emendaElement = document.getRootElement();
 
         assertEquals("true", document.selectSingleNode("//Metadados/AnexoParecer").getText());
-        assertNull(emendaElement.attributeValue("local"));
-        assertNull(emendaElement.attributeValue("data"));
         Node justificativa = document.selectSingleNode("//Justificativa");
         assertNotNull(justificativa);
         assertEquals("", justificativa.getText());
         assertEquals(0, document.selectNodes("//JustificativaAntesRevisao").size());
+        assertEquals("Sala da comissão", emendaElement.attributeValue("local"));
+        assertEquals("2022-07-22", emendaElement.attributeValue("data"));
         Element autoria = (Element) document.selectSingleNode("//Autoria");
         assertNotNull(autoria);
         assertEquals(TipoAutoria.PARLAMENTAR.getDescricao(), autoria.attributeValue("tipo"));
-        assertEquals("true", autoria.attributeValue("imprimirPartidoUF"));
-        assertEquals("0", autoria.attributeValue("quantidadeAssinaturasAdicionaisDeputados"));
-        assertEquals("0", autoria.attributeValue("quantidadeAssinaturasAdicionaisSenadores"));
-        assertEquals(0, autoria.elements().size());
-        assertEquals(0, document.selectNodes("//NotasRodape").size());
+        assertEquals("Alessandro Vieira", ((Element) autoria.selectSingleNode("Parlamentar")).attributeValue("nome"));
+        assertEquals(1, document.selectNodes("//NotasRodape/NotaRodape").size());
         assertEquals(1, document.selectNodes("//OpcoesImpressao").size());
     }
 
