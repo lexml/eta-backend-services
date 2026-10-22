@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.FileWriter;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import br.gov.lexml.eta.etaservices.emenda.Comentario;
 import br.gov.lexml.eta.etaservices.emenda.Emenda;
 import br.gov.lexml.eta.etaservices.emenda.EmendaJsonGeneratorBean;
+import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.SequenciaComentario;
 
 class EmendaXmlUnmarshallerTest {
@@ -83,9 +85,13 @@ class EmendaXmlUnmarshallerTest {
     }
 
     @Test
-    void fromXmlComAnexoParecerRetornaTrue() throws Exception {
+    void fromXmlComAnexoParecerSoOmiteJustificativa() throws Exception {
         String xml = IOUtils.resourceToString("/mp-com-revisoes.xml", StandardCharsets.UTF_8)
-                .replace("</Metadados>", "<AnexoParecer>true</AnexoParecer></Metadados>");
+                .replace("</Metadados>", "<AnexoParecer>true</AnexoParecer></Metadados>")
+                .replace("</Justificativa>", "</Justificativa><JustificativaAntesRevisao>&lt;p&gt;Antes&lt;/p&gt;</JustificativaAntesRevisao>")
+                .replace("</Autoria>", "<Parlamentar identificacao=\"6331\" nome=\"Sergio Moro\" tratamento=\"Senador\""
+                        + " siglaPartido=\"UNIÃO\" siglaUF=\"PR\" siglaCasaLegislativa=\"SF\" /></Autoria>")
+                .replace("</Emenda>", "<NotasRodape><NotaRodape id=\"1\" numero=\"1\" texto=\"Nota 1\" /></NotasRodape></Emenda>");
 
         Emenda emenda = unmarshaller.fromXml(xml);
         StringWriter jsonWriter = new StringWriter();
@@ -94,16 +100,17 @@ class EmendaXmlUnmarshallerTest {
         assertThat(emenda.isAnexoParecer()).isTrue();
         assertThat(emenda.getJustificativa()).isNull();
         assertThat(emenda.getJustificativaAntesRevisao()).isNull();
-        assertThat(emenda.getLocal()).isNull();
-        assertThat(emenda.getData()).isNull();
-        assertThat(emenda.getAutoria()).isNull();
-        assertThat(emenda.getNotasRodape()).isEmpty();
+        assertThat(emenda.getLocal()).isEqualTo("Sala da comissão");
+        assertThat(emenda.getData()).isEqualTo(LocalDate.of(2023, 7, 12));
+        assertThat(emenda.getAutoria().getParlamentares()).extracting(Parlamentar::getNome).containsExactly("Sergio Moro");
+        assertThat(emenda.getNotasRodape()).hasSize(1);
         assertThat(jsonWriter.toString())
                 .doesNotContain("\"justificativa\"")
                 .doesNotContain("\"justificativaAntesRevisao\"")
-                .doesNotContain("\"local\"")
-                .doesNotContain("\"data\"")
-                .doesNotContain("\"autoria\"");
+                .contains("\"local\"")
+                .contains("\"data\"")
+                .contains("\"autoria\"")
+                .contains("Sergio Moro");
     }
 
     @Test

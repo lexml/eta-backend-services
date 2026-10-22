@@ -79,10 +79,10 @@ public class EmendaXmlUnmarshaller {
         final SubstituicaoTermo substituicaoTermo = parseSubstituicaoTermo(rootElement);
         final String justificativa = anexoParecer ? null : parseJustificativa(rootElement);
         final String JustificativaAntesRevisao = anexoParecer ? null : parseJustificativaAntesRevisao(rootElement);
-        final Autoria autoria = anexoParecer ? null : parseAutoria(rootElement);
+        final Autoria autoria = parseAutoria(rootElement);
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
-        final List<? extends NotaRodape> notasRodape = anexoParecer ? List.of() : parseNotasRodape(rootElement);
+        final List<? extends NotaRodape> notasRodape = parseNotasRodape(rootElement);
         final List<? extends SequenciaComentario> sequenciasComentario = parseSequenciasComentario(rootElement);
         final List<String> pendenciasPreenchimento = parsePendenciasPreenchimento(rootElement);
 
@@ -103,8 +103,8 @@ public class EmendaXmlUnmarshaller {
                 anexos,
                 justificativa,
                 JustificativaAntesRevisao,
-                anexoParecer ? null : atributosEmenda.getLocal(),
-                anexoParecer ? null : atributosEmenda.getData(),
+                atributosEmenda.getLocal(),
+                atributosEmenda.getData(),
                 autoria,
                 opcoesImpressao,
                 revisoes,

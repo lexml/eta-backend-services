@@ -35,7 +35,6 @@ import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
 import br.gov.lexml.eta.etaservices.emenda.SequenciaComentario;
 import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
-import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
 import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
 import br.gov.lexml.eta.etaservices.emenda.Usuario;
 import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
@@ -61,15 +60,14 @@ public class EmendaXmlMarshaller {
             geraAnexos(emenda.getAnexos(), element);
             if (emenda.isAnexoParecer()) {
                 geraJustificativa("", element);
-                geraAutoriaVazia(element);
             } else {
                 geraJustificativa(emenda.getJustificativa(), element);
                 geraJustificativaAntesRevisao(emenda.getJustificativaAntesRevisao(), element);
-                geraAutoria(emenda.getAutoria(), element);
-                geraNotasRodape(emenda.getNotasRodape(), element);
             }
+            geraAutoria(emenda.getAutoria(), element);
             geraOpcoesImpressao(emenda.getOpcoesImpressao(), element);
             geraRevisoes(emenda.getRevisoes(), element);
+            geraNotasRodape(emenda.getNotasRodape(), element);
             geraSequenciasComentario(emenda.getSequenciasComentario(), element);
             geraPendenciasPreenchimento(emenda.getPendenciasPreenchimento(), element);
 
@@ -83,13 +81,11 @@ public class EmendaXmlMarshaller {
         Element element = document.addElement("Emenda");
 
         element.addAttribute("versaoFormatoArquivo", "1.0");
-        if (!emenda.isAnexoParecer()) {
-            if (emenda.getLocal() != null) {
-                element.addAttribute("local", emenda.getLocal());
-            }
-            if (emenda.getData() != null) {
-                element.addAttribute("data", DateTimeFormatter.ISO_DATE.format(emenda.getData()));
-            }
+        if (emenda.getLocal() != null) {
+            element.addAttribute("local", emenda.getLocal());
+        }
+        if (emenda.getData() != null) {
+            element.addAttribute("data", DateTimeFormatter.ISO_DATE.format(emenda.getData()));
         }
 
         return element;
@@ -396,14 +392,6 @@ public class EmendaXmlMarshaller {
         if (autoria.getColegiado() != null) {
             geraColegiadoAutor(autoria.getColegiado(), element);
         }
-    }
-
-    private void geraAutoriaVazia(Element emendaElement) {
-        Element element = emendaElement.addElement("Autoria");
-        element.addAttribute("tipo", TipoAutoria.PARLAMENTAR.getDescricao());
-        element.addAttribute("imprimirPartidoUF", "true");
-        element.addAttribute("quantidadeAssinaturasAdicionaisDeputados", "0");
-        element.addAttribute("quantidadeAssinaturasAdicionaisSenadores", "0");
     }
 
     private void geraParlamentar(Parlamentar autor, Element emendaElement) {

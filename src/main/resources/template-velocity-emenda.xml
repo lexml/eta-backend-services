@@ -76,7 +76,7 @@
 					<dc:creator>
 						<rdf:Seq>
 							<rdf:li>
-							#if (!$emenda.anexoParecer && !$ve.isEmpty($emenda.autoria.parlamentares))
+							#if (!$ve.isEmpty($emenda.autoria.parlamentares))
 								$emenda.autoria.parlamentares[0].tratamento
 								$emenda.autoria.parlamentares[0].nome
 							#end
@@ -383,7 +383,6 @@
 				</fo:block>
 				#end
 			</fo:block-container>
-			#if (!$emenda.anexoParecer)
 			<fo:block-container>
 ## Local e data ----------------------------------------------------------------
 				<fo:block keep-with-next.within-page="always"
@@ -553,7 +552,6 @@
 					#end
 				</fo:block>
 			</fo:block-container>
-			#end
 		</fo:flow>
 	</fo:page-sequence>
 </fo:root>
