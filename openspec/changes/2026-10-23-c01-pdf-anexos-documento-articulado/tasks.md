@@ -16,9 +16,9 @@
 
 ## 3. Documentação e verificação geral
 
-- [ ] 3.1 Atualizar o `CLAUDE.md` (seção de `documentoarticulado`) com a nova sobrecarga, a semântica de embutir e imprimir, o nome reservado e o exemplo de montagem; verificar a revisão do texto
-- [ ] 3.2 Rodar `mvn test` completo e confirmar que não há regressão em emenda, parecer e documento articulado
-- [ ] 3.3 Rodar `openspec validate 2026-10-23-c01-pdf-anexos-documento-articulado --strict` e verificar que não há erros
+- [x] 3.1 Atualizar o `CLAUDE.md` (seção de `documentoarticulado`) com a nova sobrecarga, a semântica de embutir e imprimir, o nome reservado e o exemplo de montagem; verificar a revisão do texto
+- [x] 3.2 Rodar `mvn test` completo e confirmar que não há regressão em emenda, parecer e documento articulado
+- [x] 3.3 Rodar `openspec validate 2026-10-23-c01-pdf-anexos-documento-articulado --strict` e verificar que não há erros
 
 ## Workflow follow-up
 
