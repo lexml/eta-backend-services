@@ -9,10 +9,10 @@
 
 ## 2. API do gerador de PDF
 
-- [ ] 2.1 Adicionar `DocumentoArticuladoPdfGenerator.generate(String, List<AnexoPDFA>, OutputStream)`, ignorando itens nulos ou sem stream, lendo cada stream uma só vez para `byte[]` e fazendo o `generate(json, out)` atual delegar com lista vazia; verificar que os testes existentes de `DocumentoArticuladoPdfGeneratorTest` continuam passando sem alteração
-- [ ] 2.2 Rejeitar anexo chamado `documento-articulado.xml` (sem diferenciar maiúsculas) com `EtaBackendException` antes de converter e sem escrever no destino; verificar com teste
-- [ ] 2.3 Manter o hash sobre os bytes finais; verificar com teste que, com anexos impressos, o placeholder some e o MD5 gravado é o do arquivo
-- [ ] 2.4 Testes JUnit 5 do gerador usando `ConversorDocumentoArticuladoFake` e PDFs de anexo em `src/test/resources`: geração com anexos, nada escrito em caso de falha, e ida e volta do JSON com `DocumentoArticuladoJsonExtractor` em PDF com anexos; rodar `mvn test -Dtest=DocumentoArticuladoPdfGeneratorTest`
+- [x] 2.1 Adicionar `DocumentoArticuladoPdfGenerator.generate(String, List<AnexoPDFA>, OutputStream)`, ignorando itens nulos ou sem stream, lendo cada stream uma só vez para `byte[]` e fazendo o `generate(json, out)` atual delegar com lista vazia; verificar que os testes existentes de `DocumentoArticuladoPdfGeneratorTest` continuam passando sem alteração
+- [x] 2.2 Rejeitar anexo chamado `documento-articulado.xml` (sem diferenciar maiúsculas) com `EtaBackendException` antes de converter e sem escrever no destino; verificar com teste
+- [x] 2.3 Manter o hash sobre os bytes finais; verificar com teste que, com anexos impressos, o placeholder some e o MD5 gravado é o do arquivo
+- [x] 2.4 Testes JUnit 5 do gerador usando `ConversorDocumentoArticuladoFake` e PDFs de anexo em `src/test/resources`: geração com anexos, nada escrito em caso de falha, e ida e volta do JSON com `DocumentoArticuladoJsonExtractor` em PDF com anexos; rodar `mvn test -Dtest=DocumentoArticuladoPdfGeneratorAnexosTest` (classe nova, para não inchar `DocumentoArticuladoPdfGeneratorTest`)
 
 ## 3. Documentação e verificação geral
 
