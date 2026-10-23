@@ -5,13 +5,19 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import org.apache.commons.io.IOUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.gov.lexml.eta.etaservices.documentoarticulado.conversor.ConversorDocumentoArticulado;
+import br.gov.lexml.eta.etaservices.documentoarticulado.pdf.DocumentoArticuladoFopProcessor.AnexoLido;
+import br.gov.lexml.eta.etaservices.parecer.AnexoPDFA;
 import br.gov.lexml.eta.etaservices.util.BytesUtil;
 import br.gov.lexml.eta.etaservices.util.EtaBackendException;
 
@@ -46,18 +52,50 @@ public class DocumentoArticuladoPdfGenerator {
      * @throws IOException se houver erro ao escrever no destino
      */
     public void generate(String json, OutputStream outputStream) throws IOException {
+        generate(json, null, outputStream);
+    }
+
+    /**
+     * Como {@link #generate(String, OutputStream)}, com anexos: todos são embutidos no PDF/A e os com
+     * {@code imprimir} têm as páginas concatenadas ao final. Itens nulos ou sem conteúdo são ignorados.
+     *
+     * @param anexos pode ser nulo ou vazio; os streams são lidos por inteiro uma única vez
+     * @throws EtaBackendException também se um anexo se chamar {@code documento-articulado.xml} ou se um anexo
+     *         a imprimir não for um PDF válido
+     */
+    public void generate(String json, List<AnexoPDFA> anexos, OutputStream outputStream) throws IOException {
         JsonNode documento = validar(json);
+        List<AnexoLido> anexosLidos = lerAnexos(anexos);
         String xml = conversor.jsonParaXml(json);
         ParametrosImpressaoDocumentoArticulado parametros =
                 ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado.de(documento));
         // Anexo de parecer (issue #80): sem justificação; o fecho e as assinaturas o FechoDocumentoArticulado já omite
         String conteudoFo = conteudoTransformer.transformar(xml, parametros, !FechoDocumentoArticulado.anexoParecer(documento));
         String xslFo = templateProcessor.processar(documento, parametros, conteudoFo);
-        byte[] pdf = fopProcessor.gerarPdf(xslFo, xml);
+        byte[] pdf = fopProcessor.gerarPdf(xslFo, xml, anexosLidos);
         inserirHash(pdf);
 
         outputStream.write(pdf);
         outputStream.flush();
+    }
+
+    private static List<AnexoLido> lerAnexos(List<AnexoPDFA> anexos) throws IOException {
+        List<AnexoLido> lidos = new ArrayList<>();
+        if (anexos == null) {
+            return lidos;
+        }
+        for (AnexoPDFA anexo : anexos) {
+            if (anexo == null || anexo.getFile() == null) {
+                continue;
+            }
+            String nome = anexo.getNomeArquivo();
+            if (nome != null && DocumentoArticuladoFopProcessor.NOME_ANEXO.equalsIgnoreCase(nome.trim())) {
+                throw new EtaBackendException("O nome de anexo \"" + DocumentoArticuladoFopProcessor.NOME_ANEXO
+                        + "\" é reservado ao modelo do documento articulado.");
+            }
+            lidos.add(new AnexoLido(nome, IOUtils.toByteArray(anexo.getFile()), anexo.isImprimir()));
+        }
+        return lidos;
     }
 
     private JsonNode validar(String json) {
