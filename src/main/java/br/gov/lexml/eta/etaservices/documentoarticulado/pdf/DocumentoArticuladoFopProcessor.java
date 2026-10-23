@@ -8,8 +8,10 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.Result;
@@ -25,6 +27,9 @@ import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.apache.fop.apps.io.ResourceResolverFactory;
 import org.apache.fop.pdf.PDFAMode;
+import org.apache.pdfbox.io.MemoryUsageSetting;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.xmlgraphics.io.Resource;
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.dom4j.io.DocumentSource;
@@ -51,12 +56,30 @@ class DocumentoArticuladoFopProcessor {
         static final FopFactory INSTANCIA = criarFopFactory();
     }
 
+    /** Anexo já lido para memória; {@code imprimir} define se as páginas são concatenadas ao PDF. */
+    static final class AnexoLido {
+        final String nome;
+        final byte[] conteudo;
+        final boolean imprimir;
+
+        AnexoLido(String nome, byte[] conteudo, boolean imprimir) {
+            this.nome = nome != null ? nome : "anexo.pdf";
+            this.conteudo = conteudo;
+            this.imprimir = imprimir;
+        }
+    }
+
+    byte[] gerarPdf(String xslFo, String xmlDocumento) {
+        return gerarPdf(xslFo, xmlDocumento, Collections.emptyList());
+    }
+
     /**
      * @param xslFo XSL-FO com o bloco {@code x:xmpmeta} de PDF/A
      * @param xmlDocumento conteúdo do documento-articulado.xml a embutir
-     * @return os bytes do PDF/A
+     * @param anexos todos são embutidos no PDF/A; os com {@code imprimir} têm as páginas concatenadas ao final
+     * @return os bytes do PDF/A, já com as páginas dos anexos impressos
      */
-    byte[] gerarPdf(String xslFo, String xmlDocumento) {
+    byte[] gerarPdf(String xslFo, String xmlDocumento, List<AnexoLido> anexos) {
         DocumentoArticuladoFoHelper helper = new DocumentoArticuladoFoHelper(xslFo);
         if (!helper.isPdfa() || helper.getXmpmeta() == null) {
             throw new EtaBackendException("O XSL-FO do documento articulado não define os metadados de PDF/A.");
@@ -74,15 +97,56 @@ class DocumentoArticuladoFopProcessor {
             stamper.addXMP(helper.getXmpmeta().getBytes(StandardCharsets.UTF_8));
             stamper.addAttachments(new PDFAttachmentFile(xmlDocumento.getBytes(StandardCharsets.UTF_8), NOME_ANEXO,
                     "text/xml", helper.getCreateDate(), PDFAttachmentFile.AFRelationShip.SOURCE));
+            for (AnexoLido anexo : anexos) {
+                stamper.addAttachments(new PDFAttachmentFile(anexo.conteudo, anexo.nome, tipoMime(anexo.nome),
+                        helper.getCreateDate(), PDFAttachmentFile.AFRelationShip.DATA));
+            }
             stamper.setVersion(PDFA.PDFVersion.PDF_VERSION_1_7);
             stamper.close();
 
-            return pdfa.toByteArray();
+            return concatenarImpressos(pdfa.toByteArray(), anexos);
         } catch (EtaBackendException e) {
             throw e;
         } catch (Exception e) {
             throw new EtaBackendException("Erro ao gerar o PDF do documento articulado: " + e.getMessage(), e);
         }
+    }
+
+    private static byte[] concatenarImpressos(byte[] pdf, List<AnexoLido> anexos) throws IOException {
+        PDFMergerUtility merger = new PDFMergerUtility();
+        merger.addSource(new ByteArrayInputStream(pdf));
+        boolean concatenar = false;
+        for (AnexoLido anexo : anexos) {
+            if (!anexo.imprimir) {
+                continue;
+            }
+            // valida antes para o erro identificar o anexo
+            try (PDDocument ignorado = PDDocument.load(anexo.conteudo)) {
+                merger.addSource(new ByteArrayInputStream(anexo.conteudo));
+                concatenar = true;
+            } catch (IOException e) {
+                throw new EtaBackendException("O anexo \"" + anexo.nome + "\" não é um PDF válido para impressão: "
+                        + e.getMessage(), e);
+            }
+        }
+        if (!concatenar) {
+            return pdf;
+        }
+        ByteArrayOutputStream saida = new ByteArrayOutputStream();
+        merger.setDestinationStream(saida);
+        merger.mergeDocuments(MemoryUsageSetting.setupMainMemoryOnly());
+        return saida.toByteArray();
+    }
+
+    private static String tipoMime(String nomeArquivo) {
+        String minusculo = nomeArquivo.toLowerCase();
+        if (minusculo.endsWith(".pdf")) {
+            return "application/pdf";
+        }
+        if (minusculo.endsWith(".docx")) {
+            return "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+        }
+        return "application/octet-stream";
     }
 
     private static byte[] renderizar(DocumentoArticuladoFoHelper helper) throws Exception {
