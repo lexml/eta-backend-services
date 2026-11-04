@@ -2,37 +2,49 @@ package br.gov.lexml.eta.lexmljsonix.conversor;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.SystemUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import br.gov.lexml.eta.lexmljsonix.utils.CliUtils;
-import br.gov.lexml.eta.lexmljsonix.utils.DadosInOut;
+import br.gov.lexml.eta.etaservices.documentoarticulado.conversor.ConversorDocumentoArticulado;
+import br.gov.lexml.eta.etaservices.documentoarticulado.conversor.ConversorDocumentoArticuladoCli;
 
 /**
  * Classe usada para converter, de xml para json e vice-versa, o texto em formato Lexml de uma proposição.
  * Esta classe utiliza o executável gerado a partir do código do projeto
- * <a href="https://github.com/lexml/jsonix-lexml">https://github.com/lexml/jsonix-lexml</a> para realizar a conversão.
+ * <a href="https://github.com/lexml/jsonix-lexml">https://github.com/lexml/jsonix-lexml</a> (versão 2.0.0 ou
+ * superior) para realizar a conversão.
+ * <p>
+ * A execução é delegada ao {@link ConversorDocumentoArticuladoCli}: cada conversão usa arquivos em um diretório
+ * temporário próprio, removido ao final, e uma conversão que falha (código de saída diferente de 0, saída ausente
+ * ou vazia, tempo limite excedido) lança exceção com a mensagem de erro do executável.
  *
  * @author Robson Barros
  */
 public class ConversorLexmlJsonixImpl implements ConversorLexmlJsonix {
 
-	private String activeProfile;
+	private static final Logger log = LoggerFactory.getLogger(ConversorLexmlJsonixImpl.class);
 
-	private LexmlJsonixProperties lexmlJsonixProperties;
+	private final ConversorDocumentoArticulado conversor;
 
 	public ConversorLexmlJsonixImpl(LexmlJsonixProperties lexmlJsonixProperties, String activeProfile) throws FileNotFoundException {
-		this.lexmlJsonixProperties = lexmlJsonixProperties;
-		this.activeProfile = activeProfile;
-		checarExistenciaArquivo(lexmlJsonixProperties.getCli());
+		this(lexmlJsonixProperties, activeProfile, null);
 	}
 
-	private void checarExistenciaArquivo(String filename) throws FileNotFoundException {
+	/**
+	 * Permite informar o conversor que executa o jsonix-lexml ({@code null} cria um
+	 * {@link ConversorDocumentoArticuladoCli} com o executável e o tempo limite das propriedades).
+	 */
+	ConversorLexmlJsonixImpl(LexmlJsonixProperties lexmlJsonixProperties, String activeProfile,
+			ConversorDocumentoArticulado conversor) throws FileNotFoundException {
+		checarExistenciaArquivo(lexmlJsonixProperties.getCli(), activeProfile);
+		avisarPropriedadesObsoletas(lexmlJsonixProperties);
+		this.conversor = conversor != null ? conversor
+				: new ConversorDocumentoArticuladoCli(Paths.get(lexmlJsonixProperties.getCli()), lexmlJsonixProperties.getTimeout());
+	}
+
+	private static void checarExistenciaArquivo(String filename, String activeProfile) throws FileNotFoundException {
 		if ("test".equals(activeProfile))
 			return;
 
@@ -40,89 +52,32 @@ public class ConversorLexmlJsonixImpl implements ConversorLexmlJsonix {
 			throw new FileNotFoundException(filename);
 	}
 
+	@SuppressWarnings("deprecation")
+	private static void avisarPropriedadesObsoletas(LexmlJsonixProperties propriedades) {
+		if (Boolean.TRUE.equals(propriedades.getUsarEntradaSaidaPadraoDuranteConversao())) {
+			log.warn("A propriedade lexml-jsonix.usar-entrada-saida-padrao-durante-conversao está obsoleta e não tem efeito: "
+					+ "a conversão é sempre feita por arquivo.");
+		}
+		if (Boolean.FALSE.equals(propriedades.getRemoverDiretorioAposConversao())) {
+			log.warn("A propriedade lexml-jsonix.remover-diretorio-apos-conversao está obsoleta e não tem efeito: "
+					+ "o diretório temporário da conversão é sempre removido.");
+		}
+	}
+
 	public String xmlToJson(String xml) {
 		try {
-			if (lexmlJsonixProperties.isUsarEntradaSaidaPadraoDuranteConversao())
-				return converterXmlToJsonixUsandoEntradaSaidaPadrao(xml);
-			else
-				return converterXmlToJsonixUsandoArquivo(xml);
-		} catch (Exception e) {
+			return conversor.xmlParaJson(xml);
+		} catch (RuntimeException e) {
 			throw new RuntimeException("Erro ao converter de xml para jsonix: " + e.getMessage(), e);
 		}
 	}
 
 	public String jsonToXml(String json) {
 		try {
-			if (lexmlJsonixProperties.isUsarEntradaSaidaPadraoDuranteConversao())
-				return converterJsonixToXmlUsandoEntradaSaidaPadrao(json);
-			else
-				return converterJsonixToXmlUsandoArquivo(json);
-		} catch (Exception e) {
+			return conversor.jsonParaXml(json);
+		} catch (RuntimeException e) {
 			throw new RuntimeException("Erro ao converter de json para xml: " + e.getMessage(), e);
 		}
-	}
-
-	private String converterJsonixToXmlUsandoEntradaSaidaPadrao(String json) {
-		return converterUsandoEntradaSaidaPadrao(json, "toxml");
-	}
-
-	private String converterXmlToJsonixUsandoEntradaSaidaPadrao(String xml) {
-		return converterUsandoEntradaSaidaPadrao(xml, "tojson");
-	}
-
-	private String converterJsonixToXmlUsandoArquivo(String json) throws IOException {
-		return converterUsandoArquivo(json, "toxml");
-	}
-
-	private String converterXmlToJsonixUsandoArquivo(String xml) throws IOException {
-		return converterUsandoArquivo(xml, "tojson");
-	}
-
-	private String converterUsandoArquivo(String source, String formatoSaida) throws IOException {
-		Path xmlPath = writeStringToDisk(source);
-
-		String argumentoIn = xmlPath.toString();
-		String argumentoOut = xmlPath.getParent().toString() + File.separator + "jsonix.json";
-		String cli = String.format("%s %s %s -o %s", lexmlJsonixProperties.getCli(), formatoSaida, argumentoIn, argumentoOut);
-
-		executarComando(cli, null);
-
-		String result = new String(Files.readAllBytes(Paths.get(argumentoOut)));
-
-		if (lexmlJsonixProperties.isRemoverDiretorioAposConversao())
-			deleteFolder(xmlPath.getParent());
-
-		return result;
-	}
-
-	private String converterUsandoEntradaSaidaPadrao(String source, String formatoSaida) {
-		String argumentoIn = "-"; // lê da entrada padrão
-		String argumentoOut = "-"; // escreve na entrada padrão
-		String cli = String.format("%s %s %s -o %s", lexmlJsonixProperties.getCli(), formatoSaida, argumentoIn, argumentoOut);
-
-		DadosInOut dadosInOut = new DadosInOut();
-		dadosInOut.setIn(source);
-
-		executarComando(cli, dadosInOut);
-
-		return dadosInOut.getOut();
-	}
-
-	private void executarComando(String comando, DadosInOut dadosInOut) {
-		if (SystemUtils.IS_OS_WINDOWS)
-			CliUtils.execWindowsCommand(comando, dadosInOut);
-		else
-			CliUtils.execLinuxCommand(comando, dadosInOut);
-	}
-
-	private void deleteFolder(Path folder) throws IOException {
-	    FileUtils.deleteDirectory(folder.toFile());
-	}
-
-	private Path writeStringToDisk(String value) throws IOException {
-		Path tempDirWithPrefix = Files.createTempDirectory("lexml");
-		String filename = tempDirWithPrefix.toString() + File.separator + "texto.xml";
-		return Files.write(Paths.get(filename), value.getBytes());
 	}
 
 }

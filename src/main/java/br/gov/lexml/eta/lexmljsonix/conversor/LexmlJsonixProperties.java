@@ -1,5 +1,7 @@
 package br.gov.lexml.eta.lexmljsonix.conversor;
 
+import java.time.Duration;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,13 +35,24 @@ public class LexmlJsonixProperties {
 	private String urlDatasMPVs = "https://legis.senado.gov.br/legis/resources/lex/proposicoes/datas-mpvs";
 	
 	/**
-	 * Indica se a entrada e saída padrão podem ser usadas durante o processo de conversão do executável lexml-jsonix.
+	 * Tempo máximo de cada conversão pelo executável jsonix-lexml (padrão: 60 segundos). Aceita valores como
+	 * {@code 60s} ou {@code 2m}.
 	 */
-	private boolean usarEntradaSaidaPadraoDuranteConversao = true;
-	
+	private Duration timeout = Duration.ofSeconds(60);
+
 	/**
-	 * Indica se o diretório temporário criado durante a conversão do xml para jsonix deve ser removido após o uso.
-	 * Esse parâmetro só é utilizando quando "usar-entrada-saida-padrao-durante-conversao" é igual a false.
+	 * Obsoleta: não tem efeito. A conversão é sempre feita por arquivo, em um diretório temporário próprio.
+	 * Continua aceita para não quebrar configurações existentes; informada como {@code true}, gera um aviso no log.
+	 * Fica {@code null} quando não informada.
 	 */
-	private boolean removerDiretorioAposConversao = true;
+	@Deprecated
+	private Boolean usarEntradaSaidaPadraoDuranteConversao;
+
+	/**
+	 * Obsoleta: não tem efeito. O diretório temporário da conversão é sempre removido ao final.
+	 * Continua aceita para não quebrar configurações existentes; informada como {@code false}, gera um aviso no log.
+	 * Fica {@code null} quando não informada.
+	 */
+	@Deprecated
+	private Boolean removerDiretorioAposConversao;
 }
