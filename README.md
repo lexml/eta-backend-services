@@ -13,7 +13,7 @@ Maiores informações sobre o conversor jsonix-lexml podem ser encontradas em [h
 
 ## Como usar
 
-Configurar a propriedade `jsonix.cli` no arquivo `application.properties` ou `application.yaml` da sua aplicação Java, informando a localização do executável do conversor lexml-jsonix.
+Configurar a propriedade `lexml-jsonix.cli` no arquivo `application.properties` ou `application.yaml` da sua aplicação Java, informando a localização do executável do conversor lexml-jsonix.
 
 Exemplo:
 
@@ -21,7 +21,15 @@ Exemplo:
 lexml-jsonix.cli=c:\\temp\\jsonix-lexml-win.exe
 ```
 
-  Releases dos executáveis para os três ambientes suportados (Linux, MacOS X e Windows) podem ser encontrados em [https://github.com/lexml/jsonix-lexml/releases/](https://github.com/lexml/jsonix-lexml/releases/).
+  Releases dos executáveis para os três ambientes suportados (Linux, MacOS X e Windows) podem ser encontrados em [https://github.com/lexml/jsonix-lexml/releases/](https://github.com/lexml/jsonix-lexml/releases/). É necessária a versão 2.0.0 ou superior.
+
+A conversão é sempre feita por arquivos, em um diretório temporário próprio, removido ao final. Uma conversão que falha (código de saída diferente de 0, saída ausente ou vazia, ou tempo limite excedido) lança exceção com a mensagem de erro do executável, em vez de devolver texto vazio. O tempo limite de cada conversão é configurável (padrão: 60 segundos):
+
+```properties
+lexml-jsonix.timeout=60s
+```
+
+As propriedades `lexml-jsonix.usar-entrada-saida-padrao-durante-conversao` e `lexml-jsonix.remover-diretorio-apos-conversao` estão obsoletas e não têm efeito. Continuam aceitas para não quebrar configurações existentes; informadas com valor diferente do comportamento atual (`true` e `false`, respectivamente), geram um aviso no log.
 
 ### Para converter de xml para json e vice-versa
 

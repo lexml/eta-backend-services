@@ -106,7 +106,7 @@ new DocumentoArticuladoJsonExtractor(conversor);
 ### `lexmljsonix` — proposições e conversão LexML ↔ jsonix
 
 Registrado via **auto-configuration** em `META-INF/spring.factories`:
-- `conversor/` — `ConversorLexmlJsonix` (+ `Impl`, `AutoConfiguration`, `LexmlJsonixProperties`): converte LexML ↔ jsonix chamando o executável externo `jsonix-lexml` (propriedade `lexml-jsonix.cli`).
+- `conversor/` — `ConversorLexmlJsonix` (+ `Impl`, `AutoConfiguration`, `LexmlJsonixProperties`): converte LexML ↔ jsonix chamando o executável externo `jsonix-lexml` (propriedade `lexml-jsonix.cli`). Delega a execução ao `ConversorDocumentoArticuladoCli` (sempre por arquivo, stderr na mensagem, falha vira `RuntimeException` com o prefixo "Erro ao converter de …"), com tempo limite em `lexml-jsonix.timeout` (`Duration`, padrão 60 s). `usar-entrada-saida-padrao-durante-conversao` e `remover-diretorio-apos-conversao` são obsoletas (`Boolean`, `null` quando não informadas; sem efeito, só um aviso no log com `true`/`false`, respectivamente). Testado por `ConversorLexmlJsonixImplTest` com um delegado falso (construtor de pacote).
 - `service/` — `LexmlJsonixService` (+ `Impl`, `AutoConfiguration`): pesquisa proposições e baixa o texto LexML (zip) dos serviços do Senado (`lexml-jsonix.url-proposicoes`, `lexml-jsonix.url-sdleg`).
 - `utils/` — execução de CLI, zip e DTOs de entrada/saída.
 
