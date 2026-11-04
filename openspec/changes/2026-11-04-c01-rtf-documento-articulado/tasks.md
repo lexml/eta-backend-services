@@ -2,8 +2,8 @@
 
 ## 1. Passo compartilhado de geração do XSL-FO
 
-- [ ] 1.1 Extrair de `DocumentoArticuladoPdfGenerator.generate` o trecho que vai de `validar` até o `xslFo` (conversão, opções, XSLT, Velocity) para um ponto package-private que devolve `xslFo` e `xml`, sem alterar o comportamento nem a API pública do PDF; verificar rodando `mvn test -Dtest='DocumentoArticuladoPdfGeneratorTest,DocumentoArticuladoPdfGeneratorAnexosTest,DocumentoArticuladoFopProcessorTest'` sem editar esses testes
-- [ ] 1.2 Rodar `mvn test` completo e verificar que toda a suíte atual continua passando (rede de proteção da refatoração)
+- [x] 1.1 Extrair de `DocumentoArticuladoPdfGenerator.generate` o trecho que vai de `validar` até o `xslFo` (conversão, opções, XSLT, Velocity) para um ponto package-private que devolve `xslFo` e `xml`, sem alterar o comportamento nem a API pública do PDF; verificar rodando `mvn test -Dtest='DocumentoArticuladoPdfGeneratorTest,DocumentoArticuladoPdfGeneratorAnexosTest,DocumentoArticuladoFopProcessorTest'` sem editar esses testes
+- [x] 1.2 Rodar `mvn test` completo e verificar que toda a suíte atual continua passando (rede de proteção da refatoração)
 
 ## 2. Renderização em RTF e PoC
 
