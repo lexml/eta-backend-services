@@ -19,9 +19,9 @@
 
 ## 4. Inspeção manual e documentação
 
-- [ ] 4.1 Criar o utilitário `main` em `src/test/java/.../documentoarticulado/` (nos moldes de `Json2PDF`) que gera o `.rtf` das fixtures em `target/`, com checklist de inspeção no Word no próprio cabeçalho da classe; verificar executando-o e abrindo um dos arquivos no Word
-- [ ] 4.2 Atualizar a `CLAUDE.md` (seção `documentoarticulado`: `DocumentoArticuladoRtfGenerator`, limitações do RTF, sem extração) e a lista de testes; verificar que o texto reflete o código e o comportamento da PoC
-- [ ] 4.3 Rodar `mvn test` completo e verificar que toda a suíte passa
+- [x] 4.1 Criar o utilitário `main` em `src/test/java/.../documentoarticulado/` (nos moldes de `Json2PDF`) que gera o `.rtf` das fixtures em `target/`, com checklist de inspeção no Word no próprio cabeçalho da classe; verificar executando-o e abrindo um dos arquivos no Word
+- [x] 4.2 Atualizar a `CLAUDE.md` (seção `documentoarticulado`: `DocumentoArticuladoRtfGenerator`, limitações do RTF, sem extração) e a lista de testes; verificar que o texto reflete o código e o comportamento da PoC
+- [x] 4.3 Rodar `mvn test` completo e verificar que toda a suíte passa
 
 ## Workflow follow-up
 
