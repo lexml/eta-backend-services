@@ -11,7 +11,7 @@ A proposição do ETA (documento articulado) só pode ser exportada em PDF/A. Qu
 - Extração, no `DocumentoArticuladoPdfGenerator`, do passo "JSON -> XSL-FO + XML" para um ponto package-private compartilhado, sem alterar o comportamento nem a API do PDF.
 - Novo método no `DocumentoArticuladoFopProcessor` para renderizar XSL-FO em RTF com a fábrica FOP já existente.
 - Nada é recuperável a partir do RTF: ele não carrega o modelo, então não há extração de JSON.
-- O RTF garante o **conteúdo** (textos e ordem), não a fidelidade visual ao PDF; as perdas de formatação encontradas na PoC ficam registradas como limitações conhecidas.
+- O RTF garante o **conteúdo** (textos e ordem), não a fidelidade visual ao PDF; imagens que não sejam JPEG são omitidas, com aviso em vermelho no lugar (provisório, pode virar conversão para JPEG), e os links externos mantêm o endereço. As demais perdas de formatação ficam registradas como limitações conhecidas.
 - Fora de escopo: DOCX, emenda e parecer, anexos, PDF/A.
 
 ## Capabilities
