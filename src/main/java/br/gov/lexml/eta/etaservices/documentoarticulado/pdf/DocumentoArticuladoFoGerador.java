@@ -17,14 +17,16 @@ class DocumentoArticuladoFoGerador {
 
     static final String NAMESPACE_LEXML = "http://www.lexml.gov.br/1.0";
 
-    /** XSL-FO pronto para o FOP e o documento-articulado.xml de onde ele saiu. */
+    /** XSL-FO pronto para o FOP, o documento-articulado.xml de onde ele saiu e os parâmetros de impressão usados. */
     static final class FoGerado {
         final String xslFo;
         final String xml;
+        final ParametrosImpressaoDocumentoArticulado parametros;
 
-        FoGerado(String xslFo, String xml) {
+        FoGerado(String xslFo, String xml, ParametrosImpressaoDocumentoArticulado parametros) {
             this.xslFo = xslFo;
             this.xml = xml;
+            this.parametros = parametros;
         }
     }
 
@@ -65,7 +67,7 @@ class DocumentoArticuladoFoGerador {
         // Anexo de parecer (issue #80): sem justificação; o fecho e as assinaturas o FechoDocumentoArticulado já omite
         String conteudoFo = conteudoTransformer.transformar(xml, parametros, !FechoDocumentoArticulado.anexoParecer(documento));
         String xslFo = templateProcessor.processar(documento, parametros, conteudoFo);
-        return new FoGerado(xslFo, xml);
+        return new FoGerado(xslFo, xml, parametros);
     }
 
 }
