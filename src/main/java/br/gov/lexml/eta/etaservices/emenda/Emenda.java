@@ -20,6 +20,8 @@ public interface Emenda {
 
     ModoEdicaoEmenda getModoEdicao();
 
+    boolean isAnexoParecer();
+
     Map<String, Object> getMetadados();
 
     RefProposicaoEmendada getProposicao();
@@ -59,11 +61,20 @@ public interface Emenda {
     
     List<? extends NotaRodape> getNotasRodape();
 
+    List<? extends SequenciaComentario> getSequenciasComentario();
+
     List<String> getPendenciasPreenchimento();
     
     @JsonIgnore()
     default boolean isPossuiMarcasRevisao() {
     	return getRevisoes() != null && !getRevisoes().isEmpty();
+    }
+
+    @JsonIgnore()
+    default boolean isPossuiComentarios() {
+        return getSequenciasComentario() != null
+                && getSequenciasComentario().stream()
+                        .anyMatch(seq -> seq.getComentarios() != null && !seq.getComentarios().isEmpty());
     }
     
     @JsonIgnore()

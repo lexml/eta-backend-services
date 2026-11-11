@@ -1,8 +1,8 @@
 package br.gov.lexml.eta.etaservices.printing.json;
 
-import lombok.NoArgsConstructor;
-
 import javax.xml.bind.annotation.XmlRootElement;
+
+import lombok.NoArgsConstructor;
 
 @XmlRootElement(name = "RevisaoJustificativa")
 @NoArgsConstructor

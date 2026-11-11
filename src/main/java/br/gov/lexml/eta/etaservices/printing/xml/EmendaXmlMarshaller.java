@@ -19,6 +19,7 @@ import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
+import br.gov.lexml.eta.etaservices.emenda.Comentario;
 import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
@@ -32,8 +33,11 @@ import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.emenda.SequenciaComentario;
 import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
+import br.gov.lexml.eta.etaservices.emenda.TipoAutoria;
 import br.gov.lexml.eta.etaservices.emenda.TipoColegiado;
+import br.gov.lexml.eta.etaservices.emenda.Usuario;
 import br.gov.lexml.eta.etaservices.printing.json.NotaRodapePojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
@@ -55,12 +59,18 @@ public class EmendaXmlMarshaller {
             geraComandoEmenda(emenda.getComandoEmenda(), element);
             geraSubstituicaoTermo(emenda.getSubstituicaoTermo(), element);
             geraAnexos(emenda.getAnexos(), element);
-            geraJustificativa(emenda.getJustificativa(), element);
-            geraJustificativaAntesRevisao(emenda.getJustificativaAntesRevisao(), element);
-            geraAutoria(emenda.getAutoria(), element);
+            if (emenda.isAnexoParecer()) {
+                geraJustificativa("", element);
+                geraAutoriaVazia(element);
+            } else {
+                geraJustificativa(emenda.getJustificativa(), element);
+                geraJustificativaAntesRevisao(emenda.getJustificativaAntesRevisao(), element);
+                geraAutoria(emenda.getAutoria(), element);
+                geraNotasRodape(emenda.getNotasRodape(), element);
+            }
             geraOpcoesImpressao(emenda.getOpcoesImpressao(), element);
             geraRevisoes(emenda.getRevisoes(), element);
-            geraNotasRodape(emenda.getNotasRodape(), element);
+            geraSequenciasComentario(emenda.getSequenciasComentario(), element);
             geraPendenciasPreenchimento(emenda.getPendenciasPreenchimento(), element);
 
             return toString(element);
@@ -73,10 +83,13 @@ public class EmendaXmlMarshaller {
         Element element = document.addElement("Emenda");
 
         element.addAttribute("versaoFormatoArquivo", "1.0");
-        element.addAttribute("local", emenda.getLocal());
-
-        if (emenda.getData() != null) {
-            element.addAttribute("data", DateTimeFormatter.ISO_DATE.format(emenda.getData()));
+        if (!emenda.isAnexoParecer()) {
+            if (emenda.getLocal() != null) {
+                element.addAttribute("local", emenda.getLocal());
+            }
+            if (emenda.getData() != null) {
+                element.addAttribute("data", DateTimeFormatter.ISO_DATE.format(emenda.getData()));
+            }
         }
 
         return element;
@@ -89,6 +102,7 @@ public class EmendaXmlMarshaller {
         element.addElement("Aplicacao").setText(emenda.getAplicacao());
         element.addElement("VersaoAplicacao").setText(emenda.getVersaoAplicacao());
         element.addElement("ModoEdicao").setText(emenda.getModoEdicao().toString());
+        element.addElement("AnexoParecer").setText(String.valueOf(emenda.isAnexoParecer()));
 
         emenda.getMetadados().forEach((k, v) ->
                 element.addElement(k).setText(v.toString())
@@ -282,8 +296,8 @@ public class EmendaXmlMarshaller {
             filhoElement.addAttribute("notaAlteracao", filho.getNotaAlteracao().toString());
         }
 
-        if (filho.getRotulo() != null || 
-                (filho.getTexto() != null && !"Omissis".equals(filho.getTipo())) || 
+        if (filho.getRotulo() != null ||
+                (filho.getTexto() != null && !"Omissis".equals(filho.getTipo())) ||
                 (filho.getFilhos() != null && !filho.getFilhos().isEmpty())) {
             if (filho.getRotulo() != null) {
                 Element rotuloElement = filhoElement.addElement("Rotulo");
@@ -344,7 +358,7 @@ public class EmendaXmlMarshaller {
                 comandoElement.addAttribute("motivo", comandoEmendaTextoLivre.getMotivo());
             }
 
-                comandoElement.addText(comandoEmendaTextoLivre.getTexto() != null ? 
+                comandoElement.addText(comandoEmendaTextoLivre.getTexto() != null ?
                         XMLUtil.sanitize(comandoEmendaTextoLivre.getTexto()) : "");
 
             if (comandoEmendaTextoLivre.getTextoAntesRevisao() != null) {
@@ -382,6 +396,14 @@ public class EmendaXmlMarshaller {
         if (autoria.getColegiado() != null) {
             geraColegiadoAutor(autoria.getColegiado(), element);
         }
+    }
+
+    private void geraAutoriaVazia(Element emendaElement) {
+        Element element = emendaElement.addElement("Autoria");
+        element.addAttribute("tipo", TipoAutoria.PARLAMENTAR.getDescricao());
+        element.addAttribute("imprimirPartidoUF", "true");
+        element.addAttribute("quantidadeAssinaturasAdicionaisDeputados", "0");
+        element.addAttribute("quantidadeAssinaturasAdicionaisSenadores", "0");
     }
 
     private void geraParlamentar(Parlamentar autor, Element emendaElement) {
@@ -471,6 +493,49 @@ public class EmendaXmlMarshaller {
         }
     }
 
+    protected void geraSequenciasComentario(List<? extends SequenciaComentario> sequenciasComentario, Element emendaElement) {
+        if (sequenciasComentario == null || sequenciasComentario.isEmpty()) {
+            return;
+        }
+
+        Element sequenciasElement = emendaElement.addElement("SequenciasComentario");
+        for (SequenciaComentario sequencia : sequenciasComentario) {
+            final String idDispositivo = sequencia.getIdDispositivo();
+            Element sequenciaElement = sequenciasElement.addElement("SequenciaComentario");
+
+            sequenciaElement.addAttribute("id", xmlValue(sequencia.getId()));
+            sequenciaElement.addAttribute("local", xmlValue(sequencia.getLocal()));
+
+            if (idDispositivo != null && !idDispositivo.trim().isEmpty()) {
+                sequenciaElement.addAttribute("idDispositivo", xmlValue(idDispositivo));
+            }
+
+            if (sequencia.getComentarios() != null) {
+                for (Comentario comentario : sequencia.getComentarios()) {
+                    geraComentario(comentario, sequenciaElement);
+                }
+            }
+        }
+    }
+
+    private void geraComentario(Comentario comentario, Element sequenciaElement) {
+        Element comentarioElement = sequenciaElement.addElement("Comentario");
+        comentarioElement.addAttribute("dataHora", xmlValue(comentario.getDataHora()));
+        geraUsuarioComentario(comentario.getUsuario(), comentarioElement);
+
+        Element textoElement = comentarioElement.addElement("Texto");
+        textoElement.setText(xmlValue(comentario.getTexto()));
+    }
+
+    private void geraUsuarioComentario(Usuario usuario, Element comentarioElement) {
+        Element usuarioElement = comentarioElement.addElement("Usuario");
+        if (usuario != null) {
+            usuarioElement.addAttribute("nome", xmlValue(usuario.getNome()));
+            usuarioElement.addAttribute("id", xmlValue(usuario.getId()));
+            usuarioElement.addAttribute("sigla", xmlValue(usuario.getSigla()));
+        }
+    }
+
     protected void geraNotasRodape(List<? extends NotaRodape> notasRodape, Element emendaElement) {
         if (notasRodape == null || notasRodape.isEmpty()) {
             return;
@@ -506,6 +571,10 @@ public class EmendaXmlMarshaller {
 
             pendenciaElement.addText(pendencia);
         }
+    }
+
+    private String xmlValue(String value) {
+        return XMLUtil.sanitize(value == null ? "" : value);
     }
 
     public String toString(Element element) throws IOException {

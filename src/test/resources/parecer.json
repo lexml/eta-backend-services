@@ -1,0 +1,54 @@
+{
+    "dataUltimaModificacao": "2025-10-21T15:49:46.020Z",
+    "aplicacao": "",
+    "versaoAplicacao": "",
+    "metadados": {},
+    "pendenciasPreenchimento": [],
+    "ano": 2025,
+    "ementa": "<p>Da COMISSÃO DE SERVIÇOS DE INFRAESTRUTURA, sobre o Projeto de Lei nº 124, de 2022, do Deputado Júlio Delgado, que <em>altera as Leis nºs 12.608, de 10 de abril de 2012, 12.340, de 1º de dezembro de 2010, e 11.445, de 5 de janeiro de 2007, para prever medidas de flexibilização tarifária referentes aos serviços de energia elétrica e de abastecimento de água e esgotamento sanitário durante a vigência de calamidade pública decretada em razão de desastres naturais ou de emergências climáticas.</em></p><p><br></p>",
+    "siglaCasaLegislativa": "CN",
+    "tituloSecao2":"tituloSecao2",
+    "tituloSecao3":"tituloSecao3",
+    "materia": {
+        "urn": "urn:lex:br:senado.federal:projeto.lei:2022;987",
+        "sigla": "PL",
+        "numero": "987",
+        "ano": "2022",
+        "ementa": "Cria o programa de incentivo à energia solar residencial.",
+        "identificacaoTexto": "PL 987/2022"
+    },
+    "epigrafe": "PARECER Nº , DE 2025",
+    "relatorio": "<p>Vem ao exame desta Comissão o Projeto de Lei nº 124, de 2022, de autoria do Deputado Federal Júlio Delgado. A proposição legislativa visa instituir medidas de flexibilização tarifária para os serviços essenciais de energia elétrica, abastecimento de água e esgotamento sanitário. As medidas são aplicáveis durante períodos de calamidade pública decorrentes de desastres naturais ou emergências climáticas.</p><p>O projeto altera a Lei nº 12.608, de 10 de abril de 2012, para acrescentar o art. 19-A, que prevê a suspensão, para consumidores diretamente atingidos por calamidade pública, das parcelas da tarifa de energia elétrica referentes à antecipação do custo da energia (a exemplo das bandeiras tarifárias) e da interrupção do fornecimento por inadimplência. O texto estabelece que não serão cobrados multas e juros correspondentes ao período de suspensão. Os ônus decorrentes serão ressarcidos pelo Fundo Nacional para Calamidades Públicas, Proteção e Defesa Civil (Funcap).</p><p>A proposição modifica também a Lei nº 12.340, de 1º de dezembro de 2010, para incluir o custeio dessas despesas entre as finalidades do Funcap. Permite a transferência direta de recursos do Funcap para as concessionárias e permissionárias de distribuição de energia elétrica, ressalvando que não serão cobertos descontos já concedidos a beneficiários de tarifas sociais. Por fim, altera a Lei nº 11.445, de 5 de janeiro de 2007, para adicionar o § 6º ao art. 8º, determinando que os titulares dos serviços públicos de saneamento básico prevejam medidas de flexibilização tarifária para água e esgoto em situações de calamidade pública em seus respectivos territórios.</p><p>A matéria foi aprovada pela Câmara dos Deputados e encaminhada ao Senado Federal para análise. O Projeto de Lei nº 124, de 2022, foi autuado em 26 de fevereiro de 2025, e sua tramitação inicial foi publicada no Diário do Senado Federal. Em 17 de março de 2025, a matéria foi despachada para análise das Comissões de Serviços de Infraestrutura (CI), de Assuntos Sociais (CAS) e de Assuntos Econômicos (CAE), cabendo a esta última a decisão terminativa. Não foram apresentadas emendas no prazo regimental.</p><p><br></p>",
+    "analise": "<p>A proposição, sob o aspecto da constitucionalidade e juridicidade, encontra amparo na ordem constitucional vigente. A competência para legislar sobre normas gerais de energia e saneamento básico é da União, conforme o inciso IV do art. 22 da Constituição Federal. As medidas propostas visam a proteção social e o auxílio a populações em situação de vulnerabilidade, em consonância com os princípios da dignidade da pessoa humana e da busca pela erradicação da pobreza, previstos nos arts. 1º, inciso III, e 3º, inciso III, da Constituição. A previsão de custeio por fundo federal, como o Funcap, é compatível com a competência da União para organizar e manter a Defesa Civil, nos termos do art. 21, inciso XXVIII, da Constituição. Inexiste, portanto, qualquer vício de inconstitucionalidade ou injuridicidade.</p><p>Nos termos do inciso I do art. 104 do Regimento Interno do Senado Federal (RISF), compete à Comissão de Serviços de Infraestrutura (CI) opinar sobre matérias pertinentes a transportes de terra, mar e ar, obras públicas em geral, minas, recursos geológicos, serviços de telecomunicações, parcerias público-privadas e agências reguladoras pertinentes.</p><p>O mérito da proposição manifesta-se, em primeiro lugar, no reconhecimento de que a manutenção do acesso contínuo a serviços essenciais, em situações de calamidade pública, constitui um direito mínimo indispensável para a reconstrução das condições de vida de comunidades atingidas. A suspensão de encargos extraordinários, como as bandeiras tarifárias, e a vedação da interrupção do fornecimento por inadimplência, no período de vigência do estado de calamidade, não configuram mera concessão graciosa, mas resposta legislativa adequada a circunstâncias em que a vulnerabilidade econômica se soma à desestruturação social e ambiental. Nesse sentido, a medida legislativa assegura que famílias impactadas possam concentrar seus parcos recursos em necessidades emergenciais, contribuindo para a redução da exclusão social e para a proteção de grupos já expostos a riscos intensificados.</p><p><br></p>",
+    "voto": "<p>Diante do exposto, o voto é pela constitucionalidade, juridicidade, regimentalidade e boa técnica legislativa do projeto e, no mérito, pela aprovação.</p>",
+    "local": "Sala da comissão",
+    "data": "2025-10-21",
+    "autoria": {
+        "relator": {
+            "identificacao": "SF006",
+            "nome": "Eduardo Braga",
+            "sexo": "M",
+            "siglaPartido": "MDB",
+            "siglaUF": "AM",
+            "siglaCasaLegislativa": "SF",
+            "cargo": "Senador"
+        },
+        "presidente": {
+            "identificacao": "SF007",
+            "nome": "Tasso Jereissati",
+            "sexo": "M",
+            "siglaPartido": "PSDB",
+            "siglaUF": "CE",
+            "siglaCasaLegislativa": "SF",
+            "cargo": "Senador"
+        }
+    },
+    "opcoesImpressao": {
+        "imprimirBrasao": true,
+        "textoCabecalho": "CCJ - Comissão de Constituição, Justiça e Cidadania",
+        "reduzirEspacoEntreLinhas": false,
+        "tamanhoFonte": 14
+    },
+    "revisoes": [],
+    "notasRodape": []
+}

@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import br.gov.lexml.eta.etaservices.emenda.Anexo;
 import br.gov.lexml.eta.etaservices.emenda.Autoria;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
@@ -24,6 +26,7 @@ public class EmendaPojo implements Emenda {
     private String aplicacao;
     private String versaoAplicacao;
     private ModoEdicaoEmenda modoEdicao;
+    private boolean anexoParecer;
     private Map<String, Object> metadados;
     private RefProposicaoEmendadaPojo proposicao;
     private ColegiadoApreciadorPojo colegiado;
@@ -39,8 +42,10 @@ public class EmendaPojo implements Emenda {
     private LocalDate data;
     private AutoriaPojo autoria;
     private OpcoesImpressaoPojo opcoesImpressao;
+    @JsonDeserialize(contentUsing = RevisaoPojoDeserializer.class)
     private List<? extends RevisaoPojo> revisoes;
     private List<? extends NotaRodapePojo> notasRodape;
+    private List<SequenciaComentarioPojo> sequenciasComentario;
     private List<String> pendenciasPreenchimento;
 
     @Override
@@ -81,6 +86,15 @@ public class EmendaPojo implements Emenda {
     @SuppressWarnings("unused")
     public void setModoEdicao(ModoEdicaoEmenda modoEdicao) {
         this.modoEdicao = modoEdicao;
+    }
+
+    @Override
+    public boolean isAnexoParecer() {
+        return anexoParecer;
+    }
+
+    public void setAnexoParecer(boolean anexoParecer) {
+        this.anexoParecer = anexoParecer;
     }
 
     @Override
@@ -241,6 +255,15 @@ public class EmendaPojo implements Emenda {
     }
 
     @Override
+    public List<SequenciaComentarioPojo> getSequenciasComentario() {
+        return sequenciasComentario;
+    }
+
+    public void setSequenciasComentario(List<SequenciaComentarioPojo> sequenciasComentario) {
+        this.sequenciasComentario = sequenciasComentario;
+    }
+
+    @Override
     public List<String> getPendenciasPreenchimento() {
         return pendenciasPreenchimento;
     }
@@ -253,6 +276,7 @@ public class EmendaPojo implements Emenda {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (anexoParecer ? 1231 : 1237);
 		result = prime * result + ((anexos == null) ? 0 : anexos.hashCode());
 		result = prime * result + ((aplicacao == null) ? 0 : aplicacao.hashCode());
 		result = prime * result + ((autoria == null) ? 0 : autoria.hashCode());
@@ -270,6 +294,7 @@ public class EmendaPojo implements Emenda {
 		result = prime * result + ((opcoesImpressao == null) ? 0 : opcoesImpressao.hashCode());
 		result = prime * result + ((proposicao == null) ? 0 : proposicao.hashCode());
 		result = prime * result + ((revisoes == null) ? 0 : revisoes.hashCode());
+		result = prime * result + ((sequenciasComentario == null) ? 0 : sequenciasComentario.hashCode());
 		result = prime * result + ((versaoAplicacao == null) ? 0 : versaoAplicacao.hashCode());
 		result = prime * result + ((substituicaoTermo == null) ? 0 : substituicaoTermo.hashCode());
 		return result;
@@ -284,6 +309,8 @@ public class EmendaPojo implements Emenda {
 		if (getClass() != obj.getClass())
 			return false;
 		EmendaPojo other = (EmendaPojo) obj;
+		if (anexoParecer != other.anexoParecer)
+			return false;
 		if (anexos == null) {
 			if (other.anexos != null)
 				return false;
@@ -371,6 +398,11 @@ public class EmendaPojo implements Emenda {
 				return false;
 		} else if (!revisoes.equals(other.revisoes))
 			return false;
+		if (sequenciasComentario == null) {
+			if (other.sequenciasComentario != null)
+				return false;
+		} else if (!sequenciasComentario.equals(other.sequenciasComentario))
+			return false;
 		if (versaoAplicacao == null) {
 			if (other.versaoAplicacao != null)
 				return false;
@@ -386,12 +418,13 @@ public class EmendaPojo implements Emenda {
 
 	@Override
 	public String toString() {
-		return "EmendaPojo [dataUltimaModificacao=" + dataUltimaModificacao + ", aplicacao=" + aplicacao
-				+ ", versaoAplicacao=" + versaoAplicacao + ", modoEdicao=" + modoEdicao + ", metadados=" + metadados
+        return "EmendaPojo [dataUltimaModificacao=" + dataUltimaModificacao + ", aplicacao=" + aplicacao
+				+ ", versaoAplicacao=" + versaoAplicacao + ", modoEdicao=" + modoEdicao + ", anexoParecer=" + anexoParecer + ", metadados=" + metadados
 				+ ", proposicao=" + proposicao + ", colegiado=" + colegiado + ", epigrafe=" + epigrafe
 				+ ", componentes=" + componentes + ", comandoEmenda=" + comandoEmenda + ", comandoEmendaTextoLivre=" + comandoEmendaTextoLivre 
                 + ", substituicaoTermo" + substituicaoTermo + ", anexos=" + anexos + ", justificativa=" + justificativa 
                 + ", local=" + local + ", data=" + data + ", autoria=" + autoria + ", opcoesImpressao=" + opcoesImpressao
-				+ ", revisoes=" + revisoes + ", pendenciasPreenchimento=" + pendenciasPreenchimento + "]";
+				+ ", revisoes=" + revisoes + ", sequenciasComentario=" + sequenciasComentario
+                + ", pendenciasPreenchimento=" + pendenciasPreenchimento + "]";
 	}
 }

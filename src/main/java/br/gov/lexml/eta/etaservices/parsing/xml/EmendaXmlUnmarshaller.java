@@ -27,6 +27,7 @@ import br.gov.lexml.eta.etaservices.emenda.ColegiadoApreciador;
 import br.gov.lexml.eta.etaservices.emenda.ColegiadoAutor;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmenda;
 import br.gov.lexml.eta.etaservices.emenda.ComandoEmendaTextoLivre;
+import br.gov.lexml.eta.etaservices.emenda.Comentario;
 import br.gov.lexml.eta.etaservices.emenda.ComponenteEmendado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaAdicionado;
 import br.gov.lexml.eta.etaservices.emenda.DispositivoEmendaModificado;
@@ -41,6 +42,7 @@ import br.gov.lexml.eta.etaservices.emenda.OpcoesImpressao;
 import br.gov.lexml.eta.etaservices.emenda.Parlamentar;
 import br.gov.lexml.eta.etaservices.emenda.RefProposicaoEmendada;
 import br.gov.lexml.eta.etaservices.emenda.Revisao;
+import br.gov.lexml.eta.etaservices.emenda.SequenciaComentario;
 import br.gov.lexml.eta.etaservices.emenda.Sexo;
 import br.gov.lexml.eta.etaservices.emenda.SiglaCasaLegislativa;
 import br.gov.lexml.eta.etaservices.emenda.SubstituicaoTermo;
@@ -51,6 +53,7 @@ import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
+import br.gov.lexml.eta.etaservices.printing.json.UsuarioPojo;
 
 public class EmendaXmlUnmarshaller {
     public Emenda fromXml(final String xml) throws DocumentException {
@@ -65,6 +68,7 @@ public class EmendaXmlUnmarshaller {
 
         final AtributosEmenda atributosEmenda = parseAtributosEmenda(rootElement);
         final Metadados metadados = parseMetadados(rootElement);
+        final boolean anexoParecer = metadados.isAnexoParecer();
         final RefProposicaoEmendada proposicao = parseProposicao(rootElement);
         final ColegiadoApreciador colegiadoApreciador = parseColegiado(rootElement);
         final Epigrafe epigrafe = parseEpigrafe(rootElement);
@@ -73,12 +77,13 @@ public class EmendaXmlUnmarshaller {
         final ComandoEmendaTextoLivre comandoEmendaTextoLivre = parseComandoEmendaTextoLivre(rootElement);
         final ComandoEmenda comandoEmenda = parseComandoEmenda(rootElement);
         final SubstituicaoTermo substituicaoTermo = parseSubstituicaoTermo(rootElement);
-        final String justificativa = parseJustificativa(rootElement);
-        final String JustificativaAntesRevisao = parseJustificativaAntesRevisao(rootElement);
-        final Autoria autoria = parseAutoria(rootElement);
+        final String justificativa = anexoParecer ? null : parseJustificativa(rootElement);
+        final String JustificativaAntesRevisao = anexoParecer ? null : parseJustificativaAntesRevisao(rootElement);
+        final Autoria autoria = anexoParecer ? null : parseAutoria(rootElement);
         final OpcoesImpressao opcoesImpressao = parseOpcoesImpressao(rootElement);
         final List<? extends Revisao> revisoes = parseRevisoes(rootElement);
-        final List<? extends NotaRodape> notasRodape = parseNotasRodape(rootElement);
+        final List<? extends NotaRodape> notasRodape = anexoParecer ? List.of() : parseNotasRodape(rootElement);
+        final List<? extends SequenciaComentario> sequenciasComentario = parseSequenciasComentario(rootElement);
         final List<String> pendenciasPreenchimento = parsePendenciasPreenchimento(rootElement);
 
         return new EmendaRecord(
@@ -86,6 +91,7 @@ public class EmendaXmlUnmarshaller {
                 metadados.getAplicacao(),
                 metadados.getVersaoAplicacao(),
                 metadados.getModoEdicao(),
+                metadados.isAnexoParecer(),
                 metadados.getMeta(),
                 proposicao,
                 colegiadoApreciador,
@@ -97,12 +103,13 @@ public class EmendaXmlUnmarshaller {
                 anexos,
                 justificativa,
                 JustificativaAntesRevisao,
-                atributosEmenda.getLocal(),
-                atributosEmenda.getData(),
+                anexoParecer ? null : atributosEmenda.getLocal(),
+                anexoParecer ? null : atributosEmenda.getData(),
                 autoria,
                 opcoesImpressao,
                 revisoes,
                 notasRodape,
+                sequenciasComentario,
                 pendenciasPreenchimento);
     }
 
@@ -131,6 +138,7 @@ public class EmendaXmlUnmarshaller {
         String aplicacao = "";
         String versaoAplicacao = "";
         ModoEdicaoEmenda modoEdicao = EMENDA;
+        boolean anexoParecer = false;
         final Map<String, Object> meta = new LinkedHashMap<>();
         for (Node n : metadados) {
             switch (n.getName()) {
@@ -148,13 +156,16 @@ public class EmendaXmlUnmarshaller {
                     String me = n.getStringValue();
                     modoEdicao = ModoEdicaoEmenda.parse(me);
                     break;
+                case "AnexoParecer":
+                    anexoParecer = booleanAttributeValue(n.getStringValue().trim());
+                    break;
                 default:
                     meta.put(n.getName(), n.getStringValue());
                     break;
             }
 
         }
-        return new Metadados(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, meta);
+        return new Metadados(dataUltimaModificacao, aplicacao, versaoAplicacao, modoEdicao, anexoParecer, meta);
     }
 
     private RefProposicaoEmendada parseProposicao(final Element rootElement) {
@@ -582,6 +593,52 @@ public class EmendaXmlUnmarshaller {
         final String texto = componente.attributeValue("texto");
         
         return new NotaRodapeRecord(id, numero, texto); 
+    }
+
+    private List<? extends SequenciaComentario> parseSequenciasComentario(Element rootElement) {
+        List<SequenciaComentario> ret = new ArrayList<>();
+
+        Element sequenciasComentarioElement = (Element) rootElement.selectSingleNode("SequenciasComentario");
+        if (sequenciasComentarioElement != null) {
+            List<Element> sequenciasComentario = sequenciasComentarioElement.elements("SequenciaComentario");
+
+            for(Element sequenciaComentario: sequenciasComentario) {
+                ret.add(parseSequenciaComentario(sequenciaComentario));
+            }
+        }
+
+        return ret;
+    }
+
+    private SequenciaComentario parseSequenciaComentario(Element sequenciaComentario) {
+        final String id = sequenciaComentario.attributeValue("id");
+        final String idDispositivo = sequenciaComentario.attributeValue("idDispositivo");
+        final String local = sequenciaComentario.attributeValue("local");
+        final List<Comentario> comentarios = new ArrayList<>();
+
+        for(Element comentario: sequenciaComentario.elements("Comentario")) {
+            comentarios.add(parseComentario(comentario));
+        }
+
+        return new SequenciaComentarioRecord(id, idDispositivo, local, comentarios);
+    }
+
+    private Comentario parseComentario(Element comentario) {
+        final String dataHora = comentario.attributeValue("dataHora");
+        final UsuarioPojo usuario = parseUsuarioComentario((Element) comentario.selectSingleNode("Usuario"));
+        final String texto = nodeStringValue(comentario.selectSingleNode("Texto"));
+
+        return new ComentarioRecord(usuario, dataHora, texto);
+    }
+
+    private UsuarioPojo parseUsuarioComentario(Element usuarioElement) {
+        UsuarioPojo usuario = new UsuarioPojo();
+        if(usuarioElement != null) {
+            usuario.setNome(usuarioElement.attributeValue("nome"));
+            usuario.setId(usuarioElement.attributeValue("id"));
+            usuario.setSigla(usuarioElement.attributeValue("sigla"));
+        }
+        return usuario;
     }
 
     private List<String> parsePendenciasPreenchimento(Element rootElement) {

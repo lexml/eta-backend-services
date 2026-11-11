@@ -1,6 +1,11 @@
-# eta-backend-services
 
-Serviços de back-end para componentes de edição de texto legislativo estruturado (lexml-emenda, lexml-eta e lexml-parecer)
+# Serviços de back-end para os componentes lexml-emenda, lexml-eta e lexml-parecer
+
+Principais funcionalidades:
+- Geração de PDF de emenda e parecere a partir do JSON e arquivos anexados;
+- Recuperação do JSON de emenda e parecer a partir do PDF;
+- Listagem de proposições para emendamento;
+- Recuperação do texto da proposição no formato jsonix para emendamento.
 
 Um dos serviços faz a conversão de textos de proposições no formato LexML para o formato jsonix recorendo ao conversor jsonix-lexml.
 
@@ -126,4 +131,33 @@ lexml-jsonix.url-sdleg=http://nova-url-do-servico-que-retorna-texto-lexml
 
 **Observação:** As urls acima podem ser alteradas, mas o formato do retorno deve permanecer o mesmo para que a classe `LexmlJsonixServiceImpl` funcione corretamente. Caso você possua outros serviços que retornem dados equivalentes, você poderá criar uma nova classe que implementa a interface `LexmlJsonixService` e construir o código para tratar os dados retornados nos novos serviços.
 
+## Fluxo Gitflow
 
+Está configurado o plugin [gitflow-maven-plugin](https://github.com/aleksandr-m/gitflow-maven-plugin) para gestão das branches gitflow.
+
+**Goals**
+
+- gitflow:release-start - Starts a release branch and updates version(s) to release version.
+- gitflow:release-finish - Merges a release branch and updates version(s) to next development version.
+- gitflow:release - Releases project w/o creating a release branch.
+- gitflow:feature-start - Starts a feature branch and optionally updates version(s).
+- gitflow:feature-finish - Merges a feature branch.
+- gitflow:hotfix-start - Starts a hotfix branch and updates version(s) to hotfix version.
+- gitflow:hotfix-finish - Merges a hotfix branch.
+- gitflow:support-start - Starts a support branch from the production tag.
+- gitflow:version-update - Updates version in release or support branch, optionally tagging and pushing it to the remote repository.
+- gitflow:help - Displays help information.
+
+## Deploy no repositório do Senado
+
+É possível fazer o deploy no repositório Maven do Senado sincronizando os fontes com o git interno e comandando o deploy via Jenkins.
+
+## Deploy no repositório Maven Central
+
+Fazer o deploy no repositório central usando o [central-publishing-maven-plugin](https://central.sonatype.org/publish/publish-portal-maven) de forma independente da gestão de releases do gitflow.
+
+Lembrar que o ambiente local deve estar preparado para o deplo (settings.xml e chave gpg do desenvolvedor).
+
+Gerar a release/tag pelo gitflow e depois fazer checkout da tage e rodar o comando abaixo.
+
+`mvn -Pdeploy deploy`

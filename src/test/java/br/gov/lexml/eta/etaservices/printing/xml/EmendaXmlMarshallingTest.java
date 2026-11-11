@@ -52,6 +52,7 @@ import br.gov.lexml.eta.etaservices.printing.json.AnexoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.AutoriaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.ColegiadoApreciadorPojo;
 import br.gov.lexml.eta.etaservices.printing.json.ColegiadoAutorPojo;
+import br.gov.lexml.eta.etaservices.printing.json.ComentarioPojo;
 import br.gov.lexml.eta.etaservices.printing.json.ComandoEmendaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.ComandoEmendaTextoLivrePojo;
 import br.gov.lexml.eta.etaservices.printing.json.ComponenteEmendadoPojo;
@@ -69,7 +70,9 @@ import br.gov.lexml.eta.etaservices.printing.json.RefProposicaoEmendadaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoElementoPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoJustificativaPojo;
 import br.gov.lexml.eta.etaservices.printing.json.RevisaoTextoLivrePojo;
+import br.gov.lexml.eta.etaservices.printing.json.SequenciaComentarioPojo;
 import br.gov.lexml.eta.etaservices.printing.json.SubstituicaoTermoPojo;
+import br.gov.lexml.eta.etaservices.printing.json.UsuarioPojo;
 
 class EmendaXmlMarshallingTest {
     private Source xmlSource;
@@ -95,6 +98,32 @@ class EmendaXmlMarshallingTest {
         assertThat(xmlSource)
                 .valueByXPath("/Emenda/ColegiadoApreciador/@siglaCasaLegislativa")
                 .isEqualToIgnoringCase("CN");
+    }
+
+    @Test
+    void testSequenciasComentario() {
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/@id")
+                .isEqualTo("sc123");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/@local")
+                .isEqualTo("justificação");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/Comentario/@dataHora")
+                .isEqualTo("2026-05-18 15:48:26");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/Comentario/Usuario/@nome")
+                .isEqualTo("fragomeni");
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario/Comentario/Texto")
+                .isEqualTo("Texto com acentuação & revisão <validada>.");
+    }
+
+    @Test
+    void testSequenciaComentarioDispositivo() {
+        assertThat(xmlSource)
+                .valueByXPath("/Emenda/SequenciasComentario/SequenciaComentario[@id='sc456']/@idDispositivo")
+                .isEqualTo("art3_par2");
     }
 
     @Test
@@ -149,6 +178,7 @@ class EmendaXmlMarshallingTest {
         assertEquals("Aplicação Teste", metadadosElement.selectNodes("//Aplicacao").get(0).getText());
         assertEquals("1.0.0", metadadosElement.selectNodes("//VersaoAplicacao").get(0).getText());
         assertEquals(ModoEdicaoEmenda.EMENDA.getNome(), metadadosElement.selectNodes("//ModoEdicao").get(0).getText());
+        assertEquals("false", metadadosElement.selectNodes("//AnexoParecer").get(0).getText());
         assertEquals(0, metadadosElement.selectNodes("//Autor").size()); // Sem metadados
         assertEquals(0, metadadosElement.selectNodes("//Revisao").size()); // Sem metadados
     }
@@ -160,6 +190,7 @@ class EmendaXmlMarshallingTest {
         emenda.setAplicacao("Aplicação Teste");
         emenda.setVersaoAplicacao("1.0.0");
         emenda.setModoEdicao(ModoEdicaoEmenda.EMENDA);
+        emenda.setAnexoParecer(true);
 
         Map<String, Object> metadados = new HashMap<>();
         metadados.put("Autor", "João");
@@ -175,6 +206,7 @@ class EmendaXmlMarshallingTest {
         assertEquals("Aplicação Teste", emendaElement.selectNodes("//Aplicacao").get(0).getText());
         assertEquals("1.0.0", emendaElement.selectNodes("//VersaoAplicacao").get(0).getText());
         assertEquals(ModoEdicaoEmenda.EMENDA.getNome(), emendaElement.selectNodes("//ModoEdicao").get(0).getText());
+        assertEquals("true", emendaElement.selectNodes("//AnexoParecer").get(0).getText());
         assertEquals("João", emendaElement.selectNodes("//Autor").get(0).getText());
         assertEquals("1", emendaElement.selectNodes("//Revisao").get(0).getText());
     }
@@ -474,6 +506,37 @@ class EmendaXmlMarshallingTest {
         public String getNomeArquivo() {
             return nomeArquivo;
         }
+    }
+
+    private SequenciaComentarioPojo criaSequenciaComentario() {
+        UsuarioPojo usuario = new UsuarioPojo();
+        usuario.setNome("fragomeni");
+        usuario.setId("fragomeni");
+        usuario.setSigla("F");
+
+        ComentarioPojo comentario = new ComentarioPojo();
+        comentario.setUsuario(usuario);
+        comentario.setDataHora("2026-05-18 15:48:26");
+        comentario.setTexto("Texto com acentuação & revisão <validada>.");
+
+        SequenciaComentarioPojo sequencia = new SequenciaComentarioPojo();
+        sequencia.setId("sc123");
+        sequencia.setLocal("justificação");
+        sequencia.setComentarios(List.of(comentario));
+        return sequencia;
+    }
+
+    private SequenciaComentarioPojo criaSequenciaComentarioDispositivo() {
+        ComentarioPojo comentario = new ComentarioPojo();
+        comentario.setDataHora("2026-06-11 13:26:00");
+        comentario.setTexto("Comentario em dispositivo.");
+
+        SequenciaComentarioPojo sequencia = new SequenciaComentarioPojo();
+        sequencia.setId("sc456");
+        sequencia.setIdDispositivo("art3_par2");
+        sequencia.setLocal("texto");
+        sequencia.setComentarios(List.of(comentario));
+        return sequencia;
     }
 
     @Test
@@ -1170,7 +1233,8 @@ class EmendaXmlMarshallingTest {
         Document document = DocumentHelper.parseText(xmlEmenda);
 
         assertEquals(1, document.selectNodes("//Emenda").size());
-        assertEquals(4, document.selectNodes("//Metadados/*").size());
+        assertEquals(5, document.selectNodes("//Metadados/*").size());
+        assertEquals("false", document.selectSingleNode("//Metadados/AnexoParecer").getText());
 
         assertEquals(1, document.selectNodes("//Proposicao").size());
         Element proposicao = (Element) document.selectNodes("//Proposicao").get(0);
@@ -1283,11 +1347,37 @@ class EmendaXmlMarshallingTest {
 
     }
 
+    @Test
+    void deveManterEstruturaSemPreencherDadosNaoAplicaveisAoAnexoParecer() throws Exception {
+        EmendaPojo emenda = (EmendaPojo) setupEmenda();
+        emenda.setAnexoParecer(true);
+
+        Document document = DocumentHelper.parseText(marshaller.toXml(emenda));
+        Element emendaElement = document.getRootElement();
+
+        assertEquals("true", document.selectSingleNode("//Metadados/AnexoParecer").getText());
+        assertNull(emendaElement.attributeValue("local"));
+        assertNull(emendaElement.attributeValue("data"));
+        Node justificativa = document.selectSingleNode("//Justificativa");
+        assertNotNull(justificativa);
+        assertEquals("", justificativa.getText());
+        assertEquals(0, document.selectNodes("//JustificativaAntesRevisao").size());
+        Element autoria = (Element) document.selectSingleNode("//Autoria");
+        assertNotNull(autoria);
+        assertEquals(TipoAutoria.PARLAMENTAR.getDescricao(), autoria.attributeValue("tipo"));
+        assertEquals("true", autoria.attributeValue("imprimirPartidoUF"));
+        assertEquals("0", autoria.attributeValue("quantidadeAssinaturasAdicionaisDeputados"));
+        assertEquals("0", autoria.attributeValue("quantidadeAssinaturasAdicionaisSenadores"));
+        assertEquals(0, autoria.elements().size());
+        assertEquals(0, document.selectNodes("//NotasRodape").size());
+        assertEquals(1, document.selectNodes("//OpcoesImpressao").size());
+    }
+
     private static Element createRootElement() {
         Document document = DocumentHelper.createDocument();
         return document.addElement("Emenda");
     }
-    
+
     private Source getXmlSource(Emenda emenda) {
 
         final EmendaXmlMarshaller marshaller = new EmendaXmlMarshaller();
@@ -1302,7 +1392,9 @@ class EmendaXmlMarshallingTest {
             String text = loadFileContent("test1.json");
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.registerModule(new JavaTimeModule());
-            return objectMapper.readValue(text, EmendaPojo.class);
+            EmendaPojo emenda = objectMapper.readValue(text, EmendaPojo.class);
+            emenda.setSequenciasComentario(List.of(criaSequenciaComentario(), criaSequenciaComentarioDispositivo()));
+            return emenda;
 
         } catch (IOException e) {
             System.err.println(e.getMessage());
