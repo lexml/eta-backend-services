@@ -119,11 +119,16 @@ class DocumentoArticuladoTemplateProcessor {
         return titulo.isEmpty() ? documento.path("value").path("metadado").path("identificacao").path("urn").asText() : titulo;
     }
 
-    /** Concatena os textos de um {@code content} jsonix, incluindo os de elementos inline aninhados. */
+    /**
+     * Concatena os textos de um {@code content} jsonix, incluindo os de elementos inline aninhados. O {@code br}
+     * (epígrafe com várias linhas) vale como espaço.
+     */
     private static void acumularTexto(JsonNode content, StringBuilder texto) {
         for (JsonNode item : content) {
             if (item.isTextual()) {
                 texto.append(item.asText());
+            } else if ("br".equals(item.path("name").path("localPart").asText())) {
+                texto.append(' ');
             } else {
                 acumularTexto(item.path("value").path("content"), texto);
             }

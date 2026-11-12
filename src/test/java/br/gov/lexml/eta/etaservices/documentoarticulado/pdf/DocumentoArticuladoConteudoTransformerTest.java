@@ -400,6 +400,50 @@ class DocumentoArticuladoConteudoTransformerTest {
         assertThat(epigrafe.getText()).isEqualTo(String.join(NBSP, "PROJETO", "DE", "LEI", "Nº") + NBSP.repeat(8) + "," + NBSP + "DE");
     }
 
+    /** Issue #84: a primeira linha como sempre; as seguintes abaixo, centralizadas, sem negrito e no mesmo tamanho. */
+    @Test
+    void epigrafeComDuasLinhas() throws Exception {
+        List<Element> linhas = linhasDaEpigrafe("EMENDA Nº 1 - CCJ (SUBSTITUTIVO)<br/>(ao Projeto de Lei nº 1.234, de 2026)");
+
+        assertThat(linhas).hasSize(2);
+        assertThat(linhas.get(0).attributeValue("font-weight")).isEqualTo("bold");
+        assertThat(linhas.get(0).getText()).isEqualTo(String.join(NBSP, "EMENDA", "Nº", "1", "-", "CCJ", "(SUBSTITUTIVO)"));
+        assertThat(linhas.get(1).attributeValue("font-weight")).isNull();
+        assertThat(linhas.get(1).attributeValue("font-size")).isEqualTo("16pt");
+        assertThat(linhas.get(1).attributeValue("text-align")).isEqualTo("center");
+        assertThat(linhas.get(1).getText()).isEqualTo(String.join(NBSP, "(ao", "Projeto", "de", "Lei", "nº", "1.234,", "de", "2026)"));
+    }
+
+    @Test
+    void epigrafeComTresLinhas() throws Exception {
+        List<Element> linhas = linhasDaEpigrafe("PRIMEIRA<br/> SEGUNDA <br/>TERCEIRA  LINHA");
+
+        assertThat(linhas).extracting(Element::getText).containsExactly("PRIMEIRA", "SEGUNDA", "TERCEIRA" + NBSP + NBSP + "LINHA");
+        assertThat(linhas).extracting(l -> l.attributeValue("font-weight")).containsExactly("bold", null, null);
+    }
+
+    /** br seguidos ou na ponta não geram linha vazia. */
+    @ParameterizedTest
+    @CsvSource(delimiter = '|', value = { "A<br/><br/>B", "A<br/>  <br/>B<br/>", "A<br/>B<br/>&#10;&#9;" })
+    void epigrafeSemLinhasVazias(String texto) throws Exception {
+        assertThat(linhasDaEpigrafe(texto)).extracting(Element::getText).containsExactly("A", "B");
+    }
+
+    /** O vão do número vale só para a primeira linha; a segunda sai como gravada. */
+    @Test
+    void epigrafeSemNumeroComSegundaLinha() throws Exception {
+        List<Element> linhas = linhasDaEpigrafe("PROJETO DE LEI DE CONVERSÃO Nº        , DE 2026<br/>(Medida Provisória nº 1.234, de 2026)");
+
+        assertThat(linhas.get(0).getText())
+                .isEqualTo(String.join(NBSP, "PROJETO", "DE", "LEI", "DE", "CONVERSÃO", "Nº") + NBSP.repeat(8) + "," + NBSP + "DE" + NBSP + "2026");
+        assertThat(linhas.get(1).getText()).isEqualTo(String.join(NBSP, "(Medida", "Provisória", "nº", "1.234,", "de", "2026)"));
+    }
+
+    @Test
+    void epigrafeSemBrComUmSoBloco() throws Exception {
+        assertThat(linhasDaEpigrafe("PROJETO DE LEI Nº 123, DE 2026")).hasSize(1);
+    }
+
     @Test
     void ementaComRecuoELinkParaANormaReferida() throws Exception {
         Element ementa = bloco(ARTICULACAO_E_ALTERACAO, 1);
@@ -1290,6 +1334,18 @@ class DocumentoArticuladoConteudoTransformerTest {
     /** Texto do bloco da epígrafe gerado para um documento mínimo com a epígrafe informada. */
     private String epigrafe(String texto) throws DocumentException {
         return transformar(lexml("<Epigrafe id=\"epigrafe\">" + texto + "</Epigrafe>")).getRootElement().element("block").getText();
+    }
+
+    /** Blocos das linhas da epígrafe (os centralizados do início) de um documento mínimo com a epígrafe informada. */
+    private List<Element> linhasDaEpigrafe(String texto) throws DocumentException {
+        List<Element> linhas = new ArrayList<>();
+        for (Element bloco : transformar(lexml("<Epigrafe id=\"epigrafe\">" + texto + "</Epigrafe>")).getRootElement().elements("block")) {
+            if (!"center".equals(bloco.attributeValue("text-align"))) {
+                break;
+            }
+            linhas.add(bloco);
+        }
+        return linhas;
     }
 
     /** Documento LexML mínimo com a parte inicial informada e um artigo na articulação. */

@@ -3,6 +3,7 @@ package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ANEXO_PARECER;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO;
+import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.EPIGRAFE_VARIAS_LINHAS;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JSON_EXEMPLO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JUSTIFICACAO;
 import static br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JUSTIFICACAO_LONGA;
@@ -62,6 +63,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake;
@@ -225,6 +227,47 @@ class DocumentoArticuladoPdfGeneratorTest {
         Linha epigrafe = linhaQueContem(linhas(pdfExemplo), "PROJETO DE LEI");
 
         assertThat(epigrafe.texto.trim()).isEqualTo("PROJETO DE LEI Nº" + " ".repeat(8) + ", DE");
+    }
+
+    /** Issue #84: PLV com a epígrafe em duas linhas (br); a segunda sai abaixo, centralizada e sem negrito. */
+    @Test
+    void epigrafeComDuasLinhas() throws Exception {
+        List<Linha> linhas = linhas(gerarPdf(EPIGRAFE_VARIAS_LINHAS));
+        Linha primeira = linhaQueContem(linhas, "PROJETO DE LEI DE CONVERSÃO");
+        Linha segunda = linhaQueContem(linhas, "(Medida Provisória nº 1.089, de 2021)");
+
+        assertThat(primeira.texto.trim()).isEqualTo("PROJETO DE LEI DE CONVERSÃO Nº" + " ".repeat(8) + ", DE 2026");
+        assertThat(segunda.texto.trim()).isEqualTo("(Medida Provisória nº 1.089, de 2021)");
+        assertThat(segunda.pagina).isEqualTo(primeira.pagina);
+        assertThat(segunda.y).isGreaterThan(primeira.y);
+        assertThat(primeira.fonteDe("CONVERSÃO")).containsIgnoringCase("bold");
+        assertThat(segunda.fonteDe("Medida")).doesNotContainIgnoringCase("bold");
+        assertThat(segunda.tamanho).isEqualTo(primeira.tamanho);
+        assertThat(segunda.centroDe("(Medida Provisória nº 1.089, de 2021)")).isCloseTo(MARGEM_ESQUERDA + LARGURA_DO_TEXTO / 2, offset(1f));
+    }
+
+    /** A ementa fica à mesma distância da última linha da epígrafe que fica da epígrafe de uma linha só. */
+    @Test
+    void ementaDepoisDaUltimaLinhaDaEpigrafe() throws Exception {
+        String segundaLinha = "(Medida Provisória nº 1.089, de 2021)";
+        String xml = ConversorDocumentoArticuladoFake.xml(EPIGRAFE_VARIAS_LINHAS);
+        String xmlUmaLinha = xml.replace("<br/>" + segundaLinha, "");
+        assertThat(xmlUmaLinha).isNotEqualTo(xml);
+        ObjectNode documento = (ObjectNode) new ObjectMapper().readTree(ConversorDocumentoArticuladoFake.json(EPIGRAFE_VARIAS_LINHAS));
+        ArrayNode content = (ArrayNode) documento.at("/value/projetoNorma/norma/parteInicial/epigrafe/content");
+        content.remove(2);
+        content.remove(1);
+        String jsonUmaLinha = documento.toString();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        new DocumentoArticuladoPdfGenerator(new ConversorDocumentoArticuladoFake().registrar(jsonUmaLinha, xmlUmaLinha)).generate(jsonUmaLinha, out);
+
+        List<Linha> duasLinhas = linhas(gerarPdf(EPIGRAFE_VARIAS_LINHAS));
+        List<Linha> umaLinha = linhas(out.toByteArray());
+        float entreLinhasDaEpigrafe = linhaQueContem(duasLinhas, segundaLinha).y - linhaQueContem(duasLinhas, "CONVERSÃO").y;
+
+        assertThat(linhaQueContem(umaLinha, "CONVERSÃO").y).isEqualTo(linhaQueContem(duasLinhas, "CONVERSÃO").y);
+        assertThat(linhaQueContem(duasLinhas, "Altera a").y - linhaQueContem(umaLinha, "Altera a").y)
+                .isCloseTo(entreLinhasDaEpigrafe, offset(0.5f));
     }
 
     @Test

@@ -92,6 +92,21 @@ class DocumentoArticuladoTemplateProcessorTest {
         assertThat(fo).contains("<rdf:li xml:lang=\"x-default\">PROJETO DE LEI Nº , DE</rdf:li>");
     }
 
+    /** Issue #84: as linhas da epígrafe, separadas por br, ficam separadas por um espaço no título. */
+    @Test
+    void tituloPelaEpigrafeComVariasLinhas() {
+        ArrayNode content = ((ObjectNode) parteInicial().path("epigrafe")).putArray("content");
+        content.add("EMENDA Nº        - CCJ (SUBSTITUTIVO)");
+        ObjectNode br = content.addObject();
+        br.putObject("name").put("namespaceURI", "http://www.lexml.gov.br/1.0").put("localPart", "br").put("prefix", "");
+        br.putObject("value").put("TYPE_NAME", "br_gov_lexml__1.Br");
+        content.add("(ao Projeto de Lei nº 1.234, de 2026)");
+
+        String fo = processar();
+
+        assertThat(fo).contains("<rdf:li xml:lang=\"x-default\">EMENDA Nº - CCJ (SUBSTITUTIVO) (ao Projeto de Lei nº 1.234, de 2026)</rdf:li>");
+    }
+
     @Test
     void tituloPelaUrnSemEpigrafe() {
         parteInicial().remove("epigrafe");

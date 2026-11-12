@@ -42,6 +42,11 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
      * com local, data e a autoria de um senador (impressos logo depois da articulação).
      */
     public static final String ANEXO_PARECER = "documento-anexo-parecer";
+    /**
+     * Epígrafe em duas linhas separadas por {@code br} (issue #84): PLV salvo pelo lexml-eta, com o XML gerado pelo
+     * jsonix-lexml 2.4.0, a primeira versão que aceita {@code br} na epígrafe.
+     */
+    public static final String EPIGRAFE_VARIAS_LINHAS = "documento-com-epigrafe-varias-linhas";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -56,11 +61,11 @@ public class ConversorDocumentoArticuladoFake implements ConversorDocumentoArtic
         return fake;
     }
 
-    /** Conversor com o par de exemplo e os documentos das issues #72, #75 e #80 registrados. */
+    /** Conversor com o par de exemplo e os documentos das issues #72, #75, #80 e #84 registrados. */
     public static ConversorDocumentoArticuladoFake comDocumentosDeTeste() {
         ConversorDocumentoArticuladoFake fake = comExemplo();
         for (String nome : new String[] { ARTICULACAO_E_ALTERACAO, CAPITULO_E_SECAO, PENA_E_TITULO_DISPOSITIVO, REMISSOES_INTERNAS,
-                JUSTIFICACAO, JUSTIFICACAO_LONGA, ANEXO_PARECER }) {
+                JUSTIFICACAO, JUSTIFICACAO_LONGA, ANEXO_PARECER, EPIGRAFE_VARIAS_LINHAS }) {
             fake.registrar(json(nome), xml(nome));
         }
         return fake;

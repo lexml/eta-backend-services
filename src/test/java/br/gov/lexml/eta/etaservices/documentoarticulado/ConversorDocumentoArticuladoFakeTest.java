@@ -34,7 +34,7 @@ class ConversorDocumentoArticuladoFakeTest {
     @ValueSource(strings = { ConversorDocumentoArticuladoFake.ARTICULACAO_E_ALTERACAO, ConversorDocumentoArticuladoFake.CAPITULO_E_SECAO,
             ConversorDocumentoArticuladoFake.PENA_E_TITULO_DISPOSITIVO, ConversorDocumentoArticuladoFake.REMISSOES_INTERNAS,
             ConversorDocumentoArticuladoFake.JUSTIFICACAO, ConversorDocumentoArticuladoFake.JUSTIFICACAO_LONGA,
-            ConversorDocumentoArticuladoFake.ANEXO_PARECER })
+            ConversorDocumentoArticuladoFake.ANEXO_PARECER, ConversorDocumentoArticuladoFake.EPIGRAFE_VARIAS_LINHAS })
     void converteOsDocumentosDeTeste(String nome) throws Exception {
         ConversorDocumentoArticuladoFake fake = ConversorDocumentoArticuladoFake.comDocumentosDeTeste();
         String json = ConversorDocumentoArticuladoFake.json(nome);

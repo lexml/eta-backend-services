@@ -677,28 +677,61 @@
 	  &#160; para sair em uma linha. Só as pontas são aparadas: os espaços internos ficam como vieram (quebras de
 	  linha e tabulações valem como espaço), e o vão de um projeto não numerado ("Nº     , DE") sai com no
 	  mínimo 8 espaços (vao-do-numero). Como a epígrafe é centralizada, o &#160; ajustável do FOP não tem efeito.
+	  Com elementos br (issue #84), essas regras valem para a primeira linha; cada linha seguinte não vazia sai
+	  logo abaixo, centralizada, sem negrito e no mesmo tamanho, como o complemento da epígrafe das emendas.
 	-->
 	<xsl:template match="lx:Epigrafe">
 		<xsl:if test="normalize-space(.) != ''">
-			<xsl:variable name="semPontaFinal">
-				<xsl:call-template name="aparar-fim">
-					<xsl:with-param name="texto" select="translate(., '&#9;&#10;&#13;', '   ')"/>
-				</xsl:call-template>
-			</xsl:variable>
 			<xsl:variable name="aparado">
-				<xsl:call-template name="aparar-inicio">
-					<xsl:with-param name="texto" select="$semPontaFinal"/>
+				<xsl:call-template name="linha-epigrafe">
+					<xsl:with-param name="n" select="0"/>
 				</xsl:call-template>
 			</xsl:variable>
-			<xsl:variable name="texto">
-				<xsl:call-template name="vao-do-numero">
-					<xsl:with-param name="texto" select="$aparado"/>
-				</xsl:call-template>
-			</xsl:variable>
-			<fo:block text-align="center" font-weight="bold" font-size="{$maxTamanhoFonte}">
-				<xsl:value-of select="translate($texto, ' ', '&#160;')"/>
-			</fo:block>
+			<xsl:if test="$aparado != ''">
+				<xsl:variable name="texto">
+					<xsl:call-template name="vao-do-numero">
+						<xsl:with-param name="texto" select="$aparado"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<fo:block text-align="center" font-weight="bold" font-size="{$maxTamanhoFonte}">
+					<xsl:value-of select="translate($texto, ' ', '&#160;')"/>
+				</fo:block>
+			</xsl:if>
+			<xsl:for-each select="lx:br">
+				<xsl:variable name="linha">
+					<xsl:call-template name="linha-epigrafe">
+						<xsl:with-param name="n" select="position()"/>
+					</xsl:call-template>
+				</xsl:variable>
+				<xsl:if test="$linha != ''">
+					<fo:block text-align="center" font-size="{$maxTamanhoFonte}">
+						<xsl:value-of select="translate($linha, ' ', '&#160;')"/>
+					</fo:block>
+				</xsl:if>
+			</xsl:for-each>
 		</xsl:if>
+	</xsl:template>
+
+	<!--
+	  Texto da linha $n (0 = primeira) da epígrafe do contexto (ou do pai, quando o contexto é um br): os filhos
+	  que não são br e têm $n br antes, com as pontas aparadas.
+	-->
+	<xsl:template name="linha-epigrafe">
+		<xsl:param name="n"/>
+		<xsl:variable name="epigrafe" select="ancestor-or-self::lx:Epigrafe[1]"/>
+		<xsl:variable name="bruto">
+			<xsl:for-each select="$epigrafe/node()[not(self::lx:br)][count(preceding-sibling::lx:br) = $n]">
+				<xsl:value-of select="."/>
+			</xsl:for-each>
+		</xsl:variable>
+		<xsl:variable name="semPontaFinal">
+			<xsl:call-template name="aparar-fim">
+				<xsl:with-param name="texto" select="translate($bruto, '&#9;&#10;&#13;', '   ')"/>
+			</xsl:call-template>
+		</xsl:variable>
+		<xsl:call-template name="aparar-inicio">
+			<xsl:with-param name="texto" select="$semPontaFinal"/>
+		</xsl:call-template>
 	</xsl:template>
 
 	<!-- Remove espaços do início do texto (as quebras de linha e tabulações já viraram espaço). -->
