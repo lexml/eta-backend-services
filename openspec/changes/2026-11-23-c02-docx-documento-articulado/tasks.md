@@ -8,9 +8,9 @@
 
 ## 2. Tradutor XSL-FO → DOCX (`DocumentoArticuladoFoDocx`)
 
-- [ ] 2.1 Implementar `DocumentoArticuladoFoDocx` com configuração de página A4, cabeçalho somente na primeira página (`header1.xml` + `w:titlePg`), pilha de estilos herdados, achatamento de `fo:block`/`fo:block-container`, caixa de pendências (célula 1×1 com fundo amarelo e padding), inline (`b`, `i`, `u`, `sup`/`sub`, cor), links externos e remissões internas (`w:bookmarkStart`/`w:hyperlink`)
-- [ ] 2.2 Adicionar suporte a omissis (`fo:leader` → tab stop pontilhado), notas de rodapé nativas (`word/footnotes.xml` sem duplicação de número), listas simples e aninhadas (`fo:list-block`), tabelas (remoção da tabela centralizadora, `w:jc="center"`, larguras, bordas, `w:gridSpan`, `w:vMerge`) e imagens (`data:image/*` nativas em `word/media/` e aviso em vermelho para externas/ilegíveis)
-- [ ] 2.3 Criar testes unitários JUnit 5 em `DocumentoArticuladoFoDocxTest` validando cada construção OOXML gerada e verificar com `mvn test -Dtest=DocumentoArticuladoFoDocxTest`
+- [x] 2.1 Implementar `DocumentoArticuladoFoDocx` com configuração de página A4, cabeçalho somente na primeira página (`header1.xml` + `w:titlePg`), pilha de estilos herdados, achatamento de `fo:block`/`fo:block-container`, caixa de pendências (célula 1×1 com fundo amarelo e padding), inline (`b`, `i`, `u`, `sup`/`sub`, cor), links externos e remissões internas (`w:bookmarkStart`/`w:hyperlink`)
+- [x] 2.2 Adicionar suporte a omissis (`fo:leader` → tab stop pontilhado), notas de rodapé nativas (`word/footnotes.xml` sem duplicação de número), listas simples e aninhadas (`fo:list-block`), tabelas (remoção da tabela centralizadora, `w:jc="center"`, larguras, bordas, `w:gridSpan`, `w:vMerge`) e imagens (`data:image/*` nativas em `word/media/` e aviso em vermelho para externas/ilegíveis)
+- [x] 2.3 Criar testes unitários JUnit 5 em `DocumentoArticuladoFoDocxTest` validando cada construção OOXML gerada e verificar com `mvn test -Dtest=DocumentoArticuladoFoDocxTest`
 
 ## 3. Gerador público `DocumentoArticuladoDocxGenerator` e testes de ponta a ponta
 
