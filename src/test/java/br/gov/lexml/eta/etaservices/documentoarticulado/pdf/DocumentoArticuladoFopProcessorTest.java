@@ -128,6 +128,108 @@ class DocumentoArticuladoFopProcessorTest {
                 .hasMessageContaining("falso.pdf");
     }
 
+    @Test
+    void gerarRtfDevolveUmDocumentoRtf() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        assertThat(rtf).startsWith("{\\rtf");
+        assertThat(rtf).doesNotContain(PLACEHOLDER_HASH);
+    }
+
+    @Test
+    void gerarRtfComXslFoInvalidoFalha() {
+        assertThatThrownBy(() -> processador.gerarRtf("isto não é XML"))
+                .isInstanceOf(EtaBackendException.class);
+    }
+
+    @Test
+    void gerarRtfOmiteImagemPngComAvisoEMantemJpeg() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        assertThat(rtf).doesNotContain("does not support").doesNotContain("iVBORw0KGgo");
+        assertThat(rtf).contains("Imagem omitida").contains("\\pict");
+    }
+
+    @Test
+    void gerarRtfEscreveLinksExternosSemOWrapperUrl() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        assertThat(rtf).contains("HYPERLINK \"https://normas.leg.br/?urn=").doesNotContain("url('");
+    }
+
+    @Test
+    void gerarRtfDaTabelasComLarguraDeColunaEmVezDeZero() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        assertThat(rtf).contains("\\trowd").contains("\\cellx");
+        assertThat(rtf).doesNotContainPattern("\\\\cellx0(?!\\d)");
+    }
+
+    @Test
+    void gerarRtfAplicaAEntrelinhaDoPdfAoTextoEAosParagrafosReiniciados() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        // 150% do corpo no PDF = 1,5 / 1,15 de linha simples no Word
+        assertThat(rtf).contains("\\sectd \\sl313\\slmult1 ");
+        assertThat(rtf.split("\\\\pard", -1).length - 1).isEqualTo(rtf.split("\\\\pard \\\\sl313\\\\slmult1 ", -1).length - 1);
+    }
+
+    @Test
+    void gerarRtfUsaFonteRomanaComAlternativaSerifada() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        assertThat(rtf).containsPattern("\\\\f\\d+\\\\froman\\\\fcharset0 Gentium Basic\\{\\\\\\*\\\\falt Georgia\\};");
+    }
+
+    @Test
+    void gerarRtfEscreveNotasDeRodapeNoRodapeDaPaginaEComNumeroSobrescritoLegivel() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        assertThat(rtf).contains("\\footnote").doesNotContain("\\ftnalt");
+        // sem o 0.7em do PDF: o Word j\u00e1 reduz o sobrescrito
+        assertThat(rtf).doesNotContainPattern("\\{\\\\super[^}]*\\\\fs19");
+    }
+
+    @Test
+    void gerarRtfInclueOBrasaoECabecalhoAntesDasPendencias() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        // o exemplo tem bras\u00e3o e a imagem JPEG da justifica\u00e7\u00e3o
+        assertThat(rtf.split("\\\\jpegblip", -1).length - 1).isEqualTo(2);
+        assertThat(rtf.indexOf("Gabinete do Senador Davi Alcolumbre")).isPositive()
+                .isLessThan(rtf.indexOf("Este documento cont"));
+        assertThat(rtf.indexOf("\\jpegblip")).isLessThan(rtf.indexOf("Este documento cont"));
+    }
+
+    @Test
+    void gerarRtfSeparaOCabecalhoDoRestoComEspacoNoUltimoParagrafo() {
+        String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
+
+        int texto = rtf.indexOf("Gabinete do Senador Davi Alcolumbre");
+        // 28pt = 560 twips, no par\u00e1grafo do texto do cabe\u00e7alho
+        assertThat(rtf.substring(Math.max(0, texto - 120), texto)).contains("\\sa560");
+    }
+
+    @Test
+    void gerarRtfSemBrasaoQuandoImprimirBrasaoEhFalso() {
+        DocumentoArticuladoFoGerador gerador = new DocumentoArticuladoFoGerador(
+                br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.comDocumentosDeTeste());
+        String json = br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake
+                .json(br.gov.lexml.eta.etaservices.documentoarticulado.ConversorDocumentoArticuladoFake.JUSTIFICACAO_LONGA);
+        DocumentoArticuladoFoGerador.FoGerado fo = gerador.gerar(json, gerador.validar(json));
+
+        String rtf = new String(processador.gerarRtf(fo.xslFo, fo.parametros), StandardCharsets.ISO_8859_1);
+
+        assertThat(rtf).doesNotContain("\\jpegblip");
+    }
+
+    @Test
+    void adaptacaoParaRtfNaoAlteraOPdf() throws IOException {
+        processador.gerarRtf(xslFo);
+
+        assertThat(paginas(processador.gerarPdf(xslFo, xml))).isEqualTo(paginasDoDocumento);
+    }
+
     private static int paginas(byte[] pdf) throws IOException {
         try (PDDocument documento = PDDocument.load(pdf)) {
             return documento.getNumberOfPages();

@@ -112,6 +112,31 @@ class DocumentoArticuladoFopProcessor {
         }
     }
 
+    /**
+     * Renderiza o XSL-FO em RTF com o renderer do FOP. Sem PDF/A, XMP, anexos nem hash.
+     *
+     * @return os bytes do RTF, só devolvidos depois da renderização completa
+     */
+    byte[] gerarRtf(String xslFo) {
+        return gerarRtf(xslFo, ParametrosImpressaoDocumentoArticulado.padrao());
+    }
+
+    /** @param parametros fornece a entrelinha do PDF, reproduzida no RTF */
+    byte[] gerarRtf(String xslFo, ParametrosImpressaoDocumentoArticulado parametros) {
+        DocumentoArticuladoFoHelper helper = new DocumentoArticuladoFoHelper(xslFo);
+        DocumentoArticuladoFoRtf.adaptar(helper.getFoSemXmpmeta());
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Fop fop = Fabrica.INSTANCIA.newFop(MimeConstants.MIME_RTF, Fabrica.INSTANCIA.newFOUserAgent(), out);
+            Transformer identidade = TransformerFactory.newInstance().newTransformer();
+            identidade.transform(new DocumentSource(helper.getFoSemXmpmeta()), new SAXResult(fop.getDefaultHandler()));
+            String rtf = new String(out.toByteArray(), StandardCharsets.ISO_8859_1);
+            return DocumentoArticuladoFoRtf.ajustarRtf(rtf, parametros).getBytes(StandardCharsets.ISO_8859_1);
+        } catch (Exception e) {
+            throw new EtaBackendException("Erro ao gerar o RTF do documento articulado: " + e.getMessage(), e);
+        }
+    }
+
     private static byte[] concatenarImpressos(byte[] pdf, List<AnexoLido> anexos) throws IOException {
         PDFMergerUtility merger = new PDFMergerUtility();
         merger.addSource(new ByteArrayInputStream(pdf));
