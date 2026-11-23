@@ -16,4 +16,4 @@
 
 ## 3. Documentação
 
-- [ ] 3.1 Atualizar o `CLAUDE.md` e `docs/api-documento-articulado.md` onde descrevem imagens no RTF (se houver menção)
+- [x] 3.1 Atualizar o `CLAUDE.md` e `docs/api-documento-articulado.md` onde descrevem imagens no RTF (se houver menção)
