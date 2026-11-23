@@ -14,9 +14,9 @@
 
 ## 3. Gerador público `DocumentoArticuladoDocxGenerator` e testes de ponta a ponta
 
-- [ ] 3.1 Criar `DocumentoArticuladoDocxGenerator` (público, construtor com `ConversorDocumentoArticulado`, `generate(String json, OutputStream outputStream)`) reutilizando `DocumentoArticuladoFoGerador`, com escrita atômica e Javadoc completo
-- [ ] 3.2 Criar `DocumentoArticuladoDocxGeneratorTest` (JUnit 5 com `ConversorDocumentoArticuladoFake`, sem rede nem `jsonix-lexml`) cobrindo todos os cenários da spec `docx-documento-articulado`, incluindo todas as fixtures, rejeições de entrada sem escrita parcial, não-regressão do PDF e do RTF e leitura do DOCX gerado via `LeitorArquivoProposicao.lerDocx`
-- [ ] 3.3 Verificar rodando `mvn test -Dtest='MedidasFoTest,DocumentoArticuladoFoDocxTest,DocumentoArticuladoDocxGeneratorTest'`
+- [x] 3.1 Criar `DocumentoArticuladoDocxGenerator` (público, construtor com `ConversorDocumentoArticulado`, `generate(String json, OutputStream outputStream)`) reutilizando `DocumentoArticuladoFoGerador`, com escrita atômica e Javadoc completo
+- [x] 3.2 Criar `DocumentoArticuladoDocxGeneratorTest` (JUnit 5 com `ConversorDocumentoArticuladoFake`, sem rede nem `jsonix-lexml`) cobrindo todos os cenários da spec `docx-documento-articulado`, incluindo todas as fixtures, rejeições de entrada sem escrita parcial, não-regressão do PDF e do RTF e leitura do DOCX gerado via `LeitorArquivoProposicao.lerDocx`
+- [x] 3.3 Verificar rodando `mvn test -Dtest='MedidasFoTest,DocumentoArticuladoFoDocxTest,DocumentoArticuladoDocxGeneratorTest'`
 
 ## 4. Inspeção manual, documentação e validação final
 
