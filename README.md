@@ -4,6 +4,7 @@
 Principais funcionalidades:
 - Geração de PDF de emenda e parecere a partir do JSON e arquivos anexados;
 - Recuperação do JSON de emenda e parecer a partir do PDF;
+- Geração de PDF/A de proposição do editor `lexml-eta` (com `documento-articulado.xml` embutido e anexos), extração de XML/JSON desse PDF e importação/parseamento de `DOCX`, `TXT`, `XML` e `PDF` para Jsonix (`br.gov.lexml.eta.etaservices.documentoarticulado`);
 - Listagem de proposições para emendamento;
 - Recuperação do texto da proposição no formato jsonix para emendamento.
 
@@ -138,6 +139,10 @@ lexml-jsonix.url-sdleg=http://nova-url-do-servico-que-retorna-texto-lexml
 ```
 
 **Observação:** As urls acima podem ser alteradas, mas o formato do retorno deve permanecer o mesmo para que a classe `LexmlJsonixServiceImpl` funcione corretamente. Caso você possua outros serviços que retornem dados equivalentes, você poderá criar uma nova classe que implementa a interface `LexmlJsonixService` e construir o código para tratar os dados retornados nos novos serviços.
+
+### Documento articulado (proposição do `lexml-eta`)
+
+Os serviços isolados do pacote `br.gov.lexml.eta.etaservices.documentoarticulado` (instanciação manual, sem auto-configuration Spring) são documentados com exemplos completos no guia [`docs/api-documento-articulado.md`](docs/api-documento-articulado.md).
 
 ## Fluxo Gitflow
 
