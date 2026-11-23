@@ -7,15 +7,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.apache.commons.io.IOUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.gov.lexml.eta.etaservices.documentoarticulado.conversor.ConversorDocumentoArticulado;
+import br.gov.lexml.eta.etaservices.documentoarticulado.pdf.DocumentoArticuladoFoGerador.FoGerado;
 import br.gov.lexml.eta.etaservices.documentoarticulado.pdf.DocumentoArticuladoFopProcessor.AnexoLido;
 import br.gov.lexml.eta.etaservices.parecer.AnexoPDFA;
 import br.gov.lexml.eta.etaservices.util.BytesUtil;
@@ -29,20 +27,15 @@ import br.gov.lexml.eta.etaservices.util.EtaBackendException;
  */
 public class DocumentoArticuladoPdfGenerator {
 
-    static final String NAMESPACE_LEXML = "http://www.lexml.gov.br/1.0";
-
     private static final byte[] HASH_PLACEHOLDER =
             "<check:hash>00000000000000000000000000000000".getBytes(StandardCharsets.UTF_8);
     private static final int TAMANHO_TAG_HASH = "<check:hash>".getBytes(StandardCharsets.UTF_8).length;
 
-    private final ConversorDocumentoArticulado conversor;
-    private final DocumentoArticuladoConteudoTransformer conteudoTransformer = new DocumentoArticuladoConteudoTransformer();
-    private final DocumentoArticuladoTemplateProcessor templateProcessor = new DocumentoArticuladoTemplateProcessor();
+    private final DocumentoArticuladoFoGerador foGerador;
     private final DocumentoArticuladoFopProcessor fopProcessor = new DocumentoArticuladoFopProcessor();
-    private final ObjectMapper mapper = new ObjectMapper();
 
     public DocumentoArticuladoPdfGenerator(ConversorDocumentoArticulado conversor) {
-        this.conversor = Objects.requireNonNull(conversor, "conversor");
+        this.foGerador = new DocumentoArticuladoFoGerador(conversor);
     }
 
     /**
@@ -64,15 +57,10 @@ public class DocumentoArticuladoPdfGenerator {
      *         a imprimir não for um PDF válido
      */
     public void generate(String json, List<AnexoPDFA> anexos, OutputStream outputStream) throws IOException {
-        JsonNode documento = validar(json);
+        JsonNode documento = foGerador.validar(json);
         List<AnexoLido> anexosLidos = lerAnexos(anexos);
-        String xml = conversor.jsonParaXml(json);
-        ParametrosImpressaoDocumentoArticulado parametros =
-                ParametrosImpressaoDocumentoArticulado.de(OpcoesImpressaoDocumentoArticulado.de(documento));
-        // Anexo de parecer (issue #80): sem justificação; o fecho e as assinaturas o FechoDocumentoArticulado já omite
-        String conteudoFo = conteudoTransformer.transformar(xml, parametros, !FechoDocumentoArticulado.anexoParecer(documento));
-        String xslFo = templateProcessor.processar(documento, parametros, conteudoFo);
-        byte[] pdf = fopProcessor.gerarPdf(xslFo, xml, anexosLidos);
+        FoGerado fo = foGerador.gerar(json, documento);
+        byte[] pdf = fopProcessor.gerarPdf(fo.xslFo, fo.xml, anexosLidos);
         inserirHash(pdf);
 
         outputStream.write(pdf);
@@ -96,25 +84,6 @@ public class DocumentoArticuladoPdfGenerator {
             lidos.add(new AnexoLido(nome, IOUtils.toByteArray(anexo.getFile()), anexo.isImprimir()));
         }
         return lidos;
-    }
-
-    private JsonNode validar(String json) {
-        if (json == null) {
-            throw new EtaBackendException("O documento articulado não foi informado.");
-        }
-        JsonNode documento;
-        try {
-            documento = mapper.readTree(json);
-        } catch (JsonProcessingException e) {
-            throw new EtaBackendException("O documento articulado não é um JSON válido.", e);
-        }
-        JsonNode nome = documento == null ? null : documento.path("name");
-        String urn = documento == null ? "" : documento.path("value").path("metadado").path("identificacao").path("urn").asText("");
-        if (nome == null || !NAMESPACE_LEXML.equals(nome.path("namespaceURI").asText())
-                || !"LexML".equals(nome.path("localPart").asText()) || urn.trim().isEmpty()) {
-            throw new EtaBackendException("O conteúdo não é um documento LexML em JSON (documento-articulado.json).");
-        }
-        return documento;
     }
 
     /** Substitui o placeholder do {@code check:hash} no XMP pelo MD5 do PDF (derivado de PdfGeneratorBean). */
