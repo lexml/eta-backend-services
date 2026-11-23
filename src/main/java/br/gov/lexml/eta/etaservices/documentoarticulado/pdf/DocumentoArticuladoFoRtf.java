@@ -1,10 +1,23 @@
 package br.gov.lexml.eta.etaservices.documentoarticulado.pdf;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -12,6 +25,8 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.QName;
 import org.dom4j.XPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Ajusta o XSL-FO ao renderer RTF do FOP, que não entende algumas construções aceitas pelo PDF. Opera só sobre a
@@ -19,8 +34,11 @@ import org.dom4j.XPath;
  */
 final class DocumentoArticuladoFoRtf {
 
-    static final String AVISO_IMAGEM = "[Imagem omitida: o RTF só aceita imagens JPEG.]";
+    static final String AVISO_IMAGEM = "[Imagem omitida: não foi possível incluí-la no RTF.]";
 
+    private static final Logger LOG = LoggerFactory.getLogger(DocumentoArticuladoFoRtf.class);
+    private static final Pattern DATA_IMAGEM = Pattern.compile("^data:image/[^;,]+;base64,(.*)$", Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+    private static final float QUALIDADE_JPEG = 0.9f;
     private static final String NS_FO = "http://www.w3.org/1999/XSL/Format";
     private static final Pattern URL_FO = Pattern.compile("^url\\(\\s*['\"]?(.*?)['\"]?\\s*\\)$", Pattern.DOTALL);
     private static final Pattern PROPORCIONAL = Pattern.compile("^proportional-column-width\\(\\s*([\\d.]+)\\s*\\)$");
@@ -210,11 +228,20 @@ final class DocumentoArticuladoFoRtf {
         }
     }
 
-    /** O renderer RTF só aceita JPEG; nos demais formatos ele joga a exceção e o base64 como texto do documento. */
+    /**
+     * O renderer RTF só aceita JPEG; nos demais formatos ele joga a exceção e o base64 como texto do documento. Imagens
+     * embutidas legíveis são convertidas para JPEG; as que não podem ser (endereço externo, dados ilegíveis) viram um aviso.
+     */
     private static void substituirImagensNaoJpeg(Document fo) {
         for (Object no : xpath("//fo:external-graphic").selectNodes(fo)) {
             Element imagem = (Element) no;
-            if (ehJpeg(imagem.attributeValue("src"))) {
+            String src = imagem.attributeValue("src");
+            if (ehJpeg(src)) {
+                continue;
+            }
+            String jpeg = converterParaJpeg(src);
+            if (jpeg != null) {
+                imagem.addAttribute("src", "url('" + jpeg + "')");
                 continue;
             }
             Element aviso = DocumentHelper.createElement(QName.get("inline", "fo", NS_FO));
@@ -225,12 +252,60 @@ final class DocumentoArticuladoFoRtf {
         }
     }
 
+    /** Devolve o {@code data:image/jpeg;base64,...} da imagem embutida, sobre fundo branco, ou {@code null} se não der. */
+    private static String converterParaJpeg(String src) {
+        Matcher m = src == null ? null : DATA_IMAGEM.matcher(enderecoDe(src));
+        if (m == null || !m.matches()) {
+            return null;
+        }
+        try {
+            BufferedImage lida = ImageIO.read(new ByteArrayInputStream(Base64.getMimeDecoder().decode(m.group(1))));
+            if (lida == null) {
+                LOG.warn("Imagem do RTF omitida: formato sem leitor.");
+                return null;
+            }
+            // O JPEG não tem canal alfa: a transparência vira branco
+            BufferedImage rgb = new BufferedImage(lida.getWidth(), lida.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = rgb.createGraphics();
+            try {
+                g.setColor(Color.WHITE);
+                g.fillRect(0, 0, rgb.getWidth(), rgb.getHeight());
+                g.drawImage(lida, 0, 0, null);
+            } finally {
+                g.dispose();
+            }
+            return "data:image/jpeg;base64," + Base64.getEncoder().encodeToString(gravarJpeg(rgb));
+        } catch (IOException | RuntimeException e) {
+            LOG.warn("Imagem do RTF omitida: não foi possível convertê-la para JPEG ({}).", e.getClass().getSimpleName());
+            return null;
+        }
+    }
+
+    private static byte[] gravarJpeg(BufferedImage imagem) throws IOException {
+        ImageWriter escritor = ImageIO.getImageWritersByFormatName("jpeg").next();
+        ImageWriteParam parametros = escritor.getDefaultWriteParam();
+        parametros.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+        parametros.setCompressionQuality(QUALIDADE_JPEG);
+        ByteArrayOutputStream saida = new ByteArrayOutputStream();
+        try (ImageOutputStream stream = ImageIO.createImageOutputStream(saida)) {
+            escritor.setOutput(stream);
+            escritor.write(null, new IIOImage(imagem, null, null), parametros);
+        } finally {
+            escritor.dispose();
+        }
+        return saida.toByteArray();
+    }
+
+    private static String enderecoDe(String src) {
+        Matcher m = URL_FO.matcher(src.trim());
+        return (m.matches() ? m.group(1) : src).trim();
+    }
+
     private static boolean ehJpeg(String src) {
         if (src == null) {
             return false;
         }
-        Matcher m = URL_FO.matcher(src.trim());
-        String endereco = (m.matches() ? m.group(1) : src).trim().toLowerCase(Locale.ROOT);
+        String endereco = enderecoDe(src).toLowerCase(Locale.ROOT);
         return endereco.startsWith("data:image/jpeg") || endereco.startsWith("data:image/jpg")
                 || endereco.startsWith("data:image/pjpeg");
     }

@@ -143,11 +143,11 @@ class DocumentoArticuladoFopProcessorTest {
     }
 
     @Test
-    void gerarRtfOmiteImagemPngComAvisoEMantemJpeg() {
+    void gerarRtfConverteImagensPngParaJpegSemAviso() {
         String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
 
-        assertThat(rtf).doesNotContain("does not support").doesNotContain("iVBORw0KGgo");
-        assertThat(rtf).contains("Imagem omitida").contains("\\pict");
+        assertThat(rtf).doesNotContain("does not support").doesNotContain("iVBORw0KGgo").doesNotContain("\\pngblip");
+        assertThat(rtf).contains("\\jpegblip").doesNotContain("Imagem omitida");
     }
 
     @Test
@@ -194,8 +194,8 @@ class DocumentoArticuladoFopProcessorTest {
     void gerarRtfInclueOBrasaoECabecalhoAntesDasPendencias() {
         String rtf = new String(processador.gerarRtf(xslFo), StandardCharsets.ISO_8859_1);
 
-        // o exemplo tem bras\u00e3o e a imagem JPEG da justifica\u00e7\u00e3o
-        assertThat(rtf.split("\\\\jpegblip", -1).length - 1).isEqualTo(2);
+        // o exemplo tem bras\u00e3o, a imagem JPEG da justifica\u00e7\u00e3o e duas imagens PNG convertidas para JPEG
+        assertThat(rtf.split("\\\\jpegblip", -1).length - 1).isEqualTo(4);
         assertThat(rtf.indexOf("Gabinete do Senador Davi Alcolumbre")).isPositive()
                 .isLessThan(rtf.indexOf("Este documento cont"));
         assertThat(rtf.indexOf("\\jpegblip")).isLessThan(rtf.indexOf("Este documento cont"));
