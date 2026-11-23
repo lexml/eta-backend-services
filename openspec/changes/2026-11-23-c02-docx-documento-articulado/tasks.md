@@ -20,6 +20,6 @@
 
 ## 4. Inspeção manual, documentação e validação final
 
-- [ ] 4.1 Criar utilitário manual `Json2DOCX` em `src/test/java/.../documentoarticulado/pdf/` (nos moldes de `Json2RTF`/`DocumentoArticuladoJson2PDF`) com checklist de inspeção visual no Word e LibreOffice Writer
-- [ ] 4.2 Atualizar `docs/api-documento-articulado.md` e `CLAUDE.md` documentando `DocumentoArticuladoDocxGenerator`
-- [ ] 4.3 Rodar `mvn test` completo e verificar que toda a suíte passa sem regressões
+- [x] 4.1 Criar utilitário manual `Json2DOCX` em `src/test/java/.../documentoarticulado/pdf/` (nos moldes de `Json2RTF`/`DocumentoArticuladoJson2PDF`) com checklist de inspeção visual no Word e LibreOffice Writer
+- [x] 4.2 Atualizar `docs/api-documento-articulado.md` e `CLAUDE.md` documentando `DocumentoArticuladoDocxGenerator`
+- [x] 4.3 Rodar `mvn test` completo e verificar que toda a suíte passa sem regressões
