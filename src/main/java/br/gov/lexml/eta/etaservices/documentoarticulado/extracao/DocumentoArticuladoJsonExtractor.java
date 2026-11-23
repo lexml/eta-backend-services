@@ -35,6 +35,20 @@ public class DocumentoArticuladoJsonExtractor {
     }
 
     /**
+     * Extrai o conteúdo XML ({@code documento-articulado.xml}) embutido em um PDF gerado pelo editor
+     * de proposições.
+     *
+     * @param pdfStream PDF gerado pelo editor de proposições
+     * @return conteúdo XML em UTF-8 do anexo {@code documento-articulado.xml}
+     * @throws EtaBackendException se o arquivo não for um PDF com o anexo {@code documento-articulado.xml}
+     * @throws IOException se houver erro de leitura da entrada
+     */
+    public String extractXmlFromPdf(InputStream pdfStream) throws IOException {
+        Objects.requireNonNull(pdfStream, "pdfStream");
+        return lerAnexo(IOUtils.toByteArray(pdfStream));
+    }
+
+    /**
      * @param pdfStream PDF gerado pelo editor de proposições
      * @param jsonWriter destino do documento-articulado.json
      * @throws EtaBackendException se o arquivo não for um PDF com o anexo documento-articulado.xml ou se a
@@ -42,7 +56,8 @@ public class DocumentoArticuladoJsonExtractor {
      * @throws IOException se houver erro de leitura da entrada ou de escrita no destino
      */
     public void extractJsonFromPdf(InputStream pdfStream, Writer jsonWriter) throws IOException {
-        String xml = lerAnexo(IOUtils.toByteArray(pdfStream));
+        Objects.requireNonNull(jsonWriter, "jsonWriter");
+        String xml = extractXmlFromPdf(pdfStream);
         jsonWriter.write(conversor.xmlParaJson(xml));
         jsonWriter.flush();
     }
