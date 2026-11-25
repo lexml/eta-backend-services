@@ -144,6 +144,27 @@ lexml-jsonix.url-sdleg=http://nova-url-do-servico-que-retorna-texto-lexml
 
 Os serviços isolados do pacote `br.gov.lexml.eta.etaservices.documentoarticulado` (instanciação manual, sem auto-configuration Spring) são documentados com exemplos completos no guia [`docs/api-documento-articulado.md`](docs/api-documento-articulado.md).
 
+#### Utilitários manuais de inspeção (`src/test/java`)
+
+Para gerar arquivos reais de proposição e inspecioná-los visualmente durante o desenvolvimento:
+
+| Utilitário | Classe | Uso |
+|---|---|---|
+| PDF/A (+ JSON recuperado) | `br.gov.lexml.eta.etaservices.documentoarticulado.DocumentoArticuladoJson2PDF` | `<jsonix-lexml> [entrada.json] [saida.pdf]` |
+| RTF | `br.gov.lexml.eta.etaservices.documentoarticulado.pdf.Json2RTF` | Sem argumentos (gera fixtures em `target/rtf-inspecao/`) ou `<jsonix-lexml> [entrada.json] [saida.rtf]` |
+| DOCX | `br.gov.lexml.eta.etaservices.documentoarticulado.pdf.Json2DOCX` | Sem argumentos (gera fixtures em `target/docx-inspecao/`) ou `<jsonix-lexml> [entrada.json] [saida.docx]` |
+
+Exemplo no PowerShell:
+
+```powershell
+mvn -q test-compile dependency:build-classpath "-Dmdep.outputFile=target/cp.txt"
+$cp = "target/classes;target/test-classes;" + (Get-Content target/cp.txt -Raw)
+
+java -cp $cp br.gov.lexml.eta.etaservices.documentoarticulado.DocumentoArticuladoJson2PDF C:\Desenv\jsonix\bin\jsonix-lexml-win.exe entrada.json saida.pdf
+java -cp $cp br.gov.lexml.eta.etaservices.documentoarticulado.pdf.Json2RTF C:\Desenv\jsonix\bin\jsonix-lexml-win.exe entrada.json saida.rtf
+java -cp $cp br.gov.lexml.eta.etaservices.documentoarticulado.pdf.Json2DOCX C:\Desenv\jsonix\bin\jsonix-lexml-win.exe entrada.json saida.docx
+```
+
 ## Fluxo Gitflow
 
 Está configurado o plugin [gitflow-maven-plugin](https://github.com/aleksandr-m/gitflow-maven-plugin) para gestão das branches gitflow.

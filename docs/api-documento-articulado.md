@@ -150,6 +150,24 @@ try (InputStream anexo1 = Files.newInputStream(Path.of("quadro.pdf"));
 }
 ```
 
+### 4.5 Exportação editável: DOCX e RTF (`DocumentoArticuladoDocxGenerator` e `DocumentoArticuladoRtfGenerator`)
+
+Para gerar arquivos editáveis sob demanda (sem `documento-articulado.xml` embutido, sem anexos e sem extração posterior de JSON), o mesmo pacote `br.gov.lexml.eta.etaservices.documentoarticulado.pdf` oferece:
+
+| Classe | Método | Descrição |
+|---|---|---|
+| `DocumentoArticuladoDocxGenerator` | `void generate(String json, OutputStream outputStream) throws IOException` | Traduz o XSL-FO do documento articulado diretamente para OOXML (`.docx`) sem dependências externas, preservando cabeçalho só na 1ª página, caixa de pendências, notas de rodapé nativas, tabelas centralizadas com spans, listas, omissis pontilhados, links externos/internos e imagens PNG/JPEG nativas. |
+| `DocumentoArticuladoRtfGenerator` | `void generate(String json, OutputStream outputStream) throws IOException` | Gera `.rtf` via renderer RTF do Apache FOP (mesmo conteúdo textual, sem garantia de fidelidade visual ao PDF). |
+
+```java
+DocumentoArticuladoDocxGenerator docxGenerator = new DocumentoArticuladoDocxGenerator(conversor);
+try (OutputStream out = Files.newOutputStream(Path.of("proposicao.docx"))) {
+    docxGenerator.generate(jsonix, out);
+}
+```
+
+Ambos seguem as mesmas regras de validação do PDF, escrita atômica no `OutputStream` e não fecham o stream recebido.
+
 ## 5. Extração a partir de PDF (`extracao`)
 
 Pacote: [`br.gov.lexml.eta.etaservices.documentoarticulado.extracao`](../src/main/java/br/gov/lexml/eta/etaservices/documentoarticulado/extracao)
